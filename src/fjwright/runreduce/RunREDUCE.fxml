@@ -91,17 +91,9 @@
                         <MenuItem fx:id="removeTabMenuItem" mnemonicParsing="false" onAction="#removeTabMenuItemAction" text="Remove Selected Tab" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem fx:id="userGuideMenuItem" mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide (HTML)" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="REDUCE Manual (HTML)" />
-                        <MenuItem mnemonicParsing="false" text="REDUCE Manual (PDF)" />
-                        <MenuItem mnemonicParsing="false" text="Inside Reduce (PDF)" />
-                        <MenuItem mnemonicParsing="false" text="REDUCE Symbolic Mode Primer (PDF)" />
-                        <MenuItem mnemonicParsing="false" text="Standard Lisp Report (PDF)" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
+                        <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
                     </items>
                 </Menu>
             </menus>
