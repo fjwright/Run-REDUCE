@@ -2,10 +2,9 @@ package fjwright.runreduce;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -27,7 +26,8 @@ import java.util.ResourceBundle;
 public class RunREDUCEController implements Initializable {
     // ToDo Menu ToolTips
     // Fields defined in FXML must be public!
-    public Menu helpMenu;
+    // File menu
+    public CheckMenuItem echoCheckMenuItem;
     public MenuItem inputFileMenuItem;
     public MenuItem inputPackageFileMenuItem;
     public MenuItem outputFileMenuItem;
@@ -35,6 +35,8 @@ public class RunREDUCEController implements Initializable {
     public MenuItem shutFileMenuItem;
     public MenuItem shutLastMenuItem;
     public MenuItem loadPackagesMenuItem;
+    // Help menu
+    public Menu helpMenu;
 
     static final FileChooser fileChooser = new FileChooser();
     // ToDo Separate input and output file choosers?
@@ -130,7 +132,6 @@ public class RunREDUCEController implements Initializable {
      * ********* */
 
     // Input from Files...
-    // ToDo Echo option
     public void inputFileMenuItemAction(ActionEvent actionEvent) {
         inputFile();
     }
@@ -152,7 +153,7 @@ public class RunREDUCEController implements Initializable {
                 text.append("\", \"");
                 text.append(file.toString());
             }
-            text.append("\";\n");
+            text.append(echoCheckMenuItem.isSelected() ? "\";\n" : "\"$\n");
 //            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
             System.err.println(text);
         }
@@ -238,16 +239,25 @@ public class RunREDUCEController implements Initializable {
     }
 
     // Save Session Log...
-    // ToDo Append option
     public void saveLogMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Save Session Log...");
+        saveLog(false);
+    }
+
+    // Append Session Log...
+    public void appendLogMenuItemAction(ActionEvent actionEvent) {
+        fileChooser.setTitle("Append Session Log...");
+        saveLog(true);
+    }
+
+    private void saveLog(boolean append) {
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         if (file != null) { // FixMe
-            System.err.println("Save Session Log to " + file);
+            System.err.println((append ? "Append" : "Save") + " Session Log to " + file);
 //            try (Writer out = new BufferedWriter
-//                    (new FileWriter(file, appendCheckBox.isSelected()))) {
+//                    (new FileWriter(file, append))) {
 //                RunREDUCE.reducePanel.outputTextPane.write(out);
 //            } catch (IOException ioe) {
 //                ioe.printStackTrace();

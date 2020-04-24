@@ -1,127 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-      prefWidth="800.0"
-      xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.RunREDUCEController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.RunREDUCEController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem fx:id="inputFileMenuItem" mnemonicParsing="false" onAction="#inputFileMenuItemAction"
-                      text="Input from Files..."/>
-            <MenuItem fx:id="inputPackageFileMenuItem" mnemonicParsing="false" onAction="#inputPackageFileMenuItemAction"
-                      text="Input Package Files..."/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem fx:id="outputFileMenuItem" mnemonicParsing="false" onAction="#outputFileMenuItemAction"
-                      text="Output to File..."/>
-            <MenuItem fx:id="outputHereMenuItem" mnemonicParsing="false" onAction="#outputHereMenuItemAction"
-                      text="Output Here"/>
-            <MenuItem fx:id="shutFileMenuItem" mnemonicParsing="false" onAction="#shutFileMenuItemAction"
-                      text="Shut Output Files..."/>
-            <MenuItem fx:id="shutLastMenuItem" mnemonicParsing="false" onAction="#shutLastMenuItemAction"
-                      text="Shut Last Output File"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem fx:id="loadPackagesMenuItem" mnemonicParsing="false"
-                      onAction="#loadPackagesMenuItemAction" text="Load Packages..."/>
-            <MenuItem mnemonicParsing="false" onAction="#saveLogMenuItemAction" text="Save Session Log..."/>
-            <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit"/>
+         <CheckMenuItem fx:id="echoCheckMenuItem" mnemonicParsing="false" text="Echo File Input" />
+            <MenuItem fx:id="inputFileMenuItem" mnemonicParsing="false" onAction="#inputFileMenuItemAction" text="Input from Files..." />
+            <MenuItem fx:id="inputPackageFileMenuItem" mnemonicParsing="false" onAction="#inputPackageFileMenuItemAction" text="Input Package Files..." />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="outputFileMenuItem" mnemonicParsing="false" onAction="#outputFileMenuItemAction" text="Output to File..." />
+            <MenuItem fx:id="outputHereMenuItem" mnemonicParsing="false" onAction="#outputHereMenuItemAction" text="Output Here" />
+            <MenuItem fx:id="shutFileMenuItem" mnemonicParsing="false" onAction="#shutFileMenuItemAction" text="Shut Output Files..." />
+            <MenuItem fx:id="shutLastMenuItem" mnemonicParsing="false" onAction="#shutLastMenuItemAction" text="Shut Last Output File" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="loadPackagesMenuItem" mnemonicParsing="false" onAction="#loadPackagesMenuItemAction" text="Load Packages..." />
+            <MenuItem mnemonicParsing="false" onAction="#saveLogMenuItemAction" text="Save Session Log..." />
+            <MenuItem mnemonicParsing="false" onAction="#appendLogMenuItemAction" text="Append Session Log..." />
+            <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="REDUCE">
             <items>
                 <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE...">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="CSL REDUCE"/>
-                        <MenuItem mnemonicParsing="false" text="PSL REDUCE"/>
+                        <MenuItem mnemonicParsing="false" text="CSL REDUCE" />
+                        <MenuItem mnemonicParsing="false" text="PSL REDUCE" />
                     </items>
                 </Menu>
                 <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE...">
                     <items>
                         <RadioMenuItem mnemonicParsing="false" selected="true" text="None">
                             <toggleGroup>
-                                <ToggleGroup fx:id="autoRunButtonGroup"/>
+                                <ToggleGroup fx:id="autoRunButtonGroup" />
                             </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" text="CSL REDUCE" toggleGroup="$autoRunButtonGroup"/>
-                        <RadioMenuItem mnemonicParsing="false" text="PSL REDUCE" toggleGroup="$autoRunButtonGroup"/>
+                        <RadioMenuItem mnemonicParsing="false" text="CSL REDUCE" toggleGroup="$autoRunButtonGroup" />
+                        <RadioMenuItem mnemonicParsing="false" text="PSL REDUCE" toggleGroup="$autoRunButtonGroup" />
                     </items>
                 </Menu>
-                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction"
-                          text="Stop REDUCE"/>
-                <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false"
-                          onAction="#clearDisplayMenuItemAction" text="Clear I/O Display"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem fx:id="configureREDUCEMenuItem" mnemonicParsing="false"
-                          onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..."/>
+                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
+                <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction" text="Clear I/O Display" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="configureREDUCEMenuItem" mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..." />
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="View">
             <items>
                 <Menu fx:id="lookAndFeelSubMenu" mnemonicParsing="false" text="Look &amp; Feel">
                     <items>
-                        <RadioMenuItem fx:id="javaLFRadioButtonMenuItem" mnemonicParsing="false"
-                                       onAction="#javaLFRadioButtonMenuItemAction" selected="true" text="Java">
+                        <RadioMenuItem fx:id="javaLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#javaLFRadioButtonMenuItemAction" selected="true" text="Java">
                             <toggleGroup>
-                                <ToggleGroup fx:id="lookAndFeelButtonGroup"/>
+                                <ToggleGroup fx:id="lookAndFeelButtonGroup" />
                             </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="nativeLFRadioButtonMenuItem" mnemonicParsing="false"
-                                       onAction="#nativeLFRadioButtonMenuItemAction" text="Native"
-                                       toggleGroup="$lookAndFeelButtonGroup"/>
-                        <RadioMenuItem fx:id="motifLFRadioButtonMenuItem" mnemonicParsing="false"
-                                       onAction="#motifLFRadioButtonMenuItemAction" text="Motif"
-                                       toggleGroup="$lookAndFeelButtonGroup"/>
+                        <RadioMenuItem fx:id="nativeLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#nativeLFRadioButtonMenuItemAction" text="Native" toggleGroup="$lookAndFeelButtonGroup" />
+                        <RadioMenuItem fx:id="motifLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#motifLFRadioButtonMenuItemAction" text="Motif" toggleGroup="$lookAndFeelButtonGroup" />
                     </items>
                 </Menu>
-                <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem fx:id="fontSizeMenuItem" mnemonicParsing="false" onAction="#fontSizeMenuItemAction"
-                          text="Font Size..."/>
-                <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false"
-                               onAction="#boldPromptsCheckBoxAction" text="Bold Prompts"/>
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="fontSizeMenuItem" mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..." />
+                <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false" onAction="#boldPromptsCheckBoxAction" text="Bold Prompts" />
                 <Menu fx:id="colouredIOSubMenu" mnemonicParsing="false" text="I/O Colouring">
                     <items>
-                        <RadioMenuItem fx:id="noColouredIORadioButton" mnemonicParsing="false"
-                                       onAction="#noColouredIORadioButtonAction" selected="true" text="None">
+                        <RadioMenuItem fx:id="noColouredIORadioButton" mnemonicParsing="false" onAction="#noColouredIORadioButtonAction" selected="true" text="None">
                             <toggleGroup>
-                                <ToggleGroup fx:id="colouredIOButtonGroup"/>
+                                <ToggleGroup fx:id="colouredIOButtonGroup" />
                             </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="modeColouredIORadioButton" mnemonicParsing="false"
-                                       onAction="#modeColouredIORadioButtonAction" text="Modal"
-                                       toggleGroup="$colouredIOButtonGroup"/>
-                        <RadioMenuItem fx:id="redfrontColouredIORadioButton" mnemonicParsing="false"
-                                       onAction="#redfrontColouredIORadioButtonAction" text="Redfront"
-                                       toggleGroup="$colouredIOButtonGroup"/>
+                        <RadioMenuItem fx:id="modeColouredIORadioButton" mnemonicParsing="false" onAction="#modeColouredIORadioButtonAction" text="Modal" toggleGroup="$colouredIOButtonGroup" />
+                        <RadioMenuItem fx:id="redfrontColouredIORadioButton" mnemonicParsing="false" onAction="#redfrontColouredIORadioButtonAction" text="Redfront" toggleGroup="$colouredIOButtonGroup" />
                     </items>
                 </Menu>
-                <SeparatorMenuItem mnemonicParsing="false"/>
-                <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false"
-                               onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false" onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">
                     <toggleGroup>
-                        <ToggleGroup fx:id="displayPaneButtonGroup"/>
+                        <ToggleGroup fx:id="displayPaneButtonGroup" />
                     </toggleGroup>
                 </RadioMenuItem>
-                <RadioMenuItem fx:id="splitPaneRadioButton" mnemonicParsing="false"
-                               onAction="#splitPaneRadioButtonAction" text="Split Pane Display"
-                               toggleGroup="$displayPaneButtonGroup"/>
-                <RadioMenuItem fx:id="tabbedPaneRadioButton" mnemonicParsing="false"
-                               onAction="#tabbedPaneRadioButtonAction" text="Tabbed Pane Display"
-                               toggleGroup="$displayPaneButtonGroup"/>
-                <MenuItem fx:id="addTabMenuItem" mnemonicParsing="false" onAction="#addTabMenuItemAction"
-                          text="Add Another Tab"/>
-                <MenuItem fx:id="removeTabMenuItem" mnemonicParsing="false" onAction="#removeTabMenuItemAction"
-                          text="Remove Selected Tab"/>
+                <RadioMenuItem fx:id="splitPaneRadioButton" mnemonicParsing="false" onAction="#splitPaneRadioButtonAction" text="Split Pane Display" toggleGroup="$displayPaneButtonGroup" />
+                <RadioMenuItem fx:id="tabbedPaneRadioButton" mnemonicParsing="false" onAction="#tabbedPaneRadioButtonAction" text="Tabbed Pane Display" toggleGroup="$displayPaneButtonGroup" />
+                <MenuItem fx:id="addTabMenuItem" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
+                <MenuItem fx:id="removeTabMenuItem" mnemonicParsing="false" onAction="#removeTabMenuItemAction" text="Remove Selected Tab" />
             </items>
         </Menu>
         <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE"/>
+            <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
         </Menu>
     </MenuBar>
 </VBox>
