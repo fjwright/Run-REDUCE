@@ -10,7 +10,8 @@
             <MenuItem fx:id="inputFileMenuItem" mnemonicParsing="false" onAction="#inputFileMenuItemAction" text="Input from Files..." />
             <MenuItem fx:id="inputPackageFileMenuItem" mnemonicParsing="false" onAction="#inputPackageFileMenuItemAction" text="Input Package Files..." />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="outputFileMenuItem" mnemonicParsing="false" onAction="#outputFileMenuItemAction" text="Output to File..." />
+            <MenuItem fx:id="outputNewFileMenuItem" mnemonicParsing="false" onAction="#outputNewFileMenuItemAction" text="Output to New File..." />
+            <MenuItem fx:id="outputOpenFileMenuItem" mnemonicParsing="false" onAction="#outputOpenFileMenuItemAction" text="Output to Open File..." />
             <MenuItem fx:id="outputHereMenuItem" mnemonicParsing="false" onAction="#outputHereMenuItemAction" text="Output Here" />
             <MenuItem fx:id="shutFileMenuItem" mnemonicParsing="false" onAction="#shutFileMenuItemAction" text="Shut Output Files..." />
             <MenuItem fx:id="shutLastMenuItem" mnemonicParsing="false" onAction="#shutLastMenuItemAction" text="Shut Last Output File" />

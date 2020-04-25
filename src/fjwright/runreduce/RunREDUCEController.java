@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /*
@@ -26,16 +27,17 @@ import java.util.ResourceBundle;
 public class RunREDUCEController implements Initializable {
     // ToDo Menu ToolTips
     // Fields defined in FXML must be public!
-    // File menu
+    // File menu:
     public CheckMenuItem echoCheckMenuItem;
     public MenuItem inputFileMenuItem;
     public MenuItem inputPackageFileMenuItem;
-    public MenuItem outputFileMenuItem;
+    public MenuItem outputNewFileMenuItem;
+    public MenuItem outputOpenFileMenuItem;
     public MenuItem outputHereMenuItem;
     public MenuItem shutFileMenuItem;
     public MenuItem shutLastMenuItem;
     public MenuItem loadPackagesMenuItem;
-    // Help menu
+    // Help menu:
     public Menu helpMenu;
 
     static final FileChooser fileChooser = new FileChooser();
@@ -133,16 +135,18 @@ public class RunREDUCEController implements Initializable {
 
     // Input from Files...
     public void inputFileMenuItemAction(ActionEvent actionEvent) {
+        fileChooser.setTitle("Input from Files...");
         inputFile();
     }
 
+    // Input from Package Files...
     public void inputPackageFileMenuItemAction(ActionEvent actionEvent) {
+        fileChooser.setTitle("Input from Package Files...");
         fileChooser.setInitialDirectory(new File("D:/Program Files/Reduce/packages")); // FixMe
         inputFile();
     }
 
     private void inputFile() {
-        fileChooser.setTitle("Input from Files...");
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(INPUT_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         List<File> fileList = fileChooser.showOpenMultipleDialog(RunREDUCE.primaryStage);
@@ -160,19 +164,33 @@ public class RunREDUCEController implements Initializable {
 
     }
 
-    // Output to File...
-    // ToDo Output to a new/existing/previous output file
-    public void outputFileMenuItemAction(ActionEvent actionEvent) {
+    // Output to New File...
+    public void outputNewFileMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Output to File...");
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
-        if (file != null) { // FixMe
-            System.err.println("out \"" + file + "\"$\n");
-//            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
-//            outputFileList.remove(file); // in case it was already open
-//            outputFileList.add(file);
-//            outputFileSetEnabledMenuItems(true);
+        if (file != null) {
+            System.err.println("out \"" + file + "\"$\n"); // FixMe
+            outputFileList.remove(file); // in case it was already open
+            outputFileList.add(file);
+            outputFileSetEnabledMenuItems(true);
+        }
+    }
+
+    // Output to Open File...
+    public void outputOpenFileMenuItemAction(ActionEvent actionEvent) {
+        if (!outputFileList.isEmpty()) { // not strictly necessary
+            // Select output file to shut:
+            ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(outputFileList.get(0), outputFileList);
+            Optional<File> result = choiceDialog.showAndWait();
+            if (result.isPresent()) {
+                File file = result.get();
+                System.err.println("out \"" + file + "\"$\n"); // FixMe
+                // Make this the last file used for output:
+                outputFileList.remove(file);
+                outputFileList.add(file);
+            }
         }
     }
 
@@ -184,26 +202,19 @@ public class RunREDUCEController implements Initializable {
     }
 
     // Shut Output Files...
+    // FixMe Shut multiple files
     public void shutFileMenuItemAction(ActionEvent actionEvent) {
-//        if (shutOutputFilesDialog == null)
-//            shutOutputFilesDialog = new ShutOutputFilesDialog(frame);
-//        if (!outputFileList.isEmpty()) { // not strictly necessary
-//            // Select output files to shut:
-//            int[] fileIndices = shutOutputFilesDialog.showDialog();
-//            int length = fileIndices.length;
-//            if (length != 0) {
-//                // Process backwards to avoid remove() changing subsequent indices:
-//                StringBuilder text = new StringBuilder(outputFileList.remove(fileIndices[--length]).toString());
-//                text.append("\"$\n");
-//                for (int i = --length; i >= 0; i--) {
-//                    text.insert(0, "\", \"");
-//                    text.insert(0, outputFileList.remove(fileIndices[i]).toString());
-//                }
-//                text.insert(0, "shut \"");
-//                RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
-//            }
-//        }
-//        if (outputFileList.isEmpty()) outputFileSetEnabledMenuItems(false);
+        if (!outputFileList.isEmpty()) { // not strictly necessary
+            // Select output file to shut:
+            ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(outputFileList.get(0), outputFileList);
+            Optional<File> result = choiceDialog.showAndWait();
+            if (result.isPresent()) {
+                File file = result.get();
+                System.err.println("shut \"" + file + "\"$\n"); // FixMe
+                outputFileList.remove(file);
+            }
+        }
+        if (outputFileList.isEmpty()) outputFileSetEnabledMenuItems(false);
     }
 
     // Shut Last Output File
@@ -337,5 +348,16 @@ public class RunREDUCEController implements Initializable {
         alert.setTitle("About Run-REDUCE");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
         alert.showAndWait();
+    }
+
+    /* *************** *
+     * Support methods *
+     * *************** */
+
+    private void outputFileSetEnabledMenuItems(boolean enabled) {
+        // FixMe Uncomment
+        outputHereMenuItem.setDisable(/*RunREDUCE.reducePanel.menuItemStatus.outputHereMenuItem =*/ !enabled);
+        shutFileMenuItem.setDisable(/*RunREDUCE.reducePanel.menuItemStatus.shutFileMenuItem =*/ !enabled);
+        shutLastMenuItem.setDisable(/*RunREDUCE.reducePanel.menuItemStatus.shutLastMenuItem = */!enabled);
     }
 }
