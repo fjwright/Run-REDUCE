@@ -110,14 +110,12 @@ public class RunREDUCEController implements Initializable {
                     MenuItem menuItem = new MenuItem(manual[0]);
                     helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
 //                    menuItem.setToolTipText("Open this manual in the default application.");
-                    menuItem.setOnAction(e ->
-                    {
-                        try { // FixMe
-//                            desktop.open(RRPreferences.windowsOS ?
-//                                    // ToDo Make the directory used below configurable?
-//                                    new File(RunREDUCE.reduceConfiguration.packagesRootDir, manual[1]) :
-//                                    new File("/usr/share/doc/reduce", manual[2]));
-                            desktop.open(new File("D:/Program Files/Reduce", manual[1]));
+                    menuItem.setOnAction(e -> {
+                        try {
+                            desktop.open(RRPreferences.windowsOS ?
+                                    // ToDo Make the directory used below configurable?
+                                    new File(RunREDUCE.reduceConfiguration.packagesRootDir, manual[1]) :
+                                    new File("/usr/share/doc/reduce", manual[2]));
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -142,7 +140,7 @@ public class RunREDUCEController implements Initializable {
     // Input from Package Files...
     public void inputPackageFileMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Input from Package Files...");
-        fileChooser.setInitialDirectory(new File("D:/Program Files/Reduce/packages")); // FixMe
+        fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.packagesRootDir,"packages"));
         inputFile();
     }
 
@@ -227,7 +225,7 @@ public class RunREDUCEController implements Initializable {
     }
 
     // Load Packages...
-    public void loadPackagesMenuItemAction(ActionEvent actionEvent) {
+    public void loadPackagesMenuItemAction(ActionEvent actionEvent) { // FixMe
 //        if (loadPackagesDialog == null) loadPackagesDialog = new LoadPackagesDialog(frame);
 //        if (packageList == null) packageList = new REDUCEPackageList();
 //        if (packageList.isEmpty()) {

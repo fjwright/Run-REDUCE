@@ -4,13 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+/**
+ * This is the main class that sets up and runs the application.
+ **/
 public class RunREDUCE extends Application {
     static Stage primaryStage;
 
+    static REDUCEConfigurationDefault reduceConfigurationDefault;
+    static REDUCEConfiguration reduceConfiguration;
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         RunREDUCE.primaryStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("RunREDUCE.fxml"));
         primaryStage.setTitle("Run-REDUCE-FX");
@@ -18,8 +25,37 @@ public class RunREDUCE extends Application {
         primaryStage.show();
     }
 
+    static void errorMessageDialog(String message, String title) {
+//        JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.setTitle(title);
+        alert.showAndWait();
+    }
+
+    // Run-time argument processing:
+    static boolean debugPlatform, debugOutput;
+    private static final String debugPlatformArg = "-debugPlatform";
+    private static final String debugOutputArg = "-debugOutput";
 
     public static void main(String[] args) {
+        for (String arg : args) {
+            switch (arg) {
+                case debugPlatformArg:
+                    debugPlatform = true;
+                    break;
+                case debugOutputArg:
+                    debugOutput = true;
+                    break;
+                default:
+                    System.err.format("Unrecognised argument: %s.\nAllowed arguments are: %s and %s.",
+                            arg, debugPlatformArg, debugOutputArg);
+            }
+        }
+
+        reduceConfigurationDefault = new REDUCEConfigurationDefault();
+        reduceConfiguration = new REDUCEConfiguration();
+
+        // Launch the JavaFX GUI:
         launch(args);
     }
 }

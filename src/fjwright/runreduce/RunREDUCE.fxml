@@ -48,18 +48,6 @@
         </Menu>
         <Menu mnemonicParsing="false" text="View">
             <items>
-                <Menu fx:id="lookAndFeelSubMenu" mnemonicParsing="false" text="Look &amp; Feel">
-                    <items>
-                        <RadioMenuItem fx:id="javaLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#javaLFRadioButtonMenuItemAction" selected="true" text="Java">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="lookAndFeelButtonGroup" />
-                            </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem fx:id="nativeLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#nativeLFRadioButtonMenuItemAction" text="Native" toggleGroup="$lookAndFeelButtonGroup" />
-                        <RadioMenuItem fx:id="motifLFRadioButtonMenuItem" mnemonicParsing="false" onAction="#motifLFRadioButtonMenuItemAction" text="Motif" toggleGroup="$lookAndFeelButtonGroup" />
-                    </items>
-                </Menu>
-                <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem fx:id="fontSizeMenuItem" mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..." />
                 <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false" onAction="#boldPromptsCheckBoxAction" text="Bold Prompts" />
                 <Menu fx:id="colouredIOSubMenu" mnemonicParsing="false" text="I/O Colouring">
