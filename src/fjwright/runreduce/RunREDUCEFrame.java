@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class RunREDUCEFrame {
     // ToDo Menu ToolTips
     // Fields defined in FXML must be public or @FXML!
-    public VBox frame;
+    public BorderPane frame;
     // File menu:
     public CheckMenuItem echoCheckMenuItem;
     public MenuItem inputFileMenuItem;
@@ -120,7 +120,7 @@ public class RunREDUCEFrame {
             helpMenu.getItems().add(helpMenuItemIndex, new SeparatorMenuItem());
         }
 
-        frame.getChildren().add(new REDUCEPanel()); // This works
+        frame.setCenter(new REDUCEPanel()); // This works
     }
 
     /* ********* *
