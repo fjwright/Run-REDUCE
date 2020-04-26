@@ -1,10 +1,11 @@
 package fjwright.runreduce;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -12,11 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 /*
  * This class controls the RunREDUCE menu bar.
@@ -24,9 +23,10 @@ import java.util.ResourceBundle;
  * which this GUI was run, so filenames must be relative to that
  * directory or absolute; I currently use the latter.
  */
-public class RunREDUCEController implements Initializable {
+public class RunREDUCEFrame {
     // ToDo Menu ToolTips
-    // Fields defined in FXML must be public!
+    // Fields defined in FXML must be public or @FXML!
+    public VBox frame;
     // File menu:
     public CheckMenuItem echoCheckMenuItem;
     public MenuItem inputFileMenuItem;
@@ -59,13 +59,8 @@ public class RunREDUCEController implements Initializable {
     /**
      * Called to initialize a controller after its root element has been
      * completely processed.
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  <tt>null</tt> if the location is not known.
-     * @param resources The resources used to localize the root object, or <tt>null</tt> if
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML private void initialize() {
         // Dynamically finish building menus.
 
         /* ********* *
@@ -125,6 +120,7 @@ public class RunREDUCEController implements Initializable {
             helpMenu.getItems().add(helpMenuItemIndex, new SeparatorMenuItem());
         }
 
+        frame.getChildren().add(new REDUCEPanel()); // This works
     }
 
     /* ********* *

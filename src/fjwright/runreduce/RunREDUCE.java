@@ -19,7 +19,7 @@ public class RunREDUCE extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         RunREDUCE.primaryStage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("RunREDUCE.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("RunREDUCEFrame.fxml"));
         primaryStage.setTitle("Run-REDUCE-FX");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
