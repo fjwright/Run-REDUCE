@@ -27,6 +27,16 @@ public class REDUCEPanel extends BorderPane {
     public Button sendButton;
     public Button laterButton;
 
+    // Menu item status:
+    boolean inputFileMenuItemDisabled;
+    boolean outputFileMenuItemDisabled;
+    boolean loadPackagesMenuItemDisabled;
+    boolean stopREDUCEMenuItemDisabled;
+    boolean runREDUCESubmenuDisabled;
+    boolean outputHereMenuItemDisabled;
+    boolean shutFileMenuItemDisabled;
+    boolean shutLastMenuItemDisabled;
+
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
@@ -50,7 +60,7 @@ public class REDUCEPanel extends BorderPane {
         }
 
         // Give the input text area the initial focus:
-//        inputTextArea.requestFocusInWindow();
+        inputTextArea.requestFocus();
 
     }
 
@@ -67,19 +77,40 @@ public class REDUCEPanel extends BorderPane {
             if (pattern.matcher(text).matches()) {
                 sendButton.setDisable(!(runningREDUCE = false));
                 // Reset enabled status of menu items:
-//                RunREDUCE.reducePanel.menuItemStatus.reduceStopped();
+                RunREDUCE.runREDUCEFrame.reduceStopped();
             }
             // Return the focus to the input text area:
-//            inputTextArea.requestFocusInWindow();
+            inputTextArea.requestFocus();
         }
     }
 
     public void earlierButtonAction(ActionEvent actionEvent) {
-        System.err.println("Earlier button pressed.");
+        if (inputListIndex > 0) {
+            inputTextArea.setText(inputList.get(--inputListIndex));
+            if (inputListIndex <= maxInputListIndex)
+                laterButton.setDisable(false);
+        }
+        if (inputListIndex == 0)
+            earlierButton.setDisable(true);
+        // Return the focus to the input text area:
+        inputTextArea.requestFocus();
     }
 
     public void laterButtonAction(ActionEvent actionEvent) {
-        System.err.println("Later button pressed.");
+        if (inputListIndex < maxInputListIndex) {
+            inputTextArea.setText(inputList.get(++inputListIndex));
+        } else {
+            inputTextArea.setText(null);
+            inputListIndex = maxInputListIndex + 1;
+        }
+        if (inputListIndex > 0) {
+            earlierButton.setDisable(false);
+        }
+        if (inputListIndex > maxInputListIndex) {
+            laterButton.setDisable(true);
+        }
+        // Return the focus to the input text area:
+        inputTextArea.requestFocus();
     }
 
     void sendInteractiveInputToREDUCE(String text, boolean autoTerminate) {
@@ -97,7 +128,7 @@ public class REDUCEPanel extends BorderPane {
         outputTextArea.appendText(text);
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
-//        outputTextPane.setCaretPosition(styledDoc.getLength());
+        outputTextArea.end();
 //        sendStringToREDUCENoEcho(text);
     }
 

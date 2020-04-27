@@ -11,6 +11,7 @@ import javafx.stage.Stage;
  * This is the main class that sets up and runs the application.
  **/
 public class RunREDUCE extends Application {
+    static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
@@ -19,7 +20,9 @@ public class RunREDUCE extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         RunREDUCE.primaryStage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("RunREDUCEFrame.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RunREDUCEFrame.fxml"));
+        Parent root = fxmlLoader.load();
+        runREDUCEFrame = fxmlLoader.getController();
         primaryStage.setTitle("Run-REDUCE-FX");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
