@@ -4,67 +4,72 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!-- Do not include the controller in this file! -->
-<!-- Use XML character entity references for control characters in strings, e.g. &#10; for LF. -->
+<!-- Do not include the controller when compiling this file!
+Error messages that no controller is specified do not stop compilation.
+Use XML character entity references for control characters in strings, e.g. &#10; for LF. -->
+
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <SplitPane dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
-         <items>
-            <BorderPane>
-               <top>
-                  <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
-               </top>
-               <center>
-                  <ScrollPane BorderPane.alignment="CENTER">
-                     <content>
-                        <TextArea fx:id="outputTextPane" editable="false" />
-                     </content></ScrollPane>
-               </center>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </BorderPane>
-            <BorderPane>
-               <top>
-                  <Label text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
-               </top>
-               <center>
-                  <ScrollPane BorderPane.alignment="CENTER">
-                     <content>
-                        <TextArea fx:id="inputTextArea" />
-                     </content></ScrollPane>
-               </center>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </BorderPane>
-         </items>
-      </SplitPane>
-   </center>
-   <bottom>
-      <TilePane alignment="CENTER" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="earlierButton" mnemonicParsing="false" text="▲ Earlier Input">
-               <tooltip>
-                  <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
-               </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="sendButton" mnemonicParsing="false" text="Send Input">
-               <tooltip>
-                  <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
-               </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="laterButton" mnemonicParsing="false" text="▼ Later Input">
-               <tooltip>
-                  <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
-               </tooltip>
-            </Button>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </TilePane>
-   </bottom>
+    <!--fx:controller="fjwright.runreduce.REDUCEPanel"-->
+    <center>
+        <SplitPane dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
+            <items>
+                <BorderPane>
+                    <top>
+                        <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
+                    </top>
+                    <center>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+                            <content>
+                                <TextArea fx:id="outputTextArea" editable="false" />
+                            </content>
+                        </ScrollPane>
+                    </center>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </BorderPane>
+                <BorderPane>
+                    <top>
+                        <Label text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
+                    </top>
+                    <center>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+                            <content>
+                                <TextArea fx:id="inputTextArea" />
+                            </content>
+                        </ScrollPane>
+                    </center>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </BorderPane>
+            </items>
+        </SplitPane>
+    </center>
+    <bottom>
+        <TilePane alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="earlierButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#earlierButtonAction" text="▲ Earlier Input">
+                    <tooltip>
+                        <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
+                    </tooltip>
+                </Button>
+                <Button mnemonicParsing="false" text="Button" visible="false" />
+                <Button fx:id="sendButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendButtonAction" text="Send Input">
+                    <tooltip>
+                        <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
+                    </tooltip>
+                </Button>
+                <Button mnemonicParsing="false" text="Button" visible="false" />
+                <Button fx:id="laterButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#laterButtonAction" text="▼ Later Input">
+                    <tooltip>
+                        <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
+                    </tooltip>
+                </Button>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </TilePane>
+    </bottom>
 </fx:root>

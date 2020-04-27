@@ -120,7 +120,7 @@ public class RunREDUCEFrame {
             helpMenu.getItems().add(helpMenuItemIndex, new SeparatorMenuItem());
         }
 
-        frame.setCenter(new REDUCEPanel()); // This works
+        frame.setCenter(new REDUCEPanel());
     }
 
     /* ********* *
