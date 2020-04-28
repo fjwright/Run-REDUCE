@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
+    static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
     static REDUCEConfiguration reduceConfiguration;
@@ -26,6 +27,10 @@ public class RunREDUCE extends Application {
         primaryStage.setTitle("Run-REDUCE-FX");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
+
+        runREDUCEFrame.frame.setCenter(reducePanel = new REDUCEPanel());
+        // Reset menu item status as appropriate when REDUCE is not running:
+        runREDUCEFrame.reduceStopped();
     }
 
     static void errorMessageDialog(String message, String title) {
