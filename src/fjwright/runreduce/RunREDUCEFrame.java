@@ -1,5 +1,7 @@
 package fjwright.runreduce;
 
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -8,7 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -40,6 +46,7 @@ public class RunREDUCEFrame {
     // REDUCE menu:
     public MenuItem stopREDUCEMenuItem;
     public Menu runREDUCESubmenu;
+    public Menu autoRunREDUCESubmenu;
     // Help menu:
     public Menu helpMenu;
 
@@ -65,13 +72,22 @@ public class RunREDUCEFrame {
      */
     @FXML
     private void initialize() {
-        // Dynamically finish building menus.
+        // Finish building menus dynamically.
 
         /* ********* *
          * File menu *
          * ********* */
 
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        /* *********** *
+         * REDUCE menu *
+         * *********** */
+
+        // Create a submenu to run the selected version of REDUCE:
+        runREDUCESubmenuBuild();
+        // Create a submenu to select the version of REDUCE to auto-run (or none):
+        autoRunREDUCESubmenuBuild();
 
         /* ********* *
          * Help menu *
@@ -280,9 +296,16 @@ public class RunREDUCEFrame {
      * *********** */
 
     public void stopREDUCEMenuItemAction(ActionEvent actionEvent) {
+        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
+        RunREDUCE.reducePanel.sendButton.setDisable(true);
+        RunREDUCE.reducePanel.runningREDUCE = false;
+        outputFileList.clear();
+        // Reset enabled status of menu items:
+        RunREDUCE.runREDUCEFrame.reduceStopped();
     }
 
     public void clearDisplayMenuItemAction(ActionEvent actionEvent) {
+        RunREDUCE.reducePanel.outputTextArea.clear();
     }
 
     public void configureREDUCEMenuItemAction(ActionEvent actionEvent) {
@@ -354,6 +377,53 @@ public class RunREDUCEFrame {
         shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = !enabled);
     }
 
+    private void runREDUCESubmenuBuild() {
+        ObservableList<MenuItem> menuItems = runREDUCESubmenu.getItems();
+        menuItems.clear();
+        for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
+            MenuItem item = new MenuItem(cmd.version);
+            menuItems.add(item);
+            item.setOnAction(e -> {
+                // Run REDUCE.  (A direct call hangs the GUI!)
+                Platform.runLater(() -> RunREDUCE.reducePanel.run(cmd));
+            });
+        }
+    }
+
+    private void autoRunREDUCESubmenuBuild() {
+        ObservableList<MenuItem> menuItems = autoRunREDUCESubmenu.getItems();
+        menuItems.clear();
+        ToggleGroup autoRunToggleGroup = new ToggleGroup();
+        RadioMenuItem noAutoRunRadioMenuItem = new RadioMenuItem(RRPreferences.NONE);
+        menuItems.add(noAutoRunRadioMenuItem);
+        noAutoRunRadioMenuItem.setToggleGroup(autoRunToggleGroup);
+        if (RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) noAutoRunRadioMenuItem.setSelected(true);
+        noAutoRunRadioMenuItem.setOnAction(e -> {
+            if (((RadioMenuItem) e.getSource()).isSelected())
+                RRPreferences.save(RRPreferences.AUTORUNVERSION, RRPreferences.NONE);
+        });
+        for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
+            RadioMenuItem item = new RadioMenuItem(cmd.version);
+            if (RRPreferences.autoRunVersion.equals(cmd.version)) item.setSelected(true);
+            menuItems.add(item);
+            item.setToggleGroup(autoRunToggleGroup);
+            item.setOnAction(e -> {
+                RadioMenuItem radioMenuItem = (RadioMenuItem) e.getSource();
+                if (radioMenuItem.isSelected()) {
+                    String version = radioMenuItem.getText();
+                    RRPreferences.save(RRPreferences.AUTORUNVERSION, version);
+                    if (!RunREDUCE.reducePanel.runningREDUCE) {
+                        for (REDUCECommand cmd1 : RunREDUCE.reduceConfiguration.reduceCommandList) {
+                            if (version.equals(cmd1.version))
+                                Platform.runLater(() -> RunREDUCE.reducePanel.run(cmd1));
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     /**
      * Reset menu item status as appropriate when REDUCE is not running.
      */
@@ -371,6 +441,7 @@ public class RunREDUCEFrame {
     private void startingOrStoppingREDUCE(boolean starting) {
         // Items to enable/disable when REDUCE starts/stops running:
         inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled = !starting);
+        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled = !starting);
         outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled = !starting);
         outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled = !starting);
         loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled = !starting);
@@ -390,6 +461,7 @@ public class RunREDUCEFrame {
      */
     void updateMenus() {
         inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
+        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
         outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
         outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
         loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);

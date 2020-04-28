@@ -1,5 +1,6 @@
 package fjwright.runreduce;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -7,9 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -61,8 +64,17 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
+        // Auto-run REDUCE if appropriate:
+        if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
+            for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
+                if (RRPreferences.autoRunVersion.equals(cmd.version)) {
+                    // Run REDUCE.  (A direct call hangs the GUI!)
+                    Platform.runLater(() -> run(cmd));
+                    break;
+                }
+
         // Give the input text area the initial focus:
-        inputTextArea.requestFocus();
+        inputTextArea.requestFocus(); // FixMe This doesn't seem to be working!
         // Reset menu item status as appropriate when REDUCE is not running:
         // This causes problems if called here but OK where REDUCEPanel instantiated, currently in RunREDUCE!
 //        RunREDUCE.runREDUCEFrame.reduceStopped();
@@ -72,8 +84,23 @@ public class REDUCEPanel extends BorderPane {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
             inputList.add(text);
-            sendInteractiveInputToREDUCE(text, true);
-            inputTextArea.setText(null);
+            boolean questionPrompt = false;
+            for (int i = outputTextArea.getLength() - 1; i > 0; i--) {
+                String c = outputTextArea.getText(i, i + 1);
+                if (c.equals("\n")) {
+                    // found start of last line
+                    break;
+                } else if (c.equals("?")) {
+                    // found question mark
+                    questionPrompt = true;
+                    break;
+                }
+            }
+            boolean unshifted = true;
+//            unshifted = (e.getModifiers() & java.awt.event.ActionEvent.SHIFT_MASK) == 0; // FixMe
+            // if shifted then do not auto terminate, hence if unshifted then auto terminate:
+            sendInteractiveInputToREDUCE(text, !questionPrompt && unshifted);
+            inputTextArea.clear();
             inputListIndex = inputList.size();
             maxInputListIndex = inputListIndex - 1;
             earlierButton.setDisable(false);
@@ -134,7 +161,9 @@ public class REDUCEPanel extends BorderPane {
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
         outputTextArea.end();
-//        sendStringToREDUCENoEcho(text);
+        sendStringToREDUCENoEcho(text);
+        // Return the focus to the input text area:
+        inputTextArea.requestFocus();
     }
 
     void sendStringToREDUCENoEcho(String text) {
@@ -208,6 +237,9 @@ public class REDUCEPanel extends BorderPane {
 //            }
 //            sendStringToREDUCENoEcho("load_package redfront;\n");
 //        }
+
+        // Return the focus to the input text area:
+        inputTextArea.requestFocus();
     }
 }
 
@@ -215,7 +247,7 @@ public class REDUCEPanel extends BorderPane {
  * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
  */
 class REDUCEOutputThread extends Thread {
-    InputStream input;        // REDUCE pipe output (buffered)
+    InputStream input;       // REDUCE pipe output (buffered)
     TextArea outputTextArea; // GUI output pane
     static final SimpleAttributeSet algebraicPromptAttributeSet = new SimpleAttributeSet();
     static final SimpleAttributeSet symbolicPromptAttributeSet = new SimpleAttributeSet();
@@ -237,12 +269,12 @@ class REDUCEOutputThread extends Thread {
     REDUCEOutputThread(InputStream input, TextArea outputTextArea) {
         this.input = input;
         this.outputTextArea = outputTextArea;
-        StyleConstants.setForeground(algebraicOutputAttributeSet, ALGEBRAICOUTPUTCOLOR);
-        StyleConstants.setForeground(symbolicOutputAttributeSet, SYMBOLICOUTPUTCOLOR);
-        StyleConstants.setForeground(algebraicInputAttributeSet, ALGEBRAICINPUTCOLOR);
-        StyleConstants.setForeground(symbolicInputAttributeSet, SYMBOLICINPUTCOLOR);
-        StyleConstants.setForeground(algebraicPromptAttributeSet, ALGEBRAICINPUTCOLOR);
-        StyleConstants.setForeground(symbolicPromptAttributeSet, SYMBOLICINPUTCOLOR);
+//        StyleConstants.setForeground(algebraicOutputAttributeSet, ALGEBRAICOUTPUTCOLOR);
+//        StyleConstants.setForeground(symbolicOutputAttributeSet, SYMBOLICOUTPUTCOLOR);
+//        StyleConstants.setForeground(algebraicInputAttributeSet, ALGEBRAICINPUTCOLOR);
+//        StyleConstants.setForeground(symbolicInputAttributeSet, SYMBOLICINPUTCOLOR);
+//        StyleConstants.setForeground(algebraicPromptAttributeSet, ALGEBRAICINPUTCOLOR);
+//        StyleConstants.setForeground(symbolicPromptAttributeSet, SYMBOLICINPUTCOLOR);
     }
 
     public void run() {
@@ -301,7 +333,7 @@ class REDUCEOutputThread extends Thread {
 //                                    styledDoc.insertString(styledDoc.getLength(), promptString, promptAttributeSet);
                                 } else
 //                                    styledDoc.insertString(styledDoc.getLength(), text.toString(), outputAttributeSet);
-                                break; // end of case RunREDUCEPrefs.MODE
+                                    break; // end of case RunREDUCEPrefs.MODE
 
                             case REDFRONT: // redfront coloured IO display processing
                                 /*

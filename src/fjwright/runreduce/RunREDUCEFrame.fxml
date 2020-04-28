@@ -24,23 +24,8 @@
            </Menu>
            <Menu mnemonicParsing="false" text="REDUCE">
                <items>
-                   <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE...">
-                       <items>
-                           <MenuItem mnemonicParsing="false" text="CSL REDUCE" />
-                           <MenuItem mnemonicParsing="false" text="PSL REDUCE" />
-                       </items>
-                   </Menu>
-                   <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE...">
-                       <items>
-                           <RadioMenuItem mnemonicParsing="false" selected="true" text="None">
-                               <toggleGroup>
-                                   <ToggleGroup fx:id="autoRunButtonGroup" />
-                               </toggleGroup>
-                           </RadioMenuItem>
-                           <RadioMenuItem mnemonicParsing="false" text="CSL REDUCE" toggleGroup="$autoRunButtonGroup" />
-                           <RadioMenuItem mnemonicParsing="false" text="PSL REDUCE" toggleGroup="$autoRunButtonGroup" />
-                       </items>
-                   </Menu>
+                   <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..."/>
+                   <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..."/>
                    <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
                    <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction" text="Clear I/O Display" />
                    <SeparatorMenuItem mnemonicParsing="false" />
