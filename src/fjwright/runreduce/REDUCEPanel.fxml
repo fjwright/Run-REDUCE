@@ -35,7 +35,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                     <center>
                         <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                             <content>
-                                <TextArea fx:id="inputTextArea" />
+                                <TextArea fx:id="inputTextArea" onKeyPressed="#inputTextAreaOnKeyPressed" />
                             </content>
                         </ScrollPane>
                     </center>
@@ -55,7 +55,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                     </tooltip>
                 </Button>
                 <Button mnemonicParsing="false" text="Button" visible="false" />
-                <Button fx:id="sendButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendButtonAction" text="Send Input">
+                <Button fx:id="sendButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" text="Send Input">
                     <tooltip>
                         <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
                     </tooltip>

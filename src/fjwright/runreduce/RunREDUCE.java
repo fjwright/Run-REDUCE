@@ -34,7 +34,6 @@ public class RunREDUCE extends Application {
     }
 
     static void errorMessageDialog(String message, String title) {
-//        JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.setTitle(title);
         alert.showAndWait();

@@ -1,19 +1,17 @@
 package fjwright.runreduce;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
-import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +23,18 @@ import java.util.regex.Pattern;
  * The run method runs REDUCE as a sub-process.
  */
 public class REDUCEPanel extends BorderPane {
-    // Fields defined in RunREDUCEFrame.fxml:
-    public Label outputLabel;
-    public TextArea outputTextArea;
-    public TextArea inputTextArea;
-    public Button earlierButton;
-    public Button sendButton;
-    public Button laterButton;
+    @FXML
+    Label outputLabel;
+    @FXML
+    TextArea outputTextArea;
+    @FXML
+    TextArea inputTextArea;
+    @FXML
+    Button sendButton;
+    @FXML
+    Button earlierButton;
+    @FXML
+    Button laterButton;
 
     // Menu item status:
     boolean inputFileMenuItemDisabled;
@@ -52,7 +55,7 @@ public class REDUCEPanel extends BorderPane {
     boolean runningREDUCE;
     String title; // REDUCE version if REDUCE is running
     static final String outputLabelDefault = "Input/Output Display";
-    static Color deselectedBackground = new Color(0xF8_F8_F8);
+//    static Color deselectedBackground = new Color(0xF8_F8_F8);
 
     public REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -80,7 +83,18 @@ public class REDUCEPanel extends BorderPane {
 //        RunREDUCE.runREDUCEFrame.reduceStopped();
     }
 
-    public void sendButtonAction(ActionEvent actionEvent) {
+    @FXML
+    private void sendButtonClicked(MouseEvent mouseEvent) {
+        sendAction(mouseEvent.isShiftDown());
+    }
+
+    @FXML
+    private void sendButtonKeyTyped(KeyEvent keyEvent) {
+        if (keyEvent.getCharacter().equals(" "))
+            sendAction(keyEvent.isShiftDown());
+    }
+
+    private void sendAction(boolean isShiftDown) {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
             inputList.add(text);
@@ -96,10 +110,8 @@ public class REDUCEPanel extends BorderPane {
                     break;
                 }
             }
-            boolean unshifted = true;
-//            unshifted = (e.getModifiers() & java.awt.event.ActionEvent.SHIFT_MASK) == 0; // FixMe
-            // if shifted then do not auto terminate, hence if unshifted then auto terminate:
-            sendInteractiveInputToREDUCE(text, !questionPrompt && unshifted);
+            // if isShiftDown then do not auto terminate, hence if !isShiftDown then auto terminate:
+            sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             inputTextArea.clear();
             inputListIndex = inputList.size();
             maxInputListIndex = inputListIndex - 1;
@@ -116,7 +128,8 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    public void earlierButtonAction(ActionEvent actionEvent) {
+    @FXML
+    private void earlierButtonAction() {
         if (inputListIndex > 0) {
             inputTextArea.setText(inputList.get(--inputListIndex));
             if (inputListIndex <= maxInputListIndex)
@@ -128,11 +141,12 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.requestFocus();
     }
 
-    public void laterButtonAction(ActionEvent actionEvent) {
+    @FXML
+    private void laterButtonAction() {
         if (inputListIndex < maxInputListIndex) {
             inputTextArea.setText(inputList.get(++inputListIndex));
         } else {
-            inputTextArea.setText(null);
+            inputTextArea.clear();
             inputListIndex = maxInputListIndex + 1;
         }
         if (inputListIndex > 0) {
@@ -145,7 +159,23 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.requestFocus();
     }
 
-    void sendInteractiveInputToREDUCE(String text, boolean autoTerminate) {
+    @FXML
+    private void inputTextAreaOnKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.isControlDown()) {
+            switch (keyEvent.getCode()) {
+                case ENTER:
+                    sendAction(keyEvent.isShiftDown());
+                    break;
+                case UP:
+                    earlierButtonAction();
+                    break;
+                case DOWN:
+                    laterButtonAction();
+            }
+        }
+    }
+
+    private void sendInteractiveInputToREDUCE(String text, boolean autoTerminate) {
         // Strip trailing white space and if autoTerminate then ensure the input ends with a terminator:
         int i = text.length() - 1;
         char c = 0;
@@ -261,10 +291,10 @@ class REDUCEOutputThread extends Thread {
     private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
     private final StringBuilder text = new StringBuilder(); // Must not be static!
 
-    private static final Color ALGEBRAICOUTPUTCOLOR = Color.blue;
-    private static final Color SYMBOLICOUTPUTCOLOR = new Color(0x80_00_80);
-    private static final Color ALGEBRAICINPUTCOLOR = Color.red;
-    private static final Color SYMBOLICINPUTCOLOR = new Color(0x80_00_00);
+//    private static final Color ALGEBRAICOUTPUTCOLOR = Color.blue;
+//    private static final Color SYMBOLICOUTPUTCOLOR = new Color(0x80_00_80);
+//    private static final Color ALGEBRAICINPUTCOLOR = Color.red;
+//    private static final Color SYMBOLICINPUTCOLOR = new Color(0x80_00_00);
 
     REDUCEOutputThread(InputStream input, TextArea outputTextArea) {
         this.input = input;

@@ -288,7 +288,7 @@ public class RunREDUCEFrame {
 
     // Exit
     public void exitMenuItemAction(ActionEvent actionEvent) {
-        System.exit(0);
+        Platform.exit();
     }
 
     /* *********** *
