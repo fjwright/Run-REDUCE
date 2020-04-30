@@ -10,11 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -32,43 +28,59 @@ import java.util.Optional;
 public class RunREDUCEFrame {
     // ToDo Menu ToolTips
     // Fields defined in FXML must be public or @FXML!
-    public BorderPane frame;
+    @FXML
+    BorderPane frame;
     // File menu:
-    public CheckMenuItem echoCheckMenuItem;
-    public MenuItem inputFileMenuItem;
-    public MenuItem inputPackageFileMenuItem;
-    public MenuItem outputNewFileMenuItem;
-    public MenuItem outputOpenFileMenuItem;
-    public MenuItem outputHereMenuItem;
-    public MenuItem shutFileMenuItem;
-    public MenuItem shutLastMenuItem;
-    public MenuItem loadPackagesMenuItem;
+    @FXML
+    private CheckMenuItem echoCheckMenuItem;
+    @FXML
+    private MenuItem inputFileMenuItem;
+    @FXML
+    private MenuItem inputPackageFileMenuItem;
+    @FXML
+    private MenuItem outputNewFileMenuItem;
+    @FXML
+    private MenuItem outputOpenFileMenuItem;
+    @FXML
+    private MenuItem outputHereMenuItem;
+    @FXML
+    private MenuItem shutFileMenuItem;
+    @FXML
+    private MenuItem shutLastMenuItem;
+    @FXML
+    private MenuItem loadPackagesMenuItem;
     // REDUCE menu:
-    public MenuItem stopREDUCEMenuItem;
-    public Menu runREDUCESubmenu;
-    public Menu autoRunREDUCESubmenu;
+    @FXML
+    private MenuItem stopREDUCEMenuItem;
+    @FXML
+    private Menu runREDUCESubmenu;
+    @FXML
+    private Menu autoRunREDUCESubmenu;
+    // View menu:
+    @FXML
+    private CheckMenuItem boldPromptsCheckBox;
     // Help menu:
-    public Menu helpMenu;
+    @FXML
+    private Menu helpMenu;
 
-    static final FileChooser fileChooser = new FileChooser();
     // ToDo Separate input and output file choosers?
-    static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
+    private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Input Files (*.red, *.tst)", "*.red", "*.tst");
-    static final FileChooser.ExtensionFilter LOG_FILE_FILTER =
+    private static final FileChooser fileChooser = new FileChooser();
+    private static final FileChooser.ExtensionFilter LOG_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Log Files (*.log, *.rlg)", "*.log", "*.rlg");
-    static final FileChooser.ExtensionFilter TEXT_FILE_FILTER =
+    private static final FileChooser.ExtensionFilter TEXT_FILE_FILTER =
             new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
-    static final FileChooser.ExtensionFilter ALL_FILE_FILTER =
+    private static final FileChooser.ExtensionFilter ALL_FILE_FILTER =
             new FileChooser.ExtensionFilter("All Files", "*.*");
 
     //    static ShutOutputFilesDialog shutOutputFilesDialog;
-    static final List<File> outputFileList = new ArrayList<>();
+    private static final List<File> outputFileList = new ArrayList<>();
     //    static LoadPackagesDialog loadPackagesDialog;
     static List<String> packageList;
 
     /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
+     * Called to initialize a controller after its root element has been completely processed.
      */
     @FXML
     private void initialize() {
@@ -88,6 +100,13 @@ public class RunREDUCEFrame {
         runREDUCESubmenuBuild();
         // Create a submenu to select the version of REDUCE to auto-run (or none):
         autoRunREDUCESubmenuBuild();
+
+        /* ********* *
+         * View menu *
+         * ********* */
+
+        boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
+//        applyBoldPromptsState();
 
         /* ********* *
          * Help menu *
@@ -146,13 +165,15 @@ public class RunREDUCEFrame {
      * ********* */
 
     // Input from Files...
-    public void inputFileMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void inputFileMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Input from Files...");
         inputFile();
     }
 
     // Input from Package Files...
-    public void inputPackageFileMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void inputPackageFileMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Input from Package Files...");
         fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages"));
         inputFile();
@@ -176,7 +197,8 @@ public class RunREDUCEFrame {
     }
 
     // Output to New File...
-    public void outputNewFileMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void outputNewFileMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Output to File...");
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
@@ -185,12 +207,13 @@ public class RunREDUCEFrame {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
             outputFileList.remove(file); // in case it was already open
             outputFileList.add(file);
-            outputFileSetEnabledMenuItems(true);
+            outputFileSetDisableMenuItems(false);
         }
     }
 
     // Output to Open File...
-    public void outputOpenFileMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void outputOpenFileMenuItemAction(ActionEvent actionEvent) {
         if (!outputFileList.isEmpty()) { // not strictly necessary
             // Select output file to shut:
             ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(outputFileList.get(0), outputFileList);
@@ -206,14 +229,16 @@ public class RunREDUCEFrame {
     }
 
     // Output Here
-    public void outputHereMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void outputHereMenuItemAction(ActionEvent actionEvent) {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out t$\n");
         outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = true);
     }
 
     // Shut Output Files...
     // FixMe Shut multiple files
-    public void shutFileMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void shutFileMenuItemAction(ActionEvent actionEvent) {
         if (!outputFileList.isEmpty()) { // not strictly necessary
             // Select output file to shut:
             ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(outputFileList.get(0), outputFileList);
@@ -224,20 +249,28 @@ public class RunREDUCEFrame {
                 outputFileList.remove(file);
             }
         }
-        if (outputFileList.isEmpty()) outputFileSetEnabledMenuItems(false);
+        if (outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
     }
 
     // Shut Last Output File
-    public void shutLastMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void shutLastMenuItemAction(ActionEvent actionEvent) {
         if (!outputFileList.isEmpty()) { // not strictly necessary
             int last = outputFileList.size() - 1;
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("shut \"" + outputFileList.remove(last).toString() + "\"$\n");
         }
-        if (outputFileList.isEmpty()) outputFileSetEnabledMenuItems(false);
+        if (outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
+    }
+
+    private void outputFileSetDisableMenuItems(boolean disable) {
+        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = disable);
+        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = disable);
+        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = disable);
     }
 
     // Load Packages...
-    public void loadPackagesMenuItemAction(ActionEvent actionEvent) { // FixMe
+    @FXML
+    private void loadPackagesMenuItemAction(ActionEvent actionEvent) { // FixMe
 //        if (loadPackagesDialog == null) loadPackagesDialog = new LoadPackagesDialog(frame);
 //        if (packageList == null) packageList = new REDUCEPackageList();
 //        if (packageList.isEmpty()) {
@@ -260,13 +293,15 @@ public class RunREDUCEFrame {
     }
 
     // Save Session Log...
-    public void saveLogMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void saveLogMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Save Session Log...");
         saveLog(false);
     }
 
     // Append Session Log...
-    public void appendLogMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void appendLogMenuItemAction(ActionEvent actionEvent) {
         fileChooser.setTitle("Append Session Log...");
         saveLog(true);
     }
@@ -287,95 +322,14 @@ public class RunREDUCEFrame {
     }
 
     // Exit
-    public void exitMenuItemAction(ActionEvent actionEvent) {
+    @FXML
+    private void exitMenuItemAction(ActionEvent actionEvent) {
         Platform.exit();
     }
 
     /* *********** *
      * REDUCE menu *
      * *********** */
-
-    public void stopREDUCEMenuItemAction(ActionEvent actionEvent) {
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
-        RunREDUCE.reducePanel.sendButton.setDisable(true);
-        RunREDUCE.reducePanel.runningREDUCE = false;
-        outputFileList.clear();
-        // Reset enabled status of menu items:
-        RunREDUCE.runREDUCEFrame.reduceStopped();
-    }
-
-    public void clearDisplayMenuItemAction(ActionEvent actionEvent) {
-        RunREDUCE.reducePanel.outputTextArea.clear();
-    }
-
-    public void configureREDUCEMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    /* ********* *
-     * View menu *
-     * ********* */
-
-    public void javaLFRadioButtonMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    public void nativeLFRadioButtonMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    public void motifLFRadioButtonMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    public void fontSizeMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    public void boldPromptsCheckBoxAction(ActionEvent actionEvent) {
-    }
-
-    public void noColouredIORadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void modeColouredIORadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void redfrontColouredIORadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void singlePaneRadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void splitPaneRadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void tabbedPaneRadioButtonAction(ActionEvent actionEvent) {
-    }
-
-    public void addTabMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    public void removeTabMenuItemAction(ActionEvent actionEvent) {
-    }
-
-    /* ********* *
-     * Help menu *
-     * ********* */
-
-    public void aboutMenuItemAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Prototype version 0.1\n" +
-                        "\u00A9 Francis Wright, April 2020");
-        alert.setTitle("About Run-REDUCE");
-        alert.setHeaderText("Run REDUCE in a JavaFX GUI");
-        alert.showAndWait();
-    }
-
-    /* *************** *
-     * Support methods *
-     * *************** */
-
-    private void outputFileSetEnabledMenuItems(boolean enabled) {
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = !enabled);
-        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = !enabled);
-        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = !enabled);
-    }
 
     private void runREDUCESubmenuBuild() {
         ObservableList<MenuItem> menuItems = runREDUCESubmenu.getItems();
@@ -423,6 +377,96 @@ public class RunREDUCEFrame {
             });
         }
     }
+
+    @FXML
+    private void stopREDUCEMenuItemAction(ActionEvent actionEvent) {
+        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
+        RunREDUCE.reducePanel.sendButton.setDisable(true);
+        RunREDUCE.reducePanel.runningREDUCE = false;
+        outputFileList.clear();
+        // Reset enabled status of menu items:
+        RunREDUCE.runREDUCEFrame.reduceStopped();
+    }
+
+    @FXML
+    private void clearDisplayMenuItemAction(ActionEvent actionEvent) {
+        RunREDUCE.reducePanel.outputTextArea.clear();
+    }
+
+    @FXML
+    private void configureREDUCEMenuItemAction(ActionEvent actionEvent) {
+    }
+
+    /* ********* *
+     * View menu *
+     * ********* */
+
+    @FXML
+    private void fontSizeMenuItemAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void boldPromptsCheckBoxAction(ActionEvent actionEvent) {
+        RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected();
+        RRPreferences.save(RRPreferences.BOLDPROMPTS);
+//        applyBoldPromptsState();
+    }
+
+//    static void applyBoldPromptsState() {
+//        StyleConstants.setBold(REDUCEOutputThread.promptAttributeSet, RRPreferences.boldPromptsState);
+//        StyleConstants.setBold(REDUCEOutputThread.algebraicPromptAttributeSet, RRPreferences.boldPromptsState);
+//        StyleConstants.setBold(REDUCEOutputThread.symbolicPromptAttributeSet, RRPreferences.boldPromptsState);
+//    }
+
+    @FXML
+    private void noColouredIORadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void modeColouredIORadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void redfrontColouredIORadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void singlePaneRadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void splitPaneRadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void tabbedPaneRadioButtonAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void addTabMenuItemAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void removeTabMenuItemAction(ActionEvent actionEvent) {
+    }
+
+    /* ********* *
+     * Help menu *
+     * ********* */
+
+    @FXML
+    private void aboutMenuItemAction(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Prototype version 0.1\n" +
+                        "\u00A9 Francis Wright, April 2020");
+        alert.setTitle("About Run-REDUCE");
+        alert.setHeaderText("Run REDUCE in a JavaFX GUI");
+        alert.showAndWait();
+    }
+
+    /* *************** *
+     * Support methods *
+     * *************** */
 
     /**
      * Reset menu item status as appropriate when REDUCE is not running.
