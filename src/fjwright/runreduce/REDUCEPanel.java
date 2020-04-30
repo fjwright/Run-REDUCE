@@ -67,6 +67,8 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
+        outputTextArea.setFont(RunREDUCE.reduceFont);
+
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
             for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
