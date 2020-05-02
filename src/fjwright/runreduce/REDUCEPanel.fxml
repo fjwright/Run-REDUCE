@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <!-- Do not include the controller when compiling this file!
 Error messages that no controller is specified do not stop compilation.
@@ -18,9 +19,9 @@ Use XML character entity references for control characters in strings, e.g. &#10
                         <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
                     </top>
                     <center>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+                        <ScrollPane fx:id="outputScrollPane" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                             <content>
-                                <TextArea fx:id="outputTextArea" editable="false" />
+                                <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white;" />
                             </content>
                         </ScrollPane>
                     </center>

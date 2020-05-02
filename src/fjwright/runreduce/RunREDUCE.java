@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
-    static Font reduceFont;
+    static Font reduceFont, reduceFontBold;
     static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
 
     // Set the main window to 2/3 the linear dimension of the screen initially:
@@ -47,8 +48,12 @@ public class RunREDUCE extends Application {
         // not "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
-        reduceFont = Font.font("Consolas", RRPreferences.fontSize);
-        if (debugPlatform) System.err.println("I/O display font: " + reduceFont.toString());
+        reduceFont = Font.font("Consolas"/*, RRPreferences.fontSize*/);
+        reduceFontBold = Font.font("Consolas", FontWeight.BOLD, reduceFont.getSize()/*, RRPreferences.fontSize*/);
+        if (debugPlatform) {
+            System.err.println("reduceFont: " + reduceFont.toString());
+            System.err.println("reduceFontBold: " + reduceFontBold.toString());
+        }
 
         runREDUCEFrame.frame.setCenter(reducePanel = new REDUCEPanel());
         // Reset menu item status as appropriate when REDUCE is not running:

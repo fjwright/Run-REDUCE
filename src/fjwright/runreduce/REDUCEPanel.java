@@ -1,14 +1,20 @@
 package fjwright.runreduce;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -26,7 +32,9 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     Label outputLabel;
     @FXML
-    TextArea outputTextArea;
+    TextFlow outputTextFlow;
+    @FXML
+    ScrollPane outputScrollPane;
     @FXML
     TextArea inputTextArea;
     @FXML
@@ -46,6 +54,7 @@ public class REDUCEPanel extends BorderPane {
     boolean shutFileMenuItemDisabled;
     boolean shutLastMenuItemDisabled;
 
+    private final ObservableList<Node> outputNodeObservableList;
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
@@ -67,7 +76,7 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
-        outputTextArea.setFont(RunREDUCE.reduceFont);
+        outputNodeObservableList = outputTextFlow.getChildren();
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
@@ -101,17 +110,17 @@ public class REDUCEPanel extends BorderPane {
         if (text.length() > 0) {
             inputList.add(text);
             boolean questionPrompt = false;
-            for (int i = outputTextArea.getLength() - 1; i > 0; i--) {
-                String c = outputTextArea.getText(i, i + 1);
-                if (c.equals("\n")) {
-                    // found start of last line
-                    break;
-                } else if (c.equals("?")) {
-                    // found question mark
-                    questionPrompt = true;
-                    break;
-                }
-            }
+//            for (int i = outputTextFlow.getLength() - 1; i > 0; i--) {
+//                String c = outputTextArea.getText(i, i + 1);
+//                if (c.equals("\n")) {
+//                    // found start of last line
+//                    break;
+//                } else if (c.equals("?")) {
+//                    // found question mark
+//                    questionPrompt = true;
+//                    break;
+//                }
+//            }
             // if isShiftDown then do not auto terminate, hence if !isShiftDown then auto terminate:
             sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             inputTextArea.clear();
@@ -189,10 +198,12 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void sendStringToREDUCEAndEcho(String text) {
-        outputTextArea.appendText(text);
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        outputNodeObservableList.add(t);
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
-        outputTextArea.end();
+//        outputTextArea.end();
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -225,7 +236,7 @@ public class REDUCEPanel extends BorderPane {
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
             REDUCEOutputThread outputGobbler = new
-                    REDUCEOutputThread(p.getInputStream(), outputTextArea);
+                    REDUCEOutputThread(p.getInputStream(), outputNodeObservableList, this);
             outputGobbler.start();
 
             // Reset menu item status as appropriate when REDUCE has just started.
@@ -279,8 +290,9 @@ public class REDUCEPanel extends BorderPane {
  * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
  */
 class REDUCEOutputThread extends Thread {
-    InputStream input;       // REDUCE pipe output (buffered)
-    TextArea outputTextArea; // GUI output pane
+    private final InputStream input; // REDUCE pipe output (buffered)
+    private final ObservableList<Node> outputNodeObservableList; // GUI output pane
+    private final REDUCEPanel reducePanel;
     static final SimpleAttributeSet algebraicPromptAttributeSet = new SimpleAttributeSet();
     static final SimpleAttributeSet symbolicPromptAttributeSet = new SimpleAttributeSet();
     static final SimpleAttributeSet algebraicOutputAttributeSet = new SimpleAttributeSet();
@@ -298,9 +310,10 @@ class REDUCEOutputThread extends Thread {
 //    private static final Color ALGEBRAICINPUTCOLOR = Color.red;
 //    private static final Color SYMBOLICINPUTCOLOR = new Color(0x80_00_00);
 
-    REDUCEOutputThread(InputStream input, TextArea outputTextArea) {
+    REDUCEOutputThread(InputStream input, ObservableList<Node> outputNodeObservableList, REDUCEPanel reducePanel) {
         this.input = input;
-        this.outputTextArea = outputTextArea;
+        this.outputNodeObservableList = outputNodeObservableList;
+        this.reducePanel = reducePanel;
 //        StyleConstants.setForeground(algebraicOutputAttributeSet, ALGEBRAICOUTPUTCOLOR);
 //        StyleConstants.setForeground(symbolicOutputAttributeSet, SYMBOLICOUTPUTCOLOR);
 //        StyleConstants.setForeground(algebraicInputAttributeSet, ALGEBRAICINPUTCOLOR);
@@ -322,103 +335,14 @@ class REDUCEOutputThread extends Thread {
         // Must output characters rather than lines so that prompt appears!
         try (InputStreamReader isr = new InputStreamReader(input);
              BufferedReader br = new BufferedReader(isr)) {
-            int c, promptIndex;
-            String promptString;
+            int c;
             for (; ; ) {
                 if (!br.ready()) {
                     int textLength = text.length();
-                    if (textLength > 0) {
-
-                        switch (RRPreferences.colouredIOState) {
-                            case NONE:
-                            default: // no IO display colouring, but maybe prompt processing
-                                if ((RRPreferences.boldPromptsState) &&
-                                        (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
-                                        promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
-                                    outputTextArea.appendText(text.substring(0, promptIndex));
-                                    outputTextArea.appendText(promptString);
-                                } else
-                                    outputTextArea.appendText(text.toString());
-                                break;
-
-                            case MODAL: // mode coloured IO display processing
-                                // Split off the final line, which should consist of the next input prompt:
-                                promptIndex = text.lastIndexOf("\n") + 1;
-                                Matcher promptMatcher;
-                                if (promptIndex < textLength &&
-                                        (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
-//                                    styledDoc.insertString(styledDoc.getLength(), text.substring(0, promptIndex), outputAttributeSet);
-                                    // Only colour output *after* initial REDUCE header.
-                                    switch (promptMatcher.group(1)) {
-                                        case "*":
-                                            promptAttributeSet = symbolicPromptAttributeSet;
-                                            inputAttributeSet = symbolicInputAttributeSet;
-                                            outputAttributeSet = symbolicOutputAttributeSet;
-                                            break;
-                                        case ":":
-                                        default:
-                                            promptAttributeSet = algebraicPromptAttributeSet;
-                                            inputAttributeSet = algebraicInputAttributeSet;
-                                            outputAttributeSet = algebraicOutputAttributeSet;
-                                            break;
-                                    }
-//                                    styledDoc.insertString(styledDoc.getLength(), promptString, promptAttributeSet);
-                                } else
-//                                    styledDoc.insertString(styledDoc.getLength(), text.toString(), outputAttributeSet);
-                                    break; // end of case RunREDUCEPrefs.MODE
-
-                            case REDFRONT: // redfront coloured IO display processing
-                                /*
-                                 * The markup output by the redfront package uses ASCII control characters:
-                                 * ^A prompt ^B input
-                                 * ^C algebraic-mode output ^D
-                                 * where ^A = \u0001, etc. ^A/^B and ^C/^D should always be paired.
-                                 * Prompts and input are always red, algebraic-mode output is blue,
-                                 * but any other output (echoed input or symbolic-mode output) is not coloured.
-                                 */
-                                // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
-                                for (; ; ) {
-                                    int algOutputStartMarker = text.indexOf("\u0003");
-                                    int algOutputEndMarker = text.indexOf("\u0004");
-                                    if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
-                                        if (algOutputStartMarker < algOutputEndMarker) {
-                                            // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputAttributeSet);
-                                            outputAttributeSet = null;
-                                            text.delete(0, algOutputEndMarker + 1);
-                                        } else {
-                                            // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
-                                            outputAttributeSet = algebraicOutputAttributeSet;
-                                            text.delete(0, algOutputStartMarker + 1);
-                                        }
-                                    } else if (algOutputStartMarker >= 0) {
-                                        // TEXT < algOutputStartMarker < TEXT
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1), algebraicOutputAttributeSet);
-                                        outputAttributeSet = algebraicOutputAttributeSet;
-                                        break;
-                                    } else if (algOutputEndMarker >= 0) {
-                                        // TEXT < algOutputEndMarker < TEXT
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
-                                        outputAttributeSet = null;
-                                        processPromptMarkers(algOutputEndMarker + 1);
-                                        break;
-                                    } else {
-                                        // No algebraic output markers.
-                                        processPromptMarkers(0);
-                                        break;
-                                    }
-                                }
-                                break; // end of case RunREDUCEPrefs.REDFRONT
-                        } // end of switch (RunREDUCEPrefs.colouredIOState)
-
-                        text.setLength(0); // delete any remaining text
-                        outputTextArea.end();
-                    }
-                    Thread.sleep(10);
+                    if (textLength > 0)
+                        processOutput(textLength, reducePanel);
+                    else
+                        Thread.sleep(10);
                 } else if ((c = br.read()) != -1) {
                     if (RunREDUCE.debugOutput) {
                         if (Character.isISOControl((char) c)) {
@@ -441,7 +365,117 @@ class REDUCEOutputThread extends Thread {
         }
     }
 
-    void processPromptMarkers(int start) throws BadLocationException {
+    /**
+     * Process a batch of output in this REDUCEOutputThread and
+     * pass is back to the JavaFX Application Thread for display.
+     */
+    private void processOutput(int textLength, REDUCEPanel reducePanel) {
+        int promptIndex;
+        String promptString;
+        switch (RRPreferences.colouredIOState) {
+            case NONE:
+            default: // no IO display colouring, but maybe prompt processing
+                if ((RRPreferences.boldPromptsState) &&
+                        (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
+                        promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
+                    Text t1 = new Text(text.substring(0, promptIndex));
+                    t1.setFont(RunREDUCE.reduceFont);
+                    Text t2 = new Text(promptString);
+                    t2.setFont(RunREDUCE.reduceFontBold);
+                    t2.setFill(Color.RED); // FixMe TEMPORARY FOR TESTING!
+                    // This list can only be modified on the JavaFX Application Thread!
+                    Platform.runLater(() -> {
+                        outputNodeObservableList.addAll(t1, t2);
+                        reducePanel.outputScrollPane.setVvalue(1.0); // FixMe Doesn't completely work!
+                    });
+                } else {
+                    Text t = new Text(text.toString());
+                    t.setFont(RunREDUCE.reduceFont);
+                    // This list can only be modified on the JavaFX Application Thread!
+                    Platform.runLater(() -> {
+                        outputNodeObservableList.add(t);
+                    });
+                }
+                break;
+
+            case MODAL: // mode coloured IO display processing
+                // Split off the final line, which should consist of the next input prompt:
+                promptIndex = text.lastIndexOf("\n") + 1;
+                Matcher promptMatcher;
+                if (promptIndex < textLength &&
+                        (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
+//                                    styledDoc.insertString(styledDoc.getLength(), text.substring(0, promptIndex), outputAttributeSet);
+                    // Only colour output *after* initial REDUCE header.
+                    switch (promptMatcher.group(1)) {
+                        case "*":
+                            promptAttributeSet = symbolicPromptAttributeSet;
+                            inputAttributeSet = symbolicInputAttributeSet;
+                            outputAttributeSet = symbolicOutputAttributeSet;
+                            break;
+                        case ":":
+                        default:
+                            promptAttributeSet = algebraicPromptAttributeSet;
+                            inputAttributeSet = algebraicInputAttributeSet;
+                            outputAttributeSet = algebraicOutputAttributeSet;
+                            break;
+                    }
+//                                    styledDoc.insertString(styledDoc.getLength(), promptString, promptAttributeSet);
+                } else
+//                                    styledDoc.insertString(styledDoc.getLength(), text.toString(), outputAttributeSet);
+                    break; // end of case RunREDUCEPrefs.MODE
+
+            case REDFRONT: // redfront coloured IO display processing
+                /*
+                 * The markup output by the redfront package uses ASCII control characters:
+                 * ^A prompt ^B input
+                 * ^C algebraic-mode output ^D
+                 * where ^A = \u0001, etc. ^A/^B and ^C/^D should always be paired.
+                 * Prompts and input are always red, algebraic-mode output is blue,
+                 * but any other output (echoed input or symbolic-mode output) is not coloured.
+                 */
+                // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
+                for (; ; ) {
+                    int algOutputStartMarker = text.indexOf("\u0003");
+                    int algOutputEndMarker = text.indexOf("\u0004");
+                    if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
+                        if (algOutputStartMarker < algOutputEndMarker) {
+                            // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
+//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
+//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputAttributeSet);
+                            outputAttributeSet = null;
+                            text.delete(0, algOutputEndMarker + 1);
+                        } else {
+                            // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
+//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
+//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
+                            outputAttributeSet = algebraicOutputAttributeSet;
+                            text.delete(0, algOutputStartMarker + 1);
+                        }
+                    } else if (algOutputStartMarker >= 0) {
+                        // TEXT < algOutputStartMarker < TEXT
+//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
+//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1), algebraicOutputAttributeSet);
+                        outputAttributeSet = algebraicOutputAttributeSet;
+                        break;
+                    } else if (algOutputEndMarker >= 0) {
+                        // TEXT < algOutputEndMarker < TEXT
+//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
+                        outputAttributeSet = null;
+//                        processPromptMarkers(algOutputEndMarker + 1);
+                        break;
+                    } else {
+                        // No algebraic output markers.
+//                        processPromptMarkers(0);
+                        break;
+                    }
+                }
+                break; // end of case RunREDUCEPrefs.REDFRONT
+        } // end of switch (RunREDUCEPrefs.colouredIOState)
+
+        text.setLength(0); // delete any remaining text
+    }
+
+    private void processPromptMarkers(int start) throws BadLocationException {
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
