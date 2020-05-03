@@ -48,11 +48,11 @@ class RRPreferences {
 
     static void save(String key, Object... values) {
         switch (key) {
-            case FONTSIZE:
-                prefs.putInt(FONTSIZE, fontSize = (int) values[0]);
-                break;
             case AUTORUNVERSION:
                 prefs.put(AUTORUNVERSION, autoRunVersion = (String) values[0]);
+                break;
+            case FONTSIZE:
+                prefs.putInt(FONTSIZE, fontSize = (int) values[0]);
                 break;
             case BOLDPROMPTS:
                 prefs.putBoolean(BOLDPROMPTS, boldPromptsState);
