@@ -17,31 +17,33 @@ Use XML character entity references for control characters in strings, e.g. &#10
         <SplitPane dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
             <BorderPane>
                 <top>
-                    <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
+                    <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT"/>
                 </top>
                 <center>
-                    <ScrollPane fx:id="outputScrollPane" fitToHeight="true" fitToWidth="true" style="-fx-background-color: white; -fx-padding: 5,5,5,5;" BorderPane.alignment="CENTER">
+                    <ScrollPane fx:id="outputScrollPane" fitToHeight="true" fitToWidth="true"
+                                style="-fx-background-color: white; -fx-padding: 5,5,5,5; -fx-border-width: 1; -fx-border-color: lightgray;"
+                                BorderPane.alignment="CENTER">
                         <!-- For scrolling to be based on the *visual* bounds of the TextFlow if must be wrapped in a Group. -->
                         <Group>
-                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white;" />
+                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white;"/>
                         </Group>
                     </ScrollPane>
                 </center>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
             <BorderPane>
                 <top>
-                    <Label text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
+                    <Label text="Input Editor" BorderPane.alignment="CENTER_LEFT"/>
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-                        <TextArea fx:id="inputTextArea" onKeyPressed="#inputTextAreaOnKeyPressed" />
+                        <TextArea fx:id="inputTextArea" onKeyPressed="#inputTextAreaOnKeyPressed"/>
                     </ScrollPane>
                 </center>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
         </SplitPane>
@@ -49,23 +51,27 @@ Use XML character entity references for control characters in strings, e.g. &#10
     <bottom>
         <TilePane alignment="CENTER" BorderPane.alignment="CENTER">
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
-            <Button fx:id="earlierButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#earlierButtonAction" text="▲ Earlier Input">
+            <Button fx:id="earlierButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#earlierButtonAction" text="▲ Earlier Input">
                 <tooltip>
-                    <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
+                    <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
                 </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="sendButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" text="Send Input">
+            <Button mnemonicParsing="false" text="Button" visible="false"/>
+            <Button fx:id="sendButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" text="Send Input">
                 <tooltip>
-                    <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
+                    <Tooltip
+                            text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
                 </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="laterButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#laterButtonAction" text="▼ Later Input">
+            <Button mnemonicParsing="false" text="Button" visible="false"/>
+            <Button fx:id="laterButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#laterButtonAction" text="▼ Later Input">
                 <tooltip>
-                    <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
+                    <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
                 </tooltip>
             </Button>
         </TilePane>

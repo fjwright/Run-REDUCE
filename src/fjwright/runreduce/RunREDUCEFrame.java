@@ -64,6 +64,12 @@ public class RunREDUCEFrame {
     // View menu:
     @FXML
     private CheckMenuItem boldPromptsCheckBox;
+    @FXML
+    private RadioMenuItem noColouredIORadioButton;
+    @FXML
+    private RadioMenuItem modeColouredIORadioButton;
+    @FXML
+    private RadioMenuItem redfrontColouredIORadioButton;
     // Help menu:
     @FXML
     private Menu helpMenu;
@@ -111,7 +117,18 @@ public class RunREDUCEFrame {
          * ********* */
 
         boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
-//        applyBoldPromptsState();
+
+        switch (RRPreferences.colouredIOIntent) {
+            case NONE:
+            default:
+                noColouredIORadioButton.setSelected(true);
+                break;
+            case MODAL:
+                modeColouredIORadioButton.setSelected(true);
+                break;
+            case REDFRONT:
+                redfrontColouredIORadioButton.setSelected(true);
+        }
 
         /* ********* *
          * Help menu *
@@ -426,25 +443,21 @@ public class RunREDUCEFrame {
     private void boldPromptsCheckBoxAction(ActionEvent actionEvent) {
         RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected();
         RRPreferences.save(RRPreferences.BOLDPROMPTS);
-//        applyBoldPromptsState();
     }
-
-//    static void applyBoldPromptsState() {
-//        StyleConstants.setBold(REDUCEOutputThread.promptAttributeSet, RRPreferences.boldPromptsState);
-//        StyleConstants.setBold(REDUCEOutputThread.algebraicPromptAttributeSet, RRPreferences.boldPromptsState);
-//        StyleConstants.setBold(REDUCEOutputThread.symbolicPromptAttributeSet, RRPreferences.boldPromptsState);
-//    }
 
     @FXML
     private void noColouredIORadioButtonAction(ActionEvent actionEvent) {
+        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.NONE);
     }
 
     @FXML
     private void modeColouredIORadioButtonAction(ActionEvent actionEvent) {
+        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.MODAL);
     }
 
     @FXML
     private void redfrontColouredIORadioButtonAction(ActionEvent actionEvent) {
+        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.REDFRONT);
     }
 
     @FXML

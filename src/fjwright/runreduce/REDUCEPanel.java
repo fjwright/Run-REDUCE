@@ -322,6 +322,7 @@ class REDUCEOutputThread extends Thread {
 //        StyleConstants.setForeground(symbolicPromptAttributeSet, SYMBOLICINPUTCOLOR);
     }
 
+    @Override
     public void run() {
         outputAttributeSet = null; // for initial header
         switch (RRPreferences.colouredIOState) {
@@ -372,29 +373,24 @@ class REDUCEOutputThread extends Thread {
     private void processOutput(int textLength, REDUCEPanel reducePanel) {
         int promptIndex;
         String promptString;
+        Text reduceText = new Text();
+        reduceText.setFont(RunREDUCE.reduceFont);
+        Text promptText = new Text();
+        promptText.setFont(RunREDUCE.reduceFontBold);
+        List<Text> textList = new ArrayList<>();
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
                 if ((RRPreferences.boldPromptsState) &&
                         (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
                         promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
-                    Text t1 = new Text(text.substring(0, promptIndex));
-                    t1.setFont(RunREDUCE.reduceFont);
-                    Text t2 = new Text(promptString);
-                    t2.setFont(RunREDUCE.reduceFontBold);
-                    t2.setFill(Color.RED); // FixMe TEMPORARY FOR TESTING!
-                    // This list can only be modified on the JavaFX Application Thread!
-                    Platform.runLater(() -> {
-                        outputNodeObservableList.addAll(t1, t2);
-                        reducePanel.outputScrollPane.setVvalue(1.0); // FixMe Doesn't completely work!
-                    });
+                    reduceText.setText(text.substring(0, promptIndex));
+                    textList.add(reduceText);
+                    promptText.setText(promptString);
+                    textList.add(promptText);
                 } else {
-                    Text t = new Text(text.toString());
-                    t.setFont(RunREDUCE.reduceFont);
-                    // This list can only be modified on the JavaFX Application Thread!
-                    Platform.runLater(() -> {
-                        outputNodeObservableList.add(t);
-                    });
+                    reduceText.setText(text.toString());
+                    textList.add(reduceText);
                 }
                 break;
 
@@ -472,6 +468,11 @@ class REDUCEOutputThread extends Thread {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
+        // This list can only be modified on the JavaFX Application Thread!
+        Platform.runLater(() -> {
+            outputNodeObservableList.addAll(textList);
+            reducePanel.outputScrollPane.setVvalue(1.0);
+        });
         text.setLength(0); // delete any remaining text
     }
 
