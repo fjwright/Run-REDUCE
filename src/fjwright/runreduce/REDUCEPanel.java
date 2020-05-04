@@ -32,9 +32,9 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     Label outputLabel;
     @FXML
-    TextFlow outputTextFlow;
-    @FXML
     ScrollPane outputScrollPane;
+    @FXML
+    TextFlow outputTextFlow;
     @FXML
     TextArea inputTextArea;
     @FXML
