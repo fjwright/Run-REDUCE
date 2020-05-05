@@ -17,7 +17,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -200,6 +199,7 @@ public class REDUCEPanel extends BorderPane {
     void sendStringToREDUCEAndEcho(String text) {
         Text t = new Text(text);
         t.setFont(RunREDUCE.reduceFont);
+        t.setFill(REDUCEOutputThread.inputColor);
         outputNodeObservableList.add(t);
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
@@ -293,44 +293,38 @@ class REDUCEOutputThread extends Thread {
     private final InputStream input; // REDUCE pipe output (buffered)
     private final ObservableList<Node> outputNodeObservableList; // GUI output pane
     private final REDUCEPanel reducePanel;
-    static final SimpleAttributeSet algebraicPromptAttributeSet = new SimpleAttributeSet();
-    static final SimpleAttributeSet symbolicPromptAttributeSet = new SimpleAttributeSet();
-    static final SimpleAttributeSet algebraicOutputAttributeSet = new SimpleAttributeSet();
-    static final SimpleAttributeSet symbolicOutputAttributeSet = new SimpleAttributeSet();
-    static final SimpleAttributeSet algebraicInputAttributeSet = new SimpleAttributeSet();
-    static final SimpleAttributeSet symbolicInputAttributeSet = new SimpleAttributeSet();
-    static SimpleAttributeSet promptAttributeSet = new SimpleAttributeSet();
-    static SimpleAttributeSet inputAttributeSet;
-    static SimpleAttributeSet outputAttributeSet;
     private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
     private final StringBuilder text = new StringBuilder(); // Must not be static!
 
-//    private static final Color ALGEBRAICOUTPUTCOLOR = Color.blue;
-//    private static final Color SYMBOLICOUTPUTCOLOR = new Color(0x80_00_80);
-//    private static final Color ALGEBRAICINPUTCOLOR = Color.red;
-//    private static final Color SYMBOLICINPUTCOLOR = new Color(0x80_00_00);
+    private static final Color ALGEBRAICOUTPUTCOLOR = Color.BLUE;
+    private static final Color SYMBOLICOUTPUTCOLOR = Color.rgb(0x80, 0x00, 0x80);
+    private static final Color ALGEBRAICINPUTCOLOR = Color.RED;
+    private static final Color SYMBOLICINPUTCOLOR = Color.rgb(0x80, 0x00, 0x00);
+
+    static Color algebraicPromptColor = ALGEBRAICINPUTCOLOR;
+    static Color symbolicPromptColor = SYMBOLICINPUTCOLOR;
+    static Color algebraicInputColor = ALGEBRAICINPUTCOLOR;
+    static Color symbolicInputColor = SYMBOLICINPUTCOLOR;
+    static Color algebraicOutputColor = ALGEBRAICOUTPUTCOLOR;
+    static Color symbolicOutputColor = SYMBOLICOUTPUTCOLOR;
+    static Color inputColor = Color.BLACK;
+    static Color outputColor = Color.BLACK;
 
     REDUCEOutputThread(InputStream input, ObservableList<Node> outputNodeObservableList, REDUCEPanel reducePanel) {
         this.input = input;
         this.outputNodeObservableList = outputNodeObservableList;
         this.reducePanel = reducePanel;
-//        StyleConstants.setForeground(algebraicOutputAttributeSet, ALGEBRAICOUTPUTCOLOR);
-//        StyleConstants.setForeground(symbolicOutputAttributeSet, SYMBOLICOUTPUTCOLOR);
-//        StyleConstants.setForeground(algebraicInputAttributeSet, ALGEBRAICINPUTCOLOR);
-//        StyleConstants.setForeground(symbolicInputAttributeSet, SYMBOLICINPUTCOLOR);
-//        StyleConstants.setForeground(algebraicPromptAttributeSet, ALGEBRAICINPUTCOLOR);
-//        StyleConstants.setForeground(symbolicPromptAttributeSet, SYMBOLICINPUTCOLOR);
     }
 
     @Override
     public void run() {
-        outputAttributeSet = null; // for initial header
+        outputColor = Color.BLACK; // for initial header
         switch (RRPreferences.colouredIOState) {
             case NONE:
-                inputAttributeSet = null;
+                inputColor = Color.BLACK;
                 break;
             case REDFRONT:
-                inputAttributeSet = algebraicInputAttributeSet;
+                inputColor = algebraicInputColor;
                 break;
         }
         // Must output characters rather than lines so that prompt appears!
@@ -366,6 +360,23 @@ class REDUCEOutputThread extends Thread {
         }
     }
 
+    private Text outputText(String text, Color color) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
+    private Text promptText(String text, Color color) {
+        Text t = new Text(text);
+        if (RRPreferences.boldPromptsState)
+            t.setFont(RunREDUCE.reduceFontBold);
+        else
+            t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
     /**
      * Process a batch of output in this REDUCEOutputThread and
      * pass is back to the JavaFX Application Thread for display.
@@ -373,25 +384,19 @@ class REDUCEOutputThread extends Thread {
     private void processOutput(int textLength, REDUCEPanel reducePanel) {
         int promptIndex;
         String promptString;
-        Text reduceText = new Text();
-        reduceText.setFont(RunREDUCE.reduceFont);
-        Text promptText = new Text();
-        promptText.setFont(RunREDUCE.reduceFontBold);
         List<Text> textList = new ArrayList<>();
+        Color promptColor;
+
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
-                if ((RRPreferences.boldPromptsState) &&
+                if (RRPreferences.boldPromptsState &&
                         (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
                         promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
-                    reduceText.setText(text.substring(0, promptIndex));
-                    textList.add(reduceText);
-                    promptText.setText(promptString);
-                    textList.add(promptText);
-                } else {
-                    reduceText.setText(text.toString());
-                    textList.add(reduceText);
-                }
+                    textList.add(outputText(text.substring(0, promptIndex), Color.BLACK));
+                    textList.add(promptText(promptString, Color.BLACK));
+                } else
+                    textList.add(outputText(text.toString(), Color.BLACK));
                 break;
 
             case MODAL: // mode coloured IO display processing
@@ -400,25 +405,25 @@ class REDUCEOutputThread extends Thread {
                 Matcher promptMatcher;
                 if (promptIndex < textLength &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
-//                                    styledDoc.insertString(styledDoc.getLength(), text.substring(0, promptIndex), outputAttributeSet);
+                    textList.add(outputText(text.substring(0, promptIndex), outputColor));
                     // Only colour output *after* initial REDUCE header.
                     switch (promptMatcher.group(1)) {
                         case "*":
-                            promptAttributeSet = symbolicPromptAttributeSet;
-                            inputAttributeSet = symbolicInputAttributeSet;
-                            outputAttributeSet = symbolicOutputAttributeSet;
+                            promptColor = symbolicPromptColor;
+                            inputColor = symbolicInputColor;
+                            outputColor = symbolicOutputColor;
                             break;
                         case ":":
                         default:
-                            promptAttributeSet = algebraicPromptAttributeSet;
-                            inputAttributeSet = algebraicInputAttributeSet;
-                            outputAttributeSet = algebraicOutputAttributeSet;
+                            promptColor = algebraicPromptColor;
+                            inputColor = algebraicInputColor;
+                            outputColor = algebraicOutputColor;
                             break;
                     }
-//                                    styledDoc.insertString(styledDoc.getLength(), promptString, promptAttributeSet);
+                    textList.add(promptText(promptString, promptColor));
                 } else
-//                                    styledDoc.insertString(styledDoc.getLength(), text.toString(), outputAttributeSet);
-                    break; // end of case RunREDUCEPrefs.MODE
+                    textList.add(outputText(text.toString(), outputColor));
+                break; // end of case RunREDUCEPrefs.MODAL
 
             case REDFRONT: // redfront coloured IO display processing
                 /*
@@ -438,25 +443,25 @@ class REDUCEOutputThread extends Thread {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
 //                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
 //                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputAttributeSet);
-                            outputAttributeSet = null;
+//                            outputAttributeSet = null;
                             text.delete(0, algOutputEndMarker + 1);
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
 //                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
 //                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
-                            outputAttributeSet = algebraicOutputAttributeSet;
+//                            outputAttributeSet = algebraicOutputAttributeSet;
                             text.delete(0, algOutputStartMarker + 1);
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
 //                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
 //                                        styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1), algebraicOutputAttributeSet);
-                        outputAttributeSet = algebraicOutputAttributeSet;
+//                        outputAttributeSet = algebraicOutputAttributeSet;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
 //                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
-                        outputAttributeSet = null;
+//                        outputAttributeSet = null;
 //                        processPromptMarkers(algOutputEndMarker + 1);
                         break;
                     } else {

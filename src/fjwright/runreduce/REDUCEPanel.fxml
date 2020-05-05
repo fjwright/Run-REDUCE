@@ -21,11 +21,11 @@ Use XML character entity references for control characters in strings, e.g. &#10
                 </top>
                 <center>
                     <ScrollPane fx:id="outputScrollPane" fitToHeight="true" fitToWidth="true"
-                                style="-fx-background-color: white; -fx-padding: 5,5,5,5; -fx-border-width: 1; -fx-border-color: lightgray;"
+                                style="-fx-border-width: 1; -fx-border-color: lightgray;"
                                 BorderPane.alignment="CENTER">
                         <!-- For scrolling to be based on the *visual* bounds of the TextFlow if must be wrapped in a Group. -->
                         <Group>
-                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white;"/>
+                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white; -fx-padding: 5,5,5,5;"/>
                         </Group>
                     </ScrollPane>
                 </center>
