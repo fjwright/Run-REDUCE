@@ -64,6 +64,15 @@ public class REDUCEPanel extends BorderPane {
     static final String outputLabelDefault = "Input/Output Display";
 //    static Color deselectedBackground = new Color(0xF8_F8_F8);
 
+    private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
+    private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
+    private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
+    private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
+
+    static final Color DEFAULT_COLOR = Color.BLACK;
+    static Color inputColor = DEFAULT_COLOR;
+    static Color outputColor = DEFAULT_COLOR;
+
     public REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
         fxmlLoader.setRoot(this);
@@ -198,7 +207,7 @@ public class REDUCEPanel extends BorderPane {
     void sendStringToREDUCEAndEcho(String text) {
         Text t = new Text(text);
         t.setFont(RunREDUCE.reduceFont);
-        t.setFill(REDUCEOutputThread.inputColor);
+        t.setFill(inputColor);
         outputNodeObservableList.add(t);
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
@@ -220,6 +229,16 @@ public class REDUCEPanel extends BorderPane {
      * Run the specified REDUCE command in this REDUCE panel.
      */
     void run(REDUCECommand reduceCommand) {
+        outputColor = DEFAULT_COLOR; // for initial header
+        switch (RRPreferences.colouredIOState) {
+            case NONE:
+                inputColor = DEFAULT_COLOR;
+                break;
+            case REDFRONT:
+                inputColor = ALGEBRAIC_INPUT_COLOR;
+                break;
+        }
+
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
         try {
@@ -235,7 +254,7 @@ public class REDUCEPanel extends BorderPane {
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
             REDUCEOutputThread outputGobbler = new
-                    REDUCEOutputThread(p.getInputStream(), outputNodeObservableList, this);
+                    REDUCEOutputThread(p.getInputStream(), this);
             outputGobbler.start();
 
             // Reset menu item status as appropriate when REDUCE has just started.
@@ -280,105 +299,14 @@ public class REDUCEPanel extends BorderPane {
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
-}
 
-/**
- * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
- */
-class REDUCEOutputThread extends Thread {
-    private final InputStream input; // REDUCE pipe output (buffered)
-    private final ObservableList<Node> outputNodeObservableList; // GUI output pane
-    private final REDUCEPanel reducePanel;
     private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
-    private final StringBuilder text = new StringBuilder(); // Must not be static!
-
-    private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
-    private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
-    private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
-    private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-
-    static Color inputColor = DEFAULT_COLOR;
-    static Color outputColor = DEFAULT_COLOR;
-
-    REDUCEOutputThread(InputStream input, ObservableList<Node> outputNodeObservableList, REDUCEPanel reducePanel) {
-        this.input = input;
-        this.outputNodeObservableList = outputNodeObservableList;
-        this.reducePanel = reducePanel;
-    }
-
-    @Override
-    public void run() {
-        outputColor = DEFAULT_COLOR; // for initial header
-        switch (RRPreferences.colouredIOState) {
-            case NONE:
-                inputColor = DEFAULT_COLOR;
-                break;
-            case REDFRONT:
-                inputColor = ALGEBRAIC_INPUT_COLOR;
-                break;
-        }
-        // Must output characters rather than lines so that prompt appears!
-        try (InputStreamReader isr = new InputStreamReader(input);
-             BufferedReader br = new BufferedReader(isr)) {
-            int c;
-            for (; ; ) {
-                if (!br.ready()) {
-                    int textLength = text.length();
-                    if (textLength > 0)
-                        processOutput(textLength, reducePanel);
-                    else
-                        Thread.sleep(10);
-                } else if ((c = br.read()) != -1) {
-                    if (RunREDUCE.debugOutput) {
-                        if (Character.isISOControl((char) c)) {
-                            if ((char) c != '\r') {
-                                if ((char) c == '\n')
-                                    text.append((char) c);
-                                else
-                                    text.append('|').append((char) c).append('^').append((char) (c + 64)).append('|');
-                            }
-                        } else
-                            text.append((char) c);
-                    } else {
-                        if ((char) c != '\r') // ignore CRs
-                            text.append((char) c);
-                    }
-                } else break;
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-    }
-
-    private Text outputText(String text) {
-        Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        return t;
-    }
-
-    private Text outputText(String text, Color color) {
-        Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
-        return t;
-    }
-
-    private Text promptText(String text, Color color) {
-        Text t = new Text(text);
-        if (RRPreferences.boldPromptsState)
-            t.setFont(RunREDUCE.reduceFontBold);
-        else
-            t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
-        return t;
-    }
 
     /**
-     * Process a batch of output in this REDUCEOutputThread and
+     * Process a batch of output from the REDUCEOutputThread and
      * pass is back to the JavaFX Application Thread for display.
      */
-    private void processOutput(int textLength, REDUCEPanel reducePanel) {
+    void processOutput(StringBuilder text, int textLength, REDUCEPanel reducePanel) {
         int promptIndex;
         String promptString;
         List<Text> textList = new ArrayList<>();
@@ -462,11 +390,11 @@ class REDUCEOutputThread extends Thread {
                         // TEXT < algOutputEndMarker < TEXT
                         textList.add(outputText(text.substring(0, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
                         outputColor = DEFAULT_COLOR;
-                        processPromptMarkers(textList, algOutputEndMarker + 1);
+                        processPromptMarkers(text.toString(), algOutputEndMarker + 1, textList);
                         break;
                     } else {
                         // No algebraic output markers
-                        processPromptMarkers(textList, 0);
+                        processPromptMarkers(text.toString(), 0, textList);
                         break;
                     }
                 }
@@ -481,7 +409,30 @@ class REDUCEOutputThread extends Thread {
         text.setLength(0); // delete any remaining text
     }
 
-    private void processPromptMarkers(List<Text> textList, int start) {
+    private Text outputText(String text) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        return t;
+    }
+
+    private Text outputText(String text, Color color) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
+    private Text promptText(String text, Color color) {
+        Text t = new Text(text);
+        if (RRPreferences.boldPromptsState)
+            t.setFont(RunREDUCE.reduceFontBold);
+        else
+            t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
+    private void processPromptMarkers(String text, int start, List<Text> textList) {
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
@@ -490,5 +441,56 @@ class REDUCEOutputThread extends Thread {
             textList.add(promptText(text.substring(promptStartMarker + 1, promptEndMarker), ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
+    }
+}
+
+/**
+ * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
+ */
+class REDUCEOutputThread extends Thread {
+    private final InputStream input; // REDUCE pipe output (buffered)
+    private final REDUCEPanel reducePanel;
+
+    REDUCEOutputThread(InputStream input, REDUCEPanel reducePanel) {
+        this.input = input;
+        this.reducePanel = reducePanel;
+    }
+
+    @Override
+    public void run() {
+        // Must output characters rather than lines so that prompt appears!
+        final StringBuilder text = new StringBuilder();
+        try (InputStreamReader isr = new InputStreamReader(input);
+             BufferedReader br = new BufferedReader(isr)) {
+            int c;
+            for (; ; ) {
+                if (!br.ready()) {
+                    int textLength = text.length();
+                    if (textLength > 0)
+                        // Passing a new object as argument should be thread safe,
+                        // but it should be more efficient to pass a string!
+                        reducePanel.processOutput(/*new StringBuilder(text)*/text, textLength, reducePanel);
+                    else
+                        Thread.sleep(10);
+                } else if ((c = br.read()) != -1) {
+                    if (RunREDUCE.debugOutput) {
+                        if (Character.isISOControl((char) c)) {
+                            if ((char) c != '\r') {
+                                if ((char) c == '\n')
+                                    text.append((char) c);
+                                else
+                                    text.append('|').append((char) c).append('^').append((char) (c + 64)).append('|');
+                            }
+                        } else
+                            text.append((char) c);
+                    } else {
+                        if ((char) c != '\r') // ignore CRs
+                            text.append((char) c);
+                    }
+                } else break;
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
     }
 }

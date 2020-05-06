@@ -1,7 +1,5 @@
 package fjwright.runreduce;
 
-import javafx.scene.paint.Color;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -64,7 +62,7 @@ class RRPreferences {
                 if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT) {
                     colouredIOState = colouredIOIntent;
                     if (colouredIOState == ColouredIO.NONE) {
-                        REDUCEOutputThread.inputColor = REDUCEOutputThread.outputColor = Color.BLACK;
+                        REDUCEPanel.inputColor = REDUCEPanel.outputColor = REDUCEPanel.DEFAULT_COLOR;
                     }
                 }
                 break;
