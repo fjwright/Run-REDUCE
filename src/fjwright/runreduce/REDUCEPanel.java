@@ -292,19 +292,14 @@ class REDUCEOutputThread extends Thread {
     private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
     private final StringBuilder text = new StringBuilder(); // Must not be static!
 
-    private static final Color ALGEBRAICOUTPUTCOLOR = Color.BLUE;
-    private static final Color SYMBOLICOUTPUTCOLOR = Color.rgb(0x80, 0x00, 0x80);
-    private static final Color ALGEBRAICINPUTCOLOR = Color.RED;
-    private static final Color SYMBOLICINPUTCOLOR = Color.rgb(0x80, 0x00, 0x00);
+    private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
+    private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
+    private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
+    private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
+    private static final Color DEFAULT_COLOR = Color.BLACK;
 
-    static Color algebraicPromptColor = ALGEBRAICINPUTCOLOR;
-    static Color symbolicPromptColor = SYMBOLICINPUTCOLOR;
-    static Color algebraicInputColor = ALGEBRAICINPUTCOLOR;
-    static Color symbolicInputColor = SYMBOLICINPUTCOLOR;
-    static Color algebraicOutputColor = ALGEBRAICOUTPUTCOLOR;
-    static Color symbolicOutputColor = SYMBOLICOUTPUTCOLOR;
-    static Color inputColor = Color.BLACK;
-    static Color outputColor = Color.BLACK;
+    static Color inputColor = DEFAULT_COLOR;
+    static Color outputColor = DEFAULT_COLOR;
 
     REDUCEOutputThread(InputStream input, ObservableList<Node> outputNodeObservableList, REDUCEPanel reducePanel) {
         this.input = input;
@@ -314,13 +309,13 @@ class REDUCEOutputThread extends Thread {
 
     @Override
     public void run() {
-        outputColor = Color.BLACK; // for initial header
+        outputColor = DEFAULT_COLOR; // for initial header
         switch (RRPreferences.colouredIOState) {
             case NONE:
-                inputColor = Color.BLACK;
+                inputColor = DEFAULT_COLOR;
                 break;
             case REDFRONT:
-                inputColor = algebraicInputColor;
+                inputColor = ALGEBRAIC_INPUT_COLOR;
                 break;
         }
         // Must output characters rather than lines so that prompt appears!
@@ -396,7 +391,7 @@ class REDUCEOutputThread extends Thread {
                         (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
                         promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
                     textList.add(outputText(text.substring(0, promptIndex)));
-                    textList.add(promptText(promptString, Color.BLACK));
+                    textList.add(promptText(promptString, DEFAULT_COLOR));
                 } else
                     textList.add(outputText(text.toString()));
                 break;
@@ -411,15 +406,15 @@ class REDUCEOutputThread extends Thread {
                     // Only colour output *after* initial REDUCE header.
                     switch (promptMatcher.group(1)) {
                         case "*":
-                            promptColor = symbolicPromptColor;
-                            inputColor = symbolicInputColor;
-                            outputColor = symbolicOutputColor;
+                            promptColor = SYMBOLIC_INPUT_COLOR;
+                            inputColor = SYMBOLIC_INPUT_COLOR;
+                            outputColor = SYMBOLIC_OUTPUT_COLOR;
                             break;
                         case ":":
                         default:
-                            promptColor = algebraicPromptColor;
-                            inputColor = algebraicInputColor;
-                            outputColor = algebraicOutputColor;
+                            promptColor = ALGEBRAIC_INPUT_COLOR;
+                            inputColor = ALGEBRAIC_INPUT_COLOR;
+                            outputColor = ALGEBRAIC_OUTPUT_COLOR;
                             break;
                     }
                     textList.add(promptText(promptString, promptColor));
@@ -445,28 +440,28 @@ class REDUCEOutputThread extends Thread {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
                             if (0 < algOutputStartMarker)
                                 textList.add(outputText(text.substring(0, algOutputStartMarker)));
-                            textList.add(outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputColor));
-                            outputColor = Color.BLACK;
+                            textList.add(outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                            outputColor = DEFAULT_COLOR;
                             text.delete(0, algOutputEndMarker + 1);
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                            textList.add(outputText(text.substring(0, algOutputEndMarker), algebraicOutputColor));
+                            textList.add(outputText(text.substring(0, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
                             if (algOutputEndMarker + 1 < algOutputStartMarker)
                                 textList.add(outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker)));
-                            outputColor = algebraicOutputColor;
+                            outputColor = ALGEBRAIC_OUTPUT_COLOR;
                             text.delete(0, algOutputStartMarker + 1);
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
                         if (0 < algOutputStartMarker)
                             textList.add(outputText(text.substring(0, algOutputStartMarker)));
-                        textList.add(outputText(text.substring(algOutputStartMarker + 1), algebraicOutputColor));
-                        outputColor = algebraicOutputColor;
+                        textList.add(outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_COLOR));
+                        outputColor = ALGEBRAIC_OUTPUT_COLOR;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
-                        textList.add(outputText(text.substring(0, algOutputEndMarker), algebraicOutputColor));
-                        outputColor = Color.BLACK;
+                        textList.add(outputText(text.substring(0, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                        outputColor = DEFAULT_COLOR;
                         processPromptMarkers(textList, algOutputEndMarker + 1);
                         break;
                     } else {
@@ -492,7 +487,7 @@ class REDUCEOutputThread extends Thread {
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
             textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
-            textList.add(promptText(text.substring(promptStartMarker + 1, promptEndMarker), algebraicPromptColor));
+            textList.add(promptText(text.substring(promptStartMarker + 1, promptEndMarker), ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
     }
