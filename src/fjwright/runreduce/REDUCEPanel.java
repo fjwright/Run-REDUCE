@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.text.BadLocationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -259,27 +258,24 @@ public class REDUCEPanel extends BorderPane {
         sendButton.setDisable(false);
 
         // Special support for Redfront I/O colouring:
-//        RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
-//        if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
-//            // Tidy up the initial prompt. Waiting for it is NECESSARY:
-//            StyledDocument styledDoc = outputTextPane.getStyledDocument();
-//            try {
-//                // This typically sleeps a couple of times.
-//                while (!(styledDoc.getLength() >= 3 &&
-//                        styledDoc.getText(styledDoc.getLength() - 3, 3).equals("1: "))) {
+        RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
+        if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+            // Tidy up the initial prompt. Waiting for it is NECESSARY:
+            // This typically sleeps a couple of times.
+//            Text t;
+//            while (!(outputNodeObservableList.size() > 0 &&
+//                    (t = (Text) outputNodeObservableList.get(outputNodeObservableList.size() - 1)).
+//                            getText().endsWith("1: "))) {
 ////                System.err.println("Waiting...");
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
 //                }
-//                styledDoc.remove(styledDoc.getLength() - 4, 4);
-//            } catch (BadLocationException e) {
-//                e.printStackTrace();
 //            }
-//            sendStringToREDUCENoEcho("load_package redfront;\n");
-//        }
+//            t.setText(t.getText().substring(0, t.getText().length() - 4));
+            sendStringToREDUCENoEcho("load_package redfront;\n");
+        }
 
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -360,6 +356,12 @@ class REDUCEOutputThread extends Thread {
         }
     }
 
+    private Text outputText(String text) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        return t;
+    }
+
     private Text outputText(String text, Color color) {
         Text t = new Text(text);
         t.setFont(RunREDUCE.reduceFont);
@@ -393,10 +395,10 @@ class REDUCEOutputThread extends Thread {
                 if (RRPreferences.boldPromptsState &&
                         (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
                         promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
-                    textList.add(outputText(text.substring(0, promptIndex), Color.BLACK));
+                    textList.add(outputText(text.substring(0, promptIndex)));
                     textList.add(promptText(promptString, Color.BLACK));
                 } else
-                    textList.add(outputText(text.toString(), Color.BLACK));
+                    textList.add(outputText(text.toString()));
                 break;
 
             case MODAL: // mode coloured IO display processing
@@ -441,32 +443,35 @@ class REDUCEOutputThread extends Thread {
                     if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
                         if (algOutputStartMarker < algOutputEndMarker) {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputAttributeSet);
-//                            outputAttributeSet = null;
+                            if (0 < algOutputStartMarker)
+                                textList.add(outputText(text.substring(0, algOutputStartMarker)));
+                            textList.add(outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), algebraicOutputColor));
+                            outputColor = Color.BLACK;
                             text.delete(0, algOutputEndMarker + 1);
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
-//                                            styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
-//                            outputAttributeSet = algebraicOutputAttributeSet;
+                            textList.add(outputText(text.substring(0, algOutputEndMarker), algebraicOutputColor));
+                            if (algOutputEndMarker + 1 < algOutputStartMarker)
+                                textList.add(outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker)));
+                            outputColor = algebraicOutputColor;
                             text.delete(0, algOutputStartMarker + 1);
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputStartMarker), null);
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(algOutputStartMarker + 1), algebraicOutputAttributeSet);
-//                        outputAttributeSet = algebraicOutputAttributeSet;
+                        if (0 < algOutputStartMarker)
+                            textList.add(outputText(text.substring(0, algOutputStartMarker)));
+                        textList.add(outputText(text.substring(algOutputStartMarker + 1), algebraicOutputColor));
+                        outputColor = algebraicOutputColor;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
-//                                        styledDoc.insertString(styledDoc.getLength(), text.substring(0, algOutputEndMarker), algebraicOutputAttributeSet);
-//                        outputAttributeSet = null;
-//                        processPromptMarkers(algOutputEndMarker + 1);
+                        textList.add(outputText(text.substring(0, algOutputEndMarker), algebraicOutputColor));
+                        outputColor = Color.BLACK;
+                        processPromptMarkers(textList, algOutputEndMarker + 1);
                         break;
                     } else {
-                        // No algebraic output markers.
-//                        processPromptMarkers(0);
+                        // No algebraic output markers
+                        processPromptMarkers(textList, 0);
                         break;
                     }
                 }
@@ -481,16 +486,14 @@ class REDUCEOutputThread extends Thread {
         text.setLength(0); // delete any remaining text
     }
 
-    private void processPromptMarkers(int start) throws BadLocationException {
+    private void processPromptMarkers(List<Text> textList, int start) {
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
-//            styledDoc.insertString(styledDoc.getLength(), text.substring(start, promptStartMarker), outputAttributeSet);
-//            styledDoc.insertString(styledDoc.getLength(), text.substring(promptStartMarker + 1, promptEndMarker), algebraicPromptAttributeSet);
-//            styledDoc.insertString(styledDoc.getLength(), text.substring(promptEndMarker + 1), null);
-        } else {
-//            styledDoc.insertString(styledDoc.getLength(), text.substring(start), outputAttributeSet);
-        }
+            textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
+            textList.add(promptText(text.substring(promptStartMarker + 1, promptEndMarker), algebraicPromptColor));
+        } else
+            textList.add(outputText(text.substring(start), outputColor));
     }
 }

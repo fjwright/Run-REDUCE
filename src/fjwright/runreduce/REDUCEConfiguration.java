@@ -1,6 +1,7 @@
 package fjwright.runreduce;
 
-import javax.swing.text.StyleConstants;
+import javafx.scene.paint.Color;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -63,8 +64,7 @@ class RRPreferences {
                 if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT) {
                     colouredIOState = colouredIOIntent;
                     if (colouredIOState == ColouredIO.NONE) {
-// FixMe                       REDUCEOutputThread.inputAttributeSet = REDUCEOutputThread.outputAttributeSet = null;
-//                        StyleConstants.setForeground(REDUCEOutputThread.promptAttributeSet, null);
+                        REDUCEOutputThread.inputColor = REDUCEOutputThread.outputColor = Color.BLACK;
                     }
                 }
                 break;
