@@ -89,7 +89,7 @@ public class REDUCEPanel extends BorderPane {
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
             for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
                 if (RRPreferences.autoRunVersion.equals(cmd.version)) {
-                    // Run REDUCE.  (A direct call hangs the GUI!)
+                    // Run REDUCE.  (A direct call throws an error!)
                     Platform.runLater(() -> run(cmd));
                     break;
                 }
