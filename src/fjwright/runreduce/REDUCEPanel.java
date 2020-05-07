@@ -230,6 +230,7 @@ public class REDUCEPanel extends BorderPane {
      */
     void run(REDUCECommand reduceCommand) {
         outputColor = DEFAULT_COLOR; // for initial header
+        RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         switch (RRPreferences.colouredIOState) {
             case NONE:
                 inputColor = DEFAULT_COLOR;
@@ -277,7 +278,6 @@ public class REDUCEPanel extends BorderPane {
         sendButton.setDisable(false);
 
         // Special support for Redfront I/O colouring:
-        RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
             // Tidy up the initial prompt. Waiting for it is NECESSARY:
             // This typically sleeps a couple of times.
@@ -300,13 +300,36 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.requestFocus();
     }
 
+    private Text outputText(String text) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        return t;
+    }
+
+    private Text outputText(String text, Color color) {
+        Text t = new Text(text);
+        t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
+    private Text promptText(String text, Color color) {
+        Text t = new Text(text);
+        if (RRPreferences.boldPromptsState)
+            t.setFont(RunREDUCE.reduceFontBold);
+        else
+            t.setFont(RunREDUCE.reduceFont);
+        t.setFill(color);
+        return t;
+    }
+
     private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
 
     /**
      * Process a batch of output from the REDUCEOutputThread and
      * pass is back to the JavaFX Application Thread for display.
      */
-    void processOutput(StringBuilder text, int textLength, REDUCEPanel reducePanel) {
+    void processOutput(String text, int textLength) {
         int promptIndex;
         String promptString;
         List<Text> textList = new ArrayList<>();
@@ -321,7 +344,7 @@ public class REDUCEPanel extends BorderPane {
                     textList.add(outputText(text.substring(0, promptIndex)));
                     textList.add(promptText(promptString, DEFAULT_COLOR));
                 } else
-                    textList.add(outputText(text.toString()));
+                    textList.add(outputText(text));
                 break;
 
             case MODAL: // mode coloured IO display processing
@@ -347,7 +370,7 @@ public class REDUCEPanel extends BorderPane {
                     }
                     textList.add(promptText(promptString, promptColor));
                 } else
-                    textList.add(outputText(text.toString(), outputColor));
+                    textList.add(outputText(text, outputColor));
                 break; // end of case RunREDUCEPrefs.MODAL
 
             case REDFRONT: // redfront coloured IO display processing
@@ -360,41 +383,42 @@ public class REDUCEPanel extends BorderPane {
                  * but any other output (echoed input or symbolic-mode output) is not coloured.
                  */
                 // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
+                int start = 0;
                 for (; ; ) {
-                    int algOutputStartMarker = text.indexOf("\u0003");
-                    int algOutputEndMarker = text.indexOf("\u0004");
+                    int algOutputStartMarker = text.indexOf("\u0003", start);
+                    int algOutputEndMarker = text.indexOf("\u0004", start);
                     if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
                         if (algOutputStartMarker < algOutputEndMarker) {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
-                            if (0 < algOutputStartMarker)
-                                textList.add(outputText(text.substring(0, algOutputStartMarker)));
+                            if (start < algOutputStartMarker)
+                                textList.add(outputText(text.substring(start, algOutputStartMarker)));
                             textList.add(outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
                             outputColor = DEFAULT_COLOR;
-                            text.delete(0, algOutputEndMarker + 1);
+                            start = algOutputEndMarker + 1;
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                            textList.add(outputText(text.substring(0, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                            textList.add(outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
                             if (algOutputEndMarker + 1 < algOutputStartMarker)
                                 textList.add(outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker)));
                             outputColor = ALGEBRAIC_OUTPUT_COLOR;
-                            text.delete(0, algOutputStartMarker + 1);
+                            start = algOutputStartMarker + 1;
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
-                        if (0 < algOutputStartMarker)
-                            textList.add(outputText(text.substring(0, algOutputStartMarker)));
+                        if (start < algOutputStartMarker)
+                            textList.add(outputText(text.substring(start, algOutputStartMarker)));
                         textList.add(outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_COLOR));
                         outputColor = ALGEBRAIC_OUTPUT_COLOR;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
-                        textList.add(outputText(text.substring(0, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                        textList.add(outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
                         outputColor = DEFAULT_COLOR;
-                        processPromptMarkers(text.toString(), algOutputEndMarker + 1, textList);
+                        processPromptMarkers(text, algOutputEndMarker + 1, textList);
                         break;
                     } else {
                         // No algebraic output markers
-                        processPromptMarkers(text.toString(), 0, textList);
+                        processPromptMarkers(text, start, textList);
                         break;
                     }
                 }
@@ -404,32 +428,8 @@ public class REDUCEPanel extends BorderPane {
         // This list can only be modified on the JavaFX Application Thread!
         Platform.runLater(() -> {
             outputNodeObservableList.addAll(textList);
-            reducePanel.outputScrollPane.setVvalue(1.0);
+            outputScrollPane.setVvalue(1.0);
         });
-        text.setLength(0); // delete any remaining text
-    }
-
-    private Text outputText(String text) {
-        Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        return t;
-    }
-
-    private Text outputText(String text, Color color) {
-        Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
-        return t;
-    }
-
-    private Text promptText(String text, Color color) {
-        Text t = new Text(text);
-        if (RRPreferences.boldPromptsState)
-            t.setFont(RunREDUCE.reduceFontBold);
-        else
-            t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
-        return t;
     }
 
     private void processPromptMarkers(String text, int start, List<Text> textList) {
@@ -466,11 +466,13 @@ class REDUCEOutputThread extends Thread {
             for (; ; ) {
                 if (!br.ready()) {
                     int textLength = text.length();
-                    if (textLength > 0)
-                        // Passing a new object as argument should be thread safe,
-                        // but it should be more efficient to pass a string!
-                        reducePanel.processOutput(/*new StringBuilder(text)*/text, textLength, reducePanel);
-                    else
+                    if (textLength > 0) {
+//                        Platform.runLater(() -> {
+//                            // The TextFlow can only be modified on the JavaFX Application Thread!
+                        reducePanel.processOutput(text.toString(), textLength);
+//                        });
+                        text.setLength(0); // reset string builder to gather new output
+                    } else
                         Thread.sleep(10);
                 } else if ((c = br.read()) != -1) {
                     if (RunREDUCE.debugOutput) {

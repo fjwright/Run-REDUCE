@@ -1,3 +1,11 @@
+/*
+ * RunREDUCE: A JavaFX GUI to run REDUCE
+ * Compile and run from the PARENT directory of fjwright:
+ * javac fjwright\runreduce\*.java
+ * java fjwright.runreduce.RunREDUCE
+ * (The above works in a Microsoft Windows cmd shell.)
+ */
+
 package fjwright.runreduce;
 
 import javafx.application.Application;
@@ -10,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 
 /**
  * This is the main class that sets up and runs the application.
