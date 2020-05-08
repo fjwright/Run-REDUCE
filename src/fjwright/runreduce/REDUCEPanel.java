@@ -56,13 +56,14 @@ public class REDUCEPanel extends BorderPane {
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
-    private static final Pattern pattern =
+    private static final Pattern quitPattern =
             Pattern.compile(".*\\b(?:bye|quit)\\s*[;$]?.*", Pattern.CASE_INSENSITIVE);
     private PrintWriter reduceInputPrintWriter;
     boolean runningREDUCE;
     String title; // REDUCE version if REDUCE is running
     static final String outputLabelDefault = "Input/Output Display";
-//    static Color deselectedBackground = new Color(0xF8_F8_F8);
+    //    static Color deselectedBackground = new Color(0xF8_F8_F8);
+    private boolean questionPrompt;
 
     private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
     private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
@@ -70,8 +71,10 @@ public class REDUCEPanel extends BorderPane {
     private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
 
     static final Color DEFAULT_COLOR = Color.BLACK;
-    static Color inputColor = DEFAULT_COLOR;
-    static Color outputColor = DEFAULT_COLOR;
+    // FixMe Are the following inconsistently initialised in REDUCEConfiguration.java?
+    private Color promptColor = DEFAULT_COLOR;
+    private Color inputColor = DEFAULT_COLOR;
+    private Color outputColor = DEFAULT_COLOR;
 
     public REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -116,26 +119,13 @@ public class REDUCEPanel extends BorderPane {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
             inputList.add(text);
-            boolean questionPrompt = false;
-//            for (int i = outputTextFlow.getLength() - 1; i > 0; i--) {
-//                String c = outputTextArea.getText(i, i + 1);
-//                if (c.equals("\n")) {
-//                    // found start of last line
-//                    break;
-//                } else if (c.equals("?")) {
-//                    // found question mark
-//                    questionPrompt = true;
-//                    break;
-//                }
-//            }
-            // if isShiftDown then do not auto terminate, hence if !isShiftDown then auto terminate:
             sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             inputTextArea.clear();
             inputListIndex = inputList.size();
             maxInputListIndex = inputListIndex - 1;
             earlierButton.setDisable(false);
             laterButton.setDisable(true);
-            if (pattern.matcher(text).matches()) {
+            if (quitPattern.matcher(text).matches()) {
                 runningREDUCE = false;
                 sendButton.setDisable(true);
                 // Reset enabled status of menu items:
@@ -231,14 +221,6 @@ public class REDUCEPanel extends BorderPane {
     void run(REDUCECommand reduceCommand) {
         outputColor = DEFAULT_COLOR; // for initial header
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
-        switch (RRPreferences.colouredIOState) {
-            case NONE:
-                inputColor = DEFAULT_COLOR;
-                break;
-            case REDFRONT:
-                inputColor = ALGEBRAIC_INPUT_COLOR;
-                break;
-        }
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -323,7 +305,7 @@ public class REDUCEPanel extends BorderPane {
         return t;
     }
 
-    private static final Pattern promptPattern = Pattern.compile("\\d+([:*]) ");
+    private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
 
     /**
      * Process a batch of output from the REDUCEOutputThread and
@@ -332,15 +314,17 @@ public class REDUCEPanel extends BorderPane {
     void processOutput(String text, int textLength) {
         int promptIndex;
         String promptString;
+        Matcher promptMatcher;
         List<Text> textList = new ArrayList<>();
-        Color promptColor;
 
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
-                if (RRPreferences.boldPromptsState &&
-                        (promptIndex = text.lastIndexOf("\n") + 1) < textLength &&
-                        promptPattern.matcher(promptString = text.substring(promptIndex)).matches()) {
+                inputColor = DEFAULT_COLOR;
+                promptIndex = text.lastIndexOf("\n") + 1;
+                if (promptIndex < textLength &&
+                        (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
+                    questionPrompt = promptMatcher.group(1) == null;
                     textList.add(outputText(text.substring(0, promptIndex)));
                     textList.add(promptText(promptString, DEFAULT_COLOR));
                 } else
@@ -350,23 +334,25 @@ public class REDUCEPanel extends BorderPane {
             case MODAL: // mode coloured IO display processing
                 // Split off the final line, which should consist of the next input prompt:
                 promptIndex = text.lastIndexOf("\n") + 1;
-                Matcher promptMatcher;
                 if (promptIndex < textLength &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
+                    questionPrompt = promptMatcher.group(1) == null;
                     textList.add(outputText(text.substring(0, promptIndex), outputColor));
                     // Only colour output *after* initial REDUCE header.
-                    switch (promptMatcher.group(1)) {
-                        case "*":
-                            promptColor = SYMBOLIC_INPUT_COLOR;
-                            inputColor = SYMBOLIC_INPUT_COLOR;
-                            outputColor = SYMBOLIC_OUTPUT_COLOR;
-                            break;
-                        case ":":
-                        default:
-                            promptColor = ALGEBRAIC_INPUT_COLOR;
-                            inputColor = ALGEBRAIC_INPUT_COLOR;
-                            outputColor = ALGEBRAIC_OUTPUT_COLOR;
-                            break;
+                    if (!questionPrompt) {
+                        switch (promptMatcher.group(1)) {
+                            case "*":
+                                promptColor = SYMBOLIC_INPUT_COLOR;
+                                inputColor = SYMBOLIC_INPUT_COLOR;
+                                outputColor = SYMBOLIC_OUTPUT_COLOR;
+                                break;
+                            case ":":
+                            default:
+                                promptColor = ALGEBRAIC_INPUT_COLOR;
+                                inputColor = ALGEBRAIC_INPUT_COLOR;
+                                outputColor = ALGEBRAIC_OUTPUT_COLOR;
+                                break;
+                        }
                     }
                     textList.add(promptText(promptString, promptColor));
                 } else
@@ -383,6 +369,7 @@ public class REDUCEPanel extends BorderPane {
                  * but any other output (echoed input or symbolic-mode output) is not coloured.
                  */
                 // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
+                inputColor = ALGEBRAIC_INPUT_COLOR;
                 int start = 0;
                 for (; ; ) {
                     int algOutputStartMarker = text.indexOf("\u0003", start);
@@ -437,8 +424,10 @@ public class REDUCEPanel extends BorderPane {
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
+            String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
+            questionPrompt = promptString.equals("?");
             textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
-            textList.add(promptText(text.substring(promptStartMarker + 1, promptEndMarker), ALGEBRAIC_INPUT_COLOR));
+            textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
     }

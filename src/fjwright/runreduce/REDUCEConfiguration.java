@@ -59,12 +59,8 @@ class RRPreferences {
             case COLOUREDIO:
                 prefs.put(COLOUREDIO, (colouredIOIntent = (ColouredIO) values[0]).toString());
                 // Update colouredIOState immediately unless switching to or from REDFRONT:
-                if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT) {
+                if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT)
                     colouredIOState = colouredIOIntent;
-                    if (colouredIOState == ColouredIO.NONE) {
-                        REDUCEPanel.inputColor = REDUCEPanel.outputColor = REDUCEPanel.DEFAULT_COLOR;
-                    }
-                }
                 break;
             case DISPLAYPANE:
                 prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) values[0]).toString());
