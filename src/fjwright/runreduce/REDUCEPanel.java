@@ -26,23 +26,23 @@ import java.util.regex.Pattern;
  * This class provides the panel that displays REDUCE input and output.
  * The run method runs REDUCE as a sub-process.
  */
-public class REDUCEPanel extends BorderPane {
+class REDUCEPanel extends BorderPane {
     @FXML
-    Label outputLabel;
+    private Label outputLabel;
     @FXML
-    ScrollPane outputScrollPane;
+    private ScrollPane outputScrollPane;
     @FXML
-    TextFlow outputTextFlow;
+    TextFlow outputTextFlow; // Accessed in RunREDUCEFrame.java
     @FXML
-    TextArea inputTextArea;
+    private TextArea inputTextArea;
     @FXML
-    Button sendButton;
+    Button sendButton; // Accessed in RunREDUCEFrame.java
     @FXML
-    Button earlierButton;
+    private Button earlierButton;
     @FXML
-    Button laterButton;
+    private Button laterButton;
 
-    // Menu item status:
+    // Menu item statuses accessed in RunREDUCEFrame.java:
     boolean inputFileMenuItemDisabled;
     boolean outputFileMenuItemDisabled;
     boolean loadPackagesMenuItemDisabled;
@@ -61,7 +61,7 @@ public class REDUCEPanel extends BorderPane {
     private PrintWriter reduceInputPrintWriter;
     boolean runningREDUCE;
     String title; // REDUCE version if REDUCE is running
-    static final String outputLabelDefault = "Input/Output Display";
+    private static final String outputLabelDefault = "Input/Output Display";
     //    static Color deselectedBackground = new Color(0xF8_F8_F8);
     private boolean questionPrompt;
 
@@ -70,13 +70,12 @@ public class REDUCEPanel extends BorderPane {
     private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
     private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
 
-    static final Color DEFAULT_COLOR = Color.BLACK;
-    // FixMe Are the following inconsistently initialised in REDUCEConfiguration.java?
+    private static final Color DEFAULT_COLOR = Color.BLACK;
     private Color promptColor = DEFAULT_COLOR;
     private Color inputColor = DEFAULT_COLOR;
     private Color outputColor = DEFAULT_COLOR;
 
-    public REDUCEPanel() {
+    REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -237,7 +236,7 @@ public class REDUCEPanel extends BorderPane {
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
             REDUCEOutputThread outputGobbler = new
-                    REDUCEOutputThread(p.getInputStream(), this);
+                    REDUCEOutputThread(p.getInputStream());
             outputGobbler.start();
 
             // Reset menu item status as appropriate when REDUCE has just started.
@@ -282,6 +281,59 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.requestFocus();
     }
 
+    // REDUCE output processing *******************************************************************
+
+    /**
+     * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
+     */
+    private class REDUCEOutputThread extends Thread {
+        private final InputStream input; // REDUCE pipe output (buffered)
+
+        private REDUCEOutputThread(InputStream input) {
+            this.input = input;
+        }
+
+        @Override
+        public void run() {
+            // Must output characters rather than lines so that prompt appears!
+            final StringBuilder text = new StringBuilder();
+            try (InputStreamReader isr = new InputStreamReader(input);
+                 BufferedReader br = new BufferedReader(isr)) {
+                int c;
+                for (; ; ) {
+                    if (!br.ready()) {
+                        int textLength = text.length();
+                        if (textLength > 0) {
+//                        Platform.runLater(() -> {
+//                            // The TextFlow can only be modified on the JavaFX Application Thread!
+                            processOutput(text.toString(), textLength);
+//                        });
+                            text.setLength(0); // reset string builder to gather new output
+                        } else
+                            Thread.sleep(10);
+                    } else if ((c = br.read()) != -1) {
+                        if (RunREDUCE.debugOutput) {
+                            if (Character.isISOControl((char) c)) {
+                                if ((char) c != '\r') {
+                                    if ((char) c == '\n')
+                                        text.append((char) c);
+                                    else
+                                        text.append('|').append((char) c).append('^').append((char) (c + 64)).append('|');
+                                }
+                            } else
+                                text.append((char) c);
+                        } else {
+                            if ((char) c != '\r') // ignore CRs
+                                text.append((char) c);
+                        }
+                    } else break;
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+    }
+
     private Text outputText(String text) {
         Text t = new Text(text);
         t.setFont(RunREDUCE.reduceFont);
@@ -311,7 +363,7 @@ public class REDUCEPanel extends BorderPane {
      * Process a batch of output from the REDUCEOutputThread and
      * pass is back to the JavaFX Application Thread for display.
      */
-    void processOutput(String text, int textLength) {
+    private void processOutput(String text, int textLength) {
         int promptIndex;
         String promptString;
         Matcher promptMatcher;
@@ -430,58 +482,5 @@ public class REDUCEPanel extends BorderPane {
             textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
-    }
-}
-
-/**
- * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
- */
-class REDUCEOutputThread extends Thread {
-    private final InputStream input; // REDUCE pipe output (buffered)
-    private final REDUCEPanel reducePanel;
-
-    REDUCEOutputThread(InputStream input, REDUCEPanel reducePanel) {
-        this.input = input;
-        this.reducePanel = reducePanel;
-    }
-
-    @Override
-    public void run() {
-        // Must output characters rather than lines so that prompt appears!
-        final StringBuilder text = new StringBuilder();
-        try (InputStreamReader isr = new InputStreamReader(input);
-             BufferedReader br = new BufferedReader(isr)) {
-            int c;
-            for (; ; ) {
-                if (!br.ready()) {
-                    int textLength = text.length();
-                    if (textLength > 0) {
-//                        Platform.runLater(() -> {
-//                            // The TextFlow can only be modified on the JavaFX Application Thread!
-                        reducePanel.processOutput(text.toString(), textLength);
-//                        });
-                        text.setLength(0); // reset string builder to gather new output
-                    } else
-                        Thread.sleep(10);
-                } else if ((c = br.read()) != -1) {
-                    if (RunREDUCE.debugOutput) {
-                        if (Character.isISOControl((char) c)) {
-                            if ((char) c != '\r') {
-                                if ((char) c == '\n')
-                                    text.append((char) c);
-                                else
-                                    text.append('|').append((char) c).append('^').append((char) (c + 64)).append('|');
-                            }
-                        } else
-                            text.append((char) c);
-                    } else {
-                        if ((char) c != '\r') // ignore CRs
-                            text.append((char) c);
-                    }
-                } else break;
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
     }
 }
