@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/*
- * This class controls the RunREDUCE menu bar.
+/**
+ * This class controls the main RunREDUCE frame and menu bar.
  * Note that the current directory for REDUCE is the directory from
  * which this GUI was run, so filenames must be relative to that
  * directory or absolute; I currently use the latter.
@@ -74,6 +74,8 @@ public class RunREDUCEFrame {
     private Menu helpMenu;
 
     // ToDo Separate input and output file choosers?
+    private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
+    private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages");
     private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Input Files (*.red, *.tst)", "*.red", "*.tst");
     private static final FileChooser fileChooser = new FileChooser();
@@ -100,7 +102,8 @@ public class RunREDUCEFrame {
          * File menu *
          * ********* */
 
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        // Default initial directory on Windows 10 is "This PC", so...
+        fileChooser.setInitialDirectory(USER_HOME_DIR);
 
         /* *********** *
          * REDUCE menu *
@@ -196,13 +199,13 @@ public class RunREDUCEFrame {
     @FXML
     private void inputPackageFileMenuItemAction(/*ActionEvent actionEvent*/) {
         fileChooser.setTitle("Input from Package Files...");
-        fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages"));
+        fileChooser.setInitialDirectory(PACKAGES_DIR);
         inputFile();
+        fileChooser.setInitialDirectory(USER_HOME_DIR);
     }
 
     private void inputFile() {
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().addAll(INPUT_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
+        fileChooser.getExtensionFilters().setAll(INPUT_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         List<File> fileList = fileChooser.showOpenMultipleDialog(RunREDUCE.primaryStage);
         if (fileList != null) {
             StringBuilder text = new StringBuilder("in \"");
@@ -214,15 +217,13 @@ public class RunREDUCEFrame {
             text.append(echoCheckMenuItem.isSelected() ? "\";\n" : "\"$\n");
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
         }
-
     }
 
     // Output to New File...
     @FXML
     private void outputNewFileMenuItemAction(/*ActionEvent actionEvent*/) {
         fileChooser.setTitle("Output to File...");
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().addAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
+        fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         if (file != null) {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
@@ -316,21 +317,25 @@ public class RunREDUCEFrame {
     // Save Session Log...
     @FXML
     private void saveLogMenuItemAction(/*ActionEvent actionEvent*/) {
-        fileChooser.setTitle("Save Session Log...");
         saveLog(false);
     }
 
     // Append Session Log...
     @FXML
     private void appendLogMenuItemAction(/*ActionEvent actionEvent*/) {
-        fileChooser.setTitle("Append Session Log...  [*** PLEASE CONFIRM ANY REPLACE QUERY! ***]");
         saveLog(true);
     }
 
     private void saveLog(boolean append) {
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().addAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
-        File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
+        fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
+        File file;
+        if (append) {
+            fileChooser.setTitle("Append Session Log...");
+            file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
+        } else {
+            fileChooser.setTitle("Save Session Log...");
+            file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
+        }
         if (file != null) {
             try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
                 RunREDUCE.reducePanel.outputTextFlow.getChildren().forEach(e -> {
