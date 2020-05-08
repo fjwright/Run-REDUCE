@@ -52,7 +52,7 @@ class REDUCEPanel extends BorderPane {
     boolean shutFileMenuItemDisabled;
     boolean shutLastMenuItemDisabled;
 
-    private final ObservableList<Node> outputNodeObservableList;
+    private final ObservableList<Node> outputNodeList;
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
@@ -69,7 +69,6 @@ class REDUCEPanel extends BorderPane {
     private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
     private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
     private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
-
     private static final Color DEFAULT_COLOR = Color.BLACK;
     private Color promptColor = DEFAULT_COLOR;
     private Color inputColor = DEFAULT_COLOR;
@@ -85,7 +84,7 @@ class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
-        outputNodeObservableList = outputTextFlow.getChildren();
+        outputNodeList = outputTextFlow.getChildren();
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
@@ -197,7 +196,7 @@ class REDUCEPanel extends BorderPane {
         Text t = new Text(text);
         t.setFont(RunREDUCE.reduceFont);
         t.setFill(inputColor);
-        outputNodeObservableList.add(t);
+        outputNodeList.add(t);
         // Make sure the new input text is visible, even if there was
         // a selection in the output text area:
 //        outputTextArea.end();
@@ -262,19 +261,21 @@ class REDUCEPanel extends BorderPane {
         if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
             // Tidy up the initial prompt. Waiting for it is NECESSARY:
             // This typically sleeps a couple of times.
-//            Text t;
-//            while (!(outputNodeObservableList.size() > 0 &&
-//                    (t = (Text) outputNodeObservableList.get(outputNodeObservableList.size() - 1)).
-//                            getText().endsWith("1: "))) {
-////                System.err.println("Waiting...");
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
+//            Platform.runLater(() -> {
+//                Text t;
+//                while (!(outputNodeList.size() > 0 &&
+//                        (t = (Text) outputNodeList.get(outputNodeList.size() - 1))
+//                                .getText().endsWith("1: "))) {
+//                    System.err.println("Waiting...");
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
 //                }
-//            }
 //            t.setText(t.getText().substring(0, t.getText().length() - 4));
-            sendStringToREDUCENoEcho("load_package redfront;\n");
+                sendStringToREDUCENoEcho("load_package redfront;\n");
+//            });
         }
 
         // Return the focus to the input text area:
@@ -466,7 +467,7 @@ class REDUCEPanel extends BorderPane {
 
         // This list can only be modified on the JavaFX Application Thread!
         Platform.runLater(() -> {
-            outputNodeObservableList.addAll(textList);
+            outputNodeList.addAll(textList);
             outputScrollPane.setVvalue(1.0);
         });
     }
