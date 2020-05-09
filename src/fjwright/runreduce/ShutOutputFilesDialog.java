@@ -19,7 +19,7 @@ public class ShutOutputFilesDialog {
     @FXML
     private void initialize() {
         ObservableList<File> items = FXCollections.observableArrayList(
-                RunREDUCEFrame.outputFileList);
+                RunREDUCE.reducePanel.outputFileList);
         listView.setItems(items);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -31,11 +31,12 @@ public class ShutOutputFilesDialog {
         if (i > 0) {
             // Process backwards to avoid remove() changing subsequent indices:
             StringBuilder text = new StringBuilder(
-                    RunREDUCEFrame.outputFileList.remove((int) fileIndices.get(--i)).toString());
+                    RunREDUCE.reducePanel.outputFileList.remove((int) fileIndices.get(--i)).toString());
             text.append("\"$\n");
-            while (--i >= 0) {
+            while (i > 0) {
                 text.insert(0, "\", \"");
-                text.insert(0, RunREDUCEFrame.outputFileList.remove((int) fileIndices.get(i)).toString());
+                text.insert(0,
+                        RunREDUCE.reducePanel.outputFileList.remove((int) fileIndices.get(--i)).toString());
             }
             text.insert(0, "shut \"");
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());

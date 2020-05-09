@@ -45,6 +45,7 @@ class REDUCEPanel extends BorderPane {
     // Menu item statuses accessed in RunREDUCEFrame.java:
     boolean inputFileMenuItemDisabled;
     boolean outputFileMenuItemDisabled;
+    boolean outputOpenMenuItemDisabled;
     boolean loadPackagesMenuItemDisabled;
     boolean stopREDUCEMenuItemDisabled;
     boolean runREDUCESubmenuDisabled;
@@ -64,6 +65,7 @@ class REDUCEPanel extends BorderPane {
     private static final String outputLabelDefault = "Input/Output Display";
     //    static Color deselectedBackground = new Color(0xF8_F8_F8);
     private boolean questionPrompt;
+    final List<File> outputFileList = new ArrayList<>();
 
     private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
     private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
@@ -274,7 +276,7 @@ class REDUCEPanel extends BorderPane {
 //                    }
 //                }
 //            t.setText(t.getText().substring(0, t.getText().length() - 4));
-                sendStringToREDUCENoEcho("load_package redfront;\n");
+            sendStringToREDUCENoEcho("load_package redfront;\n");
 //            });
         }
 
@@ -390,7 +392,8 @@ class REDUCEPanel extends BorderPane {
                 if (promptIndex < textLength &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
-                    textList.add(outputText(text.substring(0, promptIndex), outputColor));
+                    if (0 < promptIndex)
+                        textList.add(outputText(text.substring(0, promptIndex), outputColor));
                     // Only colour output *after* initial REDUCE header.
                     if (!questionPrompt) {
                         switch (promptMatcher.group(1)) {
@@ -479,7 +482,8 @@ class REDUCEPanel extends BorderPane {
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
             String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
             questionPrompt = promptString.equals("?");
-            textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
+            if (start < promptStartMarker)
+                textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
             textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
