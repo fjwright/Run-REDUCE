@@ -2,19 +2,22 @@ package fjwright.runreduce;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoadPackagesDialog {
     @FXML
     private GridPane gridPane;
 
-    private static final int COLUMNS = 12; // Tweak later
+    private static final int COLUMNS = 10;
     ToggleButton[] toggleButtons = new ToggleButton[RunREDUCEFrame.packageList.size()];
 
     @FXML
@@ -24,6 +27,8 @@ public class LoadPackagesDialog {
         ToggleButton tb;
         for (String pkg : RunREDUCEFrame.packageList) {
             gridPane.add(tb = new ToggleButton(pkg), col, row);
+            tb.setAlignment(Pos.CENTER_LEFT);
+            tb.setMaxWidth(Double.MAX_VALUE);
             toggleButtons[i++] = tb;
             if (++col == COLUMNS) {
                 col = 0;
@@ -34,12 +39,8 @@ public class LoadPackagesDialog {
 
     @FXML
     private void loadButtonAction(ActionEvent actionEvent) {
-        List<String> selectedPackages = new ArrayList<>();
-        for (ToggleButton tb : toggleButtons) {
-            if (tb.isSelected()) {
-                selectedPackages.add(tb.getText());
-            }
-        }
+        List<String> selectedPackages = Arrays.stream(toggleButtons).filter(ToggleButton::isSelected)
+                .map(Labeled::getText).collect(Collectors.toList());
         if (!selectedPackages.isEmpty()) {
             StringBuilder text = new StringBuilder("load_package ");
             text.append(selectedPackages.get(0));
