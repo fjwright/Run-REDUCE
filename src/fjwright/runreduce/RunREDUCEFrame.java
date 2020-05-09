@@ -87,7 +87,7 @@ public class RunREDUCEFrame {
             new FileChooser.ExtensionFilter("All Files", "*.*");
 
     //    static ShutOutputFilesDialog shutOutputFilesDialog;
-    private static final List<File> outputFileList = new ArrayList<>();
+    /*private*/ static final List<File> outputFileList = new ArrayList<>(); // FixMe Should be a field of REDUCEPanel
     //    static LoadPackagesDialog loadPackagesDialog;
     static List<String> packageList;
 
@@ -258,18 +258,22 @@ public class RunREDUCEFrame {
     }
 
     // Shut Output Files...
-    // FixMe Shut multiple files
     @FXML
     private void shutFileMenuItemAction(/*ActionEvent actionEvent*/) {
         if (!outputFileList.isEmpty()) { // not strictly necessary
-            // Select output file to shut:
-            ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(outputFileList.get(0), outputFileList);
-            Optional<File> result = choiceDialog.showAndWait();
-            if (result.isPresent()) {
-                File file = result.get();
-                RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("shut \"" + file.toString() + "\"$\n");
-                outputFileList.remove(file);
+            // Select output file(s) to shut:
+            Parent root;
+            try {
+                root = FXMLLoader.load(getClass().getResource("ShutOutputFilesDialog.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             }
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Shut Output Files...");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
         }
         if (outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
     }
