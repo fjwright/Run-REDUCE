@@ -298,26 +298,26 @@ public class RunREDUCEFrame {
 
     // Load Packages...
     @FXML
-    private void loadPackagesMenuItemAction(/*ActionEvent actionEvent*/) { // FixMe
-//        if (loadPackagesDialog == null) loadPackagesDialog = new LoadPackagesDialog(frame);
-//        if (packageList == null) packageList = new REDUCEPackageList();
-//        if (packageList.isEmpty()) {
-//            // Allow the user to correct the packages directory and try again:
-//            packageList = null;
-//            return;
-//        }
-//        // Select packages to load:
-//        List<String> selectedPackages = loadPackagesDialog.showDialog(packageList);
-//        if (!selectedPackages.isEmpty()) {
-//            StringBuilder text = new StringBuilder("load_package ");
-//            text.append(selectedPackages.get(0));
-//            for (int i = 1; i < selectedPackages.size(); i++) {
-//                text.append(", ");
-//                text.append(selectedPackages.get(i));
-//            }
-//            text.append(";\n");
-//            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
-//        }
+    private void loadPackagesMenuItemAction(/*ActionEvent actionEvent*/) {
+        if (packageList == null) packageList = new REDUCEPackageList();
+        if (packageList.isEmpty()) {
+            // Allow the user to correct the packages directory and try again:
+            packageList = null;
+            return;
+        }
+        // Select packages to load:
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("LoadPackagesDialog.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Load Packages...");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
     // Save Session Log...
