@@ -29,7 +29,6 @@ import java.util.Optional;
  * directory or absolute; I currently use the latter.
  */
 public class RunREDUCEFrame {
-    // ToDo Menu ToolTips
     // Fields defined in FXML must be public or @FXML!
     @FXML
     BorderPane frame;
@@ -85,8 +84,6 @@ public class RunREDUCEFrame {
     private static final FileChooser.ExtensionFilter ALL_FILE_FILTER =
             new FileChooser.ExtensionFilter("All Files", "*.*");
 
-    //    static ShutOutputFilesDialog shutOutputFilesDialog;
-    //    static LoadPackagesDialog loadPackagesDialog;
     static List<String> packageList;
 
     /**
@@ -141,7 +138,6 @@ public class RunREDUCEFrame {
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                 MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide (HTML)");
                 helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
-//                userGuideMenuItem.setToolTipText("Open the Run-REDUCE User Guide in the default web browser.");
                 userGuideMenuItem.setOnAction(e ->
                 {
                     try {
@@ -154,6 +150,7 @@ public class RunREDUCEFrame {
             helpMenu.getItems().add(helpMenuItemIndex++, new SeparatorMenuItem());
 
             String[][] manuals = {
+                    // {Manual name, Windows location, non-Windows location}
                     {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
                     {"REDUCE Manual (PDF)", "lib/csl/reduce.doc/manual.pdf", "manual.pdf.gz"},
                     {"Inside Reduce (PDF)", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
@@ -165,13 +162,10 @@ public class RunREDUCEFrame {
                 for (String[] manual : manuals) {
                     MenuItem menuItem = new MenuItem(manual[0]);
                     helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
-//                    menuItem.setToolTipText("Open this manual in the default application.");
                     menuItem.setOnAction(e -> {
                         try {
-                            desktop.open(RRPreferences.windowsOS ?
-                                    // ToDo Make the directory used below configurable?
-                                    new File(RunREDUCE.reduceConfiguration.packagesRootDir, manual[1]) :
-                                    new File("/usr/share/doc/reduce", manual[2]));
+                            desktop.open(new File(RunREDUCE.reduceConfiguration.docRootDir,
+                                    manual[RRPreferences.windowsOS ? 1 : 2]));
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
@@ -541,19 +535,19 @@ public class RunREDUCEFrame {
         shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = true);
     }
 
-    /**
-     * Update the enabled status of the menus.
-     */
-    void updateMenus() {
-        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);
-        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled);
-        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled);
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled);
-        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
-        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
-    }
+//    /**
+//     * Update the enabled status of the menus.
+//     */
+//    void updateMenus() {
+//        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
+//        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
+//        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
+//        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
+//        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);
+//        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled);
+//        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled);
+//        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled);
+//        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
+//        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
+//    }
 }

@@ -51,7 +51,6 @@ public class RunREDUCE extends Application {
         primaryStage.show();
 
         // REDUCE I/O requires a monospaced font:
-//        reduceFont = Font.font("DejaVu Sans Mono", RRPreferences.fontSize);
         // Only "system" fonts (in C:\Windows\Fonts) are found,
         // not "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)

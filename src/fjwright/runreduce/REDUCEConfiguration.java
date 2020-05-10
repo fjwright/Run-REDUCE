@@ -34,7 +34,7 @@ class RRPreferences {
 
     static final String NONE = "None";
 
-    static int fontSize = Math.max(prefs.getInt(FONTSIZE, 12), 5);
+    static int fontSize = Math.max(prefs.getInt(FONTSIZE, 15), 5);
     // in case a very small font size gets saved accidentally!
     // Minimum value of 5 matches minimum value set for font size SpinnerModel.
     static String autoRunVersion = prefs.get(AUTORUNVERSION, NONE);
@@ -77,7 +77,7 @@ class RRPreferences {
 class REDUCECommand {
     String version = ""; // e.g. "CSL REDUCE" or "PSL REDUCE"
     String versionRootDir = ""; // version-specific reduceRootDir.
-    String[] command = {"", "", "", "", "", ""}; // executable pathname followed by arguments
+    String[] command = {"", "", "", "", "", ""}; // executable pathname followed by 5 arguments
 
     REDUCECommand() {
     }
@@ -128,6 +128,7 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
 abstract class REDUCEConfigurationType {
     String reduceRootDir;
     String packagesRootDir;
+    String docRootDir;
     REDUCECommandList reduceCommandList;
 }
 
@@ -137,21 +138,18 @@ abstract class REDUCEConfigurationType {
  * **Note that no value can be null because preference values cannot be null.**
  */
 class REDUCEConfigurationDefault extends REDUCEConfigurationType {
-    static final String CSL_REDUCE = "CSL REDUCE";
-    static final String PSL_REDUCE = "PSL REDUCE";
+    private static final String CSL_REDUCE = "CSL REDUCE";
+    private static final String PSL_REDUCE = "PSL REDUCE";
 
     REDUCEConfigurationDefault() {
         if (RunREDUCE.debugPlatform) System.err.println("OS name: " + System.getProperty("os.name"));
 
         reduceCommandList = new REDUCECommandList();
-        reduceRootDir = System.getenv("REDUCE");
-        // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
-        // before attempting to run REDUCE.
         if (RRPreferences.windowsOS) {
             // On Windows, all REDUCE directories should be found automatically in "/Program Files/Reduce".
-            if (reduceRootDir == null) reduceRootDir = findREDUCERootDir();
-            if (reduceRootDir == null) reduceRootDir = "";
-            packagesRootDir = reduceRootDir;
+            docRootDir = packagesRootDir = reduceRootDir = findREDUCERootDir();
+            // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
+            // before attempting to run REDUCE.
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     "",
                     "$REDUCE/lib/csl/reduce.exe",
@@ -159,12 +157,12 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
                     "",
                     "$REDUCE/lib/psl/psl/bpsl.exe",
-                    "-td", "1000", "-f",
-                    "$REDUCE/lib/psl/red/reduce.img"));
+                    "-td", "1000", "-f", "$REDUCE/lib/psl/red/reduce.img"));
         } else {
             // This is appropriate for Ubuntu:
             reduceRootDir = "/usr/lib/reduce";
             packagesRootDir = "/usr/share/reduce";
+            docRootDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     "",
                     "$REDUCE/cslbuild/csl/reduce",
@@ -172,13 +170,13 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
                     "",
                     "$REDUCE/pslbuild/psl/bpsl",
-                    "-td", "1000", "-f",
-                    "$REDUCE/pslbuild/red/reduce.img"));
+                    "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
         }
     }
 
     /**
      * This method attempts to locate the REDUCE installation directory on Windows (only).
+     * If not found then it returns an empty string.
      */
     private static String findREDUCERootDir() {
         Path targetPath = Paths.get("Program Files", "Reduce");
@@ -186,7 +184,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             Path reduceRootPath = root.resolve(targetPath);
             if (Files.exists(reduceRootPath)) return reduceRootPath.toString();
         }
-        return null;
+        return "";
     }
 }
 
@@ -198,21 +196,22 @@ class REDUCEConfiguration extends REDUCEConfigurationType {
     // Preference keys:
     static final String REDUCE_ROOT_DIR = "reduceRootDir";
     static final String PACKAGES_ROOT_DIR = "packagesRootDir";
+    static final String DOC_ROOT_DIR = "docRootDir";
     static final String REDUCE_VERSIONS = "reduceVersions";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
     static final String ARG = "arg";
 
     /**
-     * This method initialises the reduceRootDir, packagesRootDir and runREDUCECommands fields from saved preferences
-     * or application defaults.
+     * Initialise the *RootDir and REDUCECommandList fields from saved preferences
+     * or platform defaults.
      */
     REDUCEConfiguration() {
-        reduceCommandList = new REDUCECommandList();
         Preferences prefs = RRPreferences.prefs;
         reduceRootDir = prefs.get(REDUCE_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.reduceRootDir);
         packagesRootDir = prefs.get(PACKAGES_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.packagesRootDir);
-        if (packagesRootDir.isEmpty()) packagesRootDir = RunREDUCE.reduceConfigurationDefault.packagesRootDir;
+        docRootDir = prefs.get(DOC_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.docRootDir);
+        reduceCommandList = new REDUCECommandList();
 
         try {
             if (prefs.nodeExists(REDUCE_VERSIONS)) {
@@ -251,13 +250,14 @@ class REDUCEConfiguration extends REDUCEConfigurationType {
     }
 
     /**
-     * This method saves the reduceRootDir, packagesRootDir and runREDUCECommands fields as preferences.
+     * This method saves the *RootDir and REDUCECommandList fields as preferences.
      */
     void save() {
         Preferences prefs = RRPreferences.prefs;
         prefs.put(REDUCE_ROOT_DIR, reduceRootDir);
         prefs.put(PACKAGES_ROOT_DIR, packagesRootDir);
-        // Remove all saved versions before saving current versions:
+        prefs.put(DOC_ROOT_DIR, docRootDir);
+        // Remove all saved REDUCE versions before saving the current REDUCE versions:
         try {
             prefs.node(REDUCE_VERSIONS).removeNode();
         } catch (BackingStoreException e) {
@@ -279,7 +279,7 @@ class REDUCEConfiguration extends REDUCEConfigurationType {
 
 /**
  * This class provides a list of all REDUCE packages by parsing the package.map file.
- * The list excludes preloaded packages, and it is sorted alphabetically.
+ * The list excludes preloaded packages and is sorted alphabetically.
  */
 class REDUCEPackageList extends ArrayList<String> {
 
