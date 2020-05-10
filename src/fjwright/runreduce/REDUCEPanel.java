@@ -2,6 +2,7 @@ package fjwright.runreduce;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -236,9 +237,10 @@ class REDUCEPanel extends BorderPane {
 
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
-            REDUCEOutputThread outputGobbler = new
-                    REDUCEOutputThread(p.getInputStream());
-            outputGobbler.start();
+            REDUCEOutputThread outputGobbler = new REDUCEOutputThread(p.getInputStream());
+            Thread th = new Thread(outputGobbler);
+            th.setDaemon(true); // terminate after all the stages are closed
+            th.start();
 
             // Reset menu item status as appropriate when REDUCE has just started.
             RunREDUCE.runREDUCEFrame.reduceStarted();
@@ -289,7 +291,7 @@ class REDUCEPanel extends BorderPane {
     /**
      * This thread reads from the REDUCE output pipe and appends it to the GUI output pane.
      */
-    private class REDUCEOutputThread extends Thread {
+    private class REDUCEOutputThread extends Task<Void> {
         private final InputStream input; // REDUCE pipe output (buffered)
 
         private REDUCEOutputThread(InputStream input) {
@@ -297,13 +299,14 @@ class REDUCEPanel extends BorderPane {
         }
 
         @Override
-        public void run() {
+        public Void call() {
             // Must output characters rather than lines so that prompt appears!
             final StringBuilder text = new StringBuilder();
             try (InputStreamReader isr = new InputStreamReader(input);
                  BufferedReader br = new BufferedReader(isr)) {
                 int c;
                 for (; ; ) {
+                    if (isCancelled()) break;
                     if (!br.ready()) {
                         int textLength = text.length();
                         if (textLength > 0) {
@@ -313,7 +316,11 @@ class REDUCEPanel extends BorderPane {
 //                        });
                             text.setLength(0); // reset string builder to gather new output
                         } else
-                            Thread.sleep(10);
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException e) {
+                                if (isCancelled()) break;
+                            }
                     } else if ((c = br.read()) != -1) {
                         if (RunREDUCE.debugOutput) {
                             if (Character.isISOControl((char) c)) {
@@ -334,6 +341,7 @@ class REDUCEPanel extends BorderPane {
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
+            return null;
         }
     }
 
