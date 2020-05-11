@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.171"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.REDUCEConfigDialog">
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+    </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints/>
+        <ColumnConstraints/>
+    </columnConstraints>
+
+    <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults"
+            GridPane.halignment="CENTER">
+        <tooltip>
+            <Tooltip text="Reset all directory and REDUCE version information to its default values.
+&#10;This will also delete information about any non-default REDUCE versions."/>
+        </tooltip>
+    </Button>
+
+    <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="350.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <Label style="-fx-font-weight: bold;" text="Generic directories for all REDUCE versions:"
+               GridPane.columnSpan="2"/>
+        <Label text="Default Root Directory" GridPane.rowIndex="1"/>
+        <TextField fx:id="defaultRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <tooltip>
+                <Tooltip text="As an optional convenience, specify a root directory path
+&#10;that provides a default for all other root directories."/>
+            </tooltip>
+        </TextField>
+        <Label text="Packages Root Directory" GridPane.rowIndex="2"/>
+        <TextField fx:id="packagesRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <tooltip>
+                <Tooltip text="A directory containing a standard REDUCE packages directory."/>
+            </tooltip>
+        </TextField>
+        <Label text="Documentation Root Dir" GridPane.rowIndex="3"/>
+        <TextField fx:id="docRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <tooltip>
+                <Tooltip text="The common root directory for the distributed REDUCE documentation."/>
+            </tooltip>
+        </TextField>
+    </GridPane>
+
+    <GridPane alignment="CENTER" vgap="10.0" GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+        <padding>
+            <Insets bottom="10.0" top="10.0"/>
+        </padding>
+        <Label style="-fx-font-weight: bold;" text="Select REDUCE Version:" GridPane.halignment="CENTER"/>
+        <ListView fx:id="listView" editable="true" prefHeight="100.0" prefWidth="200.0" GridPane.halignment="CENTER"
+                  GridPane.rowIndex="1"/>
+        <Button fx:id="deleteVersionButton" mnemonicParsing="false" onAction="#deleteVersionButtonAction"
+                text="Delete Selected Version" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <tooltip>
+                <Tooltip text="Delete the configuration for the selected version of REDUCE."/>
+            </tooltip>
+        </Button>
+        <Button fx:id="duplicateVersionButton" mnemonicParsing="false" onAction="#duplicateVersionButtonAction"
+                text="Duplicate Selected Version" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <tooltip>
+                <Tooltip text="Duplicate below it the configuration for the selected version of REDUCE."/>
+            </tooltip>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#addVersionButtonAction" text="Add New Version"
+                GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <tooltip>
+                <Tooltip text="Add at the bottom an empty configuration for a new version of REDUCE."/>
+            </tooltip>
+        </Button>
+    </GridPane>
+
+    <GridPane hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="350.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE version:"
+               GridPane.columnSpan="2"/>
+        <Label text="Version Name" GridPane.rowIndex="1"/>
+        <TextField fx:id="versionNameTextField" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <tooltip>
+                <Tooltip text="An arbitrary name used to identify this version of REDUCE."/>
+            </tooltip>
+        </TextField>
+        <Label text="Version Root Directory" GridPane.rowIndex="2"/>
+        <TextField fx:id="versionRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <tooltip>
+                <Tooltip text="Specify a root directory path as an optional convenience, which can be
+&#10;referenced as $REDUCE in the command path name and arguments below."/>
+            </tooltip>
+        </TextField>
+        <Label text="\$REDUCE below is replaced by 'Version Root Directory' if it is set,&#10;otherwise by 'Default Root Directory'."
+               wrapText="true" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3"
+               GridPane.vgrow="ALWAYS"/>
+        <Label text="Command Path Name" GridPane.rowIndex="4"/>
+        <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1"
+                   GridPane.rowIndex="4">
+            <tooltip>
+                <Tooltip
+                        text="The filename part of the command to run REDUCE, which can optionally begin with $REDUCE."/>
+            </tooltip>
+        </TextField>
+        <Label text="Argument 1" GridPane.rowIndex="5"/>
+        <TextField fx:id="arg1" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <Label text="Argument 2" GridPane.rowIndex="6"/>
+        <TextField fx:id="arg2" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        <Label text="Argument 3" GridPane.rowIndex="7"/>
+        <TextField fx:id="arg3" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="Argument 4" GridPane.rowIndex="8"/>
+        <TextField fx:id="arg4" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        <Label text="Argument 5" GridPane.rowIndex="9"/>
+        <TextField fx:id="arg5" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+    </GridPane>
+
+    <HBox alignment="CENTER_RIGHT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save"/>
+        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
+    </HBox>
+
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</GridPane>
