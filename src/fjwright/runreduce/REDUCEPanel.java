@@ -65,7 +65,7 @@ class REDUCEPanel extends BorderPane {
     String title; // REDUCE version if REDUCE is running
     private static final String outputLabelDefault = "Input/Output Display";
     //    static Color deselectedBackground = new Color(0xF8_F8_F8);
-    private boolean questionPrompt;
+    private boolean firstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
     private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
@@ -221,7 +221,9 @@ class REDUCEPanel extends BorderPane {
      */
     void run(REDUCECommand reduceCommand) {
         outputColor = DEFAULT_COLOR; // for initial header
+        // Special support for Redfront I/O colouring:
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
+        firstPrompt = true;
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -262,25 +264,8 @@ class REDUCEPanel extends BorderPane {
         sendButton.setDisable(false);
 
         // Special support for Redfront I/O colouring:
-        if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
-            // Tidy up the initial prompt. Waiting for it is NECESSARY:
-            // This typically sleeps a couple of times.
-//            Platform.runLater(() -> {
-//                Text t;
-//                while (!(outputNodeList.size() > 0 &&
-//                        (t = (Text) outputNodeList.get(outputNodeList.size() - 1))
-//                                .getText().endsWith("1: "))) {
-//                    System.err.println("Waiting...");
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            t.setText(t.getText().substring(0, t.getText().length() - 4));
+        if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT)
             sendStringToREDUCENoEcho("load_package redfront;\n");
-//            });
-        }
 
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -483,15 +468,23 @@ class REDUCEPanel extends BorderPane {
         });
     }
 
+    private static final Pattern PATTERN = Pattern.compile("\n1: ");
+
     private void processPromptMarkers(String text, int start, List<Text> textList) {
+        // Delete the very first prompt. (This code may not be reliable!)
+        Matcher matcher;
+        if (firstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
+            firstPrompt = false;
+            text = matcher.replaceFirst("");
+        }
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
-            String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
-            questionPrompt = promptString.equals("?");
             if (start < promptStartMarker)
                 textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
+            String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
+            questionPrompt = promptString.equals("?");
             textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
