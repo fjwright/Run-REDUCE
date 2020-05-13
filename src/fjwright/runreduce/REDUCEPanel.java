@@ -92,7 +92,7 @@ class REDUCEPanel extends BorderPane {
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
             for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
-                if (RRPreferences.autoRunVersion.equals(cmd.version)) {
+                if (RRPreferences.autoRunVersion.equals(cmd.name)) {
                     // Run REDUCE.  (A direct call throws an error!)
                     Platform.runLater(() -> run(cmd));
                     break;
@@ -250,7 +250,7 @@ class REDUCEPanel extends BorderPane {
                     "REDUCE Process Error");
         }
 
-        title = reduceCommand.version;
+        title = reduceCommand.name;
         outputLabel.setText(outputLabelDefault + "  |  " + title);
 //        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) {
 //            int tabIndex = RunREDUCE.tabbedPane.indexOfComponent(this);

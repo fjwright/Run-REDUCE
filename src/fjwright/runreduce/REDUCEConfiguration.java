@@ -75,16 +75,20 @@ class RRPreferences {
  * This class defines a command to run REDUCE after checking it is executable.
  */
 class REDUCECommand {
-    String version = ""; // e.g. "CSL REDUCE" or "PSL REDUCE"
-    String versionRootDir = ""; // version-specific reduceRootDir.
+    String name = ""; // e.g. "CSL REDUCE" or "PSL REDUCE"
+    String rootDir = ""; // command-specific reduceRootDir.
     String[] command = {"", "", "", "", "", ""}; // executable pathname followed by 5 arguments
 
     REDUCECommand() {
     }
 
-    REDUCECommand(String version, String versionRootDir, String... command) {
-        this.version = version;
-        this.versionRootDir = versionRootDir;
+    REDUCECommand(String name) {
+        this.name = name;
+    }
+
+    REDUCECommand(String name, String rootDir, String... command) {
+        this.name = name;
+        this.rootDir = rootDir;
         this.command = command;
     }
 
@@ -92,7 +96,7 @@ class REDUCECommand {
     String[] buildCommand() {
         // Replace $REDUCE by versionRootDir if non-null else by reduceRootDir.
         Path reduceRootPath = Paths.get(
-                !versionRootDir.equals("") ? versionRootDir : RunREDUCE.reduceConfiguration.reduceRootDir);
+                !rootDir.equals("") ? rootDir : RunREDUCE.reduceConfiguration.reduceRootDir);
         String[] command = new String[this.command.length];
         for (int i = 0; i < this.command.length; i++) {
             String element = this.command[i];
@@ -117,7 +121,7 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
     REDUCECommandList copy() {
         REDUCECommandList reduceCommandList = new REDUCECommandList();
         for (REDUCECommand cmd : this) // Build a deep copy of cmd
-            reduceCommandList.add(new REDUCECommand(cmd.version, cmd.versionRootDir, cmd.command));
+            reduceCommandList.add(new REDUCECommand(cmd.name, cmd.rootDir, cmd.command));
         return reduceCommandList;
     }
 }
@@ -220,13 +224,13 @@ class REDUCEConfiguration extends REDUCEConfigurationType {
                     // Get defaults:
                     REDUCECommand cmdDefault = null;
                     for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
-                        if (version.equals(cmd.version)) {
+                        if (version.equals(cmd.name)) {
                             cmdDefault = cmd;
                             break;
                         }
                     if (cmdDefault == null) cmdDefault = new REDUCECommand(); // all fields ""
                     prefs = prefs.node(version);
-                    String versionRootDir = prefs.get(REDUCE_ROOT_DIR, cmdDefault.versionRootDir);
+                    String versionRootDir = prefs.get(REDUCE_ROOT_DIR, cmdDefault.rootDir);
                     int commandLength = prefs.getInt(COMMAND_LENGTH, cmdDefault.command.length);
                     String[] command;
                     if (commandLength == 0) {
@@ -265,8 +269,8 @@ class REDUCEConfiguration extends REDUCEConfigurationType {
         }
         prefs = prefs.node(REDUCE_VERSIONS);
         for (REDUCECommand cmd : reduceCommandList) {
-            prefs = prefs.node(cmd.version);
-            prefs.put(REDUCE_ROOT_DIR, cmd.versionRootDir);
+            prefs = prefs.node(cmd.name);
+            prefs.put(REDUCE_ROOT_DIR, cmd.rootDir);
             int commandLength = cmd.command.length;
             prefs.putInt(COMMAND_LENGTH, commandLength);
             prefs.put(COMMAND, commandLength > 0 ? cmd.command[0] : "");

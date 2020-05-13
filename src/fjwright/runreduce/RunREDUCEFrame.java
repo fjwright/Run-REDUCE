@@ -254,21 +254,9 @@ public class RunREDUCEFrame {
     // Shut Output Files...
     @FXML
     private void shutFileMenuItemAction(/*ActionEvent actionEvent*/) {
-        if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) { // not strictly necessary
+        if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) // not strictly necessary
             // Select output file(s) to shut:
-            Parent root;
-            try {
-                root = FXMLLoader.load(getClass().getResource("ShutOutputFilesDialog.fxml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Shut Output Files...");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        }
+            showDialogAndWait("Shut Output Files...", "ShutOutputFilesDialog.fxml");
         if (RunREDUCE.reducePanel.outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
     }
 
@@ -300,18 +288,7 @@ public class RunREDUCEFrame {
             return;
         }
         // Select packages to load:
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getResource("LoadPackagesDialog.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Load Packages...");
-        stage.setScene(new Scene(root));
-        stage.showAndWait();
+        showDialogAndWait("Load Packages...", "LoadPackagesDialog.fxml");
     }
 
     // Save Session Log...
@@ -365,7 +342,7 @@ public class RunREDUCEFrame {
         ObservableList<MenuItem> menuItems = runREDUCESubmenu.getItems();
         menuItems.clear();
         for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
-            MenuItem item = new MenuItem(cmd.version);
+            MenuItem item = new MenuItem(cmd.name);
             menuItems.add(item);
             item.setOnAction(e -> RunREDUCE.reducePanel.run(cmd));
         }
@@ -384,8 +361,8 @@ public class RunREDUCEFrame {
                 RRPreferences.save(RRPreferences.AUTORUNVERSION, RRPreferences.NONE);
         });
         for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
-            RadioMenuItem item = new RadioMenuItem(cmd.version);
-            if (RRPreferences.autoRunVersion.equals(cmd.version)) item.setSelected(true);
+            RadioMenuItem item = new RadioMenuItem(cmd.name);
+            if (RRPreferences.autoRunVersion.equals(cmd.name)) item.setSelected(true);
             menuItems.add(item);
             item.setToggleGroup(autoRunToggleGroup);
             item.setOnAction(e -> {
@@ -395,7 +372,7 @@ public class RunREDUCEFrame {
                     RRPreferences.save(RRPreferences.AUTORUNVERSION, version);
                     if (!RunREDUCE.reducePanel.runningREDUCE) {
                         for (REDUCECommand cmd1 : RunREDUCE.reduceConfiguration.reduceCommandList) {
-                            if (version.equals(cmd1.version))
+                            if (version.equals(cmd1.name))
                                 RunREDUCE.reducePanel.run(cmd1);
                             break;
                         }
@@ -422,6 +399,8 @@ public class RunREDUCEFrame {
 
     @FXML
     private void configureREDUCEMenuItemAction(/*ActionEvent actionEvent*/) {
+        showDialogAndWait("Configure REDUCE Directories and Commands",
+                "REDUCEConfigDialog.fxml");
     }
 
     /* ********* *
@@ -430,18 +409,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void fontSizeMenuItemAction(/*ActionEvent actionEvent*/) {
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getResource("FontSizeDialog.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Font Size...");
-        stage.setScene(new Scene(root));
-        stage.showAndWait();
+        showDialogAndWait("Font Size...", "FontSizeDialog.fxml");
     }
 
     @FXML
@@ -502,6 +470,21 @@ public class RunREDUCEFrame {
     /* *************** *
      * Support methods *
      * *************** */
+
+    private void showDialogAndWait(String dialogTitle, String fxmlFileName) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource(fxmlFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle(dialogTitle);
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+    }
 
     /**
      * Reset menu item status as appropriate when REDUCE is not running.
