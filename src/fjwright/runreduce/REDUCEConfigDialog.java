@@ -23,10 +23,8 @@ public class REDUCEConfigDialog {
     private TextField packagesRootDirTextField;
     @FXML
     private TextField docRootDirTextField;
-
     @FXML
     private ListView<String> listView;
-
     @FXML
     private TextField commandNameTextField;
     @FXML
@@ -92,17 +90,15 @@ public class REDUCEConfigDialog {
     @FXML
     private void deleteCommandButtonAction(/*ActionEvent actionEvent*/) {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-            reduceCommandList.remove(selectedIndex);
-            setListViewItems();
-            int size = reduceCommandList.size(); // new size!
-            if (size > 0) {
-                if (selectedIndex >= size) selectedIndex = 0;
-                listView.getSelectionModel().select(selectedIndex);
-                showREDUCECommand(reduceCommandList.get(selectedIndex));
-            } else
-                addCommandButtonAction();
-        }
+        reduceCommandList.remove(selectedIndex);
+        setListViewItems();
+        int size = reduceCommandList.size(); // new size!
+        if (size > 0) {
+            if (selectedIndex == size) selectedIndex--;
+            listView.getSelectionModel().select(selectedIndex);
+            showREDUCECommand(reduceCommandList.get(selectedIndex));
+        } else
+            addCommandButtonAction();
     }
 
     /**
@@ -114,7 +110,7 @@ public class REDUCEConfigDialog {
         REDUCECommand oldCmd = reduceCommandList.get(selectedIndex++);
         // selectedIndex is now incremented to the index of the duplicate entry.
         REDUCECommand newCmd = new REDUCECommand(
-                oldCmd.name + " NEW", oldCmd.rootDir, oldCmd.command);
+                oldCmd.name + " New", oldCmd.rootDir, oldCmd.command);
         reduceCommandList.add(selectedIndex, newCmd);
         setListViewItems();
         listView.getSelectionModel().select(selectedIndex);
@@ -126,7 +122,7 @@ public class REDUCEConfigDialog {
      */
     @FXML
     private void addCommandButtonAction(/*ActionEvent actionEvent*/) {
-        REDUCECommand newCmd = new REDUCECommand("NEW VERSION");
+        REDUCECommand newCmd = new REDUCECommand("New Command");
         reduceCommandList.add(newCmd);
         setListViewItems();
         listView.getSelectionModel().selectLast();
@@ -161,8 +157,10 @@ public class REDUCEConfigDialog {
         commandNameTextField.setText(cmd.name);
         commandRootDirTextField.setText(cmd.rootDir);
         int i;
-        for (i = 0; i < cmd.command.length; i++) commandTextFieldArray[i].setText(cmd.command[i]);
-        for (; i < commandTextFieldArray.length; i++) commandTextFieldArray[i].setText("");
+        for (i = 0; i < cmd.command.length; i++)
+            commandTextFieldArray[i].setText(cmd.command[i]);
+        for (; i < commandTextFieldArray.length; i++)
+            commandTextFieldArray[i].setText("");
     }
 
     /**
@@ -181,5 +179,16 @@ public class REDUCEConfigDialog {
         // Do not save blank arguments:
         cmd.command = Arrays.stream(commandTextFieldArray).map(e -> e.getText().trim())
                 .filter(e -> !e.isEmpty()).toArray(String[]::new);
+    }
+
+    /**
+     * Update the ListView when the command name TextField is edited.
+     */
+    @FXML
+    private void commandNameTextFieldAction(/*ActionEvent actionEvent*/) {
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        reduceCommandList.get(selectedIndex).name = commandNameTextField.getText().trim();
+        setListViewItems();
+        listView.getSelectionModel().select(selectedIndex);
     }
 }

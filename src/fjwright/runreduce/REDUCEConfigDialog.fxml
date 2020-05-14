@@ -17,7 +17,7 @@
 
     <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults" GridPane.halignment="CENTER">
         <tooltip>
-            <Tooltip text="Reset all directory and REDUCE command information to its default values. &#10;This will also delete information about any non-default REDUCE commands." />
+            <Tooltip text="Reset all directory and command information to its default values. &#10;This will also delete information about any non-default commands." />
         </tooltip>
     </Button>
 
@@ -35,7 +35,7 @@
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Generic directories for all REDUCE commands:" GridPane.columnSpan="2" />
+        <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:" GridPane.columnSpan="2" />
         <Label text="REDUCE Root Directory" GridPane.rowIndex="1" />
         <TextField fx:id="reduceRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
@@ -71,7 +71,7 @@
             <Insets bottom="10.0" top="10.0" />
         </padding>
         <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER" />
-        <ListView fx:id="listView" editable="true" maxHeight="160.0" maxWidth="175.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+        <ListView fx:id="listView" editable="true" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
         <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command" GridPane.halignment="CENTER" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Delete the configuration for the selected REDUCE command." />
@@ -111,7 +111,7 @@
         </padding>
         <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:" GridPane.columnSpan="2" />
         <Label text="Command Name" GridPane.rowIndex="1" />
-        <TextField fx:id="commandNameTextField" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="An arbitrary name used to identify this REDUCE command." />
             </tooltip>
@@ -129,15 +129,15 @@
                 <Tooltip text="The filename part of the command to run REDUCE, which can optionally begin with $REDUCE." />
             </tooltip>
         </TextField>
-        <Label text="Argument 1" GridPane.rowIndex="5" />
+        <Label text="Command Argument 1" GridPane.rowIndex="5" />
         <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-        <Label text="Argument 2" GridPane.rowIndex="6" />
+        <Label text="Command Argument 2" GridPane.rowIndex="6" />
         <TextField fx:id="arg2TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-        <Label text="Argument 3" GridPane.rowIndex="7" />
+        <Label text="Command Argument 3" GridPane.rowIndex="7" />
         <TextField fx:id="arg3TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-        <Label text="Argument 4" GridPane.rowIndex="8" />
+        <Label text="Command Argument 4" GridPane.rowIndex="8" />
         <TextField fx:id="arg4TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-        <Label text="Argument 5" GridPane.rowIndex="9" />
+        <Label text="Command Argument 5" GridPane.rowIndex="9" />
         <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9" />
     </GridPane>
 
