@@ -24,7 +24,8 @@
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
             <ColumnConstraints minWidth="-Infinity" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="350.0" prefWidth="350.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="350.0" />
+            <ColumnConstraints prefWidth="24.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints />
@@ -35,25 +36,28 @@
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:" GridPane.columnSpan="2" />
+        <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:" GridPane.columnSpan="2147483647" />
         <Label text="REDUCE Root Directory" GridPane.rowIndex="1" />
         <TextField fx:id="reduceRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="As an optional convenience, specify a root directory path &#10;that provides a default for all command root directories." />
             </tooltip>
         </TextField>
+        <Button mnemonicParsing="false" onAction="#reduceRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="1" />
         <Label text="Packages Root Directory" GridPane.rowIndex="2" />
         <TextField fx:id="packagesRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="A directory containing a standard REDUCE packages directory." />
             </tooltip>
         </TextField>
+        <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
         <Label text="Documentation Root Dir" GridPane.rowIndex="3" />
         <TextField fx:id="docRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="The common root directory for all the distributed REDUCE documentation." />
             </tooltip>
         </TextField>
+        <Button mnemonicParsing="false" onAction="#docRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="3" />
     </GridPane>
 
     <GridPane alignment="CENTER" vgap="10.0" GridPane.rowIndex="1">
@@ -89,10 +93,11 @@
         </Button>
     </GridPane>
 
-    <GridPane hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+    <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
             <ColumnConstraints minWidth="-Infinity" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="350.0" prefWidth="350.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="350.0" />
+            <ColumnConstraints prefWidth="24.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints />
@@ -109,7 +114,7 @@
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:" GridPane.columnSpan="2" />
+        <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:" GridPane.columnSpan="2147483647" />
         <Label text="Command Name" GridPane.rowIndex="1" />
         <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
@@ -122,13 +127,15 @@
                 <Tooltip text="As an optional convenience, specify a root directory path to be &#10;referenced as $REDUCE in the command path name and arguments below." />
             </tooltip>
         </TextField>
-        <Label text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'." wrapText="true" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
+        <Button mnemonicParsing="false" onAction="#commandRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <Label text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'." wrapText="true" GridPane.columnSpan="3" GridPane.rowIndex="3" />
         <Label text="Command Path Name" GridPane.rowIndex="4" />
         <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="The filename part of the command to run REDUCE, which can optionally begin with $REDUCE." />
             </tooltip>
         </TextField>
+        <Button mnemonicParsing="false" onAction="#commandPathNameFCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
         <Label text="Command Argument 1" GridPane.rowIndex="5" />
         <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5" />
         <Label text="Command Argument 2" GridPane.rowIndex="6" />

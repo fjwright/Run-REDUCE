@@ -5,10 +5,15 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -41,6 +46,8 @@ public class REDUCEConfigDialog {
     private TextField arg4TextField;
     @FXML
     private TextField arg5TextField;
+    @FXML
+    private GridPane commandGridPane;
 
     private static TextField[] commandTextFieldArray;
     private static REDUCECommandList reduceCommandList; // local copy
@@ -74,6 +81,7 @@ public class REDUCEConfigDialog {
                             break;
                         }
                 });
+        createCommandArgFCButtons();
     }
 
     /**
@@ -190,5 +198,76 @@ public class REDUCEConfigDialog {
         reduceCommandList.get(selectedIndex).name = commandNameTextField.getText().trim();
         setListViewItems();
         listView.getSelectionModel().select(selectedIndex);
+    }
+
+    /*
+    * Code run by the directory chooser (DC) buttons.
+    */
+    private void dcButtonAction(String title, String defaultDir, TextField textField) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(title);
+        directoryChooser.setInitialDirectory(new File(defaultDir));
+        File dir = directoryChooser.showDialog(RunREDUCE.primaryStage);
+        if (dir != null) textField.setText(dir.toString());
+    }
+
+    @FXML
+    private void reduceRootDirDCButtonAction() {
+        dcButtonAction("REDUCE Root Directory",
+                RunREDUCE.reduceConfigurationDefault.reduceRootDir,
+                reduceRootDirTextField);
+    }
+
+    @FXML
+    private void packagesRootDirDCButtonAction() {
+        dcButtonAction("Packages Root Directory",
+                RunREDUCE.reduceConfigurationDefault.packagesRootDir,
+                packagesRootDirTextField);
+    }
+
+    @FXML
+    private void docRootDirDCButtonAction() {
+        dcButtonAction("Documentation Root Directory",
+                RunREDUCE.reduceConfigurationDefault.docRootDir,
+                docRootDirTextField);
+    }
+
+    @FXML
+    private void commandRootDirDCButtonAction() {
+        dcButtonAction("Command Root Directory",
+                RunREDUCE.reduceConfigurationDefault.reduceRootDir,
+                commandRootDirTextField);
+    }
+
+    /*
+     * Code run by the file chooser (FC) buttons.
+     */
+    private void fcButtonAction(String title, TextField textField) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        String commandRootDir = commandRootDirTextField.getText();
+        String defaultDir = !commandRootDir.isEmpty() ? commandRootDir :
+                RunREDUCE.reduceConfigurationDefault.reduceRootDir;
+        fileChooser.setInitialDirectory(new File(defaultDir));
+        File file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
+        if (file != null) textField.setText(file.toString());
+    }
+
+    @FXML
+    private void commandPathNameFCButtonAction() {
+        fcButtonAction("Command Path Name", commandPathNameTextField);
+    }
+
+    /*
+    * Called in method initialize to create the command argument file chooser buttons.
+    */
+    private void createCommandArgFCButtons() {
+        for (int i = 1; i < commandTextFieldArray.length; i++) {
+            Button button = new Button("...");
+            commandGridPane.add(button, 2, 5 + i);
+            String title = "Command Argument " + i;
+            TextField textField = commandTextFieldArray[i];
+            button.setOnAction(event -> fcButtonAction(title, textField));
+        }
     }
 }

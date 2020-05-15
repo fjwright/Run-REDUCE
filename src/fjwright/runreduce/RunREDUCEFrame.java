@@ -71,12 +71,12 @@ public class RunREDUCEFrame {
     @FXML
     private Menu helpMenu;
 
-    // ToDo Separate input and output file choosers?
     private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages");
+    // ToDo Separate input and output file choosers?
+    private static final FileChooser fileChooser = new FileChooser();
     private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Input Files (*.red, *.tst)", "*.red", "*.tst");
-    private static final FileChooser fileChooser = new FileChooser();
     private static final FileChooser.ExtensionFilter LOG_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Log Files (*.log, *.rlg)", "*.log", "*.rlg");
     private static final FileChooser.ExtensionFilter TEXT_FILE_FILTER =
