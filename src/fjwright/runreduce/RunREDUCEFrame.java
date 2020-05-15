@@ -471,7 +471,7 @@ public class RunREDUCEFrame {
      * Support methods *
      * *************** */
 
-    private void showDialogAndWait(String dialogTitle, String fxmlFileName) {
+    void showDialogAndWait(String dialogTitle, String fxmlFileName) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource(fxmlFileName));

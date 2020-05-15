@@ -296,7 +296,8 @@ class REDUCEPackageList extends ArrayList<String> {
                             "\nPlease correct 'Packages Root Dir' in the 'Configure REDUCE...' dialogue," +
                             "\nwhich will open automatically when you close this dialogue.",
                     "REDUCE Package Error");
-// FixMe           RRMenuBar.showREDUCEConfigDialog();
+            RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
+                    "REDUCEConfigDialog.fxml");
             return;
         }
 

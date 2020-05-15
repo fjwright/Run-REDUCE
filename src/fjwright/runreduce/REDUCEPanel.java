@@ -99,7 +99,7 @@ class REDUCEPanel extends BorderPane {
                 }
 
         // Give the input text area the initial focus:
-        inputTextArea.requestFocus(); // FixMe This doesn't seem to be working!
+        inputTextArea.requestFocus();
         // Reset menu item status as appropriate when REDUCE is not running:
         // This causes problems if called here but OK where REDUCEPanel instantiated, currently in RunREDUCE!
 //        RunREDUCE.runREDUCEFrame.reduceStopped();
