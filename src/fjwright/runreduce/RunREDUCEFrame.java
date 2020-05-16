@@ -10,15 +10,16 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,22 +132,38 @@ public class RunREDUCEFrame {
          * Help menu *
          * ********* */
 
+        class Browser extends Region {
+            final WebView browser = new WebView();
+            final WebEngine webEngine = browser.getEngine();
+
+            public Browser(String htmlDoc) {
+                // add the web view to the scene
+                getChildren().add(browser);
+                // apply the styles
+//                getStyleClass().add("browser");
+                // load the web page
+//                webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
+//                webEngine.load("file:///C:/Users/franc/IdeaProjects/Run-REDUCE-FX/src/fjwright/runreduce/UserGuide.html"); // Works!
+                webEngine.loadContent(htmlDoc);
+            }
+        }
+
+        int helpMenuItemIndex = 0;
+        MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide");
+        helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
+        userGuideMenuItem.setOnAction(e -> {
+            String htmlDoc = userGuideHTML();
+            if (htmlDoc == null) return;
+            Stage stage = new Stage();
+            stage.setTitle("Run-REDUCE User Guide");
+            Scene scene = new Scene(new Browser(htmlDoc));
+            stage.setScene(scene);
+//            scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
+            stage.show();
+        });
+
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
-            int helpMenuItemIndex = 0;
-
-            if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide (HTML)");
-                helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
-                userGuideMenuItem.setOnAction(e ->
-                {
-                    try {
-                        desktop.browse(new URI("https://fjwright.github.io/Run-REDUCE/UserGuide.html"));
-                    } catch (IOException | URISyntaxException ex) {
-                        ex.printStackTrace();
-                    }
-                });
-            }
             helpMenu.getItems().add(helpMenuItemIndex++, new SeparatorMenuItem());
 
             String[][] manuals = {
@@ -533,4 +550,21 @@ public class RunREDUCEFrame {
 //        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
 //        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
 //    }
+
+    private String userGuideHTML() {
+        InputStream inputStream = getClass().getResourceAsStream("UserGuide.html");
+        if (inputStream == null) {
+            System.err.println("UserGuide.html resource could not be found.");
+            return null;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String str;
+            while ((str = bufferedReader.readLine()) != null)
+                stringBuilder.append(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
 }
