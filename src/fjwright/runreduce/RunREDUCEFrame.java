@@ -141,6 +141,7 @@ public class RunREDUCEFrame {
                 getChildren().add(browser);
                 // apply the styles
 //                getStyleClass().add("browser");
+                setStyle("-fx-padding: 5;");
                 // load the web page
 //                webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
 //                webEngine.load("file:///C:/Users/franc/IdeaProjects/Run-REDUCE-FX/src/fjwright/runreduce/UserGuide.html"); // Works!
@@ -551,20 +552,19 @@ public class RunREDUCEFrame {
 //        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
 //    }
 
-    private String userGuideHTML() {
-        InputStream inputStream = getClass().getResourceAsStream("UserGuide.html");
+    private static String userGuideHTML() {
+        InputStream inputStream = RunREDUCEFrame.class.getResourceAsStream("UserGuide.html");
         if (inputStream == null) {
             System.err.println("UserGuide.html resource could not be found.");
             return null;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String str;
-            while ((str = bufferedReader.readLine()) != null)
-                stringBuilder.append(str);
+        StringWriter writer = new StringWriter();
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            int c;
+            while ((c = reader.read()) != -1) writer.write(c);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return stringBuilder.toString();
+        return writer.toString();
     }
 }

@@ -264,7 +264,7 @@ public class REDUCEConfigDialog {
     private void createCommandArgFCButtons() {
         for (int i = 1; i < commandTextFieldArray.length; i++) {
             Button button = new Button("...");
-            commandGridPane.add(button, 2, 5 + i);
+            commandGridPane.add(button, 2, 4 + i);
             String title = "Command Argument " + i;
             TextField textField = commandTextFieldArray[i];
             button.setOnAction(event -> fcButtonAction(title, textField));
