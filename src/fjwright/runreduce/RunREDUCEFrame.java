@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -132,23 +133,6 @@ public class RunREDUCEFrame {
          * Help menu *
          * ********* */
 
-        class Browser extends Region {
-            final WebView browser = new WebView();
-            final WebEngine webEngine = browser.getEngine();
-
-            public Browser(String htmlDoc) {
-                // add the web view to the scene
-                getChildren().add(browser);
-                // apply the styles
-//                getStyleClass().add("browser");
-                setStyle("-fx-padding: 5;");
-                // load the web page
-//                webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
-//                webEngine.load("file:///C:/Users/franc/IdeaProjects/Run-REDUCE-FX/src/fjwright/runreduce/UserGuide.html"); // Works!
-                webEngine.loadContent(htmlDoc);
-            }
-        }
-
         int helpMenuItemIndex = 0;
         MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide");
         helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
@@ -157,7 +141,7 @@ public class RunREDUCEFrame {
             if (htmlDoc == null) return;
             Stage stage = new Stage();
             stage.setTitle("Run-REDUCE User Guide");
-            Scene scene = new Scene(new Browser(htmlDoc));
+            Scene scene = new Scene(new Browser(stage, htmlDoc));
             stage.setScene(scene);
 //            scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
             stage.show();
@@ -551,6 +535,30 @@ public class RunREDUCEFrame {
 //        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
 //        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
 //    }
+
+    static class Browser extends Region {
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+
+        public Browser(Stage stage, String htmlDoc) {
+            // add the web view to the scene
+            getChildren().add(browser);
+            // apply the styles
+//                getStyleClass().add("browser");
+            setStyle("-fx-padding: 5;");
+//            setMaxWidth(Double.MAX_VALUE); // Doesn't work!
+            // load the web page
+//                webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
+//                webEngine.load("file:///C:/Users/franc/IdeaProjects/Run-REDUCE-FX/src/fjwright/runreduce/UserGuide.html"); // Works!
+            webEngine.loadContent(htmlDoc);
+
+//                webEngine.setOnResized(ev -> {
+//                    Rectangle2D r = ev.getData();
+//                    stage.setWidth(r.getWidth());
+//                    stage.setHeight(r.getHeight());
+//                });
+        }
+    }
 
     private static String userGuideHTML() {
         InputStream inputStream = RunREDUCEFrame.class.getResourceAsStream("UserGuide.html");
