@@ -17,7 +17,7 @@ public class LoadPackagesDialog {
     @FXML
     private GridPane gridPane;
 
-    private static final int COLUMNS = 10;
+    private static final int COLUMNS = 10; // Adjust to taste!
     ToggleButton[] toggleButtons = new ToggleButton[RunREDUCEFrame.packageList.size()];
 
     @FXML
@@ -29,6 +29,13 @@ public class LoadPackagesDialog {
             gridPane.add(tb = new ToggleButton(pkg), col, row);
             tb.setAlignment(Pos.CENTER_LEFT);
             tb.setMaxWidth(Double.MAX_VALUE);
+            tb.setOnMouseClicked(e -> {
+                if (e.getClickCount() == 2) {
+                    RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(
+                            "load_package " + ((ToggleButton) e.getSource()).getText() + ";\n");
+                    ((Stage) ((Node) e.getSource()).getScene().getWindow()).close();
+                }
+            });
             toggleButtons[i++] = tb;
             if (++col == COLUMNS) {
                 col = 0;

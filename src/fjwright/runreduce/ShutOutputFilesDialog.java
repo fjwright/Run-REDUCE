@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -18,10 +19,18 @@ public class ShutOutputFilesDialog {
 
     @FXML
     private void initialize() {
-        ObservableList<File> items = FXCollections.observableArrayList(
+        ObservableList<File> files = FXCollections.observableArrayList(
                 RunREDUCE.reducePanel.outputFileList);
-        listView.setItems(items);
+        listView.setItems(files);
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String fileName = ((Text) e.getTarget()).getText();
+                RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("shut \"" + fileName + "\";\n");
+                RunREDUCE.reducePanel.outputFileList.remove(new File(fileName));
+                ((Stage) ((Node) e.getSource()).getScene().getWindow()).close();
+            }
+        });
     }
 
     @FXML
@@ -32,7 +41,7 @@ public class ShutOutputFilesDialog {
             // Process backwards to avoid remove() changing subsequent indices:
             StringBuilder text = new StringBuilder(
                     RunREDUCE.reducePanel.outputFileList.remove((int) fileIndices.get(--i)).toString());
-            text.append("\"$\n");
+            text.append("\";\n");
             while (i > 0) {
                 text.insert(0, "\", \"");
                 text.insert(0,
@@ -41,7 +50,6 @@ public class ShutOutputFilesDialog {
             text.insert(0, "shut \"");
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
         }
-
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }

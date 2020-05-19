@@ -101,6 +101,5 @@ public class RunREDUCE extends Application {
     }
 }
 
-// ToDo Add double-click handlers to the non-standard dialogues.
 // ToDo Implement split and tabbed REDUCE panels.
-// ToDo Support access to a local User Guide.
+// ToDo Fix <em> and <strong> tags being ignored in User Guide.
