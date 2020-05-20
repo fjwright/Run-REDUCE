@@ -11,9 +11,12 @@ package fjwright.runreduce;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.SplitPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
@@ -27,6 +30,7 @@ public class RunREDUCE extends Application {
     static Stage primaryStage;
     static final String reduceFontFamilyName = "Consolas";
     static Font reduceFont, reduceFontBold;
+    static SplitPane splitPane;
     static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
 
     // Set the main window to 2/3 the linear dimension of the screen initially:
@@ -62,9 +66,51 @@ public class RunREDUCE extends Application {
             System.err.println("reduceFontBold: " + reduceFontBold.toString());
         }
 
-        runREDUCEFrame.frame.setCenter(reducePanel = new REDUCEPanel());
+        reducePanel = new REDUCEPanel();
+        switch (RRPreferences.displayPane) {
+            case SINGLE:
+                runREDUCEFrame.frame.setCenter(reducePanel);
+                break;
+            case SPLIT:
+                useSplitPane(true);
+                break;
+            case TABBED:
+//                useTabbedPane(true);
+        }
+
         // Reset menu item status as appropriate when REDUCE is not running:
         runREDUCEFrame.reduceStopped();
+    }
+
+    static void useSplitPane(boolean enable) {
+        if (enable) {
+            REDUCEPanel reducePanel2 = new REDUCEPanel();
+            splitPane = new SplitPane(reducePanel, reducePanel2);
+            splitPane.setDividerPositions(0.5);
+            runREDUCEFrame.frame.setCenter(splitPane);
+            reducePanel.splitPane.setOnMouseClicked(RunREDUCE::mouseClicked);
+            reducePanel.inputTextArea.setOnMouseClicked(RunREDUCE::mouseClicked);
+            reducePanel2.splitPane.setOnMouseClicked(RunREDUCE::mouseClicked);
+            reducePanel2.inputTextArea.setOnMouseClicked(RunREDUCE::mouseClicked);
+            reducePanel2.setSelected(false);
+        } else { // Revert to single pane.
+            splitPane = null; // release resources
+            reducePanel.splitPane.removeEventHandler(MouseEvent.MOUSE_CLICKED, RunREDUCE::mouseClicked);
+            reducePanel.inputTextArea.removeEventHandler(MouseEvent.MOUSE_CLICKED, RunREDUCE::mouseClicked);
+            // Retain the reducePanel from the selected tab if possible:
+            runREDUCEFrame.frame.setCenter(reducePanel);
+        }
+    }
+
+    private static void mouseClicked(MouseEvent event) {
+        Node node = (Node) event.getSource();
+        while (!(node instanceof REDUCEPanel)) node = node.getParent();
+        if (node == reducePanel) return;
+        reducePanel.setSelected(false);
+        reducePanel = (REDUCEPanel) node;
+        reducePanel.inputTextArea.requestFocus();
+        RunREDUCE.runREDUCEFrame.updateMenus();
+        reducePanel.setSelected(true);
     }
 
     static void errorMessageDialog(String message, String title) {

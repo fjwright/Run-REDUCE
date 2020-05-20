@@ -6,10 +6,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -27,7 +24,9 @@ import java.util.regex.Pattern;
  * This class provides the panel that displays REDUCE input and output.
  * The run method runs REDUCE as a sub-process.
  */
-class REDUCEPanel extends BorderPane {
+public class REDUCEPanel extends BorderPane {
+    @FXML
+    SplitPane splitPane; // Accessed in RunREDUCE.java
     @FXML
     private Label outputLabel;
     @FXML
@@ -35,7 +34,9 @@ class REDUCEPanel extends BorderPane {
     @FXML
     TextFlow outputTextFlow; // Accessed in RunREDUCEFrame.java
     @FXML
-    private TextArea inputTextArea;
+    private Label inputLabel;
+    @FXML
+    TextArea inputTextArea; // Accessed in RunREDUCE.java
     @FXML
     Button sendButton; // Accessed in RunREDUCEFrame.java
     @FXML
@@ -213,6 +214,20 @@ class REDUCEPanel extends BorderPane {
         if (reduceInputPrintWriter != null) {
             reduceInputPrintWriter.print(text);
             reduceInputPrintWriter.flush();
+        }
+    }
+
+    void setSelected(boolean selected) {
+        if (selected) {
+//            outputTextFlow.setStyle("-fx-control-inner-background: white;");
+            inputTextArea.setStyle("-fx-control-inner-background: white;");
+            outputLabel.setDisable(false);
+            inputLabel.setDisable(false);
+        } else {
+//            outputTextFlow.setStyle("-fx-control-inner-background: #F8F8F8;");
+            inputTextArea.setStyle("-fx-control-inner-background: #F8F8F8;");
+            outputLabel.setDisable(true);
+            inputLabel.setDisable(true);
         }
     }
 

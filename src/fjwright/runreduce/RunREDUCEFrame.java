@@ -71,6 +71,16 @@ public class RunREDUCEFrame {
     private RadioMenuItem modeColouredIORadioButton;
     @FXML
     private RadioMenuItem redfrontColouredIORadioButton;
+    @FXML
+    private RadioMenuItem singlePaneRadioButton;
+    @FXML
+    private RadioMenuItem splitPaneRadioButton;
+    @FXML
+    private RadioMenuItem tabbedPaneRadioButton;
+    @FXML
+    private MenuItem addTabMenuItem;
+    @FXML
+    private MenuItem removeTabMenuItem;
     // Help menu:
     @FXML
     private Menu helpMenu;
@@ -130,6 +140,12 @@ public class RunREDUCEFrame {
             case REDFRONT:
                 redfrontColouredIORadioButton.setSelected(true);
         }
+
+        singlePaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SINGLE);
+        splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
+        tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
+        addTabMenuItem.setDisable(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
+        removeTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
 
         /* ********* *
          * Help menu *
@@ -430,22 +446,44 @@ public class RunREDUCEFrame {
 
     @FXML
     private void singlePaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+        switch (RRPreferences.displayPane) {
+            case SPLIT:
+                RunREDUCE.useSplitPane(false);
+//                addTabMenuItem.setEnabled(true);
+                break;
+//            case TABBED:
+//                RunREDUCE.useTabbedPane(false);
+//                removeTabMenuItem.setEnabled(false);
+        }
+        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SINGLE);
     }
 
     @FXML
     private void splitPaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+//        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabbedPane(false);
+//        addTabMenuItem.setEnabled(false);
+//        removeTabMenuItem.setEnabled(false);
+        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SPLIT);
+        RunREDUCE.useSplitPane(true);
     }
 
     @FXML
     private void tabbedPaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+//        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false);
+//        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
+//        RunREDUCE.useTabbedPane(true);
+//        addTabMenuItem.setEnabled(true);
+//        removeTabMenuItem.setEnabled(true);
     }
 
     @FXML
     private void addTabMenuItemAction(/*ActionEvent actionEvent*/) {
+//        RunREDUCE.addTab();
     }
 
     @FXML
     private void removeTabMenuItemAction(/*ActionEvent actionEvent*/) {
+//        RunREDUCE.removeTab();
     }
 
     /* ********* *
@@ -513,21 +551,21 @@ public class RunREDUCEFrame {
         shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = true);
     }
 
-//    /**
-//     * Update the enabled status of the menus.
-//     */
-//    void updateMenus() {
-//        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-//        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-//        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-//        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-//        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);
-//        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled);
-//        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled);
-//        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled);
-//        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
-//        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
-//    }
+    /**
+     * Update the enabled status of the menus.
+     */
+    void updateMenus() {
+        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
+        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
+        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
+        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
+        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);
+        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled);
+        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled);
+        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled);
+        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
+        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
+    }
 
     private void ShowUserGuide(ActionEvent e) {
         Stage stage = new Stage();

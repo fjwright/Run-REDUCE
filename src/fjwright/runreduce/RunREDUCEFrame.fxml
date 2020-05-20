@@ -23,14 +23,15 @@
                 <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit" />
             </Menu>
             <Menu mnemonicParsing="false" text="REDUCE">
-                <items>
-                    <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..." />
-                    <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..." />
-                    <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
-                    <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction" text="Clear I/O Display" />
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem fx:id="configureREDUCEMenuItem" mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..." />
-                </items>
+                <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..."/>
+                <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..."/>
+                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction"
+                          text="Stop REDUCE"/>
+                <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction"
+                          text="Clear I/O Display"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false"
+                          onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..."/>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..." />

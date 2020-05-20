@@ -11,10 +11,10 @@ Error messages that no controller is specified do not stop compilation.
 Use XML character entity references for control characters in strings, e.g. &#10; for LF. -->
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
-    <!--<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"-->
-    <!--            fx:controller="fjwright.runreduce.REDUCEPanel">-->
+<!--<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"-->
+<!--            fx:controller="fjwright.runreduce.REDUCEPanel">-->
     <center>
-        <SplitPane dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
+        <SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
             <BorderPane>
                 <top>
                     <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
@@ -33,7 +33,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
             </BorderPane>
             <BorderPane>
                 <top>
-                    <Label text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
+                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
@@ -70,5 +70,5 @@ Use XML character entity references for control characters in strings, e.g. &#10
             </Button>
         </TilePane>
     </bottom>
-    <!--</BorderPane>-->
+<!--</BorderPane>-->
 </fx:root>
