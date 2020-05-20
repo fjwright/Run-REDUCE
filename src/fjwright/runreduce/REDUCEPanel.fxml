@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.TextFlow?>
 
 <!-- Do not include the controller when compiling this file!
 Error messages that no controller is specified do not stop compilation.
 Use XML character entity references for control characters in strings, e.g. &#10; for LF. -->
 
-<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
 <!--<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"-->
 <!--            fx:controller="fjwright.runreduce.REDUCEPanel">-->
     <center>
@@ -23,7 +29,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                     <ScrollPane fx:id="outputScrollPane" fitToHeight="true" fitToWidth="true" style="-fx-border-width: 1; -fx-border-color: lightgray;" BorderPane.alignment="CENTER">
                         <!-- For scrolling to be based on the *visual* bounds of the TextFlow if must be wrapped in a Group. -->
                         <Group>
-                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white; -fx-padding: 5,5,5,5;"/>
+                            <TextFlow fx:id="outputTextFlow" style="-fx-background-color: white; -fx-padding: 5,5,5,5;" />
                         </Group>
                     </ScrollPane>
                 </center>
@@ -47,28 +53,26 @@ Use XML character entity references for control characters in strings, e.g. &#10
         </SplitPane>
     </center>
     <bottom>
-        <TilePane alignment="CENTER" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" spacing="50.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <Button fx:id="earlierButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#earlierButtonAction" text="▲ Earlier Input">
+            <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
                 <tooltip>
                     <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
                 </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="sendButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" text="Send Input">
+            <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0" text="Send Input">
                 <tooltip>
                     <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
                 </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="laterButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#laterButtonAction" text="▼ Later Input">
+            <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
                 <tooltip>
                     <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
                 </tooltip>
             </Button>
-        </TilePane>
+        </HBox>
     </bottom>
 <!--</BorderPane>-->
 </fx:root>
