@@ -510,6 +510,8 @@ public class REDUCEPanel extends BorderPane {
     private boolean stopREDUCEMenuItemDisabled;
     private boolean runREDUCESubmenuDisabled;
 
+    private static final RunREDUCEFrame FRAME = RunREDUCE.runREDUCEFrame;
+
     /**
      * Reset menu item status as appropriate when REDUCE is not running.
      */
@@ -526,44 +528,64 @@ public class REDUCEPanel extends BorderPane {
 
     private void startingOrStoppingREDUCE(boolean starting) {
         // Items to enable/disable when REDUCE starts/stops running:
-        RunREDUCE.runREDUCEFrame.inputFileMenuItem.setDisable(inputFileMenuItemDisabled = !starting);
-        RunREDUCE.runREDUCEFrame.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled = !starting);
-        RunREDUCE.runREDUCEFrame.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
-        RunREDUCE.runREDUCEFrame.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
-        RunREDUCE.runREDUCEFrame.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        FRAME.inputFileMenuItem.setDisable(inputFileMenuItemDisabled = !starting);
+        FRAME.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled = !starting);
+        FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
+        FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
+        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
         // Items to disable/enable when REDUCE starts/stops running:
-        RunREDUCE.runREDUCEFrame.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled = starting);
+        FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled = starting);
         // Items to disable always when REDUCE starts or stops running:
-        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = true);
-        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = true);
-        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(shutFileMenuItemDisabled = true);
-        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(shutLastMenuItemDisabled = true);
+        FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = true);
+        FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = true);
+        FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled = true);
+        FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled = true);
     }
 
     /**
      * Update the enabled status of the menus.
      */
     void updateMenus() {
-        RunREDUCE.runREDUCEFrame.inputFileMenuItem.setDisable(inputFileMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(outputHereMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(shutFileMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
-        RunREDUCE.runREDUCEFrame.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
+        FRAME.inputFileMenuItem.setDisable(inputFileMenuItemDisabled);
+        FRAME.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled);
+        FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled);
+        FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled);
+        FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled);
+        FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled);
+        FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
+        FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
+        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
     }
 
-    void outputFileSetDisableMenuItems(boolean disable) {
-        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputOpenFileMenuItemDisabled = disable);
-        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = disable);
-        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = disable);
-        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = disable);
+    /*
+    * Called as outputFileDisableMenuItems(false) when outputNewFileMenuItemAction
+    * or outputOpenFileMenuItemAction run.
+    */
+    void outputFileDisableMenuItems(boolean disable) {
+        FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = disable);
+        FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled = disable);
+        FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled = disable);
+        FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled =
+                disable || outputFileList.size() <= 1);
     }
 
-    void outputHereDisableMenuItem() {
-        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = true);
+    /*
+    * Called when shutFileMenuItemAction or shutLastMenuItemAction run.
+    */
+    void outputFileDisableMenuItemsMaybe() {
+        if (outputFileList.isEmpty()) outputFileDisableMenuItems(true);
+        if (outputFileList.size() == 1)
+            FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = true);
+    }
+
+    /*
+    * Called when outputHereMenuItemAction run.
+    * Can output to an open output file if there is one.
+    */
+    void outputHereDisableMenuItemsMaybe() {
+        FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = true);
+        if (!outputFileList.isEmpty())
+            FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = false);
     }
 }

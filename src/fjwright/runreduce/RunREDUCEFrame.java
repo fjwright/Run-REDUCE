@@ -193,14 +193,14 @@ public class RunREDUCEFrame {
 
     // Input from Files...
     @FXML
-    private void inputFileMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void inputFileMenuItemAction() {
         fileChooser.setTitle("Input from Files...");
         inputFile();
     }
 
     // Input from Package Files...
     @FXML
-    private void inputPackageFileMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void inputPackageFileMenuItemAction() {
         fileChooser.setTitle("Input from Package Files...");
         fileChooser.setInitialDirectory(PACKAGES_DIR);
         inputFile();
@@ -224,7 +224,7 @@ public class RunREDUCEFrame {
 
     // Output to New File...
     @FXML
-    private void outputNewFileMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void outputNewFileMenuItemAction() {
         fileChooser.setTitle("Output to File...");
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
@@ -232,13 +232,13 @@ public class RunREDUCEFrame {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
             RunREDUCE.reducePanel.outputFileList.add(file);
-            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(false);
+            RunREDUCE.reducePanel.outputFileDisableMenuItems(false);
         }
     }
 
     // Output to Open File...
     @FXML
-    private void outputOpenFileMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void outputOpenFileMenuItemAction() {
         if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) { // not strictly necessary
             // Select output file to shut:
             ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(RunREDUCE.reducePanel.outputFileList.get(0),
@@ -250,43 +250,41 @@ public class RunREDUCEFrame {
                 // Make this the last file used for output:
                 RunREDUCE.reducePanel.outputFileList.remove(file);
                 RunREDUCE.reducePanel.outputFileList.add(file);
-                RunREDUCE.reducePanel.outputFileSetDisableMenuItems(false);
+                RunREDUCE.reducePanel.outputFileDisableMenuItems(false);
             }
         }
     }
 
     // Output Here
     @FXML
-    private void outputHereMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void outputHereMenuItemAction() {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out t$\n");
-        RunREDUCE.reducePanel.outputHereDisableMenuItem();
+        RunREDUCE.reducePanel.outputHereDisableMenuItemsMaybe();
     }
 
     // Shut Output Files...
     @FXML
-    private void shutFileMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void shutFileMenuItemAction() {
         if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) // not strictly necessary
             // Select output file(s) to shut:
             showDialogAndWait("Shut Output Files...", "ShutOutputFilesDialog.fxml");
-        if (RunREDUCE.reducePanel.outputFileList.isEmpty())
-            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(true);
+        RunREDUCE.reducePanel.outputFileDisableMenuItemsMaybe();
     }
 
     // Shut Last Output File
     @FXML
-    private void shutLastMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void shutLastMenuItemAction() {
         if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) { // not strictly necessary
             int last = RunREDUCE.reducePanel.outputFileList.size() - 1;
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(
                     "shut \"" + RunREDUCE.reducePanel.outputFileList.remove(last).toString() + "\"$\n");
         }
-        if (RunREDUCE.reducePanel.outputFileList.isEmpty())
-            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(true);
+        RunREDUCE.reducePanel.outputFileDisableMenuItemsMaybe();
     }
 
     // Load Packages...
     @FXML
-    private void loadPackagesMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void loadPackagesMenuItemAction() {
         if (packageList == null) packageList = new REDUCEPackageList();
         if (packageList.isEmpty()) {
             // Allow the user to correct the packages directory and try again:
@@ -299,13 +297,13 @@ public class RunREDUCEFrame {
 
     // Save Session Log...
     @FXML
-    private void saveLogMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void saveLogMenuItemAction() {
         saveLog(false);
     }
 
     // Append Session Log...
     @FXML
-    private void appendLogMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void appendLogMenuItemAction() {
         saveLog(true);
     }
 
@@ -336,7 +334,7 @@ public class RunREDUCEFrame {
 
     // Exit
     @FXML
-    private void exitMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void exitMenuItemAction() {
         Platform.exit();
     }
 
@@ -389,7 +387,7 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void stopREDUCEMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void stopREDUCEMenuItemAction() {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
         RunREDUCE.reducePanel.sendButton.setDisable(true);
         RunREDUCE.reducePanel.runningREDUCE = false;
@@ -399,12 +397,12 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void clearDisplayMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void clearDisplayMenuItemAction() {
         RunREDUCE.reducePanel.outputTextFlow.getChildren().clear();
     }
 
     @FXML
-    private void configureREDUCEMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void configureREDUCEMenuItemAction() {
         showDialogAndWait("Configure REDUCE Directories and Commands",
                 "REDUCEConfigDialog.fxml");
     }
@@ -414,33 +412,33 @@ public class RunREDUCEFrame {
      * ********* */
 
     @FXML
-    private void fontSizeMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void fontSizeMenuItemAction() {
         showDialogAndWait("Font Size...", "FontSizeDialog.fxml");
     }
 
     @FXML
-    private void boldPromptsCheckBoxAction(/*ActionEvent actionEvent*/) {
+    private void boldPromptsCheckBoxAction() {
         RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected();
         RRPreferences.save(RRPreferences.BOLDPROMPTS);
     }
 
     @FXML
-    private void noColouredIORadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void noColouredIORadioButtonAction() {
         RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.NONE);
     }
 
     @FXML
-    private void modeColouredIORadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void modeColouredIORadioButtonAction() {
         RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.MODAL);
     }
 
     @FXML
-    private void redfrontColouredIORadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void redfrontColouredIORadioButtonAction() {
         RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.REDFRONT);
     }
 
     @FXML
-    private void singlePaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void singlePaneRadioButtonAction() {
         switch (RRPreferences.displayPane) {
             case SPLIT:
                 RunREDUCE.useSplitPane(false);
@@ -454,7 +452,7 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void splitPaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void splitPaneRadioButtonAction() {
 //        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabbedPane(false);
 //        addTabMenuItem.setEnabled(false);
 //        removeTabMenuItem.setEnabled(false);
@@ -463,7 +461,7 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void tabbedPaneRadioButtonAction(/*ActionEvent actionEvent*/) {
+    private void tabbedPaneRadioButtonAction() {
 //        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false);
 //        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
 //        RunREDUCE.useTabbedPane(true);
@@ -472,12 +470,12 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void addTabMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void addTabMenuItemAction() {
 //        RunREDUCE.addTab();
     }
 
     @FXML
-    private void removeTabMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void removeTabMenuItemAction() {
 //        RunREDUCE.removeTab();
     }
 
@@ -486,7 +484,7 @@ public class RunREDUCEFrame {
      * ********* */
 
     @FXML
-    private void aboutMenuItemAction(/*ActionEvent actionEvent*/) {
+    private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Prototype version 0.1\n" +
                         "\u00A9 Francis Wright, May 2020");
