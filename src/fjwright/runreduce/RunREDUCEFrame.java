@@ -40,26 +40,26 @@ public class RunREDUCEFrame {
     @FXML
     private CheckMenuItem echoCheckMenuItem;
     @FXML
-    private MenuItem inputFileMenuItem;
+    MenuItem inputFileMenuItem;
     @FXML
-    private MenuItem inputPackageFileMenuItem;
+    MenuItem inputPackageFileMenuItem;
     @FXML
-    private MenuItem outputNewFileMenuItem;
+    MenuItem outputNewFileMenuItem;
     @FXML
-    private MenuItem outputOpenFileMenuItem;
+    MenuItem outputOpenFileMenuItem;
     @FXML
-    private MenuItem outputHereMenuItem;
+    MenuItem outputHereMenuItem;
     @FXML
-    private MenuItem shutFileMenuItem;
+    MenuItem shutFileMenuItem;
     @FXML
-    private MenuItem shutLastMenuItem;
+    MenuItem shutLastMenuItem;
     @FXML
-    private MenuItem loadPackagesMenuItem;
+    MenuItem loadPackagesMenuItem;
     // REDUCE menu:
     @FXML
-    private MenuItem stopREDUCEMenuItem;
+    MenuItem stopREDUCEMenuItem;
     @FXML
-    private Menu runREDUCESubmenu;
+    Menu runREDUCESubmenu;
     @FXML
     private Menu autoRunREDUCESubmenu;
     // View menu:
@@ -232,7 +232,7 @@ public class RunREDUCEFrame {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
             RunREDUCE.reducePanel.outputFileList.add(file);
-            outputFileSetDisableMenuItems(false);
+            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(false);
         }
     }
 
@@ -250,7 +250,7 @@ public class RunREDUCEFrame {
                 // Make this the last file used for output:
                 RunREDUCE.reducePanel.outputFileList.remove(file);
                 RunREDUCE.reducePanel.outputFileList.add(file);
-                outputFileSetDisableMenuItems(false);
+                RunREDUCE.reducePanel.outputFileSetDisableMenuItems(false);
             }
         }
     }
@@ -259,7 +259,7 @@ public class RunREDUCEFrame {
     @FXML
     private void outputHereMenuItemAction(/*ActionEvent actionEvent*/) {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out t$\n");
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = true);
+        RunREDUCE.reducePanel.outputHereDisableMenuItem();
     }
 
     // Shut Output Files...
@@ -268,7 +268,8 @@ public class RunREDUCEFrame {
         if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) // not strictly necessary
             // Select output file(s) to shut:
             showDialogAndWait("Shut Output Files...", "ShutOutputFilesDialog.fxml");
-        if (RunREDUCE.reducePanel.outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
+        if (RunREDUCE.reducePanel.outputFileList.isEmpty())
+            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(true);
     }
 
     // Shut Last Output File
@@ -279,14 +280,8 @@ public class RunREDUCEFrame {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(
                     "shut \"" + RunREDUCE.reducePanel.outputFileList.remove(last).toString() + "\"$\n");
         }
-        if (RunREDUCE.reducePanel.outputFileList.isEmpty()) outputFileSetDisableMenuItems(true);
-    }
-
-    private void outputFileSetDisableMenuItems(boolean disable) {
-        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputOpenMenuItemDisabled = disable);
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = disable);
-        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = disable);
-        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = disable);
+        if (RunREDUCE.reducePanel.outputFileList.isEmpty())
+            RunREDUCE.reducePanel.outputFileSetDisableMenuItems(true);
     }
 
     // Load Packages...
@@ -400,7 +395,7 @@ public class RunREDUCEFrame {
         RunREDUCE.reducePanel.runningREDUCE = false;
         RunREDUCE.reducePanel.outputFileList.clear();
         // Reset enabled status of menu items:
-        RunREDUCE.runREDUCEFrame.reduceStopped();
+        RunREDUCE.reducePanel.reduceStopped();
     }
 
     @FXML
@@ -517,54 +512,6 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
-    }
-
-    /**
-     * Reset menu item status as appropriate when REDUCE is not running.
-     */
-    void reduceStopped() {
-        startingOrStoppingREDUCE(false);
-    }
-
-    /**
-     * Reset menu item status as appropriate when REDUCE has just started.
-     */
-    void reduceStarted() {
-        startingOrStoppingREDUCE(true);
-    }
-
-    private void startingOrStoppingREDUCE(boolean starting) {
-        // Items to enable/disable when REDUCE starts/stops running:
-        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled = !starting);
-        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled = !starting);
-        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled = !starting);
-        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled = !starting);
-        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled = !starting);
-
-        // Items to disable/enable when REDUCE starts/stops running:
-        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled = starting);
-
-        // Items to always disable when REDUCE starts or stops running:
-        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled = true);
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = true);
-        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = true);
-        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = true);
-    }
-
-    /**
-     * Update the enabled status of the menus.
-     */
-    void updateMenus() {
-        inputFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-        inputPackageFileMenuItem.setDisable(RunREDUCE.reducePanel.inputFileMenuItemDisabled);
-        outputNewFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-        outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputFileMenuItemDisabled);
-        loadPackagesMenuItem.setDisable(RunREDUCE.reducePanel.loadPackagesMenuItemDisabled);
-        stopREDUCEMenuItem.setDisable(RunREDUCE.reducePanel.stopREDUCEMenuItemDisabled);
-        runREDUCESubmenu.setDisable(RunREDUCE.reducePanel.runREDUCESubmenuDisabled);
-        outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled);
-        shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled);
-        shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled);
     }
 
     private void ShowUserGuide(ActionEvent e) {

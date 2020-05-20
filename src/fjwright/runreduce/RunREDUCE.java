@@ -77,9 +77,6 @@ public class RunREDUCE extends Application {
             case TABBED:
 //                useTabbedPane(true);
         }
-
-        // Reset menu item status as appropriate when REDUCE is not running:
-        runREDUCEFrame.reduceStopped();
     }
 
     static void useSplitPane(boolean enable) {
@@ -109,7 +106,7 @@ public class RunREDUCE extends Application {
         reducePanel.setSelected(false);
         reducePanel = (REDUCEPanel) node;
         reducePanel.inputTextArea.requestFocus();
-        RunREDUCE.runREDUCEFrame.updateMenus();
+        reducePanel.updateMenus();
         reducePanel.setSelected(true);
     }
 

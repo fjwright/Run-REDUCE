@@ -44,17 +44,6 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Button laterButton;
 
-    // Menu item statuses accessed in RunREDUCEFrame.java:
-    boolean inputFileMenuItemDisabled;
-    boolean outputFileMenuItemDisabled;
-    boolean outputOpenMenuItemDisabled;
-    boolean loadPackagesMenuItemDisabled;
-    boolean stopREDUCEMenuItemDisabled;
-    boolean runREDUCESubmenuDisabled;
-    boolean outputHereMenuItemDisabled;
-    boolean shutFileMenuItemDisabled;
-    boolean shutLastMenuItemDisabled;
-
     private final ObservableList<Node> outputNodeList;
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
@@ -90,20 +79,22 @@ public class REDUCEPanel extends BorderPane {
 
         outputNodeList = outputTextFlow.getChildren();
 
-        // Auto-run REDUCE if appropriate:
-        if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE))
-            for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
-                if (RRPreferences.autoRunVersion.equals(cmd.name)) {
-                    // Run REDUCE.  (A direct call throws an error!)
-                    Platform.runLater(() -> run(cmd));
-                    break;
-                }
+        Platform.runLater(() -> {
+            // Auto-run REDUCE if appropriate:
+            if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
+                for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
+                    if (RRPreferences.autoRunVersion.equals(cmd.name)) {
+                        // Run REDUCE.  (A direct call throws an error!)
+                        run(cmd);
+                        break;
+                    }
+            } else
+                // Reset menu item status as appropriate when REDUCE is not running:
+                reduceStopped();
+        });
 
         // Give the input text area the initial focus:
         inputTextArea.requestFocus();
-        // Reset menu item status as appropriate when REDUCE is not running:
-        // This causes problems if called here but OK where REDUCEPanel instantiated, currently in RunREDUCE!
-//        RunREDUCE.runREDUCEFrame.reduceStopped();
     }
 
     @FXML
@@ -131,7 +122,7 @@ public class REDUCEPanel extends BorderPane {
                 runningREDUCE = false;
                 sendButton.setDisable(true);
                 // Reset enabled status of menu items:
-                RunREDUCE.runREDUCEFrame.reduceStopped();
+                reduceStopped();
             }
             // Return the focus to the input text area:
             inputTextArea.requestFocus();
@@ -260,7 +251,7 @@ public class REDUCEPanel extends BorderPane {
             th.start();
 
             // Reset menu item status as appropriate when REDUCE has just started.
-            RunREDUCE.runREDUCEFrame.reduceStarted();
+            reduceStarted();
         } catch (Exception exc) {
             RunREDUCE.errorMessageDialog(
                     "Error running REDUCE -- " + exc,
@@ -503,5 +494,76 @@ public class REDUCEPanel extends BorderPane {
             textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
         } else
             textList.add(outputText(text.substring(start), outputColor));
+    }
+
+    // Menu processing ****************************************************************************
+
+    // Menu item statuses:
+    private boolean inputFileMenuItemDisabled;
+    private boolean inputPackageFileMenuItemDisabled;
+    private boolean outputNewFileMenuItemDisabled;
+    private boolean outputOpenFileMenuItemDisabled;
+    private boolean outputHereMenuItemDisabled;
+    private boolean shutFileMenuItemDisabled;
+    private boolean shutLastMenuItemDisabled;
+    private boolean loadPackagesMenuItemDisabled;
+    private boolean stopREDUCEMenuItemDisabled;
+    private boolean runREDUCESubmenuDisabled;
+
+    /**
+     * Reset menu item status as appropriate when REDUCE is not running.
+     */
+    void reduceStopped() {
+        startingOrStoppingREDUCE(false);
+    }
+
+    /**
+     * Reset menu item status as appropriate when REDUCE has just started.
+     */
+    void reduceStarted() {
+        startingOrStoppingREDUCE(true);
+    }
+
+    private void startingOrStoppingREDUCE(boolean starting) {
+        // Items to enable/disable when REDUCE starts/stops running:
+        RunREDUCE.runREDUCEFrame.inputFileMenuItem.setDisable(inputFileMenuItemDisabled = !starting);
+        RunREDUCE.runREDUCEFrame.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled = !starting);
+        RunREDUCE.runREDUCEFrame.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
+        RunREDUCE.runREDUCEFrame.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
+        RunREDUCE.runREDUCEFrame.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        // Items to disable/enable when REDUCE starts/stops running:
+        RunREDUCE.runREDUCEFrame.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled = starting);
+        // Items to disable always when REDUCE starts or stops running:
+        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = true);
+        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = true);
+        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(shutFileMenuItemDisabled = true);
+        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(shutLastMenuItemDisabled = true);
+    }
+
+    /**
+     * Update the enabled status of the menus.
+     */
+    void updateMenus() {
+        RunREDUCE.runREDUCEFrame.inputFileMenuItem.setDisable(inputFileMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(outputHereMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(shutFileMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        RunREDUCE.runREDUCEFrame.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
+    }
+
+    void outputFileSetDisableMenuItems(boolean disable) {
+        RunREDUCE.runREDUCEFrame.outputOpenFileMenuItem.setDisable(RunREDUCE.reducePanel.outputOpenFileMenuItemDisabled = disable);
+        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = disable);
+        RunREDUCE.runREDUCEFrame.shutFileMenuItem.setDisable(RunREDUCE.reducePanel.shutFileMenuItemDisabled = disable);
+        RunREDUCE.runREDUCEFrame.shutLastMenuItem.setDisable(RunREDUCE.reducePanel.shutLastMenuItemDisabled = disable);
+    }
+
+    void outputHereDisableMenuItem() {
+        RunREDUCE.runREDUCEFrame.outputHereMenuItem.setDisable(RunREDUCE.reducePanel.outputHereMenuItemDisabled = true);
     }
 }
