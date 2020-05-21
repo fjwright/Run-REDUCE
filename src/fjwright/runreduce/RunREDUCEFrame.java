@@ -2,7 +2,6 @@ package fjwright.runreduce;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -151,14 +150,8 @@ public class RunREDUCEFrame {
          * Help menu *
          * ********* */
 
-        int helpMenuItemIndex = 0;
-        MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide");
-        helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
-        userGuideMenuItem.setOnAction(this::ShowUserGuide);
-
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
-            helpMenu.getItems().add(helpMenuItemIndex++, new SeparatorMenuItem());
 
             String[][] manuals = {
                     // {Manual name, Windows location, non-Windows location}
@@ -169,6 +162,7 @@ public class RunREDUCEFrame {
                     {"Standard Lisp Report (PDF)", "doc/sl.pdf", "sl.pdf.gz"}
             };
 
+            int helpMenuItemIndex = 2;
             if (desktop.isSupported(Desktop.Action.OPEN)) {
                 for (String[] manual : manuals) {
                     MenuItem menuItem = new MenuItem(manual[0]);
@@ -484,6 +478,16 @@ public class RunREDUCEFrame {
      * ********* */
 
     @FXML
+    private void userGuideMenuItemAction() {
+        Stage stage = new Stage();
+        stage.setTitle("Run-REDUCE User Guide");
+        Scene scene = new Scene(new Browser());
+        stage.setScene(scene);
+//            scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
+        stage.show();
+    }
+
+    @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Prototype version 0.1\n" +
@@ -512,15 +516,6 @@ public class RunREDUCEFrame {
         stage.showAndWait();
     }
 
-    private void ShowUserGuide(ActionEvent e) {
-        Stage stage = new Stage();
-        stage.setTitle("Run-REDUCE User Guide");
-        Scene scene = new Scene(new Browser());
-        stage.setScene(scene);
-//            scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
-        stage.show();
-    }
-
     private static class Browser extends Region {
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
@@ -533,7 +528,6 @@ public class RunREDUCEFrame {
             setStyle("-fx-padding: 5;");
             // load the web page
 //            webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
-//            webEngine.load("file:///C:/Users/franc/IdeaProjects/Run-REDUCE-FX/src/fjwright/runreduce/UserGuide.html"); // Works!
             webEngine.load(RunREDUCEFrame.class.getResource("UserGuide.html").toExternalForm());
         }
 

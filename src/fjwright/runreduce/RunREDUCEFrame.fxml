@@ -23,15 +23,12 @@
                 <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit" />
             </Menu>
             <Menu mnemonicParsing="false" text="REDUCE">
-                <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..."/>
-                <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..."/>
-                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction"
-                          text="Stop REDUCE"/>
-                <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction"
-                          text="Clear I/O Display"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem mnemonicParsing="false"
-                          onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..."/>
+                <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..." />
+                <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..." />
+                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
+                <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction" text="Clear I/O Display" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..." />
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..." />
@@ -57,6 +54,8 @@
                 <MenuItem fx:id="removeTabMenuItem" mnemonicParsing="false" onAction="#removeTabMenuItemAction" text="Remove Selected Tab" />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide" />
+                <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
             </Menu>
         </MenuBar>
