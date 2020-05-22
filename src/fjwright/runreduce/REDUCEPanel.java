@@ -260,11 +260,8 @@ public class REDUCEPanel extends BorderPane {
 
         title = reduceCommand.name;
         outputLabel.setText(outputLabelDefault + "  |  " + title);
-//        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) {
-//            int tabIndex = RunREDUCE.tabbedPane.indexOfComponent(this);
-//            RunREDUCE.tabbedPane.setTitleAt(tabIndex, title);
-//            RunREDUCE.tabbedPane.getTabComponentAt(tabIndex).invalidate();
-//        }
+        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
+            RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
 
         runningREDUCE = true;
         sendButton.setDisable(false);

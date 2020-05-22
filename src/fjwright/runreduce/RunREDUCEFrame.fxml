@@ -25,7 +25,7 @@
             <Menu mnemonicParsing="false" text="REDUCE">
                 <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..." />
                 <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..." />
-                <MenuItem fx:id="stopREDUCEMenuItem" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
+                <MenuItem fx:id="stopREDUCEMenuItem" disable="true" mnemonicParsing="false" onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE" />
                 <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction" text="Clear I/O Display" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..." />
@@ -50,8 +50,8 @@
                 </RadioMenuItem>
                 <RadioMenuItem fx:id="splitPaneRadioButton" mnemonicParsing="false" onAction="#splitPaneRadioButtonAction" text="Split Pane Display" toggleGroup="$displayPaneButtonGroup" />
                 <RadioMenuItem fx:id="tabbedPaneRadioButton" mnemonicParsing="false" onAction="#tabbedPaneRadioButtonAction" text="Tabbed Pane Display" toggleGroup="$displayPaneButtonGroup" />
-                <MenuItem fx:id="addTabMenuItem" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
-                <MenuItem fx:id="removeTabMenuItem" mnemonicParsing="false" onAction="#removeTabMenuItemAction" text="Remove Selected Tab" />
+                <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide" />

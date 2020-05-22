@@ -71,15 +71,13 @@ public class RunREDUCEFrame {
     @FXML
     private RadioMenuItem redfrontColouredIORadioButton;
     @FXML
-    private RadioMenuItem singlePaneRadioButton;
+    RadioMenuItem singlePaneRadioButton;
     @FXML
     private RadioMenuItem splitPaneRadioButton;
     @FXML
     private RadioMenuItem tabbedPaneRadioButton;
     @FXML
-    private MenuItem addTabMenuItem;
-    @FXML
-    private MenuItem removeTabMenuItem;
+    MenuItem addTabMenuItem;
     // Help menu:
     @FXML
     private Menu helpMenu;
@@ -143,8 +141,7 @@ public class RunREDUCEFrame {
         singlePaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SINGLE);
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
         tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
-        addTabMenuItem.setDisable(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
-        removeTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
+        addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
 
         /* ********* *
          * Help menu *
@@ -434,43 +431,36 @@ public class RunREDUCEFrame {
     @FXML
     private void singlePaneRadioButtonAction() {
         switch (RRPreferences.displayPane) {
+            case SINGLE:
+                return;
             case SPLIT:
                 RunREDUCE.useSplitPane(false);
-//                addTabMenuItem.setEnabled(true);
                 break;
-//            case TABBED:
-//                RunREDUCE.useTabbedPane(false);
-//                removeTabMenuItem.setEnabled(false);
+            case TABBED:
+                RunREDUCE.useTabPane(false);
+                addTabMenuItem.setDisable(true);
         }
         RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SINGLE);
     }
 
     @FXML
     private void splitPaneRadioButtonAction() {
-//        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabbedPane(false);
-//        addTabMenuItem.setEnabled(false);
-//        removeTabMenuItem.setEnabled(false);
+        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabPane(false);
         RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SPLIT);
         RunREDUCE.useSplitPane(true);
     }
 
     @FXML
     private void tabbedPaneRadioButtonAction() {
-//        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false);
-//        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
-//        RunREDUCE.useTabbedPane(true);
-//        addTabMenuItem.setEnabled(true);
-//        removeTabMenuItem.setEnabled(true);
+        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false);
+        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
+        RunREDUCE.useTabPane(true);
+        addTabMenuItem.setDisable(false);
     }
 
     @FXML
     private void addTabMenuItemAction() {
-//        RunREDUCE.addTab();
-    }
-
-    @FXML
-    private void removeTabMenuItemAction() {
-//        RunREDUCE.removeTab();
+        RunREDUCE.addTab();
     }
 
     /* ********* *
