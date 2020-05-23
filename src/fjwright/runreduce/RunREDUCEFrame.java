@@ -4,26 +4,26 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.System.getProperty;
 
 /**
  * This class controls the main RunREDUCE frame and menu bar.
@@ -82,7 +82,7 @@ public class RunREDUCEFrame {
     @FXML
     private Menu helpMenu;
 
-    private static final File USER_HOME_DIR = new File(System.getProperty("user.home"));
+    private static final File USER_HOME_DIR = new File(getProperty("user.home"));
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages");
     // ToDo Separate input and output file choosers?
     private static final FileChooser fileChooser = new FileChooser();
@@ -149,6 +149,14 @@ public class RunREDUCEFrame {
 
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
+            int helpMenuItemIndex = 0;
+
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide (HTML)");
+                helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
+                userGuideMenuItem.setOnAction(e -> showUserGuide(desktop));
+            }
+            helpMenu.getItems().add(helpMenuItemIndex++, new SeparatorMenuItem());
 
             String[][] manuals = {
                     // {Manual name, Windows location, non-Windows location}
@@ -159,7 +167,6 @@ public class RunREDUCEFrame {
                     {"Standard Lisp Report (PDF)", "doc/sl.pdf", "sl.pdf.gz"}
             };
 
-            int helpMenuItemIndex = 2;
             if (desktop.isSupported(Desktop.Action.OPEN)) {
                 for (String[] manual : manuals) {
                     MenuItem menuItem = new MenuItem(manual[0]);
@@ -468,16 +475,6 @@ public class RunREDUCEFrame {
      * ********* */
 
     @FXML
-    private void userGuideMenuItemAction() {
-        Stage stage = new Stage();
-        stage.setTitle("Run-REDUCE User Guide");
-        Scene scene = new Scene(new Browser());
-        stage.setScene(scene);
-//            scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
-        stage.show();
-    }
-
-    @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Prototype version 0.1\n" +
@@ -485,6 +482,40 @@ public class RunREDUCEFrame {
         alert.setTitle("About Run-REDUCE");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
         alert.showAndWait();
+    }
+
+    private void showUserGuide(Desktop desktop) {
+        try {
+            URL url = RunREDUCEFrame.class.getResource("UserGuide.html");
+            if (url != null) {
+                if (url.getProtocol().equals("file"))
+                    desktop.browse(url.toURI());
+                else
+                    desktop.browse(getResourceAsTmpFileURI());
+
+            } else {
+                RunREDUCE.errorMessageDialog("Resource file \"UserGuide.html\" could not be located.", "Run-REDUCE User Guide");
+            }
+            // OK: file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
+            // Not OK: jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
+            // JavaFX WebEngine accpets a jar: URI but Firefox does not!
+        } catch (IOException | URISyntaxException exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    private URI getResourceAsTmpFileURI() {
+        String tmpdir = getProperty("java.io.tmpdir");
+        File file = new File(tmpdir, "UserGuide.html");
+        try (FileWriter writer = new FileWriter(file);
+             InputStream inputStream = RunREDUCEFrame.class.getResourceAsStream("UserGuide.html");
+             InputStreamReader reader = new InputStreamReader(inputStream)) {
+            int c;
+            while ((c = reader.read()) != -1) writer.write((char) c);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file.toURI();
     }
 
     /* *************** *
@@ -504,26 +535,5 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
-    }
-
-    private static class Browser extends Region {
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-
-        Browser() {
-            // add the web view to the scene
-            getChildren().add(browser);
-            // apply the styles
-//                getStyleClass().add("browser");
-            setStyle("-fx-padding: 5;");
-            // load the web page
-//            webEngine.load("https://fjwright.github.io/Run-REDUCE/UserGuide.html"); // Works!
-            webEngine.load(RunREDUCEFrame.class.getResource("UserGuide.html").toExternalForm());
-        }
-
-        @Override
-        protected void layoutChildren() {
-            layoutInArea(browser, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
-        }
     }
 }

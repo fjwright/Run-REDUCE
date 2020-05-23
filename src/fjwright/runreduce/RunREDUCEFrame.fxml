@@ -54,8 +54,10 @@
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+<!--
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide" />
                 <SeparatorMenuItem mnemonicParsing="false" />
+-->
                 <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
             </Menu>
         </MenuBar>
