@@ -91,23 +91,19 @@ public class RunREDUCE extends Application {
             splitPane = new SplitPane(reducePanel, reducePanel2);
             splitPane.setDividerPositions(0.5);
             runREDUCEFrame.frame.setCenter(splitPane);
-            reducePanel.splitPane.setOnMouseClicked(RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel.inputTextArea.setOnMouseClicked(RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel2.splitPane.setOnMouseClicked(RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel2.inputTextArea.setOnMouseClicked(RunREDUCE::useSplitPaneMouseClicked);
+            reducePanel.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
+            reducePanel2.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
             reducePanel2.setSelected(false);
         } else { // Revert to single pane.
             splitPane = null; // release resources
-            reducePanel.splitPane.removeEventHandler(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel.inputTextArea.removeEventHandler(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
-            // Retain the reducePanel from the selected tab if possible:
+            reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
+            // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
         }
     }
 
     private static void useSplitPaneMouseClicked(MouseEvent event) {
         Node node = (Node) event.getSource();
-        while (!(node instanceof REDUCEPanel)) node = node.getParent();
         if (node == reducePanel) return;
         reducePanel.setSelected(false);
         reducePanel = (REDUCEPanel) node;
