@@ -9,6 +9,7 @@
 package fjwright.runreduce;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -121,10 +122,17 @@ public class RunREDUCE extends Application {
             runREDUCEFrame.frame.setCenter(tabPane);
             tabLabelNumber = 1;
             Tab tab = new Tab(reducePanel.title != null ? reducePanel.title : "Tab 1", reducePanel);
+            tabPane.getTabs().add(tab);
             tab.setOnSelectionChanged(RunREDUCE::tabOnSelectionChanged);
             tab.setOnClosed(RunREDUCE::tabOnClosed);
-            tabPane.getTabs().add(tab);
-            reducePanel.inputTextArea.requestFocus(); // FixMe Not working!
+            if (reducePanel.runningREDUCE) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> reducePanel.inputTextArea.requestFocus());
+            }
         } else { // Revert to single pane.
             tabPane = null; // release resources
             // Retain the reducePanel from the selected tab:
@@ -145,7 +153,8 @@ public class RunREDUCE extends Application {
         if (tab.isSelected()) {
             reducePanel = (REDUCEPanel) tab.getContent();
             reducePanel.updateMenus();
-            reducePanel.inputTextArea.requestFocus(); // FixMe Not working!
+            if (reducePanel.runningREDUCE)
+                Platform.runLater(() -> reducePanel.inputTextArea.requestFocus());
         }
     }
 
@@ -195,6 +204,5 @@ public class RunREDUCE extends Application {
     }
 }
 
-// ToDo Ensure that input text area receives focus in tabbed REDUCE panels.
 // ToDo Ensure that (Control+Tab) focused REDUCE panel is active in split pane.
 // ToDo Fix <em> and <strong> tags being ignored in User Guide.
