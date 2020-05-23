@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Francis Wright" />
     <title>Run-REDUCE-FX User Guide</title>
-    <style type="text/css">
+    <style>
       body {
           font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
           font-size: 12pt;
       }
       code {
-          font-family: "Lucida Console", monospace;
+          font-family: "Lucida Console", "Lucida Sans Typewriter", monospace;
       }
       h1, h2, h3 {
-          font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+          font-family: "Lucida Bright", Georgia, Times, "Times New Roman", serif;
       }
       table {
-	  margin-right: auto;
-	  margin-left: auto;
+          margin-right: auto;
+          margin-left: auto;
       }
       td,th {
-	  padding-right: 10px;
-	  padding-left: 10px;
-	  text-align: left;
+          padding-right: 10px;
+          padding-left: 10px;
+          text-align: left;
       }
     </style>
 </head>
 <body>
     <h1>Run-REDUCE-FX User Guide</h1>
     <h3>Francis Wright, May 2020</h3>
+
     <h2>General Information</h2>
+
     <p>Run-REDUCE-FX remembers user preferences and uses them the next
     time it starts. It uses the standard Java
     package <em>java.util.prefs</em>, which stores data persistently
@@ -38,26 +40,28 @@
     the preferences for this application are stored in the registry
     under the key
     "<code>Computer\HKEY_CURRENT_USER\Software\JavaSoft\Prefs\fjwright\runreduce</code>"
-    and on Ubuntu Linux they are stored in the XML file
+    and on Linux they are stored in the XML file
     "<code>~/.java/.userPrefs/fjwright/runreduce/prefs.xml</code>".
     </p>
     <p>By default, Run-REDUCE-FX looks in the standard places for a
     REDUCE installation. On Microsoft Windows it looks for the folder
     "<code>\Program Files\Reduce</code>" on all accessible drives. On
-    Ubuntu Linux it assumes that executable files are under
+    Linux it assumes that executable files are under
     "<code>/usr/lib/reduce</code>", package information is under
     "<code>/usr/share/reduce</code>", and documentation is under
     "<code>/usr/share/doc/reduce</code>". But this information can all
     be <a href="#Configure">reconfigured</a>.
     </p>
+
     <h2>The Main Window</h2>
+
     <p>The main window consists of one or more REDUCE panels that can
     each run an independent invocation of REDUCE. There are three
     options: a single REDUCE panel (the default); a split pane
     containing two REDUCE panels side-by-side that are both visible; a
     tabbed pane containing one or more REDUCE panels, of which only
     the selected panel is visible. The choice of display pane
-    arrangement is controlled by radio buttons in
+    arrangement is controlled by options in
     the <a href="#ViewMenu">View menu</a>. You can switch dynamically
     among the three options, in which case the currently selected
     REDUCE panel (only) and the REDUCE invocation running in it (if
@@ -84,7 +88,7 @@
     session. This pane is read-only. The bottom pane is an input
     editor that supports all the standard keyboard and mouse-based
     editing facilities normally provided by your platform. Both panes
-    display vertical and horizontal scroll bars when necessary; text
+    display vertical and horizontal scroll bars when necessary. Text
     does not wrap. The horizontal divider separating the two panes can
     be dragged up and down.
     </p>
@@ -95,10 +99,10 @@
     don't like the default names.)
     </p>
     <p>You type (or paste) REDUCE input into the input editor pane,
-    edit it as necessary, and then click on the <em>Send
-    Input</em> button, which sends the input to REDUCE and echos it
-    in the top pane. This clears the input editor, but you can scroll
-    through the previous input entered via the input editor using
+    edit it as necessary, and then click on the <em>Send Input</em>
+    button, which sends the input to REDUCE and echos it in the top
+    pane. This clears the input editor, but you can scroll through the
+    previous input (entered via the input editor) using
     the <em>Earlier Input</em> and <em>Later Input</em>
     buttons. Scrolling to input later than the last previous input
     clears the input editor pane back to its state before you started
@@ -137,6 +141,16 @@
     key and <em>UpArrow</em> / <em>DownArrow</em> are the cursor up /
     down keys, respectively.
     </p>
+    <p>Sending input to REDUCE strips any trailing white space,
+    normally auto-terminates it by adding a semicolon if there was no
+    final terminator, and then adds a final newline. However, if
+    Run-REDUCE-FX detects a question mark in the input prompt then it
+    suppresses auto-termination (so if you really want a terminator
+    you must enter it explicitly). As an additional precaution,
+    holding the <em>Shift</em> key while clicking on the <em>Send
+    Input</em> button or pressing <em>Control+Enter</em> always
+    suppresses auto-termination.
+    </p>
     <p>You can edit previous input recalled into the input editor as
     necessary and then send it to REDUCE. Input can be multi-line, in
     which case Run-REDUCE-FX processes all the lines
@@ -145,17 +159,9 @@
     and <em>Later Input</em> actions are disabled unless there is
     earlier or later input, respectively.
     </p>
-    <p>Sending input to REDUCE strips any trailing white space,
-    normally auto-terminates it by adding a semicolon if there was no
-    final terminator, and then adds a final newline. However, if
-    Run-REDUCE-FX detects a question mark in the input prompt then it
-    suppresses auto-termination (so if you really want a terminator
-    you must enter it explicitly). As an additional precaution,
-    holding the <em>Shift</em> key while
-    pressing <em>Control+Enter</em> or clicking on the <em>Send
-    Input</em> button always suppresses auto-termination.
-    </p>
+
     <h2>The File Menu</h2>
+
     <p>Some items in this menu pop up a dialogue that allows you to
     select one or more items, such as filenames. This dialogue
     supports all the standard keyboard and mouse-based selection
@@ -170,14 +176,14 @@
     </p>
     <p>Most of the menu items run a REDUCE command, which is echoed in
     the display pane but does not appear in the input editor. The file
-    selector dialogues all share the same default directory, which
+    chooser dialogues all share the same default directory, which
     normally is initially your home directory, but the last directory
     you used will be the default directory the next time you use a
-    file selector dialogue. This default directory is independent of
+    file chooser dialogue. This default directory is independent of
     REDUCE's default directory, which is irrelevant because
     Run-REDUCE-FX always uses absolute file paths.
     </p>
-    <p>The File menu provides the following items:</p>
+    <p>The File menu provides the following items.</p>
     <h3>Echo File Input</h3>
     <p>Selecting this causes Run-REDUCE-FX to echo file input to
     the <em>Input/Output Display</em> pane. It is selectd by
@@ -189,7 +195,7 @@
     shows only <code>*.red</code> and <code>*.tst</code> files, but
     you can reset it to show only <code>*.txt</code> files or all
     files. (Note that the recommended extension for REDUCE source code
-    files is <code>.red</code> and that a REDUCE source code file
+    file names is <code>.red</code> and that a REDUCE source code file
     should end with <code>;end;</code> to avoid an error message.)
     This menu item is disabled unless REDUCE is running.
     </p>
@@ -205,7 +211,7 @@
     REDUCE <code>OUT</code> command). By default, the file chooser
     shows only <code>*.log and *.rlg</code> files, but you can reset
     it to show only <code>*.txt</code> files or all files. (Note that
-    the extension used for REDUCE package test output log files
+    the extension used for REDUCE package test output log file names
     is <code>.rlg</code>.) Only one output file can be active at a
     time and choosing a new output file redirects output to that file
     without shutting the previous output file. The GUI remember all
@@ -260,8 +266,10 @@
     the close widget that is normally at the top right-hand corner of
     the main window frame.
     </p>
+
     <h2>The REDUCE Menu</h2>
-    <p>The REDUCE menu provides the following items:</p>
+
+    <p>The REDUCE menu provides the following items.</p>
     <h3>Run REDUCE...</h3>
     <p>This sub-menu provides an item for each configured REDUCE
     command (typically based on different versions of Lisp, by default
@@ -293,15 +301,15 @@
     <h3 id="Configure">Configure REDUCE...</h3>
     <p>This displays a dialogue that allows you to configure the
     REDUCE directories and commands. The platform defaults should work
-    for Microsoft Windows and Ubuntu Linux.  Run-REDUCE-FX currently
-    assumes that if it is not running on Windows then the Linux
-    default configuration is appropriate, so that is what you will see
-    by default on (say) Apple MacOS. There is a button to reset the
-    whole REDUCE configuration to the platform defaults.
+    for Microsoft Windows and Linux.  Run-REDUCE-FX currently assumes
+    that if it is not running on Windows then the Linux default
+    configuration is appropriate, so that is what you will see by
+    default on (say) Apple MacOS. There is a button to reset the whole
+    REDUCE configuration to the platform defaults.
     </p>
-    <p>Changes to the dialogue fields are only saved if you click on
-    the <em>Save</em> button, in which case the new configuration
-    is used within Run-REDUCE-FX and saved as preferences. Clicking on
+    <p>Changes made using this dialogue are saved when you click on
+    the <em>Save</em> button, in which case the new configuration is
+    used within Run-REDUCE-FX and saved as preferences. Clicking on
     the <em>Cancel</em> button causes all changes made since the
     dialogue opened to be forgotten.
     </p>
@@ -312,14 +320,14 @@
     </p>
     <p>Clicking on the <em>Duplicate Selected Command</em> button
     duplicates the configuration for the selected REDUCE command
-    immediately below it.  The name of the duplicate command is the
-    name of the duplicated command with <em>New</em> appended,
-    which you can edit as you wish. (But keep command names fairly
-    short!). Changes to the <em>Command Name</em> field are
+    immediately below it in the list.  The name of the duplicate
+    command is the name of the duplicated command with <em>New</em>
+    appended, which you can edit as you wish. (But keep command names
+    fairly short!). Changes to the <em>Command Name</em> field are
     reflected in the list of REDUCE commands only when you press Enter
-    (or click on the <em>Save</em> button). This provides a
-    convenient way, for example, to add one or more REDUCE commands
-    with non-standard options such as memory size.
+    (or click on the <em>Save</em> button). This provides a convenient
+    way, for example, to add one or more REDUCE commands with
+    non-standard options such as memory size.
     </p>
     <p>Clicking on the <em>Add New Command</em> button adds a new
     REDUCE command, which is initially called <em>New Command</em>,
@@ -360,9 +368,8 @@
     the <em>Packages Root Directory</em> field is only used
     by <em>Load Packages...</em>. If this directory does not exist or
     is mis-configured then <em>Load Packages...</em> will pop up a
-    warning and closing this will automatically pop up
-    the <em>Configure REDUCE...</em> dialogue to allow you to correct
-    the problem.
+    warning and closing it will automatically pop up the <em>Configure
+    REDUCE...</em> dialogue to allow you to correct the problem.
     </p>
     <p>The <em>Help</em> menu items that display REDUCE documentation
     require the common root segment of the directories containing the
@@ -384,8 +391,10 @@
     further). The initial directory used by the directory or file
     chooser is the appropriate platform default.
     </p>
+
     <h2 id="ViewMenu">The View Menu</h2>
-    <p>The View menu provides the following items:</p>
+
+    <p>The View menu provides the following items.</p>
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
@@ -419,11 +428,11 @@
     on or off does not fully take effect until the next input prompt.
     </p>
     <h3>Single Pane Display</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to display the
-    selected REDUCE panel only. This is the default.
+    <p>Selecting this causes Run-REDUCE-FX to display the selected
+    REDUCE panel only. This is the default.
     </p>
     <h3>Split Pane Display</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to display two REDUCE
+    <p>Selecting this causes Run-REDUCE-FX to display two REDUCE
     panels side-by-side. The left-hand panel displays the previously
     selected REDUCE panel (if any) and is initially active. Clicking
     on a REDUCE panel makes it active for input via its input editor
@@ -432,35 +441,29 @@
     initially, but you can change that by dragging the divider.
     </p>
     <h3>Tabbed Pane Display</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to display a tabbed
-    pane with the previously selected REDUCE panel (if any) displayed
-    under the first tab.  Clicking on the rightmost tab
-    labelled <code>+</code> adds a new tab immediately to the left of
-    the <code>+</code> tab. Clicking on the <code>&times;</code> icon
-    at the right of any tab title removes that tab and the REDUCE
+    <p>Selecting this causes Run-REDUCE-FX to display a tabbed pane
+    with the previously selected REDUCE panel (if any) displayed under
+    the first tab.  Clicking on the <code>&times;</code> icon at the
+    right of the selected tab label removes that tab and the REDUCE
     panel it contains. When there is only one tab, removing it
     disables tabbed display but preserves the REDUCE panel that the
     tab contained.
     </p>
     <h3>Add Another Tab</h3>
-    <p>This adds a new tab to a tabbed display, just like
-    the <code>+</code> tab. When tabbed display is disabled, this menu
-    item enables tabbed display and adds a <strong>second</strong>
-    tab, as it would if tabbed display were already enabled. Hence
-    this menu item is enabled when either single or tabbed pane
-    display is selected.
+    <p>This adds a new tab to a tabbed display.  This menu item is
+    disabled unless tabbed pane display is selected.
     </p>
-    <h3>Remove Selected Tab</h3>
-    <p> This removes the selected tab and the REDUCE panel it
-    contains, just like the <code>&times;</code> icon. When there is
-    only one tab, this menu item reverts to single pane display but
-    preserves the REDUCE panel that the tab contained. This menu item
-    is disabled unless tabbed display is selected.
-    </p>
+
     <h2>The Help Menu</h2>
-    <p>The Help menu provides the following items:</p>
+
+    <p>All the documents accessed via the Help menu are local files,
+    either extracted from the Java JAR file (at most once per run of
+    Run-REDUCE-FX to your default temporary directory) or assumed to
+    be available in the REDUCE installation.  The Help menu provides
+    the following items.</p>
     <h3>Run-REDUCE-FX User Guide</h3>
-    <p>This opens the Run-REDUCE-FX User Guide in a separate window.
+    <p>This opens the Run-REDUCE-FX User Guide in your default web
+    browser.
     </p>
     <h3>REDUCE Manual etc.</h3>
     <p>These menu items open the manuals and other guides that are

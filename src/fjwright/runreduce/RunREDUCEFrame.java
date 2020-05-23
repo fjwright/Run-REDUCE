@@ -17,13 +17,14 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
 import static java.lang.System.getProperty;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * This class controls the main RunREDUCE frame and menu bar.
@@ -152,7 +153,7 @@ public class RunREDUCEFrame {
             int helpMenuItemIndex = 0;
 
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide (HTML)");
+                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide");
                 helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
                 userGuideMenuItem.setOnAction(e -> showUserGuide(desktop));
             }
@@ -162,9 +163,9 @@ public class RunREDUCEFrame {
                     // {Manual name, Windows location, non-Windows location}
                     {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
                     {"REDUCE Manual (PDF)", "lib/csl/reduce.doc/manual.pdf", "manual.pdf.gz"},
-                    {"Inside Reduce (PDF)", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
-                    {"REDUCE Symbolic Mode Primer (PDF)", "doc/primer.pdf", "primer.pdf.gz"},
-                    {"Standard Lisp Report (PDF)", "doc/sl.pdf", "sl.pdf.gz"}
+                    {"Inside Reduce", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
+                    {"REDUCE Symbolic Mode Primer", "doc/primer.pdf", "primer.pdf.gz"},
+                    {"Standard Lisp Report", "doc/sl.pdf", "sl.pdf.gz"}
             };
 
             if (desktop.isSupported(Desktop.Action.OPEN)) {
@@ -484,40 +485,6 @@ public class RunREDUCEFrame {
         alert.showAndWait();
     }
 
-    private void showUserGuide(Desktop desktop) {
-        try {
-            URL url = RunREDUCEFrame.class.getResource("UserGuide.html");
-            if (url != null) {
-                if (url.getProtocol().equals("file"))
-                    desktop.browse(url.toURI());
-                else
-                    desktop.browse(getResourceAsTmpFileURI());
-
-            } else {
-                RunREDUCE.errorMessageDialog("Resource file \"UserGuide.html\" could not be located.", "Run-REDUCE User Guide");
-            }
-            // OK: file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
-            // Not OK: jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
-            // JavaFX WebEngine accpets a jar: URI but Firefox does not!
-        } catch (IOException | URISyntaxException exc) {
-            exc.printStackTrace();
-        }
-    }
-
-    private URI getResourceAsTmpFileURI() {
-        String tmpdir = getProperty("java.io.tmpdir");
-        File file = new File(tmpdir, "UserGuide.html");
-        try (FileWriter writer = new FileWriter(file);
-             InputStream inputStream = RunREDUCEFrame.class.getResourceAsStream("UserGuide.html");
-             InputStreamReader reader = new InputStreamReader(inputStream)) {
-            int c;
-            while ((c = reader.read()) != -1) writer.write((char) c);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file.toURI();
-    }
-
     /* *************** *
      * Support methods *
      * *************** */
@@ -535,5 +502,33 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
+    }
+
+    private static final String USERGUIDE_FILENAME = "UserGuide.html";
+    private static File file;
+
+    private void showUserGuide(Desktop desktop) {
+        try {
+            URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
+            // file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
+            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
+            // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
+            if (url == null) {
+                RunREDUCE.errorMessageDialog("Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.",
+                        "Run-REDUCE User Guide");
+            } else if (url.getProtocol().equals("file")) // Useful during development only!
+                desktop.browse(url.toURI());
+            else { // Normal case: when running a jar file the protocol is also jar.
+                if (file == null || !file.exists()) {
+                    file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
+                    try (InputStream in = url.openStream()) {
+                        Files.copy(in, file.toPath(), REPLACE_EXISTING);
+                    }
+                }
+                desktop.browse(file.toURI());
+            }
+        } catch (IOException | URISyntaxException exc) {
+            exc.printStackTrace();
+        }
     }
 }

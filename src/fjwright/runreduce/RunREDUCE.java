@@ -205,4 +205,3 @@ public class RunREDUCE extends Application {
 }
 
 // ToDo Ensure that (Control+Tab) focused REDUCE panel is active in split pane.
-// ToDo Fix <em> and <strong> tags being ignored in User Guide.
