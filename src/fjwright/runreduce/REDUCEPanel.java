@@ -54,7 +54,6 @@ public class REDUCEPanel extends BorderPane {
     boolean runningREDUCE;
     String title; // REDUCE version if REDUCE is running
     private static final String outputLabelDefault = "Input/Output Display";
-    //    static Color deselectedBackground = new Color(0xF8_F8_F8);
     private boolean firstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
@@ -89,12 +88,9 @@ public class REDUCEPanel extends BorderPane {
                         break;
                     }
             } else
-                // Reset menu item status as appropriate when REDUCE is not running:
+                // Reset enabled status of controls:
                 reduceStopped();
         });
-
-        // Give the input text area the initial focus:
-        inputTextArea.requestFocus();
     }
 
     @FXML
@@ -120,8 +116,8 @@ public class REDUCEPanel extends BorderPane {
             laterButton.setDisable(true);
             if (quitPattern.matcher(text).matches()) {
                 runningREDUCE = false;
-                sendButton.setDisable(true);
-                // Reset enabled status of menu items:
+                outputFileList.clear();
+                // Reset enabled status of controls:
                 reduceStopped();
             }
             // Return the focus to the input text area:
@@ -211,12 +207,14 @@ public class REDUCEPanel extends BorderPane {
     void setSelected(boolean selected) {
         if (selected) {
 //            outputTextFlow.setStyle("-fx-control-inner-background: white;");
-            inputTextArea.setStyle("-fx-control-inner-background: white;");
+//            inputTextArea.setStyle("-fx-control-inner-background: white;");
+            inputTextArea.setDisable(!runningREDUCE);
             outputLabel.setDisable(false);
             inputLabel.setDisable(false);
         } else {
 //            outputTextFlow.setStyle("-fx-control-inner-background: #F8F8F8;");
-            inputTextArea.setStyle("-fx-control-inner-background: #F8F8F8;");
+//            inputTextArea.setStyle("-fx-control-inner-background: #F8F8F8;");
+            inputTextArea.setDisable(true);
             outputLabel.setDisable(true);
             inputLabel.setDisable(true);
         }
@@ -250,7 +248,7 @@ public class REDUCEPanel extends BorderPane {
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
 
-            // Reset menu item status as appropriate when REDUCE has just started.
+            // Reset enabled state of controls:
             reduceStarted();
         } catch (Exception exc) {
             RunREDUCE.errorMessageDialog(
@@ -264,7 +262,6 @@ public class REDUCEPanel extends BorderPane {
             RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
 
         runningREDUCE = true;
-        sendButton.setDisable(false);
 
         // Special support for Redfront I/O colouring:
         if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT)
@@ -493,7 +490,7 @@ public class REDUCEPanel extends BorderPane {
             textList.add(outputText(text.substring(start), outputColor));
     }
 
-    // Menu processing ****************************************************************************
+    // Menu processing etc. ***********************************************************************
 
     // Menu item statuses:
     private boolean inputFileMenuItemDisabled;
@@ -510,14 +507,14 @@ public class REDUCEPanel extends BorderPane {
     private static final RunREDUCEFrame FRAME = RunREDUCE.runREDUCEFrame;
 
     /**
-     * Reset menu item status as appropriate when REDUCE is not running.
+     * Reset enabled status of controls as appropriate when REDUCE is not running.
      */
     void reduceStopped() {
         startingOrStoppingREDUCE(false);
     }
 
     /**
-     * Reset menu item status as appropriate when REDUCE has just started.
+     * Reset enabled status of controls as appropriate when REDUCE has just started.
      */
     void reduceStarted() {
         startingOrStoppingREDUCE(true);
@@ -525,6 +522,8 @@ public class REDUCEPanel extends BorderPane {
 
     private void startingOrStoppingREDUCE(boolean starting) {
         // Items to enable/disable when REDUCE starts/stops running:
+        inputTextArea.setDisable(!starting);
+        sendButton.setDisable(!starting);
         FRAME.inputFileMenuItem.setDisable(inputFileMenuItemDisabled = !starting);
         FRAME.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled = !starting);
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);

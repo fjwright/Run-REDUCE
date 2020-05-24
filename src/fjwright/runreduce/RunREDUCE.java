@@ -105,11 +105,11 @@ public class RunREDUCE extends Application {
     private static void useSplitPaneMouseClicked(MouseEvent event) {
         Node node = (Node) event.getSource();
         if (node == reducePanel) return;
-        reducePanel.setSelected(false);
-        reducePanel = (REDUCEPanel) node;
-        reducePanel.inputTextArea.requestFocus();
-        reducePanel.updateMenus();
+        reducePanel.setSelected(false); // other panel
+        reducePanel = (REDUCEPanel) node; // this panel
         reducePanel.setSelected(true);
+        reducePanel.updateMenus();
+        reducePanel.inputTextArea.requestFocus();
     }
 
     static void useTabPane(boolean enable) {
@@ -199,5 +199,3 @@ public class RunREDUCE extends Application {
         launch(args);
     }
 }
-
-// ToDo Ensure that (Control+Tab) focused REDUCE panel is active in split pane.

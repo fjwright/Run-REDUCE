@@ -388,10 +388,9 @@ public class RunREDUCEFrame {
     @FXML
     private void stopREDUCEMenuItemAction() {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
-        RunREDUCE.reducePanel.sendButton.setDisable(true);
         RunREDUCE.reducePanel.runningREDUCE = false;
         RunREDUCE.reducePanel.outputFileList.clear();
-        // Reset enabled status of menu items:
+        // Reset enabled status of controls:
         RunREDUCE.reducePanel.reduceStopped();
     }
 
