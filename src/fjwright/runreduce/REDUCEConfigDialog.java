@@ -96,7 +96,7 @@ public class REDUCEConfigDialog {
      * Delete all configuration data for the selected REDUCE command.
      */
     @FXML
-    private void deleteCommandButtonAction(/*ActionEvent actionEvent*/) {
+    private void deleteCommandButtonAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         reduceCommandList.remove(selectedIndex);
         setListViewItems();
@@ -113,7 +113,7 @@ public class REDUCEConfigDialog {
      * Duplicate all configuration data for the selected REDUCE command.
      */
     @FXML
-    private void duplicateCommandButtonAction(/*ActionEvent actionEvent*/) {
+    private void duplicateCommandButtonAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         REDUCECommand oldCmd = reduceCommandList.get(selectedIndex++);
         // selectedIndex is now incremented to the index of the duplicate entry.
@@ -129,7 +129,7 @@ public class REDUCEConfigDialog {
      * Add blank configuration data for a new REDUCE command at the bottom of the list.
      */
     @FXML
-    private void addCommandButtonAction(/*ActionEvent actionEvent*/) {
+    private void addCommandButtonAction() {
         REDUCECommand newCmd = new REDUCECommand("New Command");
         reduceCommandList.add(newCmd);
         setListViewItems();
@@ -193,7 +193,7 @@ public class REDUCEConfigDialog {
      * Update the ListView when the command name TextField is edited.
      */
     @FXML
-    private void commandNameTextFieldAction(/*ActionEvent actionEvent*/) {
+    private void commandNameTextFieldAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         reduceCommandList.get(selectedIndex).name = commandNameTextField.getText().trim();
         setListViewItems();

@@ -29,9 +29,7 @@ class RRPreferences {
     static final String DISPLAYPANE = "displayPane";
 
     enum ColouredIO {NONE, MODAL, REDFRONT}
-
     enum DisplayPane {SINGLE, SPLIT, TABBED}
-
     static final String NONE = "None";
 
     static int fontSize = Math.max(prefs.getInt(FONTSIZE, 15), 5);
@@ -42,7 +40,7 @@ class RRPreferences {
     static ColouredIO colouredIOIntent =
             ColouredIO.valueOf(prefs.get(COLOUREDIO, ColouredIO.NONE.toString()));
     static DisplayPane displayPane =
-            DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString())); // temporary!
+            DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
     static ColouredIO colouredIOState = colouredIOIntent;
 
     static void save(String key, Object... values) {
@@ -94,20 +92,20 @@ class REDUCECommand {
 
     // Merge this method into the constructor?
     String[] buildCommand() {
-        // Replace $REDUCE by versionRootDir if non-null else by reduceRootDir.
+        // Replace $REDUCE by local command rootDir if non-null else by global reduceRootDir.
         Path reduceRootPath = Paths.get(
-                !rootDir.equals("") ? rootDir : RunREDUCE.reduceConfiguration.reduceRootDir);
+                !rootDir.isEmpty() ? rootDir : RunREDUCE.reduceConfiguration.reduceRootDir);
         String[] command = new String[this.command.length];
         for (int i = 0; i < this.command.length; i++) {
             String element = this.command[i];
-            if (element.startsWith("$REDUCE/"))
+            if (element.startsWith("$REDUCE")) // replace $REDUCE/ or $REDUCE\
                 element = reduceRootPath.resolve(element.substring(8)).toString();
             command[i] = element;
         }
         if (!Files.isExecutable(Paths.get(command[0]))) {
             RunREDUCE.errorMessageDialog(
                     command[0] + " is not executable!",
-                    "REDUCE Configuration Error");
+                    "REDUCE Configuration");
             return null;
         }
         return command;
@@ -115,7 +113,7 @@ class REDUCECommand {
 }
 
 /**
- * This class defines a list of commands to run different versions of REDUCE.
+ * This class defines a list of commands to run REDUCE.
  */
 class REDUCECommandList extends ArrayList<REDUCECommand> {
     REDUCECommandList copy() {
@@ -295,7 +293,7 @@ class REDUCEPackageList extends ArrayList<String> {
                     "The REDUCE package map file is not available!" +
                             "\nPlease correct 'Packages Root Dir' in the 'Configure REDUCE...' dialogue," +
                             "\nwhich will open automatically when you close this dialogue.",
-                    "REDUCE Package Error");
+                    "REDUCE Packages");
             RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
                     "REDUCEConfigDialog.fxml");
             return;
@@ -318,11 +316,5 @@ class REDUCEPackageList extends ArrayList<String> {
         }
 
         Collections.sort(this);
-
-        // For testing only:
-//        for (String s : this) {
-//            System.out.print(s);
-//            System.out.print(" ");
-//        }
     }
 }

@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 /**
  * This is the main class that sets up and runs the application.
- **/
+ */
 public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
@@ -61,8 +61,8 @@ public class RunREDUCE extends Application {
         primaryStage.show();
 
         // REDUCE I/O requires a monospaced font:
-        // Only "system" fonts (in C:\Windows\Fonts) are found,
-        // not "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
+        // Only "system" fonts (in C:\Windows\Fonts) are found, not
+        // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
         reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
@@ -167,6 +167,7 @@ public class RunREDUCE extends Application {
 
     static void errorMessageDialog(String message, String title) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.initOwner(RunREDUCE.primaryStage);
         alert.setTitle(title);
         alert.showAndWait();
     }

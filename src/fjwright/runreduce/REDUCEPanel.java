@@ -188,9 +188,8 @@ public class REDUCEPanel extends BorderPane {
         t.setFont(RunREDUCE.reduceFont);
         t.setFill(inputColor);
         outputNodeList.add(t);
-        // Make sure the new input text is visible, even if there was
-        // a selection in the output text area:
-//        outputTextArea.end();
+        // Make sure the new input text is visible:
+        outputScrollPane.setVvalue(1.0);
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -492,7 +491,7 @@ public class REDUCEPanel extends BorderPane {
 
     // Menu processing etc. ***********************************************************************
 
-    // Menu item statuses:
+    // Menu item disabled statuses:
     private boolean inputFileMenuItemDisabled;
     private boolean inputPackageFileMenuItemDisabled;
     private boolean outputNewFileMenuItemDisabled;
@@ -507,14 +506,14 @@ public class REDUCEPanel extends BorderPane {
     private static final RunREDUCEFrame FRAME = RunREDUCE.runREDUCEFrame;
 
     /**
-     * Reset enabled status of controls as appropriate when REDUCE is not running.
+     * Reset disabled status of controls as appropriate when REDUCE is not running.
      */
     void reduceStopped() {
         startingOrStoppingREDUCE(false);
     }
 
     /**
-     * Reset enabled status of controls as appropriate when REDUCE has just started.
+     * Reset disabled status of controls as appropriate when REDUCE has just started.
      */
     void reduceStarted() {
         startingOrStoppingREDUCE(true);
@@ -539,7 +538,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     /**
-     * Update the enabled status of the menus.
+     * Update the disabled status of the menus.
      */
     void updateMenus() {
         FRAME.inputFileMenuItem.setDisable(inputFileMenuItemDisabled);
@@ -554,10 +553,10 @@ public class REDUCEPanel extends BorderPane {
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
     }
 
-    /*
-    * Called as outputFileDisableMenuItems(false) when outputNewFileMenuItemAction
-    * or outputOpenFileMenuItemAction run.
-    */
+    /**
+     * Called as outputFileDisableMenuItems(false) when outputNewFileMenuItemAction
+     * or outputOpenFileMenuItemAction run.
+     */
     void outputFileDisableMenuItems(boolean disable) {
         FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = disable);
         FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled = disable);
@@ -566,19 +565,19 @@ public class REDUCEPanel extends BorderPane {
                 disable || outputFileList.size() <= 1);
     }
 
-    /*
-    * Called when shutFileMenuItemAction or shutLastMenuItemAction run.
-    */
+    /**
+     * Called when shutFileMenuItemAction or shutLastMenuItemAction run.
+     */
     void outputFileDisableMenuItemsMaybe() {
         if (outputFileList.isEmpty()) outputFileDisableMenuItems(true);
         if (outputFileList.size() == 1)
             FRAME.outputOpenFileMenuItem.setDisable(outputOpenFileMenuItemDisabled = true);
     }
 
-    /*
-    * Called when outputHereMenuItemAction run.
-    * Can output to an open output file if there is one.
-    */
+    /**
+     * Called when outputHereMenuItemAction run.
+     * Can output to an open output file if there is one.
+     */
     void outputHereDisableMenuItemsMaybe() {
         FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled = true);
         if (!outputFileList.isEmpty())

@@ -85,7 +85,7 @@ public class RunREDUCEFrame {
 
     private static final File USER_HOME_DIR = new File(getProperty("user.home"));
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages");
-    // ToDo Separate input and output file choosers?
+
     private static final FileChooser fileChooser = new FileChooser();
     private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Input Files (*.red, *.tst)", "*.red", "*.tst");
@@ -242,6 +242,7 @@ public class RunREDUCEFrame {
             // Select output file to shut:
             ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(RunREDUCE.reducePanel.outputFileList.get(0),
                     RunREDUCE.reducePanel.outputFileList);
+            choiceDialog.initOwner(RunREDUCE.primaryStage);
             Optional<File> result = choiceDialog.showAndWait();
             if (result.isPresent()) {
                 File file = result.get();
@@ -477,8 +478,9 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Prototype version 0.1\n" +
-                        "\u00A9 Francis Wright, May 2020");
+                "Version 1.0, May 2020\n" +
+                        "\u00A9 2020 Francis Wright");
+        alert.initOwner(RunREDUCE.primaryStage);
         alert.setTitle("About Run-REDUCE");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
         alert.showAndWait();
@@ -498,6 +500,7 @@ public class RunREDUCEFrame {
         }
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(RunREDUCE.primaryStage);
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
@@ -517,7 +520,7 @@ public class RunREDUCEFrame {
                         "Run-REDUCE User Guide");
             } else if (url.getProtocol().equals("file")) // Useful during development only!
                 desktop.browse(url.toURI());
-            else { // Normal case: when running a jar file the protocol is also jar.
+            else { // Normal case: when running a jar file the protocol is jar.
                 if (file == null || !file.exists()) {
                     file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
                     try (InputStream in = url.openStream()) {
