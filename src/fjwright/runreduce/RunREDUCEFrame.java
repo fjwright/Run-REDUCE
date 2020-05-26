@@ -176,7 +176,7 @@ public class RunREDUCEFrame {
                         try {
                             desktop.open(new File(RunREDUCE.reduceConfiguration.docRootDir,
                                     manual[RRPreferences.windowsOS ? 1 : 2]));
-                        } catch (IOException ex) {
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     });

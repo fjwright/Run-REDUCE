@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
-    static final String reduceFontFamilyName = "Consolas";
+    static String reduceFontFamilyName;
     static Font reduceFont, reduceFontBold;
     static SplitPane splitPane;
     static TabPane tabPane;
@@ -65,8 +65,10 @@ public class RunREDUCE extends Application {
         // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
+        reduceFontFamilyName = RRPreferences.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         reduceFontBold = Font.font(reduceFontFamilyName, FontWeight.BOLD, RRPreferences.fontSize);
+        // ToDo Check automatically that specified font has been loaded.
         if (debugPlatform) {
             System.err.println("reduceFont: " + reduceFont.toString());
             System.err.println("reduceFontBold: " + reduceFontBold.toString());

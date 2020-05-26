@@ -123,3 +123,15 @@ easy way to run Run-REDUCE-FX using a shell command is first to open
 *Files* and navigate to the directory to which you downloaded
 `Run-REDUCE-FX.jar`.  Right-click on this directory and select *Open
 in Terminal*.  You can now run `Run-REDUCE-FX.jar` as described above.
+
+### Bugs on Ubuntu 18.04.4 LTS
+
+I get a warning when the application starts and dialogue boxes jump
+unpleasantly as they open, but adding
+ 
+    -Djdk.gtk.version=2
+
+to the command used to run Run-REDUCE-FX avoids both problems.
+However, any attempt to access documentation via the Help menu just
+hangs in the *java.awt.Desktop.open* and *java.awt.Desktop.browse* methods.
+The ultimate cause seems to be a hang in a native method in *sun.awt.X11.XDesktopPeer*.
