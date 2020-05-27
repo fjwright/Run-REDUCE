@@ -10,9 +10,9 @@ instead of Swing.  It does **not** (yet) provide typeset-quality
 display of mathematical notation.
 
 For information about how to install and run Run-REDUCE-FX please see
-the [Installation Guide](docs/InstallationGuide.md).  For information
+the [Installation Guide](https:docs/InstallationGuide.md).  For information
 about how to use Run-REDUCE-FX please see the [User
-Guide](docs/UserGuide.html) (which is also included
+Guide](https:docs/UserGuide.html) (which is also included
 in Run-REDUCE-FX and easily accessible via the Help menu).
 
 Run-REDUCE-FX should run on any platform that supports JavaFX 8 (or
