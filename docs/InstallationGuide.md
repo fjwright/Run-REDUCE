@@ -13,10 +13,10 @@ JavaFX 8 or later, but I can only test on Windows 10 and 64-bit Ubuntu
 18.
 
 You also need a suitable Java environment and I recommend installing
-Java from java.com, which in my experience seems to be the easiest to
+Java from [java.com](https://www.java.com/), which in my experience seems to be the easiest to
 install and to work best.  (To be more specific, you need to have a
 Java Runtime Environment (JRE) and JavaFX libraries installed, both
-version 8 or later.  The version of Java available from java.com is
+version 8 or later.  The version of Java available from [java.com](https://www.java.com/) is
 Oracle JRE 8, which includes JavaFX 8, whereas other JRE versions
 normally do not, in which case you need to install JavaFX separately.)
 
@@ -88,7 +88,7 @@ executing the simpler shell command
 
     java -jar Run-REDUCE-FX.jar
 
-### Known Issues
+## Known Issues
 
 On my main Windows computer, which has an HD display, I find that I
 need to use a larger REDUCE I/O font size than I would expect.  (A
