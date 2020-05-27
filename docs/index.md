@@ -15,14 +15,14 @@ you need to install separately.  Run-REDUCE-FX is designed to run a
 standard installation of REDUCE; it does not include REDUCE.
 
 Full information about how to install and run Run-REDUCE-FX is
-available in the [Installation Guide](docs/InstallationGuide.md).  For
+available in the [Installation Guide](InstallationGuide.md).  For
 information about how to use Run-REDUCE-FX please see the [User
-Guide](src/fjwright/runreduce/UserGuide.html) (which is also included
+Guide](/src/fjwright/runreduce/UserGuide.html) (which is also included
 in Run-REDUCE-FX and easily accessible via the Help menu).
 
 This version of Run-REDUCE-FX runs well on Microsoft Windows, but may
 run less well on other platforms; see *Known Issues* at the end
-of the [Installation Guide](docs/InstallationGuide.md).
+of the [Installation Guide](InstallationGuide.md).
 
 Run-REDUCE-FX is still under development but here are the key features
 that it currently provides:
