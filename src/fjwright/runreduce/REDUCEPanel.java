@@ -467,7 +467,7 @@ public class REDUCEPanel extends BorderPane {
         });
     }
 
-    private static final Pattern PATTERN = Pattern.compile("\n1: ");
+    private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
 
     private void processPromptMarkers(String text, int start, List<Text> textList) {
         // Delete the very first prompt. (This code may not be reliable!)

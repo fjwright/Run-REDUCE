@@ -153,7 +153,7 @@ public class RunREDUCEFrame {
             int helpMenuItemIndex = 0;
 
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE User Guide");
+                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE-FX User Guide");
                 helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
                 userGuideMenuItem.setOnAction(e -> showUserGuide(desktop));
             }
@@ -481,7 +481,7 @@ public class RunREDUCEFrame {
                 "Version 1.0, May 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.initOwner(RunREDUCE.primaryStage);
-        alert.setTitle("About Run-REDUCE");
+        alert.setTitle("About Run-REDUCE-FX");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
         alert.showAndWait();
     }

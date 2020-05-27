@@ -58,7 +58,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide" />
                 <SeparatorMenuItem mnemonicParsing="false" />
 -->
-                <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE" />
+                <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE-FX" />
             </Menu>
         </MenuBar>
     </top>

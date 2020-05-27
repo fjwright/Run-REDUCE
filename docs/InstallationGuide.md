@@ -12,18 +12,20 @@ suitable configuration it **should** run on any platform that supports
 JavaFX 8 or later, but I can only test on Windows 10 and 64-bit Ubuntu
 18.
 
-You need to have a Java Runtime Environment (JRE) and JavaFX libraries
-installed, both version 8 or later.  Oracle JRE 8, available from
-java.com, includes JavaFX 8, but other JRE versions normally do not,
-in which case you need to install JavaFX separately.  See below for
-more specific details.
+You also need a suitable Java environment and I recommend installing
+Java from java.com, which in my experience seems to be the easiest to
+install and to work best.  (To be more specific, you need to have a
+Java Runtime Environment (JRE) and JavaFX libraries installed, both
+version 8 or later.  The version of Java available from java.com is
+Oracle JRE 8, which includes JavaFX 8, whereas other JRE versions
+normally do not, in which case you need to install JavaFX separately.)
 
-You also need to download the file `Run-REDUCE-FX.jar`.  The easiest
+You also need to download the file *Run-REDUCE-FX.jar*.  The easiest
 way to do this is to click on the download link at the top of the
 [Run-REDUCE-FX web page](https://fjwright.github.io/Run-REDUCE-FX/).
-(Alternatively, you can click on the `release` tab on the [GitHub
+(Alternatively, you can click on the *release* tab on the [GitHub
 project page](https://github.com/fjwright/Run-REDUCE-FX), then click
-on `Run-REDUCE-FX.jar` under `Assets`.)  Save `Run-REDUCE-FX.jar`
+on *Run-REDUCE-FX.jar* under *Assets*.)  Save *Run-REDUCE-FX.jar*
 somewhere convenient, such as your home directory or the directory in
 which you store your REDUCE projects.  You can then run Run-REDUCE-FX
 as an executable file by double-clicking on it or by executing the
@@ -35,25 +37,23 @@ in the directory containing the file.  The latter approach has the
 advantage that any error messages will be displayed in the shell
 window.
 
-There are many ways to run JavaFX applications.  Here are some
-specific recommendations that I have tested.
+Here are some specific recommendations that I have tested.
 
 
 ## Microsoft Windows
 
-`Run-REDUCE-FX` behaves very much like a drop-in replacement for
-`Run-REDUCE`.  So if you ran the latter on your computer then you can
-probably run the former in the same way.  If necessary, you can
-install a suitable Java 8 JRE, which includes JavaFX 8, very easily
-from [java.com](https://www.java.com/).  This sets up Java so that
-`Run-REDUCE-FX.jar` runs automatically by opening it, e.g. by
+Run-REDUCE-FX behaves very much like a drop-in replacement for
+Run-REDUCE.  So if you ran the latter on your computer then you can
+probably run the former in the same way.  Installing Java from
+[java.com](https://www.java.com/) sets it up so that
+*Run-REDUCE-FX.jar* runs automatically when you open it, e.g. by
 double-clicking on it.
 
 An easy way to run Run-REDUCE-FX using a shell command is first to
-open File Explorer and navigate to the folder to which you downloaded
-`Run-REDUCE-FX.jar`.  In the address bar, type `cmd` and then press
-the *Return* key.  This will open a Command Prompt window in the
-current folder.
+open *File Explorer* and navigate to the folder to which you
+downloaded *Run-REDUCE-FX.jar*.  In the address bar, type `cmd` and
+then press the *Return* key.  This will open a Command Prompt window
+in the current folder.
 
 
 ## Ubuntu and other Platforms
@@ -63,75 +63,50 @@ other versions of Debian Linux, on which Ubuntu is based, and to a
 lesser extent to other flavours of Linux and other platforms, such as
 macOS.
 
-### Install Oracle JRE 8 from the Web
-
-Visit java.com, click on Java Download, then select Linux or Linux x64
-as appropriate.  There are installation instructions on this web site,
-which you may find useful.  (On versions of Linux based on Red Hat,
-you may prefer to select the appropriate RPM distribution and install
-that.)  Download the appropriate `tar.gz` archive file and move it to
-an appropriate installation directory, which I will assume is your
-home directory `~`.  Extract the contents of the archive, which you
-can do easily by double-clicking on it to run Archive Manager (or see
-the instructions on the web).
+Visit java.com, click on *Java Download*, then select *Linux* or
+*Linux x64* as appropriate.  There are installation instructions on
+this web site, which you may find useful.  (On versions of Linux based
+on Red Hat, you may prefer to select the appropriate RPM distribution
+and install that.)  Download the appropriate *tar.gz* archive file and
+move it to an appropriate installation directory, which I will assume
+is your home directory *~*.  Extract the contents of the archive,
+which you can do easily by double-clicking on it to run *Archive
+Manager* (or see the instructions on the web).
 
 An easy way to run Run-REDUCE-FX using a shell command is first to
-open Files and navigate to the directory to which you downloaded
-`Run-REDUCE-FX.jar`.  Right-click on this directory and select *Open
-in Terminal*.  You can now run `Run-REDUCE-FX.jar` by executing the
+open *Files* and navigate to the directory to which you downloaded
+*Run-REDUCE-FX.jar*.  Right-click on this directory and select *Open
+in Terminal*.  You can now run *Run-REDUCE-FX.jar* by executing the
 shell command
 
     ~/jre1.8.0_251/bin/java -jar Run-REDUCE-FX.jar
 
-Alternatively, if you add the directory `~/jre1.8.0_251/bin` to your
-PATH, you can run Run-REDUCE-FX by executing the simpler shell command
+where `jre1.8.0_251` is the name of the Java directory you just
+installed.  Alternatively, if you add the directory
+`~/jre1.8.0_251/bin` to your PATH, you can run Run-REDUCE-FX by
+executing the simpler shell command
 
     java -jar Run-REDUCE-FX.jar
 
-### Install OpenJDK JRE 11 plus OpenJFX 11 using a Package Manager
+### Known Issues
 
-Open the Synaptic Package Manager from Activities, search for `jdk`,
-mark `openjdk-11-jre` for installation and accept its dependencies.
-Then search for `jfx`, mark `openjfx` for installation and accept its
-dependencies (but you can deselect `openjfx-source`).  Then click
-Apply.
+On my main Windows computer, which has an HD display, I find that I
+need to use a larger REDUCE I/O font size than I would expect.  (A
+font with the same numerical size appears smaller than in Run-REDUCE.)
+This may be because JavaFX font sizes don't reflect display scaling.
 
-You can now run Run-REDUCE-FX as described above, except that the
-shell command is
+On my Linux computer, which currently runs Ubuntu 18.04.4 LTS, I
+notice the following issues, which may arise more generally.
 
-    java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml -jar Run-REDUCE-FX.jar
+I find that any attempt to access documentation via the Help menu just
+hangs. (This seems to happen in the *java.awt.Desktop.open* and
+*java.awt.Desktop.browse* methods, which ultimately hang in native
+methods in *sun.awt.X11.XDesktopPeer*.)
 
-You could simplify this command by putting it into a shell script file
-or making it into a shell alias.
-
-### Install OpenJDK JRE 11 plus OpenJFX 11 from the Web
-
-Visit [AdoptOpenJDK](https://adoptopenjdk.net/), click on the *Other
-platforms* button (immediately below the *Latest release* button) and
-select OpenJDK 11 (LTS).  (The default JVM, HotSpot, should be fine.)
-Select and/or scroll down to find your platform.  On the right, choose
-the JRE version (the JDK version will also work, but is much bigger
-and irrelevant unless you do Java development), download an
-appropriate installation file and install it.  (The default
-installation should be fine.)
-
-Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
-*Download* button.  Scroll down and download JavaFX Linux SDK, then
-set it up by [following these
-instructions](https://openjfx.io/openjfx-docs/#install-javafx).  An
-easy way to run Run-REDUCE-FX using a shell command is first to open
-*Files* and navigate to the directory to which you downloaded
-`Run-REDUCE-FX.jar`.  Right-click on this directory and select *Open
-in Terminal*.  You can now run `Run-REDUCE-FX.jar` as described above.
-
-### Bugs on Ubuntu 18.04.4 LTS
-
-I get a warning when the application starts and dialogue boxes jump
-unpleasantly as they open, but adding
+I also get a warning when the application starts.  Adding
  
     -Djdk.gtk.version=2
 
-to the command used to run Run-REDUCE-FX avoids both problems.
-However, any attempt to access documentation via the Help menu just
-hangs in the *java.awt.Desktop.open* and *java.awt.Desktop.browse* methods.
-The ultimate cause seems to be a hang in a native method in *sun.awt.X11.XDesktopPeer*.
+before `-jar` in the command used to run Run-REDUCE-FX avoids this
+warning, but you may then find that dialogues do not appear where you
+expect them.
