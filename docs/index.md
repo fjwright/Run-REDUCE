@@ -17,7 +17,7 @@ standard installation of REDUCE; it does not include REDUCE.
 Full information about how to install and run Run-REDUCE-FX is
 available in the [Installation Guide](InstallationGuide.md).  For
 information about how to use Run-REDUCE-FX please see the [User
-Guide](../src/fjwright/runreduce/UserGuide.html) (which is also included
+Guide](UserGuide.html) (which is also included
 in Run-REDUCE-FX and easily accessible via the Help menu).
 
 This version of Run-REDUCE-FX runs well on Microsoft Windows, but may
