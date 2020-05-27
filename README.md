@@ -15,9 +15,9 @@ about how to use Run-REDUCE-FX please see the [User
 Guide](src/fjwright/runreduce/UserGuide.html) (which is also included
 in Run-REDUCE-FX and easily accessible via the Help menu).
 
-Run-REDUCE-FX should run on any platform that supports Java 8 (or
-later), but I can only test it on Microsoft Windows and 64-bit Ubuntu
-Linux.  (Whilst Java is portable, filesystem structures and
+Run-REDUCE-FX should run on any platform that supports JavaFX 8 (or
+later), but I can only test it on Microsoft Windows and 64-bit Ubuntu.
+(Whilst Java is portable, filesystem structures and
 installation conventions are not!)
 
 REDUCE itself is an open source project available from

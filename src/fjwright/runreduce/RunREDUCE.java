@@ -67,8 +67,15 @@ public class RunREDUCE extends Application {
         // ToDo Consider bundling a font as a resource.
         reduceFontFamilyName = RRPreferences.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
+        if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("REDUCE I/O Font Warning");
+            alert.setContentText("Specified font '" + reduceFontFamilyName + "' not found." +
+                    "\nReplacement font '" + reduceFont.getFamily() + "' used instead." +
+                    "\nBeware that REDUCE output may be mangled!");
+            alert.showAndWait();
+        }
         reduceFontBold = Font.font(reduceFontFamilyName, FontWeight.BOLD, RRPreferences.fontSize);
-        // ToDo Check automatically that specified font has been loaded.
         if (debugPlatform) {
             System.err.println("reduceFont: " + reduceFont.toString());
             System.err.println("reduceFontBold: " + reduceFontBold.toString());
