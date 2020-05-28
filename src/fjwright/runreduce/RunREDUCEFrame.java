@@ -1,13 +1,12 @@
 package fjwright.runreduce;
 
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -15,9 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
@@ -97,6 +94,7 @@ public class RunREDUCEFrame {
             new FileChooser.ExtensionFilter("All Files", "*.*");
 
     static List<String> packageList;
+    static HostServices hostServices;
 
     /**
      * Called to initialize a controller after its root element has been completely processed.
@@ -148,41 +146,22 @@ public class RunREDUCEFrame {
          * Help menu *
          * ********* */
 
-        if (Desktop.isDesktopSupported()) {
-            Desktop desktop = Desktop.getDesktop();
-            int helpMenuItemIndex = 0;
+        String[][] manuals = {
+                // {Manual name, Windows location, non-Windows location}
+                {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
+                {"REDUCE Manual (PDF)", "lib/csl/reduce.doc/manual.pdf", "manual.pdf.gz"},
+                {"Inside Reduce", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
+                {"REDUCE Symbolic Mode Primer", "doc/primer.pdf", "primer.pdf.gz"},
+                {"Standard Lisp Report", "doc/sl.pdf", "sl.pdf.gz"}
+        };
 
-            if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                MenuItem userGuideMenuItem = new MenuItem("Run-REDUCE-FX User Guide");
-                helpMenu.getItems().add(helpMenuItemIndex++, userGuideMenuItem);
-                userGuideMenuItem.setOnAction(e -> showUserGuide(desktop));
-            }
-            helpMenu.getItems().add(helpMenuItemIndex++, new SeparatorMenuItem());
-
-            String[][] manuals = {
-                    // {Manual name, Windows location, non-Windows location}
-                    {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
-                    {"REDUCE Manual (PDF)", "lib/csl/reduce.doc/manual.pdf", "manual.pdf.gz"},
-                    {"Inside Reduce", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
-                    {"REDUCE Symbolic Mode Primer", "doc/primer.pdf", "primer.pdf.gz"},
-                    {"Standard Lisp Report", "doc/sl.pdf", "sl.pdf.gz"}
-            };
-
-            if (desktop.isSupported(Desktop.Action.OPEN)) {
-                for (String[] manual : manuals) {
-                    MenuItem menuItem = new MenuItem(manual[0]);
-                    helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
-                    menuItem.setOnAction(e -> {
-                        try {
-                            desktop.open(new File(RunREDUCE.reduceConfiguration.docRootDir,
-                                    manual[RRPreferences.windowsOS ? 1 : 2]));
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    });
-                }
-            }
-            helpMenu.getItems().add(helpMenuItemIndex, new SeparatorMenuItem());
+        int helpMenuItemIndex = 2;
+        for (String[] manual : manuals) {
+            MenuItem menuItem = new MenuItem(manual[0]);
+            helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
+            menuItem.setOnAction(e -> hostServices.showDocument(
+                    new File(RunREDUCE.reduceConfiguration.docRootDir,
+                            manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
         }
     }
 
@@ -475,6 +454,35 @@ public class RunREDUCEFrame {
      * Help menu *
      * ********* */
 
+    private static final String USERGUIDE_FILENAME = "UserGuide.html";
+    private static File file;
+
+    @FXML
+    private void userGuideMenuItemAction() {
+        try {
+            URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
+            // file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
+            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
+            // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
+            if (url == null) {
+                RunREDUCE.errorMessageDialog("Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.",
+                        "Run-REDUCE-FX User Guide");
+            } else if (url.getProtocol().equals("file")) // Useful during development only!
+                hostServices.showDocument(url.toString());
+            else { // Normal case: when running a jar file the protocol is jar.
+                if (file == null || !file.exists()) {
+                    file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
+                    try (InputStream in = url.openStream()) {
+                        Files.copy(in, file.toPath(), REPLACE_EXISTING);
+                    }
+                }
+                hostServices.showDocument(file.toString());
+            }
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        }
+    }
+
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
@@ -504,33 +512,5 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
-    }
-
-    private static final String USERGUIDE_FILENAME = "UserGuide.html";
-    private static File file;
-
-    private void showUserGuide(Desktop desktop) {
-        try {
-            URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
-            // file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
-            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
-            // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
-            if (url == null) {
-                RunREDUCE.errorMessageDialog("Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.",
-                        "Run-REDUCE User Guide");
-            } else if (url.getProtocol().equals("file")) // Useful during development only!
-                desktop.browse(url.toURI());
-            else { // Normal case: when running a jar file the protocol is jar.
-                if (file == null || !file.exists()) {
-                    file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
-                    try (InputStream in = url.openStream()) {
-                        Files.copy(in, file.toPath(), REPLACE_EXISTING);
-                    }
-                }
-                desktop.browse(file.toURI());
-            }
-        } catch (IOException | URISyntaxException exc) {
-            exc.printStackTrace();
-        }
     }
 }

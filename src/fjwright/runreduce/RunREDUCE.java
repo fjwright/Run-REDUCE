@@ -92,6 +92,8 @@ public class RunREDUCE extends Application {
             case TABBED:
                 useTabPane(true);
         }
+
+        RunREDUCEFrame.hostServices = getHostServices();
     }
 
     static void useSplitPane(boolean enable) {
@@ -174,10 +176,10 @@ public class RunREDUCE extends Application {
         }
     }
 
-    static void errorMessageDialog(String message, String title) {
+    static void errorMessageDialog(String message, String headerText) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.initOwner(RunREDUCE.primaryStage);
-        alert.setTitle(title);
+        alert.setHeaderText(headerText);
         alert.showAndWait();
     }
 
