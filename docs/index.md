@@ -1,4 +1,4 @@
-### [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) | [Installation Guide](InstallationGuide.md) | [User Guide](UserGuide.html)
+### [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) :: [Installation Guide](InstallationGuide.md) :: [User Guide](UserGuide.html)
 
 Run-REDUCE-FX is a Graphical User Interface for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
