@@ -162,6 +162,8 @@ public class RunREDUCEFrame {
             menuItem.setOnAction(e -> hostServices.showDocument(
                     new File(RunREDUCE.reduceConfiguration.docRootDir,
                             manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
+            if (!RRPreferences.windowsOS) break;
+            // FixMe Investigate how to support PDF files on Linux.
         }
     }
 

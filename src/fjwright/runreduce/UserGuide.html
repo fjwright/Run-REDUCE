@@ -2,13 +2,15 @@
 <html lang="en-GB">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Francis Wright" />
     <title>Run-REDUCE-FX User Guide</title>
     <style>
       body {
           font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
           font-size: 12pt;
+          max-width: 640px;
+          margin-right: auto;
+          margin-left: auto;
       }
       code {
           font-family: "Lucida Console", "Lucida Sans Typewriter", monospace;
@@ -183,7 +185,7 @@
     REDUCE's default directory, which is irrelevant because
     Run-REDUCE-FX always uses absolute file paths.
     </p>
-    <p>The File menu provides the following items.</p>
+    <p>The File menu provides the following items:</p>
     <h3>Echo File Input</h3>
     <p>Selecting this causes Run-REDUCE-FX to echo file input to
     the <em>Input/Output Display</em> pane. It is selectd by
@@ -269,7 +271,7 @@
 
     <h2>The REDUCE Menu</h2>
 
-    <p>The REDUCE menu provides the following items.</p>
+    <p>The REDUCE menu provides the following items:</p>
     <h3>Run REDUCE...</h3>
     <p>This sub-menu provides an item for each configured REDUCE
     command (typically based on different versions of Lisp, by default
@@ -394,7 +396,7 @@
 
     <h2 id="ViewMenu">The View Menu</h2>
 
-    <p>The View menu provides the following items.</p>
+    <p>The View menu provides the following items:</p>
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
@@ -456,19 +458,19 @@
 
     <h2>The Help Menu</h2>
 
-    <p>All the documents accessed via the Help menu are local files,
-    either extracted from the Java JAR file (at most once per run of
-    Run-REDUCE-FX to your default temporary directory) or assumed to
-    be available in the REDUCE installation.  The Help menu provides
-    the following items.</p>
+    <p>All the documents accessed via the Help menu are local files.
+    The Help menu provides the following items:</p>
     <h3>Run-REDUCE-FX User Guide</h3>
     <p>This opens the Run-REDUCE-FX User Guide in your default web
-    browser.
+    browser.  It is extracted from the Java JAR file at most once per
+    run of Run-REDUCE-FX to your default temporary directory.
     </p>
     <h3>REDUCE Manual etc.</h3>
-    <p>These menu items open the manuals and other guides that are
-    distributed with REDUCE in your default web browser or PDF viewer,
-    as appropriate.
+    <p>On Microsoft Windows, these menu items open the manuals and
+    other guides that are distributed with REDUCE in your default web
+    browser or PDF viewer, as appropriate.  On other platforms, only
+    the HTML version of the REDUCE Manual is available at present.
+    The files are assumed to be available in your REDUCE installation.
     </p>
     <h3>About Run-REDUCE-FX</h3>
     <p>This pops up brief information about Run-REDUCE-FX.</p>
