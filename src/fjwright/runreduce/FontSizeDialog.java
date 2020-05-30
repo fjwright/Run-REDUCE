@@ -19,12 +19,11 @@ public class FontSizeDialog {
     @FXML
     private Label newSizeDemoLabel; // Sample text at new font size of ...
 
-    private Font newFont = RunREDUCE.reduceFont;
     private int newFontSize;
 
     private void setNewSizeDemoLabel() {
         newSizeDemoLabel.setText("Sample text at new font size of " + newFontSize);
-        newSizeDemoLabel.setFont(newFont);
+        newSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
     }
 
     // FixMe Throws a NullPointerException if you delete the font size and press Enter.
@@ -32,11 +31,11 @@ public class FontSizeDialog {
 
     @FXML
     private void initialize() {
+        newFontSize = RRPreferences.fontSize;
         defaultFontSizeLabel.setText("Default font size is " +
                 Math.round(Font.font(RunREDUCE.reduceFontFamilyName).getSize()));
-        newFontSize = (int) Math.round(newFont.getSize());
         oldSizeDemoLabel.setText("Sample text at old font size of " + newFontSize);
-        oldSizeDemoLabel.setFont(newFont);
+        oldSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
         SpinnerValueFactory<Integer> spinnerValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 30, newFontSize);
         newSizeValueSpinner.setValueFactory(spinnerValueFactory);
@@ -45,7 +44,6 @@ public class FontSizeDialog {
         spinnerValueFactory.valueProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     newFontSize = newValue;
-                    newFont = Font.font(RunREDUCE.reduceFontFamilyName, newFontSize);
                     setNewSizeDemoLabel();
                     // This should be unnecessary, but is kept as a precaution.
 //                    stage.sizeToScene(); // This works!
@@ -54,8 +52,11 @@ public class FontSizeDialog {
 
     @FXML
     private void okButtonAction(ActionEvent actionEvent) {
-        RunREDUCE.reduceFont = newFont;
         RRPreferences.save(RRPreferences.FONTSIZE, newFontSize);
+        RunREDUCE.fontFamilyAndSizeStyle = "-fx-font-family:" + RunREDUCE.reduceFontFamilyName
+                + ";-fx-font-size:" + newFontSize;
+        RunREDUCE.reducePanel.inputTextArea.setStyle(
+                "-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }

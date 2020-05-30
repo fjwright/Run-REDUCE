@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -57,14 +56,14 @@ public class REDUCEPanel extends BorderPane {
     private boolean firstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
-    private static final Color ALGEBRAIC_OUTPUT_COLOR = Color.BLUE;
-    private static final Color SYMBOLIC_OUTPUT_COLOR = Color.rgb(0x80, 0x00, 0x80);
-    private static final Color ALGEBRAIC_INPUT_COLOR = Color.RED;
-    private static final Color SYMBOLIC_INPUT_COLOR = Color.rgb(0x80, 0x00, 0x00);
-    private static final Color DEFAULT_COLOR = Color.BLACK;
-    private Color promptColor = DEFAULT_COLOR;
-    private Color inputColor = DEFAULT_COLOR;
-    private Color outputColor = DEFAULT_COLOR;
+    private static final String ALGEBRAIC_OUTPUT_COLOR = "blue";
+    private static final String SYMBOLIC_OUTPUT_COLOR = "#800080";
+    private static final String ALGEBRAIC_INPUT_COLOR = "red";
+    private static final String SYMBOLIC_INPUT_COLOR = "#800000";
+    private static final String DEFAULT_COLOR = "black";
+    private String promptColor = DEFAULT_COLOR;
+    private String inputColor = DEFAULT_COLOR;
+    private String outputColor = DEFAULT_COLOR;
 
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -75,6 +74,8 @@ public class REDUCEPanel extends BorderPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+
+        inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " " + RunREDUCE.reduceFontFamilyName);
 
         outputNodeList = outputTextFlow.getChildren();
 
@@ -185,8 +186,7 @@ public class REDUCEPanel extends BorderPane {
 
     void sendStringToREDUCEAndEcho(String text) {
         Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        t.setFill(inputColor);
+        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + inputColor);
         outputNodeList.add(t);
         // Make sure the new input text is visible:
         outputScrollPane.setVvalue(1.0);
@@ -329,26 +329,27 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
+//    fontFamilyAndSizeStyle ="-fx-font-family:"+RunREDUCE.reduceFontFamilyName
+//                    +";-fx-font-size:"+RRPreferences.fontSize;
+
     private Text outputText(String text) {
         Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
+        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
         return t;
     }
 
-    private Text outputText(String text, Color color) {
+    private Text outputText(String text, String color) {
         Text t = new Text(text);
-        t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
+        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
         return t;
     }
 
-    private Text promptText(String text, Color color) {
+    private Text promptText(String text, String color) {
         Text t = new Text(text);
         if (RRPreferences.boldPromptsState)
-            t.setFont(RunREDUCE.reduceFontBold);
+            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-font-weight:bold" + ";-fx-fill:" + color);
         else
-            t.setFont(RunREDUCE.reduceFont);
-        t.setFill(color);
+            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
         return t;
     }
 

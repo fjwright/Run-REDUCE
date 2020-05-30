@@ -33,7 +33,7 @@ public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
     static String reduceFontFamilyName;
-    static Font reduceFont, reduceFontBold;
+    static String fontFamilyAndSizeStyle;
     static SplitPane splitPane;
     static TabPane tabPane;
     static int tabLabelNumber = 1;
@@ -65,6 +65,7 @@ public class RunREDUCE extends Application {
         // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
+        Font reduceFont, reduceFontBold;
         reduceFontFamilyName = RRPreferences.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
@@ -80,6 +81,8 @@ public class RunREDUCE extends Application {
             System.err.println("reduceFont: " + reduceFont.toString());
             System.err.println("reduceFontBold: " + reduceFontBold.toString());
         }
+        fontFamilyAndSizeStyle = "-fx-font-family:" + RunREDUCE.reduceFontFamilyName
+                + ";-fx-font-size:" + RRPreferences.fontSize;
 
         reducePanel = new REDUCEPanel();
         switch (RRPreferences.displayPane) {
