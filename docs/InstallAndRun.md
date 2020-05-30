@@ -1,4 +1,4 @@
-# Run-REDUCE-FX Installation Guide
+# Run-REDUCE-FX Install and Run Guide
 
 ### Francis Wright, May 2020
 
@@ -89,7 +89,7 @@ shell command
 
 where `jre1.8.0_251` is the name of the Java directory you just
 installed.  Alternatively, if you add the directory
-`~/jre1.8.0_251/bin` to your PATH, you can run Run-REDUCE-FX by
+`~/jre1.8.0_251/bin` to your `PATH`, you can run Run-REDUCE-FX by
 executing the simpler shell command
 
     java -jar Run-REDUCE-FX.jar
