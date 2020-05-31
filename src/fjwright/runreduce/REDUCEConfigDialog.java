@@ -88,7 +88,7 @@ public class REDUCEConfigDialog {
      * Reset all configuration data to the default.
      */
     @FXML
-    private void resetAllDefaultsButtonAction(/*ActionEvent actionEvent*/) {
+    private void resetAllDefaultsButtonAction() {
         setupDialog(RunREDUCE.reduceConfigurationDefault);
     }
 
@@ -139,15 +139,29 @@ public class REDUCEConfigDialog {
 
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
-        // Write form data back to REDUCEConfiguration:
+        // Write form data back to REDUCEConfiguration
+        // after validating generic root directory fields:
+        String[] dirs = new String[]{
+                reduceRootDirTextField.getText(),
+                packagesRootDirTextField.getText(),
+                docRootDirTextField.getText()};
+        for (String dir : dirs)
+            if (!new File(dir).canRead()) {
+                RunREDUCE.errorMessageDialog("Invalid Directory",
+                        "The directory\n" + dir + "\ndoes not exist or is not accessible.");
+                return;
+            }
+        RunREDUCE.reduceConfiguration.reduceRootDir = dirs[0];
+        RunREDUCE.reduceConfiguration.packagesRootDir = dirs[1];
+        RunREDUCE.reduceConfiguration.docRootDir = dirs[2];
         saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
-        RunREDUCE.reduceConfiguration.reduceRootDir = reduceRootDirTextField.getText();
-        RunREDUCE.reduceConfiguration.packagesRootDir = packagesRootDirTextField.getText();
-        RunREDUCE.reduceConfiguration.docRootDir = docRootDirTextField.getText();
         RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
         RunREDUCE.reduceConfiguration.save();
         // Close dialogue:
         cancelButtonAction(actionEvent);
+        // Rebuild the Run REDUCE submenus:
+        RunREDUCE.runREDUCEFrame.runREDUCESubmenuBuild();
+        RunREDUCE.runREDUCEFrame.autoRunREDUCESubmenuBuild();
     }
 
     @FXML
@@ -200,9 +214,9 @@ public class REDUCEConfigDialog {
         listView.getSelectionModel().select(selectedIndex);
     }
 
-    /*
-    * Code run by the directory chooser (DC) buttons.
-    */
+    /**
+     * Code run by the directory chooser (DC) buttons.
+     */
     private void dcButtonAction(String title, String defaultDir, TextField textField) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(title);
@@ -239,7 +253,7 @@ public class REDUCEConfigDialog {
                 commandRootDirTextField);
     }
 
-    /*
+    /**
      * Code run by the file chooser (FC) buttons.
      */
     private void fcButtonAction(String title, TextField textField) {
@@ -258,9 +272,9 @@ public class REDUCEConfigDialog {
         fcButtonAction("Command Path Name", commandPathNameTextField);
     }
 
-    /*
-    * Called in method initialize to create the command argument file chooser buttons.
-    */
+    /**
+     * Called in method initialize to create the command argument file chooser buttons.
+     */
     private void createCommandArgFCButtons() {
         for (int i = 1; i < commandTextFieldArray.length; i++) {
             Button button = new Button("...");

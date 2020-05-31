@@ -323,7 +323,7 @@ public class RunREDUCEFrame {
      * REDUCE menu *
      * *********** */
 
-    private void runREDUCESubmenuBuild() {
+    void runREDUCESubmenuBuild() {
         ObservableList<MenuItem> menuItems = runREDUCESubmenu.getItems();
         menuItems.clear();
         for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
@@ -333,7 +333,7 @@ public class RunREDUCEFrame {
         }
     }
 
-    private void autoRunREDUCESubmenuBuild() {
+    void autoRunREDUCESubmenuBuild() {
         ObservableList<MenuItem> menuItems = autoRunREDUCESubmenu.getItems();
         menuItems.clear();
         ToggleGroup autoRunToggleGroup = new ToggleGroup();
@@ -467,8 +467,8 @@ public class RunREDUCEFrame {
             // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
             // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
             if (url == null) {
-                RunREDUCE.errorMessageDialog("Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.",
-                        "Run-REDUCE-FX User Guide");
+                RunREDUCE.errorMessageDialog("Run-REDUCE-FX User Guide",
+                        "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
             } else if (url.getProtocol().equals("file")) // Useful during development only!
                 hostServices.showDocument(url.toString());
             else { // Normal case: when running a jar file the protocol is jar.

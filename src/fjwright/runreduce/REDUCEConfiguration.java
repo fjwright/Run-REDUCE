@@ -29,7 +29,9 @@ class RRPreferences {
     static final String DISPLAYPANE = "displayPane";
 
     enum ColouredIO {NONE, MODAL, REDFRONT}
+
     enum DisplayPane {SINGLE, SPLIT, TABBED}
+
     static final String NONE = "None";
 
     static int fontSize = Math.max(prefs.getInt(FONTSIZE, 15), 5);
@@ -103,9 +105,8 @@ class REDUCECommand {
             command[i] = element;
         }
         if (!Files.isExecutable(Paths.get(command[0]))) {
-            RunREDUCE.errorMessageDialog(
-                    command[0] + " is not executable!",
-                    "REDUCE Configuration");
+            RunREDUCE.errorMessageDialog("REDUCE Configuration",
+                    "The command path name\n" + command[0] + "\ndoes not exist or is not executable.");
             return null;
         }
         return command;
@@ -289,11 +290,9 @@ class REDUCEPackageList extends ArrayList<String> {
         Path packagesRootPath = Paths.get(RunREDUCE.reduceConfiguration.packagesRootDir);
         Path packageMapFile = packagesRootPath.resolve("packages/package.map");
         if (!Files.isReadable(packageMapFile)) {
-            RunREDUCE.errorMessageDialog(
-                    "The REDUCE package map file is not available!" +
-                            "\nPlease correct 'Packages Root Dir' in the 'Configure REDUCE...' dialogue," +
-                            "\nwhich will open automatically when you close this dialogue.",
-                    "REDUCE Packages");
+            RunREDUCE.errorMessageDialog("REDUCE Packages", "The REDUCE package map file is not available!" +
+                    "\nPlease correct 'Packages Root Dir' in the 'Configure REDUCE...' dialogue," +
+                    "\nwhich will open automatically when you close this dialogue.");
             RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
                     "REDUCEConfigDialog.fxml");
             return;

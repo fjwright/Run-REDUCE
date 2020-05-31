@@ -179,7 +179,7 @@ public class RunREDUCE extends Application {
         }
     }
 
-    static void errorMessageDialog(String message, String headerText) {
+    static void errorMessageDialog(String headerText, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.initOwner(RunREDUCE.primaryStage);
         alert.setHeaderText(headerText);

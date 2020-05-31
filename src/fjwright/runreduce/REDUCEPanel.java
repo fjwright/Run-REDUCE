@@ -250,9 +250,7 @@ public class REDUCEPanel extends BorderPane {
             // Reset enabled state of controls:
             reduceStarted();
         } catch (Exception exc) {
-            RunREDUCE.errorMessageDialog(
-                    "Error running REDUCE -- " + exc,
-                    "REDUCE Process Error");
+            RunREDUCE.errorMessageDialog("REDUCE Process", "Error running REDUCE:\n" + exc);
         }
 
         title = reduceCommand.name;
