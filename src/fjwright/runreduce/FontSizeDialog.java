@@ -27,9 +27,11 @@ public class FontSizeDialog {
     private int newFontSize;
     private static final Pattern PATTERN = Pattern.compile("\\d+");
 
+    // Note that a font name containing spaces needs quoting in CSS!
+
     private void setNewSizeDemoLabel() {
         newSizeDemoLabel.setText("Sample text at new font size of " + newFontSize);
-        newSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
+        newSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
     }
 
     @FXML
@@ -38,7 +40,7 @@ public class FontSizeDialog {
         defaultFontSizeLabel.setText("Default font size is " +
                 Math.round(Font.font(RunREDUCE.reduceFontFamilyName).getSize()));
         oldSizeDemoLabel.setText("Sample text at old font size of " + newFontSize);
-        oldSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
+        oldSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
         SpinnerValueFactory<Integer> spinnerValueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FONT_SIZE, MAX_FONT_SIZE, newFontSize);
         newSizeValueSpinner.setValueFactory(spinnerValueFactory);
@@ -67,10 +69,10 @@ public class FontSizeDialog {
     @FXML
     private void okButtonAction(ActionEvent actionEvent) {
         RRPreferences.save(RRPreferences.FONTSIZE, newFontSize);
-        RunREDUCE.fontFamilyAndSizeStyle = "-fx-font-family:" + RunREDUCE.reduceFontFamilyName
-                + ";-fx-font-size:" + newFontSize;
+        RunREDUCE.fontFamilyAndSizeStyle = "-fx-font-family:'" + RunREDUCE.reduceFontFamilyName
+                + "';-fx-font-size:" + newFontSize;
         RunREDUCE.reducePanel.inputTextArea.setStyle(
-                "-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
+                "-fx-font:" + newFontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }

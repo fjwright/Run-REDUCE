@@ -75,7 +75,8 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
-        inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " " + RunREDUCE.reduceFontFamilyName);
+        // Note that a font name containing spaces needs quoting in CSS!
+        inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
 
         outputNodeList = outputTextFlow.getChildren();
 

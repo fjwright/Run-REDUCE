@@ -142,4 +142,7 @@ This may be because JavaFX font sizes don't reflect display scaling.
 
 On my Linux computer, which currently runs Ubuntu 18.04.4 LTS, access
 to PDF files via the Help menu does not work well, so I currently
-suppress the menu items affected on platforms other than Windows.
+suppress the menu items affected on all platforms other than Windows.
+Using Java 8, alerts are truncated; using Java 11 alerts and other
+dialogues jump unpleasantly when they are first opened although they
+are not truncated.

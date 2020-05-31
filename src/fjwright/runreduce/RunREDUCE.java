@@ -22,7 +22,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -65,24 +64,21 @@ public class RunREDUCE extends Application {
         // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
-        Font reduceFont, reduceFontBold;
         reduceFontFamilyName = RRPreferences.windowsOS ? "Consolas" : "DejaVu Sans Mono";
-        reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
+        Font reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(primaryStage);
             alert.setHeaderText("REDUCE I/O Font Warning");
             alert.setContentText("Specified font '" + reduceFontFamilyName + "' not found." +
                     "\nReplacement font '" + reduceFont.getFamily() + "' used instead." +
                     "\nBeware that REDUCE output may be mangled!");
             alert.showAndWait();
         }
-        reduceFontBold = Font.font(reduceFontFamilyName, FontWeight.BOLD, RRPreferences.fontSize);
-        if (debugPlatform) {
-            System.err.println("reduceFont: " + reduceFont.toString());
-            System.err.println("reduceFontBold: " + reduceFontBold.toString());
-        }
-        fontFamilyAndSizeStyle = "-fx-font-family:" + RunREDUCE.reduceFontFamilyName
-                + ";-fx-font-size:" + RRPreferences.fontSize;
+        if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
+        // Note that a font name containing spaces needs quoting in CSS!
+        fontFamilyAndSizeStyle = "-fx-font-family:'" + RunREDUCE.reduceFontFamilyName
+                + "';-fx-font-size:" + RRPreferences.fontSize;
 
         reducePanel = new REDUCEPanel();
         switch (RRPreferences.displayPane) {
@@ -179,10 +175,11 @@ public class RunREDUCE extends Application {
         }
     }
 
-    static void errorMessageDialog(String headerText, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, message);
-        alert.initOwner(RunREDUCE.primaryStage);
+    static void errorMessageDialog(String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(primaryStage);
         alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
         alert.showAndWait();
     }
 
