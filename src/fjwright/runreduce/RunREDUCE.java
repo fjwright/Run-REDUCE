@@ -69,16 +69,18 @@ public class RunREDUCE extends Application {
         if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(primaryStage);
-            alert.setHeaderText("REDUCE I/O Font Warning");
-            alert.setContentText("Specified font '" + reduceFontFamilyName + "' not found." +
-                    "\nReplacement font '" + reduceFont.getFamily() + "' used instead." +
-                    "\nBeware that REDUCE output may be mangled!");
+            alert.setHeaderText("REDUCE I/O Font");
+            alert.setContentText(String.format(
+                    "Specified font '%s' not found."
+                            + "\nReplacement font '%s' used instead."
+                            + "\nBeware that REDUCE output may be mangled!",
+                    reduceFontFamilyName, reduceFont.getFamily()));
             alert.showAndWait();
         }
         if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
         // Note that a font name containing spaces needs quoting in CSS!
-        fontFamilyAndSizeStyle = "-fx-font-family:'" + RunREDUCE.reduceFontFamilyName
-                + "';-fx-font-size:" + RRPreferences.fontSize;
+        fontFamilyAndSizeStyle = String.format("-fx-font-family:'%s';-fx-font-size:%d",
+                RunREDUCE.reduceFontFamilyName, RRPreferences.fontSize);
 
         reducePanel = new REDUCEPanel();
         switch (RRPreferences.displayPane) {

@@ -33,7 +33,7 @@ top-level directory.
 
 ## Release Notes
 
-## Version 1.1
+### Version 1.1
 
 * Avoid warning messages and hanging Help menu items on Ubuntu, but
   suppress display of PDF files via the Help menu on non-Windows
