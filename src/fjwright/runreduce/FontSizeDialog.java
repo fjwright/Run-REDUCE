@@ -6,8 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.regex.Pattern;
 
 public class FontSizeDialog {
     @FXML
@@ -19,15 +22,15 @@ public class FontSizeDialog {
     @FXML
     private Label newSizeDemoLabel; // Sample text at new font size of ...
 
+    private static final int MIN_FONT_SIZE = 5;
+    private static final int MAX_FONT_SIZE = 30;
     private int newFontSize;
+    private static final Pattern PATTERN = Pattern.compile("\\d+");
 
     private void setNewSizeDemoLabel() {
         newSizeDemoLabel.setText("Sample text at new font size of " + newFontSize);
         newSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
     }
-
-    // FixMe Throws a NullPointerException if you delete the font size and press Enter.
-    // Presumably the spinnerValueFactory value converter needs to trap this error, maybe by wrapping in a try-catch.
 
     @FXML
     private void initialize() {
@@ -37,7 +40,7 @@ public class FontSizeDialog {
         oldSizeDemoLabel.setText("Sample text at old font size of " + newFontSize);
         oldSizeDemoLabel.setStyle("-fx-font:" + newFontSize + " " + RunREDUCE.reduceFontFamilyName);
         SpinnerValueFactory<Integer> spinnerValueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 30, newFontSize);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FONT_SIZE, MAX_FONT_SIZE, newFontSize);
         newSizeValueSpinner.setValueFactory(spinnerValueFactory);
         setNewSizeDemoLabel();
         // Listen for changes on the spinner:
@@ -48,6 +51,17 @@ public class FontSizeDialog {
                     // This should be unnecessary, but is kept as a precaution.
 //                    stage.sizeToScene(); // This works!
                 });
+        // Validate direct input via the editor:
+        newSizeValueSpinner.getEditor().setOnAction(event -> {
+            TextField textField = (TextField) event.getTarget();
+            if (PATTERN.matcher(textField.getText()).matches()) {
+                newFontSize = Integer.parseInt(textField.getText());
+                if (newFontSize < MIN_FONT_SIZE) newFontSize = MIN_FONT_SIZE;
+                else if (newFontSize > MAX_FONT_SIZE) newFontSize = MAX_FONT_SIZE;
+                setNewSizeDemoLabel();
+            }
+            textField.setText(Integer.toString(newFontSize));
+        });
     }
 
     @FXML
