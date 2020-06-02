@@ -79,7 +79,7 @@ public class RunREDUCE extends Application {
         }
         if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
         // Note that a font name containing spaces needs quoting in CSS!
-        fontFamilyAndSizeStyle = String.format("-fx-font-family:'%s';-fx-font-size:%d",
+        fontFamilyAndSizeStyle = String.format("font-family:'%s';font-size:%d",
                 RunREDUCE.reduceFontFamilyName, RRPreferences.fontSize);
 
         reducePanel = new REDUCEPanel();

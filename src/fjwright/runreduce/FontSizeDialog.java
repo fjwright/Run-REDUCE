@@ -73,7 +73,7 @@ public class FontSizeDialog {
     private void okButtonAction(ActionEvent actionEvent) {
         RRPreferences.save(RRPreferences.FONTSIZE, newFontSize);
         RunREDUCE.fontFamilyAndSizeStyle =
-                String.format("-fx-font-family:'%s';-fx-font-size:%d", RunREDUCE.reduceFontFamilyName, newFontSize);
+                String.format("font-family:'%s';font-size:%d", RunREDUCE.reduceFontFamilyName, newFontSize);
         setStyle(RunREDUCE.reducePanel.inputTextArea);
         // Close dialogue:
         cancelButtonAction(actionEvent);

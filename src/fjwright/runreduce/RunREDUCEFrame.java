@@ -298,19 +298,19 @@ public class RunREDUCEFrame {
             fileChooser.setTitle("Save Session Log...");
             file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         }
-        if (file != null) {
-            try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
-                RunREDUCE.reducePanel.outputTextFlow.getChildren().forEach(e -> {
-                    try {
-                        out.write(((Text) e).getText());
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                });
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-        }
+//        if (file != null) {
+//            try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
+//                RunREDUCE.reducePanel.outputTextFlow.getChildren().forEach(e -> {
+//                    try {
+//                        out.write(((Text) e).getText());
+//                    } catch (IOException ioException) {
+//                        ioException.printStackTrace();
+//                    }
+//                });
+//            } catch (IOException ioe) {
+//                ioe.printStackTrace();
+//            }
+//        }
     }
 
     // Exit
@@ -378,7 +378,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void clearDisplayMenuItemAction() {
-        RunREDUCE.reducePanel.outputTextFlow.getChildren().clear();
+//        RunREDUCE.reducePanel.outputTextFlow.getChildren().clear();
     }
 
     @FXML
