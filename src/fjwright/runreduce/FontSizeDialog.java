@@ -72,8 +72,7 @@ public class FontSizeDialog {
     @FXML
     private void okButtonAction(ActionEvent actionEvent) {
         RRPreferences.save(RRPreferences.FONTSIZE, newFontSize);
-        RunREDUCE.fontFamilyAndSizeStyle =
-                String.format("font-family:'%s';font-size:%d", RunREDUCE.reduceFontFamilyName, newFontSize);
+        RunREDUCE.reducePanel.updateFontSize(newFontSize); // FixMe Need to do this for all REDUCE panels!
         setStyle(RunREDUCE.reducePanel.inputTextArea);
         // Close dialogue:
         cancelButtonAction(actionEvent);

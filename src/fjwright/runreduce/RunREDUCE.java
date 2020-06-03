@@ -32,7 +32,6 @@ public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
     static Stage primaryStage;
     static String reduceFontFamilyName;
-    static String fontFamilyAndSizeStyle;
     static SplitPane splitPane;
     static TabPane tabPane;
     static int tabLabelNumber = 1;
@@ -78,9 +77,6 @@ public class RunREDUCE extends Application {
             alert.showAndWait();
         }
         if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
-        // Note that a font name containing spaces needs quoting in CSS!
-        fontFamilyAndSizeStyle = String.format("font-family:'%s';font-size:%d",
-                RunREDUCE.reduceFontFamilyName, RRPreferences.fontSize);
 
         reducePanel = new REDUCEPanel();
         switch (RRPreferences.displayPane) {

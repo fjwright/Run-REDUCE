@@ -47,9 +47,8 @@ public class REDUCEPanel extends BorderPane {
 
     WebEngine webEngine;
     HTMLDocument document;
-    HTMLElement body;
+    HTMLElement style, body;
 
-    //    private final ObservableList<Node> outputNodeList;
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
@@ -82,8 +81,7 @@ public class REDUCEPanel extends BorderPane {
         }
 
         webEngine = outputWebView.getEngine();
-//        webEngine.loadContent("<html><body><p>REDUCE will run here!</p></body></html>");
-        webEngine.loadContent("<html><body></body></html>");
+        webEngine.loadContent("<html><head><style type='text/css'></style></head><body></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -93,8 +91,6 @@ public class REDUCEPanel extends BorderPane {
 
         // Note that a font name containing spaces needs quoting in CSS!
         inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
-
-//        outputNodeList = outputTextFlow.getChildren();
     }
 
     /**
@@ -104,6 +100,12 @@ public class REDUCEPanel extends BorderPane {
     private void outputWebViewAvailable() {
         // Use document factory methods to create new elements.
         document = (HTMLDocument) webEngine.getDocument();
+        style = (HTMLElement) document.getElementsByTagName("style").item(0);
+        style.appendChild(document.createTextNode(
+                String.format("body{font-size:%d}", RRPreferences.fontSize))); // MUST be the first child!
+        // Note that a font name containing spaces needs quoting in CSS!
+        style.appendChild(document.createTextNode(
+                String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
         body = document.getBody();
 
         // Auto-run REDUCE if appropriate:
@@ -117,6 +119,10 @@ public class REDUCEPanel extends BorderPane {
         } else
             // Reset enabled status of controls:
             reduceStopped();
+    }
+
+    void updateFontSize(int newFontSize) {
+        style.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
     }
 
     @FXML
@@ -211,12 +217,12 @@ public class REDUCEPanel extends BorderPane {
 
     void sendStringToREDUCEAndEcho(String text) {
         HTMLElement element = (HTMLElement) document.createElement("pre");
-        element.setAttribute("style", RunREDUCE.fontFamilyAndSizeStyle + ";color:" + inputColor);
+        element.setAttribute("style", "color:" + inputColor);
         element.appendChild(document.createTextNode(text));
         body.appendChild(element);
-                // Make sure the new input text is visible:
+        // Make sure the new input text is visible:
 //        outputScrollPane.setVvalue(1.0);
-                sendStringToREDUCENoEcho(text);
+        sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -485,10 +491,9 @@ public class REDUCEPanel extends BorderPane {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
-        // This list can only be modified on the JavaFX Application Thread!
+        // This list can only be modified on the JavaFX Application Thread! True???
         Platform.runLater(() -> {
             HTMLElement element = (HTMLElement) document.createElement("pre");
-            element.setAttribute("style", RunREDUCE.fontFamilyAndSizeStyle);
 //            element.setAttribute("style", RunREDUCE.fontFamilyAndSizeStyle + ";color:" + inputColor);
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : textList) stringBuilder.append(s);
