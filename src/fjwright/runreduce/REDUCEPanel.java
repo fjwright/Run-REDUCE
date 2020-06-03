@@ -46,8 +46,8 @@ public class REDUCEPanel extends BorderPane {
     private Button laterButton;
 
     WebEngine webEngine;
-    HTMLDocument document;
-    HTMLElement style, body;
+    HTMLDocument doc;
+    HTMLElement style, body, pre;
 
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
@@ -81,7 +81,7 @@ public class REDUCEPanel extends BorderPane {
         }
 
         webEngine = outputWebView.getEngine();
-        webEngine.loadContent("<html><head><style type='text/css'></style></head><body></body></html>");
+        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -99,14 +99,15 @@ public class REDUCEPanel extends BorderPane {
      */
     private void outputWebViewAvailable() {
         // Use document factory methods to create new elements.
-        document = (HTMLDocument) webEngine.getDocument();
-        style = (HTMLElement) document.getElementsByTagName("style").item(0);
-        style.appendChild(document.createTextNode(
+        doc = (HTMLDocument) webEngine.getDocument();
+        style = (HTMLElement) doc.getElementsByTagName("style").item(0);
+        style.appendChild(doc.createTextNode(
                 String.format("body{font-size:%d}", RRPreferences.fontSize))); // MUST be the first child!
         // Note that a font name containing spaces needs quoting in CSS!
-        style.appendChild(document.createTextNode(
+        style.appendChild(doc.createTextNode(
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
-        body = document.getBody();
+        body = doc.getBody();
+        pre = (HTMLElement) body.getFirstChild();
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
@@ -123,6 +124,12 @@ public class REDUCEPanel extends BorderPane {
 
     void updateFontSize(int newFontSize) {
         style.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
+    }
+
+    void clearDisplay() {
+        HTMLElement newPre = (HTMLElement) doc.createElement("pre");
+        body.replaceChild(newPre, pre);
+        pre = newPre;
     }
 
     @FXML
@@ -216,10 +223,8 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void sendStringToREDUCEAndEcho(String text) {
-        HTMLElement element = (HTMLElement) document.createElement("pre");
-        element.setAttribute("style", "color:" + inputColor);
-        element.appendChild(document.createTextNode(text));
-        body.appendChild(element);
+//        element.setAttribute("style", "color:" + inputColor);
+        pre.appendChild(doc.createTextNode(text));
         // Make sure the new input text is visible:
 //        outputScrollPane.setVvalue(1.0);
         sendStringToREDUCENoEcho(text);
@@ -359,9 +364,6 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-//    fontFamilyAndSizeStyle ="font-family:"+RunREDUCE.reduceFontFamilyName
-//                    +";font-size:"+RRPreferences.fontSize;
-
     private String outputText(String text) {
 //        Text t = new Text(text);
 //        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
@@ -493,12 +495,10 @@ public class REDUCEPanel extends BorderPane {
 
         // This list can only be modified on the JavaFX Application Thread! True???
         Platform.runLater(() -> {
-            HTMLElement element = (HTMLElement) document.createElement("pre");
 //            element.setAttribute("style", RunREDUCE.fontFamilyAndSizeStyle + ";color:" + inputColor);
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : textList) stringBuilder.append(s);
-            element.appendChild(document.createTextNode(stringBuilder.toString()));
-            body.appendChild(element);
+            pre.appendChild(doc.createTextNode(stringBuilder.toString()));
 //            outputScrollPane.setVvalue(1.0);
         });
     }

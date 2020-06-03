@@ -378,7 +378,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void clearDisplayMenuItemAction() {
-//        RunREDUCE.reducePanel.outputTextFlow.getChildren().clear();
+        RunREDUCE.reducePanel.clearDisplay();
     }
 
     @FXML
