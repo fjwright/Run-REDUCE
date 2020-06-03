@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.w3c.dom.Node;
 import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLElement;
 
@@ -93,6 +94,8 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
     }
 
+    // WebView control ****************************************************************************
+
     /**
      * This method is run once the outputWebView is available.
      * Setting up the REDUCEPanel output display can now continue here.
@@ -101,8 +104,10 @@ public class REDUCEPanel extends BorderPane {
         // Use document factory methods to create new elements.
         doc = (HTMLDocument) webEngine.getDocument();
         style = (HTMLElement) doc.getElementsByTagName("style").item(0);
-        style.appendChild(doc.createTextNode(
-                String.format("body{font-size:%d}", RRPreferences.fontSize))); // MUST be the first child!
+        style.appendChild(doc.createTextNode( // MUST be the first child!
+                String.format("body{font-size:%d}", RRPreferences.fontSize)));
+        style.appendChild(doc.createTextNode( // MUST be the second child!
+                String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
         // Note that a font name containing spaces needs quoting in CSS!
         style.appendChild(doc.createTextNode(
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
@@ -122,15 +127,22 @@ public class REDUCEPanel extends BorderPane {
             reduceStopped();
     }
 
-    void updateFontSize(int newFontSize) {
-        style.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
-    }
-
     void clearDisplay() {
         HTMLElement newPre = (HTMLElement) doc.createElement("pre");
         body.replaceChild(newPre, pre);
         pre = newPre;
     }
+
+    void updateFontSize(int newFontSize) {
+        style.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
+    }
+
+    void setBoldPrompts(boolean enabled) {
+        style.getChildNodes().item(1).setNodeValue(
+                String.format(".prompt{font-weight:%s}", enabled ? "bold" : "normal"));
+    }
+
+    // User input processing **********************************************************************
 
     @FXML
     private void sendButtonClicked(MouseEvent mouseEvent) {
@@ -364,25 +376,29 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    private String outputText(String text) {
+    private Node outputText(String text) {
 //        Text t = new Text(text);
 //        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
-        return text;
+        return doc.createTextNode(text);
     }
 
-    private String outputText(String text, String color) {
+    private Node outputText(String text, String color) {
 //        Text t = new Text(text);
 //        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        return text;
+        return doc.createTextNode(text);
     }
 
-    private String promptText(String text, String color) {
+    private Node promptText(String text, String color) {
 //        Text t = new Text(text);
 //        if (RRPreferences.boldPromptsState)
 //            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-font-weight:bold" + ";-fx-fill:" + color);
 //        else
 //            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        return text;
+        Node span = doc.createElement("span");
+        ((HTMLElement) span).setClassName("prompt");
+//        span.setTextContent(text);
+        span.appendChild(doc.createTextNode(text));
+        return span;
     }
 
     private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
@@ -395,7 +411,7 @@ public class REDUCEPanel extends BorderPane {
         int promptIndex;
         String promptString;
         Matcher promptMatcher;
-        List<String> textList = new ArrayList<>();
+        List<Node> textList = new ArrayList<>();
 
         switch (RRPreferences.colouredIOState) {
             case NONE:
@@ -493,19 +509,16 @@ public class REDUCEPanel extends BorderPane {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
-        // This list can only be modified on the JavaFX Application Thread! True???
+        // The DOM can only be modified on the JavaFX Application Thread!
         Platform.runLater(() -> {
-//            element.setAttribute("style", RunREDUCE.fontFamilyAndSizeStyle + ";color:" + inputColor);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String s : textList) stringBuilder.append(s);
-            pre.appendChild(doc.createTextNode(stringBuilder.toString()));
+            for (Node n : textList) pre.appendChild(n);
 //            outputScrollPane.setVvalue(1.0);
         });
     }
 
     private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
 
-    private void processPromptMarkers(String text, int start, List<String> textList) {
+    private void processPromptMarkers(String text, int start, List<Node> textList) {
         // Delete the very first prompt. (This code may not be reliable!)
         Matcher matcher;
         if (firstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {

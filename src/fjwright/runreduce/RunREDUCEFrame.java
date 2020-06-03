@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -398,7 +397,8 @@ public class RunREDUCEFrame {
 
     @FXML
     private void boldPromptsCheckBoxAction() {
-        RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected();
+        RunREDUCE.reducePanel.setBoldPrompts(
+                RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected());
         RRPreferences.save(RRPreferences.BOLDPROMPTS);
     }
 
