@@ -14,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.w3c.dom.Node;
 import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLElement;
 
@@ -82,7 +81,8 @@ public class REDUCEPanel extends BorderPane {
         }
 
         webEngine = outputWebView.getEngine();
-        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
+//        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
+        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre><span>This is static spanned text.\n</span></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -96,6 +96,10 @@ public class REDUCEPanel extends BorderPane {
 
     // WebView control ****************************************************************************
 
+    // Evaluate this expression in the debugger to see the current document as HTML:
+    // webEngine.executeScript("document.documentElement.outerHTML");
+    // Ref: https://stackoverflow.com/questions/14273450/get-the-contents-from-the-webview-using-javafx
+
     /**
      * This method is run once the outputWebView is available.
      * Setting up the REDUCEPanel output display can now continue here.
@@ -107,12 +111,20 @@ public class REDUCEPanel extends BorderPane {
         style.appendChild(doc.createTextNode( // MUST be the first child!
                 String.format("body{font-size:%d}", RRPreferences.fontSize)));
         style.appendChild(doc.createTextNode( // MUST be the second child!
-                String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
+//                String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
+                "span{font-weight:bold;color:red}"));
         // Note that a font name containing spaces needs quoting in CSS!
         style.appendChild(doc.createTextNode(
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
         body = doc.getBody();
         pre = (HTMLElement) body.getFirstChild();
+
+        // TEMPORARY...THIS WORKS!
+        Platform.runLater(() -> {
+            HTMLElement tmp = (HTMLElement) doc.createElement("span");
+            tmp.setTextContent("This is dynamic spanned text.\n");
+            pre.appendChild(tmp);
+        });
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
@@ -236,7 +248,11 @@ public class REDUCEPanel extends BorderPane {
 
     void sendStringToREDUCEAndEcho(String text) {
 //        element.setAttribute("style", "color:" + inputColor);
-        pre.appendChild(doc.createTextNode(text));
+//        pre.appendChild(doc.createTextNode(text));
+        // THIS WORKS!
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setTextContent(text);
+        pre.appendChild(span);
         // Make sure the new input text is visible:
 //        outputScrollPane.setVvalue(1.0);
         sendStringToREDUCENoEcho(text);
@@ -376,28 +392,34 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    private Node outputText(String text) {
+    private HTMLElement outputText(String text) {
 //        Text t = new Text(text);
 //        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
-        return doc.createTextNode(text);
+//        return (HTMLElement) doc.createTextNode(text);
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setTextContent(text);
+        return span;
     }
 
-    private Node outputText(String text, String color) {
+    private HTMLElement outputText(String text, String color) {
 //        Text t = new Text(text);
 //        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        return doc.createTextNode(text);
+//        return (HTMLElement) doc.createTextNode(text);
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setTextContent(text);
+        return span;
     }
 
-    private Node promptText(String text, String color) {
+    private HTMLElement promptText(String text, String color) {
 //        Text t = new Text(text);
 //        if (RRPreferences.boldPromptsState)
 //            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-font-weight:bold" + ";-fx-fill:" + color);
 //        else
 //            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        Node span = doc.createElement("span");
-        ((HTMLElement) span).setClassName("prompt");
-//        span.setTextContent(text);
-        span.appendChild(doc.createTextNode(text));
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+//        ((HTMLElement) span).setClassName("prompt");
+        span.setTextContent(text);
+//        span.appendChild(doc.createTextNode(text));
         return span;
     }
 
@@ -411,7 +433,7 @@ public class REDUCEPanel extends BorderPane {
         int promptIndex;
         String promptString;
         Matcher promptMatcher;
-        List<Node> textList = new ArrayList<>();
+        List<HTMLElement> textList = new ArrayList<>();
 
         switch (RRPreferences.colouredIOState) {
             case NONE:
@@ -511,14 +533,21 @@ public class REDUCEPanel extends BorderPane {
 
         // The DOM can only be modified on the JavaFX Application Thread!
         Platform.runLater(() -> {
-            for (Node n : textList) pre.appendChild(n);
+            for (HTMLElement el : textList) {
+                pre.appendChild(el);
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+            }
 //            outputScrollPane.setVvalue(1.0);
         });
     }
 
     private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
 
-    private void processPromptMarkers(String text, int start, List<Node> textList) {
+    private void processPromptMarkers(String text, int start, List<HTMLElement> textList) {
         // Delete the very first prompt. (This code may not be reliable!)
         Matcher matcher;
         if (firstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
