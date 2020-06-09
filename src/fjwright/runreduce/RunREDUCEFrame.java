@@ -3,6 +3,7 @@ package fjwright.runreduce;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.Desktop;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
@@ -95,6 +97,7 @@ public class RunREDUCEFrame {
 
     static List<String> packageList;
     static HostServices hostServices;
+    static Desktop desktop;
 
     /**
      * Called to initialize a controller after its root element has been completely processed.
@@ -146,6 +149,14 @@ public class RunREDUCEFrame {
          * Help menu *
          * ********* */
 
+        // This code causes the following warning on Ubuntu 18.04.4 LTS:
+        // (java:6572): Gdk-WARNING **: 17:06:21.689: XSetErrorHandler() called with a GDK error trap pushed. Don't do that.
+        // It is avoided by using the JVM option -Djdk.gtk.version=2, which also makes dialogs behave better.
+        if (!RRPreferences.windowsOS &&
+                (!Desktop.isDesktopSupported()
+                        || !(desktop = Desktop.getDesktop()).isSupported(Desktop.Action.OPEN)))
+            desktop = null;
+
         String[][] manuals = {
                 // {Manual name, Windows location, non-Windows location}
                 {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
@@ -156,15 +167,44 @@ public class RunREDUCEFrame {
         };
 
         int helpMenuItemIndex = 2;
-        for (String[] manual : manuals) {
-            MenuItem menuItem = new MenuItem(manual[0]);
-            helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
-            menuItem.setOnAction(e -> hostServices.showDocument(
-                    new File(RunREDUCE.reduceConfiguration.docRootDir,
-                            manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
-            if (!RRPreferences.windowsOS) break;
-            // FixMe Investigate how to support PDF files on Linux.
+        for (int i = 0; i < manuals.length; i++) {
+            String[] manual = manuals[i];
+            if (i == 0 || RRPreferences.windowsOS) {
+                MenuItem menuItem = new MenuItem(manual[0]);
+                helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
+                menuItem.setOnAction(e -> hostServices.showDocument(
+                        new File(RunREDUCE.reduceConfiguration.docRootDir,
+                                manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
+            } else {
+                if (desktop == null) break;
+                MenuItem menuItem = new MenuItem(manual[0]);
+                helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
+                menuItem.setOnAction(e -> documentOpen(
+                        new File(RunREDUCE.reduceConfiguration.docRootDir,
+                                manual[2])));
+            }
         }
+    }
+
+    /*
+    * This method is based on https://www.tfzx.net/article/9082893.html
+    * Thanks to Rainer Schöpf for the reference.
+    */
+    private void documentOpen(File manual) {
+        final Task<Void> openFile = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    desktop.open(manual);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+        };
+        final Thread thread = new Thread(openFile);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /* ********* *
@@ -488,7 +528,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.0, May 2020\n" +
+                "Version 1.2, June 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.initOwner(RunREDUCE.primaryStage);
         alert.setTitle("About Run-REDUCE-FX");
