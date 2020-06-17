@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -530,6 +531,7 @@ public class RunREDUCEFrame {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Version 1.2, June 2020\n" +
                         "\u00A9 2020 Francis Wright");
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
         alert.setTitle("About Run-REDUCE-FX");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
