@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane alignment="center" stylesheets="@Differentiate.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.Differentiate">
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+    </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints/>
+    </columnConstraints>
+    <Label prefHeight="70.0" prefWidth="250.0"
+           text="Empty boxes are ignored. Superscript boxes are orders, which must be positive integers or empty; if so they default to 1."
+           textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER">
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+    </Label>
+    <VBox alignment="CENTER" fillWidth="false" spacing="5.0" GridPane.rowIndex="1">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <HBox alignment="CENTER" spacing="2.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;">
+            <padding>
+                <Insets bottom="5.0"/>
+            </padding>
+            <Label styleClass="d-symbol" text="∂"/>
+            <Label fx:id="totalOrdLabel" styleClass="order"/>
+            <TextField fx:id="depVarTextField" prefColumnCount="6" styleClass="variable" text="ws"/>
+        </HBox>
+        <HBox alignment="CENTER" spacing="2.0">
+            <Label styleClass="d-symbol" text="∂"/>
+            <TextField fx:id="indVar0TextField" alignment="CENTER" onKeyTyped="#indVar1KeyTyped" prefColumnCount="1"
+                       styleClass="variable" text="x"/>
+            <TextField fx:id="ord0TextField" alignment="CENTER" onKeyTyped="#indVar1KeyTyped" prefColumnCount="1"
+                       styleClass="order"/>
+            <TextField fx:id="indVar1TextField" alignment="CENTER" onKeyTyped="#indVar2KeyTyped" prefColumnCount="1"
+                       styleClass="variable"/>
+            <TextField fx:id="ord1TextField" alignment="CENTER" onKeyTyped="#indVar2KeyTyped" prefColumnCount="1"
+                       styleClass="order"/>
+            <TextField fx:id="indVar2TextField" alignment="CENTER" onKeyTyped="#indVar3KeyTyped" prefColumnCount="1"
+                       styleClass="variable"/>
+            <TextField fx:id="ord2TextField" alignment="CENTER" onKeyTyped="#indVar3KeyTyped" prefColumnCount="1"
+                       styleClass="order"/>
+        </HBox>
+    </VBox>
+    <HBox alignment="CENTER" spacing="10.0" GridPane.rowIndex="2">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <Button mnemonicParsing="false" onAction="#editButtonAction" text="Edit"/>
+        <Button mnemonicParsing="false" onAction="#evaluateButtonAction" text="Evaluate"/>
+        <Button mnemonicParsing="false" onAction="#closeButtonAction" text="Close"/>
+    </HBox>
+</GridPane>

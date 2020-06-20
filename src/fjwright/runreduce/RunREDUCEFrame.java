@@ -40,21 +40,9 @@ public class RunREDUCEFrame {
     @FXML
     private CheckMenuItem echoCheckMenuItem;
     @FXML
-    MenuItem inputFileMenuItem;
+    MenuItem inputFileMenuItem, inputPackageFileMenuItem, outputNewFileMenuItem, outputOpenFileMenuItem;
     @FXML
-    MenuItem inputPackageFileMenuItem;
-    @FXML
-    MenuItem outputNewFileMenuItem;
-    @FXML
-    MenuItem outputOpenFileMenuItem;
-    @FXML
-    MenuItem outputHereMenuItem;
-    @FXML
-    MenuItem shutFileMenuItem;
-    @FXML
-    MenuItem shutLastMenuItem;
-    @FXML
-    MenuItem loadPackagesMenuItem;
+    MenuItem outputHereMenuItem, shutFileMenuItem, shutLastMenuItem, loadPackagesMenuItem;
     // REDUCE menu:
     @FXML
     MenuItem stopREDUCEMenuItem;
@@ -66,17 +54,11 @@ public class RunREDUCEFrame {
     @FXML
     private CheckMenuItem boldPromptsCheckBox;
     @FXML
-    private RadioMenuItem noColouredIORadioButton;
-    @FXML
-    private RadioMenuItem modeColouredIORadioButton;
-    @FXML
-    private RadioMenuItem redfrontColouredIORadioButton;
+    private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
-    private RadioMenuItem splitPaneRadioButton;
-    @FXML
-    private RadioMenuItem tabbedPaneRadioButton;
+    private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
     // Help menu:
@@ -491,6 +473,15 @@ public class RunREDUCEFrame {
     @FXML
     private void addTabMenuItemAction() {
         RunREDUCE.addTab();
+    }
+
+    /* ************** *
+     * Templates menu *
+     * ************** */
+
+    @FXML
+    private void differentiateMenuItemAction() {
+        showDialogAndWait("Differentiate (partially)", "Differentiate.fxml");
     }
 
     /* ********* *

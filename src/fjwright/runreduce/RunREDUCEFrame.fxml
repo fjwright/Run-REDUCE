@@ -53,6 +53,9 @@
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
             </Menu>
+            <Menu mnemonicParsing="false" text="Templates">
+                <MenuItem mnemonicParsing="false" onAction="#differentiateMenuItemAction" text="Differentiate..."/>
+            </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />
                 <SeparatorMenuItem mnemonicParsing="false" />
