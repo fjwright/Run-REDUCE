@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -31,20 +32,14 @@ public class Differentiate {
 
     private void indVarAction(final int n) {
         final String ordString;
-        int order = 0;
+        int order;
         if (indVarTextFields[n].getText().isEmpty()) {
-            if (n == 0) {
-                // Error:
-                System.err.println("The first independent variable is required!");
-                indVarTextFields[n].setText("x"); // Error recovery
-                return;
-            }
-            // order = 0;
+            order = 0;
         } else if ((ordString = ordTextFields[n].getText()).isEmpty())
             order = 1;
         else if (!(PATTERN.matcher(ordString).matches() && (order = Integer.parseInt(ordString)) > 0)) {
-            // Error:
-            System.err.println("The order must be a positive integer or empty!");
+            RunREDUCE.errorMessageDialog("Differentiate Template",
+                    "The order must be a positive integer or empty!");
             ordTextFields[n].setText(""); // Error recovery
             order = 1;
         }
@@ -72,32 +67,51 @@ public class Differentiate {
     }
 
     private String result() {
+        final String depVar = depVarTextField.getText();
+        if (depVar.isEmpty()) {
+            RunREDUCE.errorMessageDialog("Differentiate Template",
+                    "A dependent variable or expression is required!");
+            return null;
+        }
         final var text = new StringBuilder("df(");
-        text.append(depVarTextField.getText());
+        text.append(depVar);
         for (var i = 0; i < 3; i++) {
             final String indVar = indVarTextFields[i].getText();
             if (!indVar.isEmpty()) {
                 text.append(",").append(indVar);
                 if (orders[i] > 1) text.append(",").append(orders[i]);
+            } else if (i == 0) {
+                RunREDUCE.errorMessageDialog("Differentiate Template",
+                        "The first independent variable is required!");
+                return null;
             }
         }
         return text.append(")").toString();
     }
 
     @FXML
-    private void editButtonAction() {
-        // Insert in input editor:
-        System.out.println(result());
+    private void editButtonAction(ActionEvent actionEvent) {
+        // Insert in input editor if valid:
+        final String r = result();
+        if (r == null) return;
+        final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
+        textArea.insertText(textArea.getCaretPosition(), r);
+        // Close dialogue:
+        cancelButtonAction(actionEvent);
     }
 
     @FXML
-    private void evaluateButtonAction() {
-        // Send to REDUCE:
-        System.out.println(result() + ";\n");
+    private void evaluateButtonAction(ActionEvent actionEvent) {
+        // Send to REDUCE if valid:
+        final String r = result();
+        if (r == null) return;
+        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(r + ";\n");
+        // Close dialogue:
+        cancelButtonAction(actionEvent);
     }
 
     @FXML
-    private void closeButtonAction(ActionEvent actionEvent) {
+    private void cancelButtonAction(ActionEvent actionEvent) {
         // Close dialogue:
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
