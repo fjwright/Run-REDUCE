@@ -1,0 +1,18 @@
+.int-symbol {
+    -fx-font-size: 100px;
+    -fx-translate-y: -10;
+    -fx-padding: 0;
+}
+.d-symbol {
+    -fx-font-size: 20px;
+}
+.variable {
+    -fx-font-size: 20px;
+    -fx-padding: 0;
+    -fx-font-style: italic;
+}
+.limit {
+    -fx-font-size: 15px;
+    -fx-padding: 0;
+    -fx-font-style: italic;
+}

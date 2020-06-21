@@ -484,6 +484,11 @@ public class RunREDUCEFrame {
         showDialogAndWait("Differentiate (partially)", "Differentiate.fxml");
     }
 
+    @FXML
+    private void integrateMenuItemAction() {
+        showDialogAndWait("Integrate", "Integrate.fxml");
+    }
+
     /* ********* *
      * Help menu *
      * ********* */
