@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <GridPane alignment="center" stylesheets="@Integrate.css" vgap="5.0" xmlns="http://javafx.com/javafx/11.0.1"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.Integrate">
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Integrate">
     <rowConstraints>
         <RowConstraints/>
         <RowConstraints/>
@@ -33,15 +33,15 @@
         <Label styleClass="int-symbol" text="∫"/>
         <VBox alignment="CENTER_LEFT" spacing="10.0">
             <HBox>
-                <TextField fx:id="upLimTextField" prefColumnCount="3" styleClass="limit" text="b"/>
+                <TextField fx:id="upLimTextField" prefColumnCount="3" styleClass="limit"/>
             </HBox>
             <HBox alignment="CENTER" spacing="5.0">
-                <TextField fx:id="integrandTextField" prefColumnCount="8" styleClass="variable" text="f(x)"/>
+                <TextField fx:id="integrandTextField" prefColumnCount="8" styleClass="variable" text="ws"/>
                 <Label styleClass="d-symbol" text="d"/>
                 <TextField fx:id="intVarTextField" prefColumnCount="1" styleClass="variable" text="x"/>
             </HBox>
             <HBox>
-                <TextField fx:id="lowLimTextField" prefColumnCount="3" styleClass="limit" text="a"/>
+                <TextField fx:id="lowLimTextField" prefColumnCount="3" styleClass="limit"/>
             </HBox>
         </VBox>
     </HBox>

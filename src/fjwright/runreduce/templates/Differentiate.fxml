@@ -6,7 +6,7 @@
 
 <GridPane alignment="center" stylesheets="@Differentiate.css" vgap="10.0"
           xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="fjwright.runreduce.Differentiate">
+          fx:controller="fjwright.runreduce.templates.Differentiate">
     <rowConstraints>
         <RowConstraints/>
         <RowConstraints/>

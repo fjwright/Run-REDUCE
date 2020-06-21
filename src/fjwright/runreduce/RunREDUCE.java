@@ -36,7 +36,7 @@ public class RunREDUCE extends Application {
     static SplitPane splitPane;
     static TabPane tabPane;
     static int tabLabelNumber = 1;
-    static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
+    public static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
 
     // Set the main window to 2/3 the linear dimension of the screen initially:
     static final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -177,7 +177,7 @@ public class RunREDUCE extends Application {
         }
     }
 
-    static void errorMessageDialog(String headerText, String contentText) {
+    public static void errorMessageDialog(String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(primaryStage);
         alert.setHeaderText(headerText);

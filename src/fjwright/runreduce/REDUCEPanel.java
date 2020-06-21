@@ -35,7 +35,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Label inputLabel;
     @FXML
-    TextArea inputTextArea; // Accessed in RunREDUCE.java
+    public TextArea inputTextArea; // Accessed in RunREDUCE & templates
     @FXML
     Button sendButton; // Accessed in RunREDUCEFrame.java
     @FXML
@@ -185,7 +185,7 @@ public class REDUCEPanel extends BorderPane {
         sendStringToREDUCEAndEcho(text);
     }
 
-    void sendStringToREDUCEAndEcho(String text) {
+    public void sendStringToREDUCEAndEcho(String text) {
         Text t = new Text(text);
         t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + inputColor);
         outputNodeList.add(t);

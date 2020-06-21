@@ -1,5 +1,6 @@
-package fjwright.runreduce;
+package fjwright.runreduce.templates;
 
+import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
