@@ -489,6 +489,11 @@ public class RunREDUCEFrame {
         showDialogAndWait("Integrate", "templates/Integrate.fxml");
     }
 
+    @FXML
+    private void matrixMenuItemAction() {
+        showDialogAndWait("Matrix", "templates/Matrix.fxml");
+    }
+
     /* ********* *
      * Help menu *
      * ********* */
