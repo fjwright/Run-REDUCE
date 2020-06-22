@@ -8,8 +8,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
-
 import static java.util.Arrays.stream;
 
 public class Matrix {
@@ -34,20 +32,30 @@ public class Matrix {
     }
 
     private String result() {
-        final String[][] matrix =
-                stream(cells).map(row -> stream(row).map(TextField::getText).filter(s -> !s.isEmpty()).toArray(String[]::new))
-                        .filter(a -> a.length > 0).toArray(String[][]::new);
-        if (stream(matrix).map(Array::getLength).distinct().count() != 1) {
-            RunREDUCE.errorMessageDialog("Matrix Template",
-                    "Rows do not all contain the same number of non-empty cells!");
-            return null;
+        // Construct an array of Strings from the array of TextFields:
+        final String[][] stringArray =
+                stream(cells).map(
+                        row -> stream(row).map(TextField::getText).toArray(String[]::new)
+                ).toArray(String[][]::new);
+        // Determine the matrix dimensions (nRows * nCols) and convert empty strings to "0":
+        int nColsI, nCols = 0, nRows = 0;
+        for (int i = 0; i < stringArray.length; i++) {
+            String[] row = stringArray[i];
+            nColsI = 0;
+            for (int j = 0; j < row.length; j++) {
+                if (row[j].isEmpty()) row[j] = "0";
+                else nColsI = j + 1;
+            }
+            if (nColsI > nCols) nCols = nColsI;
+            if (nColsI > 0) nRows = i + 1;
         }
+        // Construct and return the REDUCE input:
         StringBuilder text = new StringBuilder("mat(");
-        for (int i = 0; i < matrix.length; i++) {
-            String[] row = matrix[i];
+        for (int i = 0; i < nRows; i++) {
+            String[] row = stringArray[i];
             if (i > 0) text.append(",");
             text.append("(");
-            for (int j = 0; j < row.length; j++) {
+            for (int j = 0; j < nCols; j++) {
                 if (j > 0) text.append(",");
                 text.append(row[j]);
             }
@@ -60,10 +68,8 @@ public class Matrix {
     @FXML
     private void editButtonAction(ActionEvent actionEvent) {
         // Insert in input editor if valid:
-        final String r = result();
-        if (r == null) return;
         final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-        textArea.insertText(textArea.getCaretPosition(), r);
+        textArea.insertText(textArea.getCaretPosition(), result());
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }
@@ -71,9 +77,7 @@ public class Matrix {
     @FXML
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
-        final String r = result();
-        if (r == null) return;
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(r + ";\n");
+        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }

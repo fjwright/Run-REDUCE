@@ -13,7 +13,7 @@
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
-    <Label prefHeight="60.0" prefWidth="380.0" text="Fill a rectangle of cell in the top left-hand corner of the grid, leaving any cells outside the rectangle empty." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER">
+    <Label prefHeight="90.0" prefWidth="380.0" text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
@@ -36,20 +36,20 @@
                 <RowConstraints />
             </rowConstraints>
             <TextField fx:id="cell00" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="cell10" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="cell20" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="cell30" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="cell01" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="cell11" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="cell21" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="cell31" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <TextField fx:id="cell02" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="cell12" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField fx:id="cell22" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <TextField fx:id="cell32" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <TextField fx:id="cell03" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <TextField fx:id="cell10" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="cell11" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="cell12" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <TextField fx:id="cell13" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="cell20" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="cell21" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="cell22" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <TextField fx:id="cell23" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <TextField fx:id="cell30" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="cell31" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="cell32" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <TextField fx:id="cell33" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="3" />
         </GridPane>
         <Label styleClass="bracket" text=")" />
