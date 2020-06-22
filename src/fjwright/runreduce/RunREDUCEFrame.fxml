@@ -57,6 +57,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#differentiateMenuItemAction" text="Differentiate..."/>
                 <MenuItem mnemonicParsing="false" onAction="#integrateMenuItemAction" text="Integrate..."/>
                 <MenuItem mnemonicParsing="false" onAction="#matrixMenuItemAction" text="Matrix..."/>
+                <MenuItem mnemonicParsing="false" onAction="#forMenuItemAction" text="For..."/>
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />

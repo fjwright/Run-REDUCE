@@ -494,6 +494,11 @@ public class RunREDUCEFrame {
         showDialogAndWait("Matrix", "templates/Matrix.fxml");
     }
 
+    @FXML
+    private void forMenuItemAction() {
+        showDialogAndWait("For", "templates/For.fxml");
+    }
+
     /* ********* *
      * Help menu *
      * ********* */
