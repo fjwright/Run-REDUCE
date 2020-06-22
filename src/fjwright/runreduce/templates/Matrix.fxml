@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" stylesheets="@Matrix.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
+<GridPane alignment="center" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
@@ -35,22 +41,22 @@
                 <RowConstraints />
                 <RowConstraints />
             </rowConstraints>
-            <TextField fx:id="cell00" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="cell01" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="cell02" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="cell03" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <TextField fx:id="cell10" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="cell11" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="cell12" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField fx:id="cell13" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <TextField fx:id="cell20" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="cell21" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="cell22" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <TextField fx:id="cell23" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-            <TextField fx:id="cell30" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="cell31" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <TextField fx:id="cell32" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <TextField fx:id="cell33" prefColumnCount="4" styleClass="variable" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <TextField fx:id="cell00" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="cell01" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <TextField fx:id="cell02" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+            <TextField fx:id="cell03" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <TextField fx:id="cell10" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="cell11" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="cell12" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField fx:id="cell13" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="cell20" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="cell21" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="cell22" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <TextField fx:id="cell23" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <TextField fx:id="cell30" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="cell31" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="cell32" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <TextField fx:id="cell33" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="3" />
         </GridPane>
         <Label styleClass="bracket" text=")" />
     </HBox>

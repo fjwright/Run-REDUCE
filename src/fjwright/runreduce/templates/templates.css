@@ -1,0 +1,29 @@
+/* Labels */
+
+.d-symbol {
+    -fx-font-size: 20px;
+}
+.int-symbol {
+    -fx-font-size: 100px;
+    -fx-translate-y: -10;
+}
+.bracket {
+    -fx-font-size: 120px;
+    -fx-translate-y: -10;
+}
+
+/* TextFields */
+
+.text-field {
+    -fx-font-size: 20px;
+    -fx-font-style: italic;
+    -fx-padding: 0;
+}
+.order {
+    -fx-font-size: 15px;
+    -fx-translate-y: -5;
+    -fx-font-style: normal;
+}
+.limit {
+    -fx-font-size: 15px;
+}

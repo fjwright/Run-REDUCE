@@ -1,9 +1,0 @@
-.bracket {
-    -fx-font-size: 120px;
-    -fx-translate-y: -10;
-}
-.variable {
-    -fx-font-size: 20px;
-    -fx-padding: 0;
-    -fx-font-style: italic;
-}
