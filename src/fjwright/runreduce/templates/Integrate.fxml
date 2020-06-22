@@ -16,7 +16,6 @@
         <RowConstraints />
         <RowConstraints />
         <RowConstraints />
-        <RowConstraints />
     </rowConstraints>
     <columnConstraints>
         <ColumnConstraints />
@@ -26,7 +25,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
     </Label>
-    <HBox alignment="CENTER" GridPane.rowIndex="2">
+    <HBox alignment="CENTER" GridPane.rowIndex="1">
         <Label styleClass="int-symbol" text="∫" />
         <VBox alignment="CENTER_LEFT" spacing="10.0">
             <HBox>
@@ -42,7 +41,7 @@
             </HBox>
         </VBox>
     </HBox>
-    <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.rowIndex="3">
+    <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.rowIndex="2">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </padding>
