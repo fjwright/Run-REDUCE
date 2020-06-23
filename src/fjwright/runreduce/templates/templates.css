@@ -14,16 +14,20 @@
 
 /* TextFields */
 
-.text-field {
+.styled-textfields .text-field {
     -fx-font-size: 20px;
     -fx-font-style: italic;
     -fx-padding: 0;
 }
-.order {
+.styled-textfields .order {
     -fx-font-size: 15px;
     -fx-translate-y: -5;
     -fx-font-style: normal;
 }
-.limit {
+.styled-textfields .limit {
     -fx-font-size: 15px;
+}
+/* 'For' template only */
+.tab-header-background {
+    -fx-background-color: transparent
 }
