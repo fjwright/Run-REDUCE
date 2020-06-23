@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.For">
+<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.For">
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
@@ -26,7 +15,7 @@
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
-    <Label prefHeight="110.0" prefWidth="425.0" text="The 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." wrapText="true" GridPane.halignment="CENTER" />
+    <Label prefHeight="110.0" prefWidth="425.0" text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." wrapText="true" GridPane.halignment="CENTER" />
     <VBox GridPane.rowIndex="1">
         <Label alignment="BOTTOM_LEFT" text="Iterate over a...">
          <padding>
@@ -38,7 +27,7 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for" />
-                            <TextField fx:id="forVarTextField" prefColumnCount="4" promptText="var">
+                            <TextField fx:id="forVarTextField" onKeyTyped="#forVarCheckKeyTyped" prefColumnCount="4" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier" />
                                 </tooltip>
@@ -68,7 +57,7 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for each" />
-                            <TextField fx:id="foreachVarTextField" prefColumnCount="9" promptText="var">
+                            <TextField fx:id="foreachVarTextField" onKeyTyped="#foreachVarCheckKeyTyped" prefColumnCount="9" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier" />
                                 </tooltip>
@@ -84,7 +73,7 @@
                                     <Tooltip text="The 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." />
                                 </tooltip>
                             </ChoiceBox>
-                            <TextField fx:id="foreachListTextField" prefColumnCount="9" prefWidth="125.0" promptText="list">
+                            <TextField fx:id="foreachListTextField" onKeyTyped="#listOrVarCheckKeyTyped" prefColumnCount="9" prefWidth="125.0" promptText="list">
                                 <tooltip>
                                     <Tooltip text="Must evaluate to a list" />
                                 </tooltip>

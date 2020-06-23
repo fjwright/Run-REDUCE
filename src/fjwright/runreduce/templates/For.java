@@ -10,6 +10,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.regex.Pattern;
+
 public class For {
     @FXML
     private TextField forVarTextField, fromTextField, stepTextField, untilTextField;
@@ -24,6 +26,39 @@ public class For {
     private void initialize() {
         foreachChoiceBox.getSelectionModel().selectFirst();
         actionChoiceBox.getSelectionModel().selectFirst();
+    }
+
+    private static final Pattern VAR_PATTERN = Pattern.compile("(!|\\p{Alpha}).*");
+
+    private void varCheckKeyTyped(TextField varTextField) {
+        String text = varTextField.getText();
+        if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
+            RunREDUCE.errorMessageDialog("For Template",
+                    "A 'var' entry must be an identifier.");
+            varTextField.setText("");
+        }
+    }
+
+    @FXML
+    private void forVarCheckKeyTyped() {
+        varCheckKeyTyped(forVarTextField);
+    }
+
+    @FXML
+    private void foreachVarCheckKeyTyped() {
+        varCheckKeyTyped(foreachVarTextField);
+    }
+
+    private static final Pattern LIST_OR_VAR_PATTERN = Pattern.compile("([{!]|\\p{Alpha}).*");
+
+    @FXML
+    private void listOrVarCheckKeyTyped() {
+        String text = foreachListTextField.getText();
+        if (!(text.isEmpty() || LIST_OR_VAR_PATTERN.matcher(text).matches())) {
+            RunREDUCE.errorMessageDialog("For Template",
+                    "The 'list' entry must be a list or a variable that evaluates to a list.");
+            foreachListTextField.setText("");
+        }
     }
 
     private String result() {
