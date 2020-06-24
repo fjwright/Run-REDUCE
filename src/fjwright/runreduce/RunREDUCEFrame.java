@@ -61,6 +61,9 @@ public class RunREDUCEFrame {
     private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
+    // Templates menu:
+    @FXML
+    Menu templatesMenu;
     // Help menu:
     @FXML
     private Menu helpMenu;

@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Differentiate">
+<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Differentiate">
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
@@ -20,11 +13,7 @@
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
-    <Label prefHeight="80.0" prefWidth="380.0" text="The dependent variable or expression and first independent variable are required. Other boxes may be left empty. Superscript boxes are orders, which unless empty must be positive integers." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER">
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </padding>
-    </Label>
+    <Label prefHeight="76.0" prefWidth="380.0" text="The dependent variable or expression and first independent variable are required. Other boxes may be left empty. Superscript boxes are orders, which unless empty must be positive integers." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" />
     <VBox alignment="CENTER" fillWidth="false" spacing="5.0" styleClass="styled-textfields" GridPane.rowIndex="1">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

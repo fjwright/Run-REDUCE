@@ -61,25 +61,37 @@ public class For {
         }
     }
 
-    private String result() {
+    private static class EmptyFieldException extends Exception {
+    }
+
+    private String getTextCheckNonEmpty(final TextField textField) throws EmptyFieldException {
+        final String text = textField.getText().trim();
+        if (text.isEmpty()) {
+            RunREDUCE.errorMessageDialog("For Template",
+                    "All entries except the step size must be non-empty.");
+            throw new EmptyFieldException();
+        } else
+            return text;
+    }
+
+    private String result() throws EmptyFieldException {
         var text = new StringBuilder();
-        String forVar = forVarTextField.getText().trim(),
-                foreachVar = foreachVarTextField.getText().trim(),
-                step = stepTextField.getText().trim();
         if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
             // Iterate over a numerical range:
-            text.append("for ").append(forVar).append(" := ").append(fromTextField.getText());
+            text.append("for ").append(getTextCheckNonEmpty(forVarTextField))
+                    .append(" := ").append(getTextCheckNonEmpty(fromTextField));
+            String step = stepTextField.getText().trim();
             if (step.isEmpty() || step.equals("1"))
                 text.append(" : ");
             else
                 text.append(" step ").append(step).append(" until ");
-            text.append(untilTextField.getText());
+            text.append(getTextCheckNonEmpty(untilTextField));
         } else  // Iterate over a list:
-            text.append("foreach ").append(foreachVar)
+            text.append("foreach ").append(getTextCheckNonEmpty(foreachVarTextField))
                     .append(" ").append(foreachChoiceBox.getSelectionModel().getSelectedItem())
-                    .append(" ").append(foreachListTextField.getText());
+                    .append(" ").append(getTextCheckNonEmpty(foreachListTextField));
         text.append(" ").append(actionChoiceBox.getSelectionModel().getSelectedItem())
-                .append(" ").append(exprnTextField.getText());
+                .append(" ").append(getTextCheckNonEmpty(exprnTextField));
         return text.toString();
     }
 
@@ -87,17 +99,23 @@ public class For {
     private void editButtonAction(ActionEvent actionEvent) {
         // Insert in input editor if valid:
         final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-        textArea.insertText(textArea.getCaretPosition(), result());
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
+        try {
+            textArea.insertText(textArea.getCaretPosition(), result());
+            // Close dialogue:
+            cancelButtonAction(actionEvent);
+        } catch (EmptyFieldException ignored) {
+        }
     }
 
     @FXML
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
+        try {
+            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
+            // Close dialogue:
+            cancelButtonAction(actionEvent);
+        } catch (EmptyFieldException ignored) {
+        }
     }
 
     @FXML

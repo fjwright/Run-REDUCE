@@ -502,6 +502,7 @@ public class REDUCEPanel extends BorderPane {
     private boolean loadPackagesMenuItemDisabled;
     private boolean stopREDUCEMenuItemDisabled;
     private boolean runREDUCESubmenuDisabled;
+    private boolean templatesMenuDisabled;
 
     private static final RunREDUCEFrame FRAME = RunREDUCE.runREDUCEFrame;
 
@@ -528,6 +529,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        FRAME.templatesMenu.setDisable(templatesMenuDisabled = !starting);
         // Items to disable/enable when REDUCE starts/stops running:
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled = starting);
         // Items to disable always when REDUCE starts or stops running:
@@ -551,6 +553,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
+        FRAME.templatesMenu.setDisable(templatesMenuDisabled);
     }
 
     /**

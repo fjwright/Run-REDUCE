@@ -8,22 +8,36 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.regex.Pattern;
+
 public class Integrate {
     @FXML
     private TextField integrandTextField, intVarTextField, lowLimTextField, upLimTextField;
+
+    private static final Pattern VAR_PATTERN = Pattern.compile("(!|\\p{Alpha}).*");
+
+    @FXML
+    private void intVarCheckKeyTyped() {
+        String text = intVarTextField.getText();
+        if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
+            RunREDUCE.errorMessageDialog("Integrate Template",
+                    "The integration variable must be an identifier.");
+            intVarTextField.setText("");
+        }
+    }
 
     private String result() {
         final String integrand = integrandTextField.getText(), intVar = intVarTextField.getText();
         if (integrand.isEmpty() || intVar.isEmpty()) {
             RunREDUCE.errorMessageDialog("Integrate Template",
-                    "The integrand and integration variable are both required!");
+                    "The integrand and integration variable are both required.");
             return null;
         }
         final String lowLim = lowLimTextField.getText(), upLim = upLimTextField.getText();
         final boolean indefInt;
         if ((indefInt = lowLim.isEmpty()) ^ upLim.isEmpty()) {
             RunREDUCE.errorMessageDialog("Integrate Template",
-                    "The limits must be both empty or both specified!");
+                    "The limits must be both empty or both specified.");
             return null;
         }
         final var text = new StringBuilder("int(");

@@ -21,6 +21,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -179,6 +180,7 @@ public class RunREDUCE extends Application {
 
     public static void errorMessageDialog(String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(primaryStage);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);

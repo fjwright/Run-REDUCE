@@ -15,7 +15,7 @@
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
-    <Label prefHeight="110.0" prefWidth="425.0" text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." wrapText="true" GridPane.halignment="CENTER" />
+    <Label prefHeight="126.0" prefWidth="425.0" text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" />
     <VBox GridPane.rowIndex="1">
         <Label alignment="BOTTOM_LEFT" text="Iterate over a...">
          <padding>
