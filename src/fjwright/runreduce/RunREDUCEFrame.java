@@ -491,12 +491,12 @@ public class RunREDUCEFrame {
 
     @FXML
     private void matrixMenuItemAction() {
-        showDialogAndWait("Matrix", "templates/Matrix.fxml");
+        showDialogAndWait("Create a Matrix", "templates/Matrix.fxml");
     }
 
     @FXML
     private void forMenuItemAction() {
-        showDialogAndWait("For", "templates/For.fxml");
+        showDialogAndWait("Create a For Statement", "templates/For.fxml");
     }
 
     /* ********* *

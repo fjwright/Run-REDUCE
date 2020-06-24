@@ -35,14 +35,15 @@ that it currently provides:
   as necessary.  Previous input is remembered and can be scrolled
   through, edited and re-input.  A final terminator can be added
   automatically if appropriate when input is sent to REDUCE.
-* Options to make the REDUCE input prompt bold and to colour the
-  input/output display based on the input mode or redfront.
-* Menu options to handle REDUCE file input/output and load standard
+* Split or tabbed panes running independent REDUCE processes.
+* Menu items to handle REDUCE file input/output and load standard
   REDUCE packages, similar to the facilities provided by the CSL
   REDUCE GUI.
+* Menu options to make the REDUCE input prompt bold and to colour the
+  input/output display based on the input mode or redfront.
+* Templates to construct structured expressions and statements.
 * Easy access to the Run-REDUCE-FX User Guide and the standard
   documentation distributed with REDUCE as HTML or PDF files.
-* Split or tabbed panes running independent REDUCE processes.
 
 In future I hope to implement typeset-style display of mathematics.
 

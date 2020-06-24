@@ -58,3 +58,7 @@ top-level directory.
 * Fix truncated text in the About dialogue.
 
 ### Updates since last release
+
+* Provide templates for *df*, *int* and *mat* expressions and *for*
+  statements.
+* Add a hyperlinked Contents section to the User Guide.

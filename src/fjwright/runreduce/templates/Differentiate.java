@@ -23,7 +23,9 @@ public class Differentiate {
 
     private TextField[] indVarTextFields, ordTextFields;
     private final int[] orders = {1, 0, 0};
-    private final static Pattern PATTERN = Pattern.compile("\\d+");
+
+    private final static Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
+    private static final Pattern VAR_PATTERN = Pattern.compile("(!|\\p{Alpha}).*");
 
     @FXML
     private void initialize() {
@@ -32,15 +34,20 @@ public class Differentiate {
     }
 
     private void indVarAction(final int n) {
-        final String ordString;
+        final String indVar = indVarTextFields[n].getText(), ordString;
         int order;
-        if (indVarTextFields[n].getText().isEmpty()) {
+        if (indVar.isEmpty())
             order = 0;
+        else if (!VAR_PATTERN.matcher(indVar).matches()) {
+            RunREDUCE.errorMessageDialog("Differentiate Template",
+                    "An independent variable entry must be an identifier or empty.");
+            indVarTextFields[n].setText("");
+            return;
         } else if ((ordString = ordTextFields[n].getText()).isEmpty())
             order = 1;
-        else if (!(PATTERN.matcher(ordString).matches() && (order = Integer.parseInt(ordString)) > 0)) {
+        else if (!(NUMBER_PATTERN.matcher(ordString).matches() && (order = Integer.parseInt(ordString)) > 0)) {
             RunREDUCE.errorMessageDialog("Differentiate Template",
-                    "The order must be a positive integer or empty!");
+                    "An order entry must be a positive integer or empty.");
             ordTextFields[n].setText(""); // Error recovery
             order = 1;
         }
@@ -71,7 +78,7 @@ public class Differentiate {
         final String depVar = depVarTextField.getText();
         if (depVar.isEmpty()) {
             RunREDUCE.errorMessageDialog("Differentiate Template",
-                    "A dependent variable or expression is required!");
+                    "A dependent variable or expression is required.");
             return null;
         }
         final var text = new StringBuilder("df(");
@@ -83,7 +90,7 @@ public class Differentiate {
                 if (orders[i] > 1) text.append(",").append(orders[i]);
             } else if (i == 0) {
                 RunREDUCE.errorMessageDialog("Differentiate Template",
-                        "The first independent variable is required!");
+                        "The first independent variable is required.");
                 return null;
             }
         }

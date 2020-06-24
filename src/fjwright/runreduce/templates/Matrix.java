@@ -49,6 +49,11 @@ public class Matrix {
             if (nColsI > nCols) nCols = nColsI;
             if (nColsI > 0) nRows = i + 1;
         }
+        if (nRows == 0) {
+            RunREDUCE.errorMessageDialog("Matrix Template",
+                    "A least one entry must be non-empty.");
+            return null;
+        }
         // Construct and return the REDUCE input:
         StringBuilder text = new StringBuilder("mat(");
         for (int i = 0; i < nRows; i++) {
@@ -68,8 +73,10 @@ public class Matrix {
     @FXML
     private void editButtonAction(ActionEvent actionEvent) {
         // Insert in input editor if valid:
+        final String r = result();
+        if (r == null) return;
         final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-        textArea.insertText(textArea.getCaretPosition(), result());
+        textArea.insertText(textArea.getCaretPosition(), r);
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }
@@ -77,7 +84,9 @@ public class Matrix {
     @FXML
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
+        final String r = result();
+        if (r == null) return;
+        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(r + ";\n");
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }

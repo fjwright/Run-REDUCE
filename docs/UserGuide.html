@@ -33,7 +33,18 @@
     <h1>Run-REDUCE-FX User Guide</h1>
     <h3>&copy; 2020 Francis Wright</h3>
 
-    <h2>General Information</h2>
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#GeneralInformation">General Information</a></li>
+      <li><a href="#MainWindow">The Main Window</a></li>
+      <li><a href="#FileMenu">The File Menu</a></li>
+      <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
+      <li><a href="#ViewMenu">The View Menu</a></li>
+      <li><a href="#TemplatesMenu">The Templates Menu</a></li>
+      <li><a href="#HelpMenu">The Help Menu</a></li>
+    </ul>
+
+    <h2 id="GeneralInformation">General Information</h2>
 
     <p>Run-REDUCE-FX remembers user preferences and uses them the next
     time it starts. It uses the standard Java
@@ -55,7 +66,7 @@
     be <a href="#Configure">reconfigured</a>.
     </p>
 
-    <h2>The Main Window</h2>
+    <h2 id="MainWindow">The Main Window</h2>
 
     <p>The main window consists of one or more REDUCE panels that can
     each run an independent invocation of REDUCE. There are three
@@ -162,7 +173,7 @@
     earlier or later input, respectively.
     </p>
 
-    <h2>The File Menu</h2>
+    <h2 id="FileMenu">The File Menu</h2>
 
     <p>Some items in this menu pop up a dialogue that allows you to
     select one or more items, such as filenames. This dialogue
@@ -269,7 +280,7 @@
     the main window frame.
     </p>
 
-    <h2>The REDUCE Menu</h2>
+    <h2 id="REDUCEMenu">The REDUCE Menu</h2>
 
     <p>The REDUCE menu provides the following items:</p>
     <h3>Run REDUCE...</h3>
@@ -457,7 +468,76 @@
     disabled unless tabbed pane display is selected.
     </p>
 
-    <h2>The Help Menu</h2>
+    <h2 id="TemplatesMenu">The Templates Menu</h2>
+
+    <p>The <em>Templates</em> menu facilitates construction of
+    structured expressions and statements whose syntax might not be
+    immediately obvious, especially to a novice.  They all provide two
+    buttons that apply the filled-in template and close the dialogue:
+    the <em>Edit</em> button inserts the template into the input
+    editor at the current cursor position; the <em>Evaluate</em>
+    button sends the template directly to REDUCE for evaluation.
+    </p>
+    <p>If the template represents an operator with a primary operand
+    then it defaults to <em>ws</em>, which is convenient for simple
+    interactive calculations, but it can be changed to anything.  The
+    templates provide some minimal input validation: for example, if
+    an element must be an explicit number (rather than a variable that
+    must evaluate to a number), the template will check this and
+    report an error immediately an inappropriate character is entered.
+    </p>
+    <p>These templates are intended only for creating simple
+    structures, but they can form a basis for arbitrarily complex
+    structures if they are entered into the input editor for further
+    editing.  The fields of expression templates display minimal
+    formatting intended to hint at how such an expression would
+    normally be typeset.
+    </p>
+    <h3>Differentiate...</h3>
+    <p>This template supports (partial) differentiation involving up
+    to three independent variables, each to arbitrary order.  The
+    orders must be explicit positive integers and the total order
+    automatically updates to reflect the number of independent
+    variables and their orders.  If an order is omitted then it
+    defaults to 1.  The first independent variable is required but
+    others are optional.  The dependent variable defaults
+    to <em>ws</em> and the first independent variable defaults
+    to <em>x</em>, but both can be changed.
+    </p>
+    <h3>Integrate...</h3>
+    <p>This template supports both indefinite and definite
+    integration: if both limits are omitted then the integral is
+    indefinite; if both limits are specified then the integral is
+    definite.  The integrand defaults to <em>ws</em> and the
+    integration variable defaults to <em>x</em>, but both can be
+    changed.
+    </p>
+    <h3>Matrix...</h3>
+    <p>This template supports the creation of matrices up to 4 by 4.
+    The elements can be any expressions.  The (1,1) element is always
+    in the top left-hand corner of the template.  The width of the
+    matrix, i.e. the maximum column index, is determined by the
+    right-most non-empty element and the depth of the matrix, i.e. the
+    maximum row index, is determined by the lowest non-empty element.
+    Within the matrix so determined, empty elements default to zero,
+    which is very convenient for entering diagonal, triangular or
+    other sparse matrices.
+    </p>
+    <h3>For...</h3>
+    <p>This template supports the creation of <em>for</em> statements
+    and is modelled on the diagram at the start of the section of the
+    REDUCE manual headed "FOR Statements".  You choose between
+    iterating over a numerical range and a list by clicking on the
+    appropriate tab, which then displays the appropriate template.
+    You choose the <em>action</em> and the <em>for each ... in/on</em>
+    option via pop-up choice boxes, which default to the most common
+    choices.  (Note that the <em>for each ... on</em> option is only
+    allowed in symbolic mode, but the template does not check this.)
+    The field for the expression to be executed by the <em>for</em>
+    statement is on a separate line to allow it more space.
+    </p>
+
+    <h2 id="HelpMenu">The Help Menu</h2>
 
     <p>All the documents accessed via the Help menu are local files.
     The Help menu provides the following items:</p>
