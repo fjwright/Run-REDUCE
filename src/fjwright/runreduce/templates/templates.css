@@ -7,6 +7,13 @@
     -fx-font-size: 100px;
     -fx-translate-y: -10;
 }
+.sum-prod-symbol {
+    -fx-font-size: 50px;
+    -fx-translate-y: -5;
+}
+.sum-prod-button {
+    -fx-font-size: 15px;
+}
 .bracket {
     -fx-font-size: 120px;
     -fx-translate-y: -10;

@@ -493,6 +493,11 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void sumProdMenuItemAction() {
+        showDialogAndWait("Create a Sum or Product", "templates/SumProd.fxml");
+    }
+
+    @FXML
     private void matrixMenuItemAction() {
         showDialogAndWait("Create a Matrix", "templates/Matrix.fxml");
     }
