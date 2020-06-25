@@ -1,16 +1,12 @@
 package fjwright.runreduce.templates;
 
-import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.stage.Stage;
 
-import java.util.regex.Pattern;
+import static fjwright.runreduce.templates.Templates.*;
 
 public class SumProd {
     @FXML
@@ -20,59 +16,34 @@ public class SumProd {
     @FXML
     private TextField varTextField, lowLimTextField, upLimTextField, operandTextField;
 
-    public void sumToggleButtonAction() {
+    @FXML
+    private void sumToggleButtonAction() {
         sumProdLabel.setText("∑");
     }
 
-    public void prodToggleButtonAction() {
+    @FXML
+    private void prodToggleButtonAction() {
         sumProdLabel.setText("∏");
     }
 
-    private static final Pattern VAR_PATTERN = Pattern.compile("(!|\\p{Alpha}).*");
+// Check field entries dynamically ================================================================
 
     @FXML
     private void varCheckKeyTyped() {
-        String text = varTextField.getText();
-        if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
-            RunREDUCE.errorMessageDialog("Sum or Product Template",
-                    "The control variable must be an identifier.");
-            varTextField.setText("");
-        }
-    }
-
-    private static final Pattern NUM_OR_VAR_PATTERN = Pattern.compile("([+-]?\\d+)|(!|\\p{Alpha}).*");
-
-    private void numOrVarCheckKeyTyped(TextField textField) {
-        String text = textField.getText();
-        if (!(text.isEmpty() || NUM_OR_VAR_PATTERN.matcher(text).matches())) {
-            RunREDUCE.errorMessageDialog("Sum or Product Template",
-                    "Each limit must be an integer or an identifier.");
-            textField.setText("");
-        }
+        Templates.varCheckKeyTyped(varTextField);
     }
 
     @FXML
     private void upLimCheckKeyTyped() {
-        numOrVarCheckKeyTyped(upLimTextField);
+        intOrVarCheckKeyTyped(upLimTextField);
     }
 
     @FXML
     private void lowLimCheckKeyTyped() {
-        numOrVarCheckKeyTyped(lowLimTextField);
+        intOrVarCheckKeyTyped(lowLimTextField);
     }
 
-    private static class EmptyFieldException extends Exception {
-    }
-
-    private String getTextCheckNonEmpty(final TextField textField) throws EmptyFieldException {
-        final String text = textField.getText().trim();
-        if (text.isEmpty()) {
-            RunREDUCE.errorMessageDialog("Sum or Product Template",
-                    "All entries must be non-empty.");
-            throw new EmptyFieldException();
-        } else
-            return text;
-    }
+// Process the result =============================================================================
 
     private String result() throws EmptyFieldException {
         var text = new StringBuilder();
@@ -90,11 +61,8 @@ public class SumProd {
     @FXML
     private void editButtonAction(ActionEvent actionEvent) {
         // Insert in input editor if valid:
-        final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
         try {
-            textArea.insertText(textArea.getCaretPosition(), result());
-            // Close dialogue:
-            cancelButtonAction(actionEvent);
+            Templates.editButtonAction(actionEvent, result());
         } catch (EmptyFieldException ignored) {
         }
     }
@@ -103,9 +71,7 @@ public class SumProd {
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
         try {
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
-            // Close dialogue:
-            cancelButtonAction(actionEvent);
+            Templates.evaluateButtonAction(actionEvent, result());
         } catch (EmptyFieldException ignored) {
         }
     }
@@ -113,8 +79,6 @@ public class SumProd {
     @FXML
     private void cancelButtonAction(ActionEvent actionEvent) {
         // Close dialogue:
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+        Templates.cancelButtonAction(actionEvent);
     }
 }
