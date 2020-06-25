@@ -10,6 +10,8 @@ instead of Swing.  It does **not** (yet) provide typeset-quality
 display of mathematical notation.  The latest version of Run-REDUCE-FX
 requires Java 11 or later plus JavaFX 11 or later.
 
+For further general background information please see the
+[Run-REDUCE-FX web page](https://fjwright.github.io/Run-REDUCE-FX/).
 For information about how to install and run Run-REDUCE-FX please see
 the [Install and Run
 Guide](https://fjwright.github.io/Run-REDUCE-FX/InstallAndRun.html).
@@ -57,8 +59,10 @@ top-level directory.
   platforms.
 * Fix truncated text in the About dialogue.
 
-### Updates since last release
+### Version 1.3
 
 * Provide templates for *df*, *int* and *mat* expressions and *for*
   statements.
 * Add a hyperlinked Contents section to the User Guide.
+
+### Updates since last release
