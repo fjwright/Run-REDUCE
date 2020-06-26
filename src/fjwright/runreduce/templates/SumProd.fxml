@@ -3,8 +3,9 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+<GridPane alignment="center" stylesheets="@templates.css" vgap="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.SumProd">
     <rowConstraints>
         <RowConstraints/>
@@ -15,9 +16,11 @@
     <columnConstraints>
         <ColumnConstraints/>
     </columnConstraints>
-    <Label prefHeight="76.0" prefWidth="380.0" text=
-            "Only definite sums and products are supported, so all fields must be non-empty. The control variable must be an identifier and the limits must be or *evaluate* to integers."
-           textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER"/>
+    <HBox alignment="CENTER">
+        <Text fontSmoothingType="LCD"
+              text="Only definite sums and products are supported, so all fields must be non-empty. The control variable must be an identifier and the limits must be or *evaluate* to integers."
+              textAlignment="CENTER" wrappingWidth="380.0"/>
+    </HBox>
     <HBox alignment="CENTER" spacing="5.0" GridPane.rowIndex="1">
         <ToggleButton fx:id="sumToggleButton" mnemonicParsing="false" onAction="#sumToggleButtonAction" selected="true"
                       styleClass="sum-prod-button" text="∑">

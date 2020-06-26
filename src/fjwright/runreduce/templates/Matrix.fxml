@@ -3,70 +3,76 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="center" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
+<GridPane alignment="center" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
     <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
     </rowConstraints>
     <columnConstraints>
-        <ColumnConstraints />
+        <ColumnConstraints/>
     </columnConstraints>
-    <Label prefHeight="76.0" prefWidth="380.0" text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" />
+    <HBox alignment="CENTER">
+        <Text fontSmoothingType="LCD"
+              text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero."
+              textAlignment="CENTER" wrappingWidth="380.0"/>
+    </HBox>
     <HBox alignment="CENTER" styleClass="styled-textfields" GridPane.rowIndex="1">
-        <Label styleClass="bracket" text="(" />
+        <Label styleClass="bracket" text="("/>
         <GridPane alignment="CENTER">
             <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-                <ColumnConstraints />
-                <ColumnConstraints />
-                <ColumnConstraints />
-                <ColumnConstraints />
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints/>
             </rowConstraints>
-            <TextField fx:id="cell00" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="cell01" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="cell02" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="cell03" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <TextField fx:id="cell10" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="cell11" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="cell12" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField fx:id="cell13" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <TextField fx:id="cell20" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="cell21" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="cell22" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <TextField fx:id="cell23" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-            <TextField fx:id="cell30" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="cell31" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <TextField fx:id="cell32" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <TextField fx:id="cell33" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <TextField fx:id="cell00" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <TextField fx:id="cell01" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+            <TextField fx:id="cell02" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+            <TextField fx:id="cell03" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
+            <TextField fx:id="cell10" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <TextField fx:id="cell11" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+            <TextField fx:id="cell12" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+            <TextField fx:id="cell13" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+            <TextField fx:id="cell20" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField fx:id="cell21" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+            <TextField fx:id="cell22" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+            <TextField fx:id="cell23" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+            <TextField fx:id="cell30" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <TextField fx:id="cell31" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+            <TextField fx:id="cell32" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+            <TextField fx:id="cell33" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="3"/>
         </GridPane>
-        <Label styleClass="bracket" text=")" />
+        <Label styleClass="bracket" text=")"/>
     </HBox>
     <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.rowIndex="2">
         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
         <Button mnemonicParsing="false" onAction="#editButtonAction" text="Edit">
             <tooltip>
-                <Tooltip text="Insert into input editor" />
+                <Tooltip text="Insert into input editor"/>
             </tooltip>
         </Button>
         <Button mnemonicParsing="false" onAction="#evaluateButtonAction" text="Evaluate">
             <tooltip>
-                <Tooltip text="Send to REDUCE" />
+                <Tooltip text="Send to REDUCE"/>
             </tooltip>
         </Button>
-        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel" />
+        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
     </HBox>
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 </GridPane>
