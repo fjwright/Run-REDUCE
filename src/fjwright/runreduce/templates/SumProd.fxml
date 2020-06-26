@@ -16,7 +16,7 @@
         <ColumnConstraints/>
     </columnConstraints>
     <Label prefHeight="76.0" prefWidth="380.0" text=
-            "Only definite sums and products are supported, so all boxes must be non-empty. The control variable must be an identifier and the limits must *evaluate* to integers."
+            "Only definite sums and products are supported, so all fields must be non-empty. The control variable must be an identifier and the limits must be or *evaluate* to integers."
            textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER"/>
     <HBox alignment="CENTER" spacing="5.0" GridPane.rowIndex="1">
         <ToggleButton fx:id="sumToggleButton" mnemonicParsing="false" onAction="#sumToggleButtonAction" selected="true"
@@ -32,7 +32,7 @@
     <HBox alignment="CENTER" styleClass="styled-textfields" GridPane.rowIndex="2">
         <VBox alignment="CENTER">
             <HBox alignment="CENTER">
-                <TextField fx:id="upLimTextField" alignment="CENTER" onKeyTyped="#upLimCheckKeyTyped"
+                <TextField fx:id="upLimTextField" alignment="CENTER" onKeyTyped="#intOrVarCheckKeyTyped"
                            prefColumnCount="3" promptText="int" styleClass="limit" text="5"/>
             </HBox>
             <Label fx:id="sumProdLabel" styleClass="sum-prod-symbol" text="∑"/>
@@ -40,7 +40,7 @@
                 <TextField fx:id="varTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped" prefColumnCount="3"
                            promptText="var" styleClass="limit" text="i"/>
                 <Label text="="/>
-                <TextField fx:id="lowLimTextField" alignment="CENTER" onKeyTyped="#lowLimCheckKeyTyped"
+                <TextField fx:id="lowLimTextField" alignment="CENTER" onKeyTyped="#intOrVarCheckKeyTyped"
                            prefColumnCount="3" promptText="int" styleClass="limit" text="1"/>
             </HBox>
         </VBox>

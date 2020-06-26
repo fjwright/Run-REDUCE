@@ -1,19 +1,15 @@
 package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.stream;
 
-public class Differentiate {
+public class Differentiate extends Template {
     @FXML
     private Label totalOrdLabel;
     @FXML
@@ -24,8 +20,7 @@ public class Differentiate {
     private TextField[] indVarTextFields, ordTextFields;
     private final int[] orders = {1, 0, 0};
 
-    private final static Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
-    private static final Pattern VAR_PATTERN = Pattern.compile("(!|\\p{Alpha}).*");
+    private final static Pattern NUMBER_PATTERN = Pattern.compile("[1-9]\\d*");
 
     @FXML
     private void initialize() {
@@ -39,14 +34,14 @@ public class Differentiate {
         if (indVar.isEmpty())
             order = 0;
         else if (!VAR_PATTERN.matcher(indVar).matches()) {
-            RunREDUCE.errorMessageDialog("Differentiate Template",
+            RunREDUCE.errorMessageDialog("Differentiate Template Error",
                     "An independent variable entry must be an identifier or empty.");
-            indVarTextFields[n].setText("");
+            indVarTextFields[n].setText(""); // Error recovery
             return;
         } else if ((ordString = ordTextFields[n].getText()).isEmpty())
             order = 1;
         else if (!(NUMBER_PATTERN.matcher(ordString).matches() && (order = Integer.parseInt(ordString)) > 0)) {
-            RunREDUCE.errorMessageDialog("Differentiate Template",
+            RunREDUCE.errorMessageDialog("Differentiate Template Error",
                     "An order entry must be a positive integer or empty.");
             ordTextFields[n].setText(""); // Error recovery
             order = 1;
@@ -74,12 +69,13 @@ public class Differentiate {
         indVarAction(2);
     }
 
-    private String result() {
+    @Override
+    String result() throws EmptyFieldException {
         final String depVar = depVarTextField.getText();
         if (depVar.isEmpty()) {
-            RunREDUCE.errorMessageDialog("Differentiate Template",
+            RunREDUCE.errorMessageDialog("Differentiate Template Error",
                     "A dependent variable or expression is required.");
-            return null;
+            throw new EmptyFieldException();
         }
         final var text = new StringBuilder("df(");
         text.append(depVar);
@@ -89,40 +85,11 @@ public class Differentiate {
                 text.append(",").append(indVar);
                 if (orders[i] > 1) text.append(",").append(orders[i]);
             } else if (i == 0) {
-                RunREDUCE.errorMessageDialog("Differentiate Template",
+                RunREDUCE.errorMessageDialog("Differentiate Template Error",
                         "The first independent variable is required.");
-                return null;
+                throw new EmptyFieldException();
             }
         }
         return text.append(")").toString();
-    }
-
-    @FXML
-    private void editButtonAction(ActionEvent actionEvent) {
-        // Insert in input editor if valid:
-        final String r = result();
-        if (r == null) return;
-        final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-        textArea.insertText(textArea.getCaretPosition(), r);
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
-    }
-
-    @FXML
-    private void evaluateButtonAction(ActionEvent actionEvent) {
-        // Send to REDUCE if valid:
-        final String r = result();
-        if (r == null) return;
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(r + ";\n");
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
-    }
-
-    @FXML
-    private void cancelButtonAction(ActionEvent actionEvent) {
-        // Close dialogue:
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 }

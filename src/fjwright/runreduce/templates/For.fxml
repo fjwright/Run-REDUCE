@@ -27,7 +27,7 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for" />
-                            <TextField fx:id="forVarTextField" onKeyTyped="#forVarCheckKeyTyped" prefColumnCount="4" promptText="var">
+                            <TextField fx:id="forVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="4" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier" />
                                 </tooltip>
@@ -57,7 +57,7 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for each" />
-                            <TextField fx:id="foreachVarTextField" onKeyTyped="#foreachVarCheckKeyTyped" prefColumnCount="9" promptText="var">
+                            <TextField fx:id="foreachVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="9" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier" />
                                 </tooltip>

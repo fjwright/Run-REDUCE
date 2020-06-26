@@ -1,16 +1,12 @@
 package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import static java.util.Arrays.stream;
 
-public class Matrix {
+public class Matrix extends Template {
     @FXML
     private TextField cell00, cell01, cell02, cell03;
     @FXML
@@ -31,7 +27,8 @@ public class Matrix {
                 {cell30, cell31, cell32, cell33}};
     }
 
-    private String result() {
+    @Override
+    String result() throws EmptyFieldException {
         // Construct an array of Strings from the array of TextFields:
         final String[][] stringArray =
                 stream(cells).map(
@@ -50,9 +47,9 @@ public class Matrix {
             if (nColsI > 0) nRows = i + 1;
         }
         if (nRows == 0) {
-            RunREDUCE.errorMessageDialog("Matrix Template",
-                    "A least one entry must be non-empty.");
-            return null;
+            RunREDUCE.errorMessageDialog("Matrix Template Error",
+                    "A least one field must be non-empty.");
+            throw new EmptyFieldException();
         }
         // Construct and return the REDUCE input:
         StringBuilder text = new StringBuilder("mat(");
@@ -68,34 +65,5 @@ public class Matrix {
         }
         text.append(")");
         return text.toString();
-    }
-
-    @FXML
-    private void editButtonAction(ActionEvent actionEvent) {
-        // Insert in input editor if valid:
-        final String r = result();
-        if (r == null) return;
-        final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-        textArea.insertText(textArea.getCaretPosition(), r);
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
-    }
-
-    @FXML
-    private void evaluateButtonAction(ActionEvent actionEvent) {
-        // Send to REDUCE if valid:
-        final String r = result();
-        if (r == null) return;
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(r + ";\n");
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
-    }
-
-    @FXML
-    private void cancelButtonAction(ActionEvent actionEvent) {
-        // Close dialogue:
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
     }
 }
