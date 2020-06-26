@@ -17,8 +17,8 @@
     </columnConstraints>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
-              text="The dependent variable or expression and first independent variable are required. Other boxes may be left empty. Superscript boxes are orders, which unless empty must be positive integers."
-              textAlignment="CENTER" wrappingWidth="380.0"/>
+              text="The dependent variable or expression and first independent variable are required. Other fields may be left empty. Superscripts represent orders, which unless empty must be positive integers."
+              textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
     <VBox alignment="CENTER" fillWidth="false" spacing="5.0" styleClass="styled-textfields" GridPane.rowIndex="1">
         <padding>

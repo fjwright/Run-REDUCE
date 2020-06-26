@@ -18,7 +18,7 @@
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
               text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero."
-              textAlignment="CENTER" wrappingWidth="380.0"/>
+              textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
     <HBox alignment="CENTER" styleClass="styled-textfields" GridPane.rowIndex="1">
         <Label styleClass="bracket" text="("/>

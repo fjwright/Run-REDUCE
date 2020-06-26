@@ -69,3 +69,4 @@ top-level directory.
 
 * V1.31 Sum or Product template. Use Text instead of Label for the text at the 
   top of each template. This seems to avoid truncated text reliably and portably.
+* Add a Symbolic/Numeric switch to the Integrate template. Make the expression templates a little wider.

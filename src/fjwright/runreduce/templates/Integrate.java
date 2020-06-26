@@ -3,8 +3,11 @@ package fjwright.runreduce.templates;
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 
 public class Integrate extends Template{
+    @FXML
+    private ToggleButton numToggleButton;
     @FXML
     private TextField integrandTextField, intVarTextField, lowLimTextField, upLimTextField;
 
@@ -23,8 +26,14 @@ public class Integrate extends Template{
                     "The limits must be both empty or both specified.");
             throw new EmptyFieldException();
         }
-        final var text = new StringBuilder("int(");
-        text.append(integrand).append(",").append(intVar);
+        if (indefInt && numToggleButton.isSelected()) {
+            RunREDUCE.errorMessageDialog("Integrate Template Error",
+                    "The limits must be specified when the 'Numeric' option is selected.");
+            throw new EmptyFieldException();
+        }
+        final var text = new StringBuilder();
+        if (numToggleButton.isSelected()) text.append("load_package numeric; on rounded; num_");
+        text.append("int(").append(integrand).append(",").append(intVar);
         if (!indefInt) text.append(",").append(lowLim).append(",").append(upLim);
         return text.append(")").toString();
     }

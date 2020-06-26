@@ -18,8 +18,8 @@
     </columnConstraints>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
-              text="Only definite sums and products are supported, so all fields must be non-empty. The control variable must be an identifier and the limits must be or *evaluate* to integers."
-              textAlignment="CENTER" wrappingWidth="380.0"/>
+              text="Only definite sums and products are supported, so all fields must be non-empty. The control variable must be an identifier and the limits must be, or *evaluate* to, integers."
+              textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
     <HBox alignment="CENTER" spacing="5.0" GridPane.rowIndex="1">
         <ToggleButton fx:id="sumToggleButton" mnemonicParsing="false" onAction="#sumToggleButtonAction" selected="true"
