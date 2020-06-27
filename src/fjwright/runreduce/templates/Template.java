@@ -70,7 +70,7 @@ abstract class Template {
             final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
             textArea.insertText(textArea.getCaretPosition(), result());
             // Close dialogue:
-            cancelButtonAction(actionEvent);
+//            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
         }
     }
@@ -81,7 +81,7 @@ abstract class Template {
         try {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
             // Close dialogue:
-            cancelButtonAction(actionEvent);
+//            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
         }
     }

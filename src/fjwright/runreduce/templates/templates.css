@@ -7,6 +7,15 @@
     -fx-font-size: 100px;
     -fx-translate-y: -10;
 }
+.lim-symbol {
+    -fx-font-size: 20px;
+}
+.lim-dir {
+    -fx-font-size: 15px;
+    -fx-translate-y: -5;
+    -fx-border-width: 1px;
+    -fx-border-color: lightgray;
+}
 .sum-prod-symbol {
     -fx-font-size: 50px;
     -fx-translate-y: -5;

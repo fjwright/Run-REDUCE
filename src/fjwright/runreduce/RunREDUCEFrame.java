@@ -483,28 +483,33 @@ public class RunREDUCEFrame {
      * ************** */
 
     @FXML
-    private void differentiateMenuItemAction() {
-        showDialogAndWait("Differentiate (partially)", "templates/Differentiate.fxml");
+    private void derivativeMenuItemAction() {
+        showDialogAndWait("Create a (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
     }
 
     @FXML
-    private void integrateMenuItemAction() {
-        showDialogAndWait("Integrate", "templates/Integrate.fxml");
+    private void integralMenuItemAction() {
+        showDialogAndWait("Create an Integral", "templates/Integral.fxml", Modality.NONE);
+    }
+
+    @FXML
+    private void limitMenuItemAction() {
+        showDialogAndWait("Create a Limit", "templates/Limit.fxml", Modality.NONE);
     }
 
     @FXML
     private void sumProdMenuItemAction() {
-        showDialogAndWait("Create a Sum or Product", "templates/SumProd.fxml");
+        showDialogAndWait("Create a Sum or Product", "templates/SumProd.fxml", Modality.NONE);
     }
 
     @FXML
     private void matrixMenuItemAction() {
-        showDialogAndWait("Create a Matrix", "templates/Matrix.fxml");
+        showDialogAndWait("Create a Matrix", "templates/Matrix.fxml", Modality.NONE);
     }
 
     @FXML
     private void forMenuItemAction() {
-        showDialogAndWait("Create a For Statement", "templates/For.fxml");
+        showDialogAndWait("Create a For Statement", "templates/For.fxml", Modality.NONE);
     }
 
     /* ********* *
@@ -556,7 +561,7 @@ public class RunREDUCEFrame {
      * Support methods *
      * *************** */
 
-    void showDialogAndWait(String dialogTitle, String fxmlFileName) {
+    void showDialogAndWait(String dialogTitle, String fxmlFileName, Modality... modality) {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource(fxmlFileName));
@@ -565,7 +570,11 @@ public class RunREDUCEFrame {
             return;
         }
         Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
+        if (modality.length == 0) {
+            stage.initModality(Modality.APPLICATION_MODAL);
+        } else {
+            stage.initModality(modality[0]);
+        }
         stage.initOwner(RunREDUCE.primaryStage);
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
