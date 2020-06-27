@@ -44,6 +44,6 @@
                 <Tooltip text="Send to REDUCE"/>
             </tooltip>
         </Button>
-        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
+        <Button mnemonicParsing="false" onAction="#closeButtonAction" text="Close"/>
     </HBox>
 </VBox>

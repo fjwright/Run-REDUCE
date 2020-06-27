@@ -5,22 +5,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane alignment="center" stylesheets="@templates.css" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Differentiate">
-    <rowConstraints>
-        <RowConstraints/>
-        <RowConstraints/>
-        <RowConstraints/>
-    </rowConstraints>
-    <columnConstraints>
-        <ColumnConstraints/>
-    </columnConstraints>
+<VBox alignment="CENTER" spacing="10.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Differentiate">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
-              text="The dependent variable or expression and first independent variable are required. Other fields may be left empty. Superscripts represent orders, which unless empty must be positive integers."
+              text="The dependent variable or expression and first independent variable are required. Other fields may be left empty.
+Superscripts represent orders, which unless empty must be positive integers."
               textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
-    <VBox alignment="CENTER" fillWidth="false" spacing="5.0" styleClass="styled-textfields" GridPane.rowIndex="1">
+    <VBox alignment="CENTER" fillWidth="false" spacing="5.0" styleClass="styled-textfields">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
@@ -46,7 +42,7 @@
                        styleClass="order"/>
         </HBox>
     </VBox>
-    <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.rowIndex="2">
+    <HBox alignment="CENTER_RIGHT" spacing="20.0">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
@@ -60,9 +56,6 @@
                 <Tooltip text="Send to REDUCE"/>
             </tooltip>
         </Button>
-        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
+        <Button mnemonicParsing="false" onAction="#closeButtonAction" text="Close"/>
     </HBox>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-</GridPane>
+</VBox>

@@ -87,7 +87,7 @@ abstract class Template {
     }
 
     @FXML
-    private void cancelButtonAction(ActionEvent actionEvent) {
+    private void closeButtonAction(ActionEvent actionEvent) {
         // Close dialogue:
         final Node source = (Node) actionEvent.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
