@@ -22,8 +22,9 @@ public class Differentiate extends Template {
 
     private final static Pattern NUMBER_PATTERN = Pattern.compile("[1-9]\\d*");
 
-    @FXML
-    private void initialize() {
+    @FXML @Override
+    protected void initialize() {
+        super.initialize();
         indVarTextFields = new TextField[]{indVar0TextField, indVar1TextField, indVar2TextField};
         ordTextFields = new TextField[]{ord0TextField, ord1TextField, ord2TextField};
     }

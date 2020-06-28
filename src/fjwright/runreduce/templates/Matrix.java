@@ -18,8 +18,9 @@ public class Matrix extends Template {
 
     private TextField[][] cells;
 
-    @FXML
-    private void initialize() {
+    @FXML @Override
+    protected void initialize() {
+        super.initialize();
         cells = new TextField[][]{
                 {cell00, cell01, cell02, cell03},
                 {cell10, cell11, cell12, cell13},

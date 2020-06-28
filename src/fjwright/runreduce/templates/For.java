@@ -18,8 +18,9 @@ public class For extends Template {
     @FXML
     private TabPane tabPane;
 
-    @FXML
-    private void initialize() {
+    @FXML @Override
+    protected void initialize() {
+        super.initialize();
         foreachChoiceBox.getSelectionModel().selectFirst();
         actionChoiceBox.getSelectionModel().selectFirst();
     }

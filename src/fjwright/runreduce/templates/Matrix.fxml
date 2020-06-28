@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+<VBox fx:id="templateRoot" alignment="CENTER" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

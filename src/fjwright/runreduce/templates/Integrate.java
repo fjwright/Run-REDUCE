@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 
-public class Integrate extends Template{
+public class Integrate extends Template {
     @FXML
     private ToggleButton numToggleButton;
     @FXML
