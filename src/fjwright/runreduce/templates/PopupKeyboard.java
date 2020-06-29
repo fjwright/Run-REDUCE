@@ -1,15 +1,14 @@
 package fjwright.runreduce.templates;
 
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -39,7 +38,8 @@ class PopupKeyboard {
         final var hBox = new HBox();
         popup.getContent().add(hBox);
         hBox.setAlignment(Pos.CENTER);
-        hBox.setStyle("-fx-background-color: gray; -fx-border-color: darkgray; -fx-border-insets: 2px; -fx-border-radius: 2px;");
+        hBox.setStyle("-fx-background-color: gray; -fx-border-color: darkgray;" +
+                "-fx-border-insets: 3px; -fx-background-radius: 3px; -fx-border-radius: 3px;");
 
         final var gridPane0 = new GridPane();
         hBox.getChildren().add(gridPane0);
@@ -48,29 +48,27 @@ class PopupKeyboard {
             Button button = new Button(symbol);
             gridPane0.add(button, 0, i);
             button.setMaxWidth(Double.MAX_VALUE);
-            button.setOnAction(actionEvent -> {
-                ((TextField) target).setText(symbol);
-                popup.hide();
-            });
+            button.setOnAction(actionEvent -> buttonAction(symbol));
         }
 
-        hBox.getChildren().add(new Separator(Orientation.VERTICAL));
+        var sep = new Region();
+        sep.setPrefWidth(3);
+        hBox.getChildren().add(sep);
 
-        final var gridPane = new GridPane();
-        hBox.getChildren().add(gridPane);
+        final var gridPane1 = new GridPane();
+        hBox.getChildren().add(gridPane1);
         for (int i = 0; i < greekLetters.length; i++)
             for (int j = 0; j < greekLetters[i].length; j++) {
                 String letter = greekLetters[i][j];
                 Button button = new Button(letter);
-                gridPane.add(button, j, i);
+                gridPane1.add(button, j, i);
                 button.setMaxWidth(Double.MAX_VALUE);
-                button.setOnAction(actionEvent -> {
-                    ((TextField) target).setText(letter);
-                    popup.hide();
-                });
+                button.setOnAction(actionEvent -> buttonAction(letter));
             }
 
-        hBox.getChildren().add(new Separator(Orientation.VERTICAL));
+        sep = new Region();
+        sep.setPrefWidth(3);
+        hBox.getChildren().add(sep);
 
         final var closeText = new Text("Close");
         closeText.setRotate(-90);
@@ -83,11 +81,19 @@ class PopupKeyboard {
         closeButton.setOnAction(actionEvent -> popup.hide());
     }
 
+    static void buttonAction(String character) {
+        // Insert character in target TextField at its caret:
+        TextField textField = (TextField) target;
+        textField.insertText(textField.getCaretPosition(), character);
+        popup.hide();
+    }
+
     static void middleMouseButtonClicked(MouseEvent mouseEvent) {
         if (!(mouseEvent.getButton() == MouseButton.MIDDLE &&
-                ((target = ((Node) mouseEvent.getTarget()).getParent())
-                        instanceof TextField)))
+                ((((target = ((Node) mouseEvent.getTarget()).getParent()) instanceof TextField) || // on TextField
+                        ((target = target.getParent()) instanceof TextField) || // on TextField content
+                        ((target = target.getParent()) instanceof TextField))))) // on TextField content caret
             return;
-        popup.show(((Node) mouseEvent.getSource()).getScene().getWindow());
+        popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
     }
 }
