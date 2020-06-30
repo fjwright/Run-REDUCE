@@ -12,10 +12,25 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class provides a pop-up keyboard on the middle mouse button for special symbols and Greek letters.
  */
 class PopupKeyboard {
+    private static Node target;
+    private final static Popup popup = new Popup();
+
+    static void middleMouseButtonClicked(MouseEvent mouseEvent) {
+        if (!(mouseEvent.getButton() == MouseButton.MIDDLE &&
+                ((((target = ((Node) mouseEvent.getTarget()).getParent()) instanceof TextField) || // on TextField
+                        ((target = target.getParent()) instanceof TextField) || // on TextField content
+                        ((target = target.getParent()) instanceof TextField))))) // on TextField content caret
+            return;
+        popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+    }
+
     private static final String[] symbols = new String[]{"∞", "π"};
 
     private static final String[][] greekLetters = new String[2][12];
@@ -30,9 +45,6 @@ class PopupKeyboard {
                 if (gl == '\u03C2' /* skip ς */) gl++;
             }
     }
-
-    private final static Popup popup = new Popup();
-    private static Node target;
 
     static {
         final var hBox = new HBox();
@@ -84,16 +96,33 @@ class PopupKeyboard {
     static void buttonAction(String character) {
         // Insert character in target TextField at its caret:
         TextField textField = (TextField) target;
-        textField.insertText(textField.getCaretPosition(), character);
+        if (textField.getSelectedText() == null)
+            textField.insertText(textField.getCaretPosition(), character);
+        else
+            textField.replaceSelection(character);
         popup.hide();
     }
 
-    static void middleMouseButtonClicked(MouseEvent mouseEvent) {
-        if (!(mouseEvent.getButton() == MouseButton.MIDDLE &&
-                ((((target = ((Node) mouseEvent.getTarget()).getParent()) instanceof TextField) || // on TextField
-                        ((target = target.getParent()) instanceof TextField) || // on TextField content
-                        ((target = target.getParent()) instanceof TextField))))) // on TextField content caret
-            return;
-        popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+    static Map<Character, String> map = new HashMap<>();
+
+    static {
+        map.put('∞', "infinity");
+        map.put('π', "pi");
+    }
+
+    static String decode(final String text) {
+        final StringBuilder builder = new StringBuilder();
+        boolean found = false;
+        for (int i = 0; i < text.length(); i++) {
+            char a = text.charAt(i);
+            String b = map.get(a);
+            if (b == null)
+                builder.append(a);
+            else {
+                found = true;
+                builder.append(b);
+            }
+        }
+        return found ? builder.toString() : text;
     }
 }

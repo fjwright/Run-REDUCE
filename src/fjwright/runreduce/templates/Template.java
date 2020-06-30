@@ -74,12 +74,15 @@ abstract class Template {
 
     abstract String result() throws EmptyFieldException;
 
+    // Could apply PopupKeyboard.decode() below more efficiently only to appropriate user input.
+    // But it seems fast enough as it is.
+
     @FXML
     private void editButtonAction(ActionEvent actionEvent) {
         // Insert in input editor if valid:
         try {
             final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-            textArea.insertText(textArea.getCaretPosition(), result());
+            textArea.insertText(textArea.getCaretPosition(), PopupKeyboard.decode(result()));
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
@@ -90,7 +93,7 @@ abstract class Template {
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
         try {
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(result() + ";\n");
+            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(PopupKeyboard.decode(result()) + ";\n");
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
