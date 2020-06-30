@@ -6,9 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -29,6 +34,7 @@ class PopupKeyboard {
                         ((target = target.getParent()) instanceof TextField))))) // on TextField content caret
             return;
         popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        applyShiftButton(mouseEvent.isShiftDown());
     }
 
     private static final String[] constsLc = new String[]{"∞", "π"};
@@ -63,6 +69,14 @@ class PopupKeyboard {
     private static final String GRIDPANE_TEXT_STYLE =
             "-fx-font-smoothing-type:lcd;-fx-font-size:6pt";
 
+    private static final ToggleButton shiftButton = new ToggleButton();
+    private static final GridPane gridPane0Lc = new GridPane();
+    private static final GridPane gridPane0Uc = new GridPane();
+    private static final Text gridPane1TextLc = new Text("Greek Lower-Case Letters");
+    private static final Text gridPane1TextUc = new Text("Greek Upper-Case Letters");
+    private static final GridPane gridPane1Lc = new GridPane();
+    private static final GridPane gridPane1Uc = new GridPane();
+
     static {
         final var hBox = new HBox();
         popup.getContent().add(hBox);
@@ -74,7 +88,6 @@ class PopupKeyboard {
         // Shift button
         final var shiftText = new Text("Shift");
         shiftText.setRotate(-90);
-        final var shiftButton = new ToggleButton();
         shiftButton.setGraphic(shiftText);
         hBox.getChildren().add(shiftButton);
         shiftButton.setMaxHeight(Double.MAX_VALUE);
@@ -86,8 +99,6 @@ class PopupKeyboard {
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
         final var gridPane0Text = new Text("Consts");
         gridPane0Text.setStyle(GRIDPANE_TEXT_STYLE);
-        final var gridPane0Lc = new GridPane();
-        final var gridPane0Uc = new GridPane();
         final var gridStackPane0 = new StackPane(gridPane0Lc, gridPane0Uc);
         final var vBox0 = new VBox(gridPane0Text, gridStackPane0);
         hBox.getChildren().add(vBox0);
@@ -108,14 +119,11 @@ class PopupKeyboard {
 
         // Greek letters button grid
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
-        final Text gridPane1TextLc = new Text("Greek Lower-Case Letters");
         gridPane1TextLc.setStyle(GRIDPANE_TEXT_STYLE);
-        final Text gridPane1TextUc = new Text("Greek Upper-Case Letters");
         gridPane1TextUc.setStyle(GRIDPANE_TEXT_STYLE);
         final var textStackPane = new StackPane(gridPane1TextLc, gridPane1TextUc);
-//        textStackPane.setAlignment(Pos.CENTER);
-        final var gridPane1Lc = new GridPane();
-        final var gridPane1Uc = new GridPane();
+        gridPane1Lc.setMaxWidth(Double.MAX_VALUE);
+        gridPane1Uc.setMaxWidth(Double.MAX_VALUE);
         final var gridStackPane1 = new StackPane(gridPane1Lc, gridPane1Uc);
         gridStackPane1.setAlignment(Pos.CENTER);
         final var vBox1 = new VBox(textStackPane, gridStackPane1);
@@ -138,14 +146,7 @@ class PopupKeyboard {
         gridPane0.setVisible(false);
         gridPane1Uc.setVisible(false);
         gridPane1TextUc.setVisible(false);
-        shiftButton.setOnAction(actionEvent -> {
-            gridPane0Uc.setVisible(shiftButton.isSelected());
-            gridPane0Lc.setVisible(!shiftButton.isSelected());
-            gridPane1Uc.setVisible(shiftButton.isSelected());
-            gridPane1Lc.setVisible(!shiftButton.isSelected());
-            gridPane1TextUc.setVisible(shiftButton.isSelected());
-            gridPane1TextLc.setVisible(!shiftButton.isSelected());
-        });
+        shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
 
         // Close button
         final var closeText = new Text("Close");
@@ -159,7 +160,7 @@ class PopupKeyboard {
         closeButton.setOnAction(actionEvent -> popup.hide());
     }
 
-    static void charButtonAction(String character) {
+    private static void charButtonAction(String character) {
         // Insert character in target TextField at its caret:
         TextField textField = (TextField) target;
         if (textField.getSelectedText() == null)
@@ -167,6 +168,29 @@ class PopupKeyboard {
         else
             textField.replaceSelection(character);
         popup.hide();
+    }
+
+// Handle shifting ================================================================================
+
+    private static void applyShift(boolean shifted) {
+        gridPane0Uc.setVisible(shifted);
+        gridPane0Lc.setVisible(!shifted);
+        gridPane1Uc.setVisible(shifted);
+        gridPane1Lc.setVisible(!shifted);
+        gridPane1TextUc.setVisible(shifted);
+        gridPane1TextLc.setVisible(!shifted);
+    }
+
+    private static void applyShiftButton(boolean shifted) {
+        applyShift(shifted);
+        shiftButton.setSelected(shifted);
+    }
+
+    static {
+        popup.addEventHandler(KeyEvent.ANY, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.SHIFT)
+                applyShiftButton(keyEvent.isShiftDown());
+        });
     }
 
 // Decoding special symbols to the names used in REDUCE ===========================================
