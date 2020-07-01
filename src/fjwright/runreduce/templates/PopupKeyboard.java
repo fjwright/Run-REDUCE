@@ -37,32 +37,32 @@ class PopupKeyboard {
         applyShiftButton(mouseEvent.isShiftDown());
     }
 
-    private static final String[] constsLc = new String[]{"∞", "π"};
-    private static final String[] constsLcTooltips = new String[]{
-            "INFINITY: bigger than any real or natural number",
-            "PI: Archimedes' circle constant = 3.14159..."};
-    private static final String[] constsUc = new String[]{"γ", "φ"};
-    private static final String[] constsUcTooltips = new String[]{
-            "EULER_GAMMA: Euler-Mascheroni constant = 0.57722...",
-            "GOLDEN_RATIO: (1+√5)/2 = 1.61803..."};
+    // Array [0][...] is unshifted; [1][...] is shifted.
+    private static final String[][] constants = new String[][]{
+            {"∞", "π"},  //
+            {"γ", "φ"}}; // shifted
+    private static final String[][] constTooltips = new String[][]{
+            {"INFINITY: bigger than any real or natural number",
+                    "PI: Archimedes' circle constant = 3.14159..."},
+            {"EULER_GAMMA: Euler-Mascheroni constant = 0.57722...",
+                    "GOLDEN_RATIO: (1+√5)/2 = 1.61803..."}};
 
-    private static final String[][] greekLettersUc = new String[2][12];
-    private static final String[][] greekLettersLc = new String[2][12];
+    private static final String[][][] greekLetters = new String[2][2][12];
     //  Α α, Β β, Γ γ, Δ δ, Ε ε, Ζ ζ, Η η, Θ θ, Ι ι, Κ κ, Λ λ, Μ μ,
     //  Ν ν, Ξ ξ, Ο ο, Π π, Ρ ρ, Σ ς/σ, Τ τ, Υ υ, Φ φ, Χ χ, Ψ ψ, Ω ω
 
     static {
-        char gl = '\u0391'; // Α
-        for (int i = 0; i < greekLettersUc.length; i++)
-            for (int j = 0; j < greekLettersUc[i].length; j++) {
-                greekLettersUc[i][j] = String.valueOf(gl++);
-                if (gl == '\u03A2' /* skip empty UC ς code point */) gl++;
-            }
-        gl = '\u03B1'; // α
-        for (int i = 0; i < greekLettersLc.length; i++)
-            for (int j = 0; j < greekLettersLc[i].length; j++) {
-                greekLettersLc[i][j] = String.valueOf(gl++);
+        char gl = '\u03B1'; // α
+        for (int i = 0; i < greekLetters[0].length; i++)
+            for (int j = 0; j < greekLetters[0][i].length; j++) {
+                greekLetters[0][i][j] = String.valueOf(gl++);
                 if (gl == '\u03C2' /* skip ς */) gl++;
+            }
+        gl = '\u0391'; // Α
+        for (int i = 0; i < greekLetters[1].length; i++)
+            for (int j = 0; j < greekLetters[1][i].length; j++) {
+                greekLetters[1][i][j] = String.valueOf(gl++);
+                if (gl == '\u03A2' /* skip empty UC ς code point */) gl++;
             }
     }
 
@@ -70,12 +70,10 @@ class PopupKeyboard {
             "-fx-font-smoothing-type:lcd;-fx-font-size:6pt";
 
     private static final ToggleButton shiftButton = new ToggleButton();
-    private static final GridPane gridPane0Lc = new GridPane();
-    private static final GridPane gridPane0Uc = new GridPane();
-    private static final Text gridPane1TextLc = new Text("Greek Lower-Case Letters");
-    private static final Text gridPane1TextUc = new Text("Greek Upper-Case Letters");
-    private static final GridPane gridPane1Lc = new GridPane();
-    private static final GridPane gridPane1Uc = new GridPane();
+    private static final GridPane[] gridPane0 = new GridPane[2];
+    private static final GridPane[] gridPane1 = new GridPane[2];
+    private static final Text[] gridPane1Text =
+            {new Text("Greek Lower-Case Letters"), new Text("Greek Upper-Case Letters")};
 
     static {
         final var hBox = new HBox();
@@ -93,60 +91,54 @@ class PopupKeyboard {
         shiftButton.setMaxHeight(Double.MAX_VALUE);
         shiftButton.setPrefWidth(30);
         shiftButton.setMinWidth(30);
+        shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
 
         // Consts button grid
-        // Lower case (Lc) means unshifted; upper case (Uc) means shifted.
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
         final var gridPane0Text = new Text("Consts");
         gridPane0Text.setStyle(GRIDPANE_TEXT_STYLE);
-        final var gridStackPane0 = new StackPane(gridPane0Lc, gridPane0Uc);
+        final var gridStackPane0 = new StackPane();
         final var vBox0 = new VBox(gridPane0Text, gridStackPane0);
         hBox.getChildren().add(vBox0);
-        var gridPane0 = gridPane0Lc;
-        var constsTooltips = constsLcTooltips;
-        for (var consts : new String[][]{constsLc, constsUc}) {
-            for (int i = 0; i < consts.length; i++) {
-                String con = consts[i];
-                Button button = new Button(con);
-                gridPane0.add(button, 0, i);
+        for (int s = 0; s < 2; s++) {
+            gridStackPane0.getChildren().add(gridPane0[s] = new GridPane());
+            for (int i = 0; i < constants[s].length; i++) {
+                String constant = constants[s][i];
+                Button button = new Button(constant);
+                gridPane0[s].add(button, 0, i);
                 button.setMaxWidth(Double.MAX_VALUE);
-                button.setOnAction(actionEvent -> charButtonAction(con));
-                button.setTooltip(new Tooltip(constsTooltips[i]));
+                button.setTooltip(new Tooltip(constTooltips[s][i]));
+                button.setOnAction(actionEvent -> charButtonAction(constant));
             }
-            gridPane0 = gridPane0Uc;
-            constsTooltips = constsUcTooltips;
         }
 
         // Greek letters button grid
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
-        gridPane1TextLc.setStyle(GRIDPANE_TEXT_STYLE);
-        gridPane1TextUc.setStyle(GRIDPANE_TEXT_STYLE);
-        final var textStackPane = new StackPane(gridPane1TextLc, gridPane1TextUc);
-        gridPane1Lc.setMaxWidth(Double.MAX_VALUE);
-        gridPane1Uc.setMaxWidth(Double.MAX_VALUE);
-        final var gridStackPane1 = new StackPane(gridPane1Lc, gridPane1Uc);
+        final var textStackPane1 = new StackPane();
+        final var gridStackPane1 = new StackPane();
         gridStackPane1.setAlignment(Pos.CENTER);
-        final var vBox1 = new VBox(textStackPane, gridStackPane1);
+        final var vBox1 = new VBox(textStackPane1, gridStackPane1);
         vBox1.setAlignment(Pos.CENTER);
         hBox.getChildren().add(vBox1);
-        var gridPane1 = gridPane1Lc;
-        for (var greekLetters : new String[][][]{greekLettersLc, greekLettersUc}) {
-            for (int i = 0; i < greekLetters.length; i++)
-                for (int j = 0; j < greekLetters[i].length; j++) {
-                    String letter = greekLetters[i][j];
-                    Button button = new Button(letter);
-                    gridPane1.add(button, j, i);
+        for (int s = 0; s < 2; s++) {
+            gridStackPane1.getChildren().add(gridPane1[s] = new GridPane());
+            gridPane1[s].setMaxWidth(Double.MAX_VALUE);
+            textStackPane1.getChildren().add(gridPane1Text[s]);
+            gridPane1Text[s].setStyle(GRIDPANE_TEXT_STYLE);
+            for (int i = 0; i < greekLetters[s].length; i++)
+                for (int j = 0; j < greekLetters[s][i].length; j++) {
+                    String greekLetter = greekLetters[s][i][j];
+                    Button button = new Button(greekLetter);
+                    gridPane1[s].add(button, j, i);
                     button.setMaxWidth(Double.MAX_VALUE);
-                    button.setOnAction(actionEvent -> charButtonAction(letter));
+                    button.setOnAction(actionEvent -> charButtonAction(greekLetter));
                 }
-            gridPane1 = gridPane1Uc;
         }
 
-        // Implement the shift button
-        gridPane0.setVisible(false);
-        gridPane1Uc.setVisible(false);
-        gridPane1TextUc.setVisible(false);
-        shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
+        // Initialise the shift state
+        gridPane0[1].setVisible(false);
+        gridPane1[1].setVisible(false);
+        gridPane1Text[1].setVisible(false);
 
         // Close button
         final var closeText = new Text("Close");
@@ -160,8 +152,10 @@ class PopupKeyboard {
         closeButton.setOnAction(actionEvent -> popup.hide());
     }
 
+    /**
+     * Overwrite selected text or insert character in target TextField at its caret.
+     */
     private static void charButtonAction(String character) {
-        // Insert character in target TextField at its caret:
         TextField textField = (TextField) target;
         if (textField.getSelectedText() == null)
             textField.insertText(textField.getCaretPosition(), character);
@@ -173,12 +167,12 @@ class PopupKeyboard {
 // Handle shifting ================================================================================
 
     private static void applyShift(boolean shifted) {
-        gridPane0Uc.setVisible(shifted);
-        gridPane0Lc.setVisible(!shifted);
-        gridPane1Uc.setVisible(shifted);
-        gridPane1Lc.setVisible(!shifted);
-        gridPane1TextUc.setVisible(shifted);
-        gridPane1TextLc.setVisible(!shifted);
+        gridPane0[1].setVisible(shifted);
+        gridPane0[0].setVisible(!shifted);
+        gridPane1[1].setVisible(shifted);
+        gridPane1[0].setVisible(!shifted);
+        gridPane1Text[1].setVisible(shifted);
+        gridPane1Text[0].setVisible(!shifted);
     }
 
     private static void applyShiftButton(boolean shifted) {
