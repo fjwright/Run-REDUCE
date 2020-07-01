@@ -38,9 +38,10 @@ class PopupKeyboard {
     }
 
     // Array [0][...] is unshifted; [1][...] is shifted.
+    // '\u200B' is a zero-width space used to distinguish characters to be decoded on input to REDUCE.
     private static final String[][] constants = new String[][]{
-            {"∞", "π"},  //
-            {"γ", "φ"}}; // shifted
+            {"\u200B∞", "\u200Bπ"},
+            {"\u200Bγ", "\u200Bφ"}};
     private static final String[][] constTooltips = new String[][]{
             {"INFINITY: bigger than any real or natural number",
                     "PI: Archimedes' circle constant = 3.14159..."},
@@ -92,6 +93,9 @@ class PopupKeyboard {
         shiftButton.setPrefWidth(30);
         shiftButton.setMinWidth(30);
         shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
+        shiftButton.setTooltip(new Tooltip(
+                "Click, or hold the Shift key, to show the secondary keyboard." +
+                        "\nClick again, or release the Shift key, to show the primary keyboard."));
 
         // Consts button grid
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
@@ -150,6 +154,8 @@ class PopupKeyboard {
         closeButton.setPrefWidth(30);
         closeButton.setMinWidth(30);
         closeButton.setOnAction(actionEvent -> popup.hide());
+        closeButton.setTooltip(new Tooltip(
+                "Close the pop-up.\nPressing the Escape key also closes the pop-up."));
     }
 
     /**
@@ -203,13 +209,11 @@ class PopupKeyboard {
         boolean found = false;
         for (int i = 0; i < text.length(); i++) {
             char a = text.charAt(i);
-            String b = map.get(a);
-            if (b == null)
-                builder.append(a);
-            else {
+            if (a == '\u200B') {
                 found = true;
-                builder.append(b);
-            }
+                builder.append(map.get(text.charAt(++i)));
+            } else
+                builder.append(a);
         }
         return found ? builder.toString() : text;
     }
