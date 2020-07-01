@@ -37,6 +37,7 @@
     <ul>
       <li><a href="#GeneralInformation">General Information</a></li>
       <li><a href="#MainWindow">The Main Window</a></li>
+      <li><a href="#PopupKeyboard">The Pop-up Keyboard</a></li>
       <li><a href="#FileMenu">The File Menu</a></li>
       <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
       <li><a href="#ViewMenu">The View Menu</a></li>
@@ -173,6 +174,75 @@
     earlier or later input, respectively.
     </p>
 
+    <h2 id="PopupKeyboard">The Pop-up Keyboard</h2>
+
+    <p>The pop-up keyboard provides access to some non-ASCII
+    characters.  It is currently available only for
+    the <a href="#TemplatesMenu">templates</a> by clicking the
+    middle-mouse button on any text field.  Clicking on a character
+    button on the pop-up keyboard then causes that character to
+    overwrite the selected text if there is any or otherwise to insert
+    at the text cursor (caret).  The pop-up then closes.  You can also
+    close it by clicking on the
+    <em>Close</em> button at the right-hand side of the pop-up or by
+    pressing the <em>Escape</em> key on your main keyboard.
+    </p>
+    <p>If you don't have a middle mouse-button but you have a wheel
+    mouse then pressing on the wheel may generate a middle
+    mouse-button click.  If you use an older touch pad with separate
+    buttons then clicking the left and right touch-pad buttons
+    together may generate a middle mouse-button click.  If you use a
+    newer touch pad with no separate buttons then pressing (not just
+    tapping) with three fingers may generate a middle mouse-button
+    click.  You may need to adjust you mouse or touch-pad
+    configuration to be able to generate a middle mouse-button click.
+    </p>
+    <p>The characters provided by the pop-up keyboard consist of some
+    REDUCE symbolic constants and the upper- and lower-case Greek
+    alphabet.  The pop-up keyboard has two layers and the secondary
+    layer is accessed by either holding down the <em>Shift</em> key on
+    your main keyboard or clicking on the <em>Shift</em> button at the
+    left-hand side of the pop-up.  Note that the
+    physical <em>Shift</em> key does not act as a toggle but the
+    virtual <em>Shift</em> button does.  The secondary keyboard layer
+    provides access to additional symbolic constants and upper-case
+    Greek letters.
+    </p>
+    <p>The symbolic constants are in the left-hand block of buttons
+    and the Greek alphabet is in the right-hand block of buttons.  The
+    two classes of characters look similar but are treated slightly
+    differently.  REDUCE only recognises symbolic constants if their
+    names are spelt out appropriately using ASCII characters, so this
+    is done before sending them to REDUCE.  However, REDUCE appears to
+    accept non-ASCII characters as letters with no predefined meaning,
+    so the Greek letters in the right-hand block of buttons are all
+    sent to REDUCE with no processing.  REDUCE outputs them exactly as
+    they are input, without case-folding.  Beware that many upper-case
+    Greek letters look like upper-case Roman letters but are in fact
+    distinct!  If you hover your mouse pointer over a symbolic
+    constant button then a tooltip will pop up giving the REDUCE name
+    of the constant and a brief description of it and/or its
+    conventional name and approximate numerical value (if
+    appropriate).
+    </p>
+    <p>Note that some characters are available as both symbolic
+    constants and as Greek letters.  For example, &pi; as a symbolic
+    constant is always spelt out appropriately using ASCII characters
+    before sending it to REDUCE whereas &pi; as a Greek letter is not,
+    so that within REDUCE the two are completely unrelated and &pi; as
+    a Greek letter can be used freely as an identifier (or part of
+    one).  In order to preserve the two meanings, the symbolic
+    constants are preceded by a zero-width space character, which is
+    removed when the symbolic constant is sent to REDUCE.  The
+    zero-width space character is invisible but it is nevertheless
+    there.  If you move the text cursor past a symbolic constant you
+    will also need to move it past the zero-width space character,
+    although you will not see the cursor move, and if you delete a
+    symbolic constant you should also delete the zero-width space
+    character, although again you will not see the cursor move.  (If
+    you don't delete it then it could cause confusion.)
+    </p>
+    
     <h2 id="FileMenu">The File Menu</h2>
 
     <p>Some items in this menu pop up a dialogue that allows you to
@@ -196,7 +266,7 @@
     REDUCE's default directory, which is irrelevant because
     Run-REDUCE-FX always uses absolute file paths.
     </p>
-    <p>The File menu provides the following items:</p>
+    <p>The <em>File</em> menu provides the following items:</p>
     <h3>Echo File Input</h3>
     <p>Selecting this causes Run-REDUCE-FX to echo file input to
     the <em>Input/Output Display</em> pane. It is selectd by
@@ -282,7 +352,7 @@
 
     <h2 id="REDUCEMenu">The REDUCE Menu</h2>
 
-    <p>The REDUCE menu provides the following items:</p>
+    <p>The <em>REDUCE</em> menu provides the following items:</p>
     <h3>Run REDUCE...</h3>
     <p>This sub-menu provides an item for each configured REDUCE
     command (typically based on different versions of Lisp, by default
@@ -407,7 +477,7 @@
 
     <h2 id="ViewMenu">The View Menu</h2>
 
-    <p>The View menu provides the following items:</p>
+    <p>The <em>View</em> menu provides the following items:</p>
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
@@ -474,14 +544,18 @@
     structured expressions and statements whose syntax might not be
     immediately obvious, especially to a novice.  This menu is
     disabled unless REDUCE is running.  The template dialogues all
-    provide two buttons that apply the filled-in template and close
-    the dialogue: the <em>Edit</em> button inserts the template into
-    the input editor at the current cursor position;
-    the <em>Evaluate</em> button sends the template directly to REDUCE
-    for evaluation.
+    provide two buttons that apply the filled-in template:
+    the <em>Edit</em> button inserts the template into the input
+    editor at the current cursor position; the <em>Evaluate</em>
+    button sends the template directly to REDUCE for evaluation.
+    These buttons do not close the dialogue, which is non-modal
+    (meaning it does not prevent access to other windows) and can be
+    left open but moved out of the way.  In fact, several template
+    dialogues can be open at the same time.  To close a template
+    dialogue, click on the <em>Close</em> button.
     </p>
     <p>If the template represents an operator with a primary operand
-    then it defaults to <em>ws</em>, which is convenient for simple
+    then this defaults to <em>ws</em>, which is convenient for simple
     interactive calculations, but it can be changed to anything.  The
     templates provide some minimal input validation: for example, if
     an element must be an explicit number (rather than a variable that
@@ -489,14 +563,14 @@
     report an error immediately an inappropriate character is entered.
     </p>
     <p>These templates are intended only for creating simple
-    structures, but they can form a basis for arbitrarily complex
+    structures, but they can form the basis for arbitrarily complex
     structures if they are entered into the input editor for further
     editing.  The fields of expression templates display minimal
     formatting intended to hint at how such an expression would
     normally be typeset.
     </p>
-    <p>The Templates menu provides the following items:</p>
-    <h3>Differentiate...</h3>
+    <p>The <em>Templates</em> menu provides the following items:</p>
+    <h3>Derivative...</h3>
     <p>This template supports (partial) differentiation involving up
     to three independent variables, each to arbitrary order.  The
     orders must be explicit positive integers and the total order
@@ -507,13 +581,41 @@
     to <em>ws</em> and the first independent variable defaults
     to <em>x</em>, but both can be changed.
     </p>
-    <h3>Integrate...</h3>
+    <h3>Integral...</h3>
     <p>This template supports both indefinite and definite
     integration: if both limits are omitted then the integral is
     indefinite; if both limits are specified then the integral is
     definite.  The integrand defaults to <em>ws</em> and the
     integration variable defaults to <em>x</em>, but both can be
-    changed.
+    changed.</p>
+    <p>A pair of toggle buttons labelled <em>Symbolic</em>
+    and <em>Numeric</em> allow you to switch between the two modes of
+    evaluation; the default is <em>Symbolic</em>.  Note that only a
+    definite integral can be evaluated numerically and the template
+    checks this.  When the template sends a numeric integral to
+    REDUCE, it also loads the <em>numeric</em> package and turns
+    on <em>rounded</em> mode because otherwise the result gets
+    converted to a rational, which is probably not what you want!
+    Remember that you may need to turn off <em>rounded</em> mode
+    before you continue with symbolic computations.
+    </p>
+    <h3>Limit...</h3>
+    <p>This template supports limits of (mostly) continuous functions
+    (as opposed to sequences).  By default, it computes a two-sided
+    limit, which is appropriate if the function is continuous at the
+    limit point.  By clicking successively on the superscript box to
+    the right of the limit point field you cycle through the limit
+    from the right/above, indicated by a superscript +, the limit from
+    the left/below, indicated by a superscript -, and the default
+    two-sided limit.  All fields are required.
+    </p>
+    <h3>Sum or Product...</h3>
+    <p>This template supports finite repeated sums and products of
+    sequences, i.e. functions of a discrete control variable that runs
+    over a finite range of successive increasing integers.  You select
+    whether to construct a sum or product by clicking on the
+    appropriate toggle button, which defaults to a sum.  All fields
+    are required.
     </p>
     <h3>Matrix...</h3>
     <p>This template supports the creation of matrices up to 4 by 4.
@@ -526,7 +628,7 @@
     which is very convenient for entering diagonal, triangular or
     other sparse matrices.
     </p>
-    <h3>For...</h3>
+    <h3>For Statement...</h3>
     <p>This template supports the creation of <em>for</em> statements
     and is modelled on the diagram at the start of the section of the
     REDUCE manual headed "FOR Statements".  You choose between
@@ -542,8 +644,8 @@
 
     <h2 id="HelpMenu">The Help Menu</h2>
 
-    <p>All the documents accessed via the Help menu are local files.
-    The Help menu provides the following items:</p>
+    <p>All the documents accessed via the <em>Help</em> menu are local
+      files.  The <em>Help</em> menu provides the following items:</p>
     <h3>Run-REDUCE-FX User Guide</h3>
     <p>This opens the Run-REDUCE-FX User Guide in your default web
     browser.  It is extracted from the Java JAR file at most once per

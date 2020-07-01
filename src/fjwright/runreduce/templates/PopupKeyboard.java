@@ -207,7 +207,10 @@ class PopupKeyboard {
             char a = text.charAt(i);
             if (a == '\u200B') {
                 found = true;
-                builder.append(map.get(text.charAt(++i)));
+                a = text.charAt(++i);
+                String b = map.get(a);
+                // In case the symbolic constant is deleted but the marker is left!
+                builder.append(b == null ? a : b);
             } else
                 builder.append(a);
         }

@@ -2,7 +2,7 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, June 2020
+### Francis Wright, July 2020
 
 Run-REDUCE-FX is a re-implementation of
 [Run-REDUCE](https://fjwright.github.io/Run-REDUCE/) using JavaFX
@@ -67,8 +67,13 @@ top-level directory.
 
 ### Updates since last release
 
-* V1.31 Sum or Product template. Use Text instead of Label for the text at the 
-  top of each template. This seems to avoid truncated text reliably and portably.
-* Add a Symbolic/Numeric switch to the Integrate template. Make the expression templates a little wider.
-* Add a Limit template. Make template dialogues non-modal and don't close them automatically on applying them.
-  Rename some templates using nouns rather than verbs consistently.
+* V1.31 Sum or Product template. Use Text instead of Label for the
+  text at the top of each template. This seems to avoid truncated text
+  reliably and portably.
+* Add a Symbolic/Numeric switch to the Integrate template. Make the
+  expression templates a little wider.
+* Add a Limit template. Make template dialogues non-modal and don't
+  close them automatically on applying them.  Rename some templates
+  using nouns rather than verbs consistently.
+* V1.32 Add a pop-up keyboard for entering non-ASCII characters:
+  currently some symbolic constants and the Greek alphabet.
