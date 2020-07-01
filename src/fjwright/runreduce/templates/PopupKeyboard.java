@@ -10,10 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -76,6 +73,8 @@ class PopupKeyboard {
     private static final Text[] gridPane1Text =
             {new Text("Greek Lower-Case Letters"), new Text("Greek Upper-Case Letters")};
 
+    private static final double BUTTON_WIDTH = 30;
+
     static {
         final var hBox = new HBox();
         popup.getContent().add(hBox);
@@ -90,8 +89,7 @@ class PopupKeyboard {
         shiftButton.setGraphic(shiftText);
         hBox.getChildren().add(shiftButton);
         shiftButton.setMaxHeight(Double.MAX_VALUE);
-        shiftButton.setPrefWidth(30);
-        shiftButton.setMinWidth(30);
+        shiftButton.setPrefWidth(BUTTON_WIDTH);
         shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
         shiftButton.setTooltip(new Tooltip(
                 "Click, or hold the Shift key, to show the secondary keyboard." +
@@ -103,6 +101,7 @@ class PopupKeyboard {
         gridPane0Text.setStyle(GRIDPANE_TEXT_STYLE);
         final var gridStackPane0 = new StackPane();
         final var vBox0 = new VBox(gridPane0Text, gridStackPane0);
+        vBox0.setAlignment(Pos.CENTER);
         hBox.getChildren().add(vBox0);
         for (int s = 0; s < 2; s++) {
             gridStackPane0.getChildren().add(gridPane0[s] = new GridPane());
@@ -110,7 +109,7 @@ class PopupKeyboard {
                 String constant = constants[s][i];
                 Button button = new Button(constant);
                 gridPane0[s].add(button, 0, i);
-                button.setMaxWidth(Double.MAX_VALUE);
+                button.setPrefWidth(BUTTON_WIDTH);
                 button.setTooltip(new Tooltip(constTooltips[s][i]));
                 button.setOnAction(actionEvent -> charButtonAction(constant));
             }
@@ -120,13 +119,11 @@ class PopupKeyboard {
         // Ths unshifted and shifted button grids are superimposed, but one is hidden.
         final var textStackPane1 = new StackPane();
         final var gridStackPane1 = new StackPane();
-        gridStackPane1.setAlignment(Pos.CENTER);
         final var vBox1 = new VBox(textStackPane1, gridStackPane1);
         vBox1.setAlignment(Pos.CENTER);
         hBox.getChildren().add(vBox1);
         for (int s = 0; s < 2; s++) {
             gridStackPane1.getChildren().add(gridPane1[s] = new GridPane());
-            gridPane1[s].setMaxWidth(Double.MAX_VALUE);
             textStackPane1.getChildren().add(gridPane1Text[s]);
             gridPane1Text[s].setStyle(GRIDPANE_TEXT_STYLE);
             for (int i = 0; i < greekLetters[s].length; i++)
@@ -134,15 +131,10 @@ class PopupKeyboard {
                     String greekLetter = greekLetters[s][i][j];
                     Button button = new Button(greekLetter);
                     gridPane1[s].add(button, j, i);
-                    button.setMaxWidth(Double.MAX_VALUE);
+                    button.setPrefWidth(BUTTON_WIDTH);
                     button.setOnAction(actionEvent -> charButtonAction(greekLetter));
                 }
         }
-
-        // Initialise the shift state
-        gridPane0[1].setVisible(false);
-        gridPane1[1].setVisible(false);
-        gridPane1Text[1].setVisible(false);
 
         // Close button
         final var closeText = new Text("Close");
@@ -151,15 +143,19 @@ class PopupKeyboard {
         closeButton.setGraphic(closeText);
         hBox.getChildren().add(closeButton);
         closeButton.setMaxHeight(Double.MAX_VALUE);
-        closeButton.setPrefWidth(30);
-        closeButton.setMinWidth(30);
+        closeButton.setPrefWidth(BUTTON_WIDTH);
         closeButton.setOnAction(actionEvent -> popup.hide());
         closeButton.setTooltip(new Tooltip(
                 "Close the pop-up.\nPressing the Escape key also closes the pop-up."));
+
+        // Initialise the shift state
+        gridPane0[1].setVisible(false);
+        gridPane1[1].setVisible(false);
+        gridPane1Text[1].setVisible(false);
     }
 
     /**
-     * Overwrite selected text or insert character in target TextField at its caret.
+     * Overwrite selected text in target TextField or insert character at caret.
      */
     private static void charButtonAction(String character) {
         TextField textField = (TextField) target;
