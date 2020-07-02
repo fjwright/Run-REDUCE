@@ -10,7 +10,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -39,29 +42,38 @@ class PopupKeyboard {
     private static final String[][] constants = new String[][]{
             {"\u200B∞", "\u200Bπ"},
             {"\u200Bγ", "\u200Bφ"}};
-    private static final String[][] constTooltips = new String[][]{
+    private static final String[][] constantTooltips = new String[][]{
             {"INFINITY: bigger than any real or natural number",
                     "PI: Archimedes' circle constant = 3.14159..."},
             {"EULER_GAMMA: Euler-Mascheroni constant = 0.57722...",
                     "GOLDEN_RATIO: (1+√5)/2 = 1.61803..."}};
+    private static final String[][] constantNames = new String[][]
+            {{"infinity", "pi"}, {"euler_gamma", "golden_ratio"}};
 
     private static final String[][][] greekLetters = new String[2][2][12];
     //  Α α, Β β, Γ γ, Δ δ, Ε ε, Ζ ζ, Η η, Θ θ, Ι ι, Κ κ, Λ λ, Μ μ,
     //  Ν ν, Ξ ξ, Ο ο, Π π, Ρ ρ, Σ ς/σ, Τ τ, Υ υ, Φ φ, Χ χ, Ψ ψ, Ω ω
 
+    private static final String[][][] greekLetterNames = new String[2][2][12];
+
     static {
         char gl = '\u03B1'; // α
-        for (int i = 0; i < greekLetters[0].length; i++)
-            for (int j = 0; j < greekLetters[0][i].length; j++) {
-                greekLetters[0][i][j] = String.valueOf(gl++);
-                if (gl == '\u03C2' /* skip ς */) gl++;
-            }
-        gl = '\u0391'; // Α
-        for (int i = 0; i < greekLetters[1].length; i++)
-            for (int j = 0; j < greekLetters[1][i].length; j++) {
-                greekLetters[1][i][j] = String.valueOf(gl++);
-                if (gl == '\u03A2' /* skip empty UC ς code point */) gl++;
-            }
+        for (int s = 0; s < greekLetters.length; s++) {
+            for (int i = 0; i < greekLetters[0].length; i++)
+                for (int j = 0; j < greekLetters[0][i].length; j++) {
+                    greekLetters[s][i][j] = String.valueOf(gl);
+                    String name = Character.getName(gl++);
+                    name = name.substring(name.lastIndexOf(' ') + 1);
+                    if (s == 0) name = name.toLowerCase();
+                    else name = Character.toString(name.charAt(0))
+                            .concat(name.substring(1).toLowerCase());
+//                    System.err.println("'" + name + "'");
+                    greekLetterNames[s][i][j] = name;
+                    // Skip ς and empty UC ς code point:
+                    if (gl == '\u03C2' || gl == '\u03A2') gl++;
+                }
+            gl = '\u0391'; // Α
+        }
     }
 
     private static final String GRIDPANE_TEXT_STYLE =
@@ -106,12 +118,13 @@ class PopupKeyboard {
         for (int s = 0; s < 2; s++) {
             gridStackPane0.getChildren().add(gridPane0[s] = new GridPane());
             for (int i = 0; i < constants[s].length; i++) {
-                String constant = constants[s][i];
-                Button button = new Button(constant);
+                Button button = new Button(constants[s][i]);
                 gridPane0[s].add(button, 0, i);
                 button.setPrefWidth(BUTTON_WIDTH);
-                button.setTooltip(new Tooltip(constTooltips[s][i]));
-                button.setOnAction(actionEvent -> charButtonAction(constant));
+                button.setTooltip(new Tooltip(constantTooltips[s][i]));
+                int[] indices = {s, i};
+                button.setOnMouseClicked(mouseEvent ->
+                        charButtonAction(mouseEvent, indices));
             }
         }
 
@@ -128,11 +141,13 @@ class PopupKeyboard {
             gridPane1Text[s].setStyle(GRIDPANE_TEXT_STYLE);
             for (int i = 0; i < greekLetters[s].length; i++)
                 for (int j = 0; j < greekLetters[s][i].length; j++) {
-                    String greekLetter = greekLetters[s][i][j];
-                    Button button = new Button(greekLetter);
+                    Button button = new Button(greekLetters[s][i][j]);
                     gridPane1[s].add(button, j, i);
                     button.setPrefWidth(BUTTON_WIDTH);
-                    button.setOnAction(actionEvent -> charButtonAction(greekLetter));
+                    button.setTooltip(new Tooltip(greekLetterNames[s][i][j]));
+                    int[] indices = {s, i, j};
+                    button.setOnMouseClicked(mouseEvent ->
+                            charButtonAction(mouseEvent, indices));
                 }
         }
 
@@ -155,14 +170,22 @@ class PopupKeyboard {
     }
 
     /**
-     * Overwrite selected text in target TextField or insert character at caret.
+     * Overwrite selected text in target TextField or insert text at caret.
      */
-    private static void charButtonAction(String character) {
+    private static void charButtonAction(MouseEvent mouseEvent, int[] indices) {
+        String text;
+        if (mouseEvent.isControlDown()) {
+            if (indices.length == 2) text = constantNames[indices[0]][indices[1]];
+            else text = greekLetterNames[indices[0]][indices[1]][indices[2]];
+        } else {
+            if (indices.length == 2) text = constants[indices[0]][indices[1]];
+            else text = greekLetters[indices[0]][indices[1]][indices[2]];
+        }
         TextField textField = (TextField) target;
         if (textField.getSelectedText() == null)
-            textField.insertText(textField.getCaretPosition(), character);
+            textField.insertText(textField.getCaretPosition(), text);
         else
-            textField.replaceSelection(character);
+            textField.replaceSelection(text);
         popup.hide();
     }
 
