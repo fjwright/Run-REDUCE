@@ -3,11 +3,17 @@ package fjwright.runreduce.templates;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.regex.Pattern;
@@ -15,15 +21,34 @@ import java.util.regex.Pattern;
 /**
  * This is the base class for the specific template classes.
  */
-abstract class Template {
+public abstract class Template {
 
 // Set up the pop-up keyboard on the middle mouse button for all template dialogues ===============
 
     @FXML
-    private Node templateRoot;
+    private VBox templateRoot;
 
     @FXML
     protected void initialize() {
+        // Add the button bar to the bottom of the template:
+        var hBox = new HBox();
+        templateRoot.getChildren().add(hBox);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
+        hBox.setSpacing(20);
+        hBox.setPadding(new Insets(10));
+        var button = new Button("Edit");
+        hBox.getChildren().add(button);
+        button.setOnAction(this::editButtonAction);
+        button.setTooltip(new Tooltip("Insert into input editor"));
+        button = new Button("Evaluate");
+        hBox.getChildren().add(button);
+        button.setOnAction(this::evaluateButtonAction);
+        button.setTooltip(new Tooltip("Send to REDUCE"));
+        button = new Button("Close");
+        hBox.getChildren().add(button);
+        button.setOnAction(this::closeButtonAction);
+
+        // Register the pop-up handler on the template:
         templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKeyboard);
     }
 

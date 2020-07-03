@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+<VBox fx:id="templateRoot" alignment="CENTER" spacing="20.0" stylesheets="@templates.css"
+      xmlns="http://javafx.com/javafx/10.0.2-internal"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Limit">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -25,25 +26,9 @@
                 <TextField fx:id="limPointTextField" alignment="CENTER" prefColumnCount="3" promptText="alg"
                            styleClass="limit" text="0"/>
                 <Label fx:id="dirLabel" alignment="CENTER" minWidth="12.0" onMouseClicked="#dirMouseClicked"
-                       styleClass="lim-dir"/> <!-- En Quad = U+2000 -->
+                       styleClass="lim-dir"/>
             </HBox>
         </VBox>
         <TextField fx:id="exprnTextField" promptText="algebraic" text="ws"/>
-    </HBox>
-    <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.rowIndex="3">
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </padding>
-        <Button mnemonicParsing="false" onAction="#editButtonAction" text="Edit">
-            <tooltip>
-                <Tooltip text="Insert into input editor"/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#evaluateButtonAction" text="Evaluate">
-            <tooltip>
-                <Tooltip text="Send to REDUCE"/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#closeButtonAction" text="Close"/>
     </HBox>
 </VBox>

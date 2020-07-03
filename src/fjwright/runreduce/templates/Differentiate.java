@@ -83,8 +83,8 @@ public class Differentiate extends Template {
         for (var i = 0; i < 3; i++) {
             final String indVar = indVarTextFields[i].getText();
             if (!indVar.isEmpty()) {
-                text.append(",").append(indVar);
-                if (orders[i] > 1) text.append(",").append(orders[i]);
+                text.append(", ").append(indVar);
+                if (orders[i] > 1) text.append(", ").append(orders[i]);
             } else if (i == 0) {
                 RunREDUCE.errorMessageDialog("Differentiate Template Error",
                         "The first independent variable is required.");

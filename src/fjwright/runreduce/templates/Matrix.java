@@ -56,10 +56,10 @@ public class Matrix extends Template {
         StringBuilder text = new StringBuilder("mat(");
         for (int i = 0; i < nRows; i++) {
             String[] row = stringArray[i];
-            if (i > 0) text.append(",");
+            if (i > 0) text.append(", ");
             text.append("(");
             for (int j = 0; j < nCols; j++) {
-                if (j > 0) text.append(",");
+                if (j > 0) text.append(", ");
                 text.append(row[j]);
             }
             text.append(")");

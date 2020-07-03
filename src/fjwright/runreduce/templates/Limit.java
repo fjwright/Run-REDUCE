@@ -32,8 +32,8 @@ public class Limit extends Template {
                 text.append("!-(");
         }
         text.append(getTextCheckNonEmpty(exprnTextField))
-                .append(",").append(getTextCheckNonEmpty(varTextField))
-                .append(",").append(getTextCheckNonEmpty(limPointTextField))
+                .append(", ").append(getTextCheckNonEmpty(varTextField))
+                .append(", ").append(getTextCheckNonEmpty(limPointTextField))
                 .append(")");
         return text.toString();
     }

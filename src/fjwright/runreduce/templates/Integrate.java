@@ -33,8 +33,8 @@ public class Integrate extends Template {
         }
         final var text = new StringBuilder();
         if (numToggleButton.isSelected()) text.append("load_package numeric; on rounded; num_");
-        text.append("int(").append(integrand).append(",").append(intVar);
-        if (!indefInt) text.append(",").append(lowLim).append(",").append(upLim);
+        text.append("int(").append(integrand).append(", ").append(intVar);
+        if (!indefInt) text.append(", ").append(lowLim).append(", ").append(upLim);
         return text.append(")").toString();
     }
 }

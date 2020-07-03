@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" stylesheets="@templates.css" spacing="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
+<VBox fx:id="templateRoot" alignment="CENTER" stylesheets="@templates.css" spacing="20.0"
+      xmlns="http://javafx.com/javafx/10.0.2-internal"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.For">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -118,20 +119,4 @@ allowed only in symbolic mode and makes the 'for variable' evaluate to successiv
             </padding>
         </HBox>
     </VBox>
-    <HBox alignment="CENTER_RIGHT" spacing="20.0">
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </padding>
-        <Button mnemonicParsing="false" onAction="#editButtonAction" text="Edit">
-            <tooltip>
-                <Tooltip text="Insert into input editor"/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#evaluateButtonAction" text="Evaluate">
-            <tooltip>
-                <Tooltip text="Send to REDUCE"/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#closeButtonAction" text="Close"/>
-    </HBox>
 </VBox>
