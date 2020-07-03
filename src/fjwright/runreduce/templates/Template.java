@@ -24,7 +24,7 @@ abstract class Template {
 
     @FXML
     protected void initialize() {
-        templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::middleMouseButtonClicked);
+        templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKeyboard);
     }
 
 // Check field entries dynamically ================================================================

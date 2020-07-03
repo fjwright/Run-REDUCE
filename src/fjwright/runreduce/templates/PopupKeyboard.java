@@ -27,14 +27,17 @@ class PopupKeyboard {
     private static Node target;
     private final static Popup popup = new Popup();
 
-    static void middleMouseButtonClicked(MouseEvent mouseEvent) {
-        if (!(mouseEvent.getButton() == MouseButton.MIDDLE &&
+    static void showPopupKeyboard(MouseEvent mouseEvent) {
+        if (((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
+                (mouseEvent.getButton() == MouseButton.MIDDLE))
+                &&
                 ((((target = ((Node) mouseEvent.getTarget()).getParent()) instanceof TextField) || // on TextField
                         ((target = target.getParent()) instanceof TextField) || // on TextField content
-                        ((target = target.getParent()) instanceof TextField))))) // on TextField content caret
-            return;
-        popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-        applyShiftButton(mouseEvent.isShiftDown());
+                        ((target = target.getParent()) instanceof TextField)))) // on TextField content caret
+        {
+            popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            applyShiftButton(mouseEvent.isShiftDown());
+        }
     }
 
     // Array [0][...] is unshifted; [1][...] is shifted.
