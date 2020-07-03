@@ -508,6 +508,11 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void solveMenuItemAction() {
+        showDialogAndWait("Solve Equation(s)", "templates/Solve.fxml", Modality.NONE);
+    }
+
+    @FXML
     private void forMenuItemAction() {
         showDialogAndWait("Create a For Statement", "templates/For.fxml", Modality.NONE);
     }

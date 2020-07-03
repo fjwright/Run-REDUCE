@@ -59,6 +59,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#limitMenuItemAction" text="Limit..." />
                 <MenuItem mnemonicParsing="false" onAction="#sumProdMenuItemAction" text="Sum or Product..." />
                 <MenuItem mnemonicParsing="false" onAction="#matrixMenuItemAction" text="Matrix..." />
+                <MenuItem mnemonicParsing="false" onAction="#solveMenuItemAction" text="Solve Equation(s)..." />
                 <MenuItem mnemonicParsing="false" onAction="#forMenuItemAction" text="For Statement..." />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
