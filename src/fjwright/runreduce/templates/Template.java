@@ -6,16 +6,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -63,7 +62,7 @@ public abstract class Template {
         final String text = textField.getText();
         if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
             RunREDUCE.errorMessageDialog("Template Error",
-                    "This field must be an identifier.");
+                    "This field must be, or begin with, an identifier.");
             textField.setText("");
         }
     }
@@ -82,6 +81,39 @@ public abstract class Template {
         }
     }
 
+// Process switches ===============================================================================
+
+    private final List<String> switchOnOffList = new ArrayList<>();
+    private final List<String> switchOffOnList = new ArrayList<>();
+
+    /**
+     * Call this method in result() in each specific template class
+     * for switches that are off by default to turn them on
+     * and off again after evaluating the template output.
+     */
+    protected void switchesOnOff(CheckBox... switchCheckBoxes) {
+        switchOnOffList.clear();
+        for (var switchCheckBox : switchCheckBoxes) {
+            if (switchCheckBox.isSelected()) {
+                switchOnOffList.add(switchCheckBox.getText());
+            }
+        }
+    }
+
+    /**
+     * Call this method in result() in each specific template class
+     * for switches that are on by default to turn them off
+     * and on again after evaluating the template output.
+     */
+    protected void switchesOffOn(CheckBox... switchCheckBoxes) {
+        switchOffOnList.clear();
+        for (var switchCheckBox : switchCheckBoxes) {
+            if (!switchCheckBox.isSelected()) {
+                switchOffOnList.add(switchCheckBox.getText());
+            }
+        }
+    }
+
 // Process the result =============================================================================
 
     protected static class EmptyFieldException extends Exception {
@@ -97,7 +129,48 @@ public abstract class Template {
             return text;
     }
 
+    /**
+     * This method must be overridden by each specific template class
+     * to construct the result.
+     */
     abstract String result() throws EmptyFieldException;
+
+    /**
+     * This method processes the result returned by each specific template class to decode any
+     * symbolic constants and precede and follow the result with any required switch settings.
+     */
+    private String processResult() throws EmptyFieldException {
+        // result() initialises the switch lists.
+        String decodedResult = PopupKeyboard.decode(result());
+        if (switchOnOffList.isEmpty() && switchOffOnList.isEmpty())
+            return decodedResult;
+        String switchOnOffString = null, switchOffOnString = null;
+        if (!switchOnOffList.isEmpty())
+            switchOnOffString = String.join(", ", switchOnOffList);
+        if (!switchOffOnList.isEmpty())
+            switchOffOnString = String.join(", ", switchOffOnList);
+        StringBuilder result = new StringBuilder();
+        if (switchOnOffString != null) {
+            result.append("on ");
+            result.append(switchOnOffString);
+            result.append(";\n");
+        }
+        if (switchOffOnString != null) {
+            result.append("off ");
+            result.append(switchOffOnString);
+            result.append(";\n");
+        }
+        result.append(decodedResult);
+        if (switchOffOnString != null) {
+            result.append(";\non ");
+            result.append(switchOffOnString);
+        }
+        if (switchOnOffString != null) {
+            result.append(";\noff ");
+            result.append(switchOnOffString);
+        }
+        return result.toString();
+    }
 
     // Could apply PopupKeyboard.decode() below more efficiently only to appropriate user input.
     // But it seems fast enough as it is.
@@ -107,7 +180,7 @@ public abstract class Template {
         // Insert in input editor if valid:
         try {
             final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-            textArea.insertText(textArea.getCaretPosition(), PopupKeyboard.decode(result()));
+            textArea.insertText(textArea.getCaretPosition(), processResult());
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
@@ -118,7 +191,7 @@ public abstract class Template {
     private void evaluateButtonAction(ActionEvent actionEvent) {
         // Send to REDUCE if valid:
         try {
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(PopupKeyboard.decode(result()) + ";\n");
+            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(processResult() + ";\n");
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {

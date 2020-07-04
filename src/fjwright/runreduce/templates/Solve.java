@@ -1,7 +1,11 @@
 package fjwright.runreduce.templates;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.stream;
 
@@ -10,6 +14,10 @@ public class Solve extends Template {
     private TextField eqn1TextField, eqn2TextField, eqn3TextField;
     @FXML
     private TextField var1TextField, var2TextField, var3TextField;
+    @FXML /* Default off */
+    private CheckBox multiplicitiesCheckBox, fullrootsCheckBox;
+    @FXML /* Default on */
+    private CheckBox trigformCheckBox, solvesingularCheckBox, allbranchCheckBox, arbvarsCheckBox;
 
     private TextField[] eqnTextFields, varTextFields;
 
@@ -23,6 +31,8 @@ public class Solve extends Template {
 
     @Override
     String result() throws EmptyFieldException {
+        switchesOnOff(multiplicitiesCheckBox, fullrootsCheckBox);
+        switchesOffOn(trigformCheckBox, solvesingularCheckBox, allbranchCheckBox, arbvarsCheckBox);
         String[] eqns = stream(eqnTextFields).map(t -> t.getText().trim()).filter(s -> !s.isEmpty()).toArray(String[]::new);
         String[] vars = stream(varTextFields).map(t -> t.getText().trim()).filter(s -> !s.isEmpty()).toArray(String[]::new);
         if (eqns.length == 0) throw new EmptyFieldException();
