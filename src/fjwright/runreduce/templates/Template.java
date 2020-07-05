@@ -3,7 +3,6 @@ package fjwright.runreduce.templates;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -22,19 +21,19 @@ import java.util.regex.Pattern;
  */
 public abstract class Template {
 
-// Set up the pop-up keyboard on the middle mouse button for all template dialogues ===============
+// Add the button bar to the bottom of the dialogue box and
+// set up the pop-up keyboard on the middle mouse button for all template dialogues ===============
 
     @FXML
     private VBox templateRoot;
 
     @FXML
     protected void initialize() {
-        // Add the button bar to the bottom of the template:
+        // Add the button bar to the bottom of the dialogue box:
         var hBox = new HBox();
         templateRoot.getChildren().add(hBox);
         hBox.setAlignment(Pos.CENTER_RIGHT);
         hBox.setSpacing(20);
-        hBox.setPadding(new Insets(10));
         var button = new Button("Edit");
         hBox.getChildren().add(button);
         button.setOnAction(this::editButtonAction);
@@ -88,23 +87,29 @@ public abstract class Template {
 
     /**
      * Call this method in result() in each specific template class
-     * for switches that are off by default to turn them on
+     * for switch CheckBoxes that are off by default to turn them on
      * and off again after evaluating the template output.
      */
-    protected void switchesOnOff(CheckBox... switchCheckBoxes) {
-        for (var switchCheckBox : switchCheckBoxes) {
-            if (switchCheckBox.isSelected()) {
-                switchOnOffList.add(switchCheckBox.getText());
-            }
-        }
+    protected void switchCheckBoxesOnOff(CheckBox... switchCheckBoxes) {
+        for (var switchCheckBox : switchCheckBoxes)
+            if (switchCheckBox.isSelected()) switchOnOffList.add(switchCheckBox.getText());
     }
 
     /**
      * Call this method in result() in each specific template class
-     * for switches that are on by default to turn them off
+     * for switch Names that are off by default to turn them on
+     * and off again after evaluating the template output.
+     */
+    protected void switchNameOnOff(String switchName) {
+        switchOnOffList.add(switchName);
+    }
+
+    /**
+     * Call this method in result() in each specific template class
+     * for switch CheckBoxes that are on by default to turn them off
      * and on again after evaluating the template output.
      */
-    protected void switchesOffOn(CheckBox... switchCheckBoxes) {
+    protected void switchCheckBoxesOffOn(CheckBox... switchCheckBoxes) {
         for (var switchCheckBox : switchCheckBoxes) {
             if (!switchCheckBox.isSelected()) {
                 switchOffOnList.add(switchCheckBox.getText());
@@ -134,11 +139,19 @@ public abstract class Template {
     abstract String result() throws EmptyFieldException;
 
     /**
+     * This method may be overridden by a specific template class
+     * to construct output that precedes the main result.
+     */
+    String resultPreamble() {
+        return "";
+    }
+
+    /**
      * This method processes the result returned by each specific template class to decode any
      * symbolic constants and precede and follow the result with any required switch settings.
      */
     private String processResult() throws EmptyFieldException {
-        // result() initialises the switch lists.
+        // result() must be called early because it sets the switch lists.
         String decodedResult = PopupKeyboard.decode(result());
         if (switchOnOffList.isEmpty() && switchOffOnList.isEmpty())
             return decodedResult;
@@ -149,26 +162,12 @@ public abstract class Template {
             switchOffOnString = String.join(", ", switchOffOnList);
         switchOnOffList.clear();
         switchOffOnList.clear();
-        StringBuilder result = new StringBuilder();
-        if (switchOnOffString != null) {
-            result.append("on ");
-            result.append(switchOnOffString);
-            result.append(";\n");
-        }
-        if (switchOffOnString != null) {
-            result.append("off ");
-            result.append(switchOffOnString);
-            result.append(";\n");
-        }
+        StringBuilder result = new StringBuilder(resultPreamble());
+        if (switchOnOffString != null) result.append("on ").append(switchOnOffString).append(";\n");
+        if (switchOffOnString != null) result.append("off ").append(switchOffOnString).append(";\n");
         result.append(decodedResult);
-        if (switchOffOnString != null) {
-            result.append(";\non ");
-            result.append(switchOffOnString);
-        }
-        if (switchOnOffString != null) {
-            result.append(";\noff ");
-            result.append(switchOnOffString);
-        }
+        if (switchOffOnString != null) result.append(";\non ").append(switchOffOnString);
+        if (switchOnOffString != null) result.append(";\noff ").append(switchOnOffString);
         return result.toString();
     }
 
