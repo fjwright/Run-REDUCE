@@ -1,104 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="440.0" spacing="20.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.templates.Solve">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="440.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Solve">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD"
-              text="At least one equation or expression is required. If no unknowns are specified then REDUCE solves for all those found. (Unknowns must be kernels.)"
-              textAlignment="CENTER" wrappingWidth="400.0"/>
+        <Text fontSmoothingType="LCD" text="At least one equation or expression is required.
+&#10;Symbolic: If no unknowns are specified then REDUCE solves for all those found. (Unknowns must be kernels.)
+&#10;Numeric: The variables must be specified but their starting values are optional." textAlignment="CENTER" wrappingWidth="400.0" />
     </HBox>
     <HBox alignment="CENTER" spacing="10.0">
-        <ToggleButton mnemonicParsing="false" selected="true" text="Symbolic">
-            <toggleGroup>
-                <ToggleGroup fx:id="symNumToggleGroup"/>
-            </toggleGroup>
-        </ToggleButton>
-        <ToggleButton fx:id="numToggleButton" mnemonicParsing="false" text="Numeric" toggleGroup="$symNumToggleGroup"/>
+      <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symRadioButtonAction" selected="true" text="Symbolic">
+         <toggleGroup>
+                <ToggleGroup fx:id="symNumToggleGroup" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#numRadioButtonAction" text="Numeric" toggleGroup="$symNumToggleGroup" />
     </HBox>
-    <GridPane alignment="CENTER" hgap="20.0">
+    <GridPane fx:id="mainGridPane" alignment="CENTER" hgap="10.0">
         <columnConstraints>
-            <ColumnConstraints percentWidth="75.0"/>
-            <ColumnConstraints percentWidth="25.0"/>
+            <ColumnConstraints percentWidth="75.0" />
+            <ColumnConstraints percentWidth="25.0" />
+            <ColumnConstraints percentWidth="0.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
-        <Label text="Equations or expressions" GridPane.columnIndex="0"/>
-        <Label text="Unknowns" GridPane.columnIndex="1"/>
-        <TextField fx:id="eqn1TextField" promptText="equation or expression" text="ws" GridPane.columnIndex="0"
-                   GridPane.rowIndex="1"/>
-        <TextField fx:id="var1TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1"
-                   GridPane.rowIndex="1"/>
-        <TextField fx:id="eqn2TextField" promptText="equation or expression" GridPane.columnIndex="0"
-                   GridPane.rowIndex="2"/>
-        <TextField fx:id="var2TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1"
-                   GridPane.rowIndex="2"/>
-        <TextField fx:id="eqn3TextField" promptText="equation or expression" GridPane.columnIndex="0"
-                   GridPane.rowIndex="3"/>
-        <TextField fx:id="var3TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1"
-                   GridPane.rowIndex="3"/>
+        <Label text="Equations or expressions" GridPane.columnIndex="0" />
+        <Label text="Unknowns" GridPane.columnIndex="1" />
+        <Label fx:id="startFromLabel" text="Start from" visible="false" GridPane.columnIndex="2" />
+        <TextField fx:id="eqn1TextField" promptText="equation or expression" text="ws" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="var1TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="start1TextField" promptText="number" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <TextField fx:id="eqn2TextField" promptText="equation or expression" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="var2TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="start2TextField" promptText="number" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <TextField fx:id="eqn3TextField" promptText="equation or expression" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="var3TextField" onKeyTyped="#varCheckKeyTyped" promptText="unknown" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="start3TextField" promptText="number" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <padding>
+         <Insets right="-10.0" />
+      </padding>
     </GridPane>
-    <GridPane alignment="CENTER" hgap="50.0" vgap="10.0">
+    <GridPane fx:id="switchGridPane" alignment="CENTER" hgap="50.0" vgap="10.0">
         <columnConstraints>
-            <ColumnConstraints/>
-            <ColumnConstraints/>
+            <ColumnConstraints />
+            <ColumnConstraints />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
         <CheckBox fx:id="multiplicitiesCheckBox" mnemonicParsing="false" text="multiplicities">
             <tooltip>
-                <Tooltip text="Include multiple solutions"/>
+                <Tooltip text="Include multiple solutions" />
             </tooltip>
         </CheckBox>
         <CheckBox fx:id="fullrootsCheckBox" mnemonicParsing="false" text="fullroots" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="Output full roots of cubics and quartics"/>
+                <Tooltip text="Output full roots of cubics and quartics" />
             </tooltip>
         </CheckBox>
         <CheckBox fx:id="trigformCheckBox" mnemonicParsing="false" selected="true" text="trigform" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Use trigonometric forms of roots of cubics and quartics"/>
+                <Tooltip text="Use trigonometric forms of roots of cubics and quartics" />
             </tooltip>
         </CheckBox>
         <CheckBox fx:id="solvesingularCheckBox" mnemonicParsing="false" selected="true" text="solvesingular" GridPane.columnIndex="1">
             <tooltip>
-                <Tooltip text="Use arbitrary constants for degenerate systems"/>
+                <Tooltip text="Use arbitrary constants for degenerate systems" />
             </tooltip>
         </CheckBox>
-        <CheckBox fx:id="allbranchCheckBox" mnemonicParsing="false" selected="true" text="allbranch" GridPane.columnIndex="1"
-                  GridPane.rowIndex="1">
+        <CheckBox fx:id="allbranchCheckBox" mnemonicParsing="false" selected="true" text="allbranch" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="Include all branches"/>
+                <Tooltip text="Include all branches" />
             </tooltip>
         </CheckBox>
-        <CheckBox fx:id="arbvarsCheckBox" mnemonicParsing="false" selected="true" text="arbvars" GridPane.columnIndex="1"
-                  GridPane.rowIndex="2">
+        <CheckBox fx:id="arbvarsCheckBox" mnemonicParsing="false" selected="true" text="arbvars" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Use new indeterminate kernels"/>
+                <Tooltip text="Use new indeterminate kernels" />
             </tooltip>
         </CheckBox>
     </GridPane>

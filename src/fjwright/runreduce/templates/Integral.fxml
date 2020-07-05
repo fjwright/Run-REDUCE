@@ -20,12 +20,12 @@
         <padding>
             <Insets top="20.0"/>
         </padding>
-        <ToggleButton mnemonicParsing="false" selected="true" text="Symbolic">
+        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" selected="true" text="Symbolic">
             <toggleGroup>
                 <ToggleGroup fx:id="symNumToggleGroup"/>
             </toggleGroup>
-        </ToggleButton>
-        <ToggleButton fx:id="numToggleButton" mnemonicParsing="false" text="Numeric" toggleGroup="$symNumToggleGroup"/>
+        </RadioButton>
+        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" text="Numeric" toggleGroup="$symNumToggleGroup"/>
     </HBox>
     <HBox alignment="CENTER" styleClass="styled-textfields">
         <Label styleClass="int-symbol" text="∫"/>

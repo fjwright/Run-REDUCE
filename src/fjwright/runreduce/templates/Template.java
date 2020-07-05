@@ -92,7 +92,6 @@ public abstract class Template {
      * and off again after evaluating the template output.
      */
     protected void switchesOnOff(CheckBox... switchCheckBoxes) {
-        switchOnOffList.clear();
         for (var switchCheckBox : switchCheckBoxes) {
             if (switchCheckBox.isSelected()) {
                 switchOnOffList.add(switchCheckBox.getText());
@@ -106,7 +105,6 @@ public abstract class Template {
      * and on again after evaluating the template output.
      */
     protected void switchesOffOn(CheckBox... switchCheckBoxes) {
-        switchOffOnList.clear();
         for (var switchCheckBox : switchCheckBoxes) {
             if (!switchCheckBox.isSelected()) {
                 switchOffOnList.add(switchCheckBox.getText());
@@ -149,6 +147,8 @@ public abstract class Template {
             switchOnOffString = String.join(", ", switchOnOffList);
         if (!switchOffOnList.isEmpty())
             switchOffOnString = String.join(", ", switchOffOnList);
+        switchOnOffList.clear();
+        switchOffOnList.clear();
         StringBuilder result = new StringBuilder();
         if (switchOnOffString != null) {
             result.append("on ");
