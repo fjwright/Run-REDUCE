@@ -88,16 +88,9 @@ public class Solve extends Template {
     }
 
     @Override
-    String resultPreamble() {
-        if (numRadioButton.isSelected()) {
-            return "load_package numeric;\n";
-        } else
-            return "";
-    }
-
-    @Override
     String result() throws EmptyFieldException {
         if (numRadioButton.isSelected()) {
+            preamble("load_package numeric;\n");
             switchNameOnOff("rounded");
             switchCheckBoxesOnOff(complexCheckBox);
         } else {

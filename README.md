@@ -79,3 +79,4 @@ top-level directory.
   currently some symbolic constants and the Greek alphabet.
 * Add a Solve template with a Symbolic/Numeric option and access to relevant switches/options.
 * Add numeric options to the Integral template.
+* Support multiple integrals.

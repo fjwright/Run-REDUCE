@@ -3,10 +3,12 @@
 .d-symbol {
     -fx-font-size: 20px;
 }
+/*
 .int-symbol {
     -fx-font-size: 100px;
     -fx-translate-y: -10;
 }
+*/
 .lim-symbol {
     -fx-font-size: 20px;
 }

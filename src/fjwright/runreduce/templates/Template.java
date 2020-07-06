@@ -56,7 +56,7 @@ public abstract class Template {
             Pattern.compile("(?:!|\\p{Alpha}).*");  // non-capturing group
 
     @FXML
-    private void varCheckKeyTyped(KeyEvent keyEvent) {
+    protected void varCheckKeyTyped(KeyEvent keyEvent) {
         final TextField textField = (TextField) keyEvent.getTarget();
         final String text = textField.getText();
         if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
@@ -132,19 +132,21 @@ public abstract class Template {
             return text;
     }
 
+    private String preambleText;
+
+    /**
+     * This method may be called by a specific template class
+     * to construct output that precedes the main result.
+     */
+    void preamble(String preambleText) {
+        this.preambleText = preambleText;
+    }
+
     /**
      * This method must be overridden by each specific template class
      * to construct the result.
      */
     abstract String result() throws EmptyFieldException;
-
-    /**
-     * This method may be overridden by a specific template class
-     * to construct output that precedes the main result.
-     */
-    String resultPreamble() {
-        return "";
-    }
 
     /**
      * This method processes the result returned by each specific template class to decode any
@@ -162,7 +164,11 @@ public abstract class Template {
             switchOffOnString = String.join(", ", switchOffOnList);
         switchOnOffList.clear();
         switchOffOnList.clear();
-        StringBuilder result = new StringBuilder(resultPreamble());
+        StringBuilder result = new StringBuilder();
+        if (preambleText != null) {
+            result.append(preambleText);
+            preambleText = null;
+        }
         if (switchOnOffString != null) result.append("on ").append(switchOnOffString).append(";\n");
         if (switchOffOnString != null) result.append("off ").append(switchOffOnString).append(";\n");
         result.append(decodedResult);

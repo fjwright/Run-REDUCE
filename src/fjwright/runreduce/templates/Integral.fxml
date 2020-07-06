@@ -5,94 +5,85 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="440.0" spacing="5.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.templates.Integrate">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="440.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Integrate">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <HBox alignment="CENTER" spacing="10.0">
-        <padding>
-            <Insets bottom="20.0"/>
-        </padding>
-        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symRadioButtonAction"
-                     selected="true" text="Symbolic">
+        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symRadioButtonAction" selected="true" text="Symbolic">
             <toggleGroup>
-                <ToggleGroup fx:id="symNumToggleGroup"/>
+                <ToggleGroup fx:id="symNumToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#numRadioButtonAction" text="Numeric"
-                     toggleGroup="$symNumToggleGroup"/>
+        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#numRadioButtonAction" text="Numeric" toggleGroup="$symNumToggleGroup" />
     </HBox>
     <VBox>
         <HBox alignment="CENTER">
-            <Text fontSmoothingType="LCD" text="The integrand and integration variable are required."
-                  textAlignment="CENTER" wrappingWidth="400.0"/>
+            <Text fontSmoothingType="LCD" text="The integrand and integration variable are required." textAlignment="CENTER" wrappingWidth="400.0" />
         </HBox>
         <StackPane>
             <HBox fx:id="symText" alignment="CENTER">
-                <Text fontSmoothingType="LCD"
-                      text="The limits must be both empty, giving an indefinite integral, or both specified, giving a definite integral."
-                      textAlignment="CENTER" wrappingWidth="400.0"/>
+                <Text fontSmoothingType="LCD" text="The limits must be both empty, giving an indefinite integral, or both specified, giving a definite integral." textAlignment="CENTER" wrappingWidth="400.0" />
             </HBox>
             <HBox fx:id="numText" alignment="CENTER" visible="false">
-                <Text fontSmoothingType="LCD" text="Both limits must be specified." textAlignment="CENTER"
-                      wrappingWidth="400.0"/>
+                <Text fontSmoothingType="LCD" text="Both limits must be specified." textAlignment="CENTER" wrappingWidth="400.0" />
             </HBox>
         </StackPane>
     </VBox>
     <HBox alignment="CENTER" styleClass="styled-textfields">
-        <Label styleClass="int-symbol" text="∫"/>
-        <VBox alignment="CENTER_LEFT" spacing="10.0">
-            <HBox>
-                <TextField fx:id="upLimTextField" prefColumnCount="5" styleClass="limit"/>
-            </HBox>
-            <HBox alignment="CENTER" spacing="5.0">
-                <TextField fx:id="integrandTextField" prefColumnCount="8" text="ws"/>
-                <Label styleClass="d-symbol" text="d"/>
-                <TextField fx:id="intVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="1" text="x"/>
-            </HBox>
-            <HBox>
-                <TextField fx:id="lowLimTextField" prefColumnCount="5" styleClass="limit"/>
-            </HBox>
+        <VBox fx:id="zIntVBox" alignment="CENTER" layoutX="116.0" layoutY="10.0" visible="false">
+            <TextField fx:id="zUpLimTextField" prefColumnCount="3" styleClass="limit" />
+            <Label styleClass="sum-prod-symbol" text="∫" />
+            <TextField fx:id="zLowLimTextField" prefColumnCount="3" styleClass="limit" />
         </VBox>
+        <VBox fx:id="yIntVBox" alignment="CENTER" layoutX="94.0" layoutY="10.0" visible="false">
+            <TextField fx:id="yUpLimTextField" prefColumnCount="3" styleClass="limit" />
+            <Label styleClass="sum-prod-symbol" text="∫" />
+            <TextField fx:id="yLowLimTextField" prefColumnCount="3" styleClass="limit" />
+        </VBox>
+        <VBox alignment="CENTER">
+            <TextField prefColumnCount="3" styleClass="limit" fx:id="xUpLimTextField" />
+            <Label styleClass="sum-prod-symbol" text="∫" />
+            <TextField prefColumnCount="3" styleClass="limit" fx:id="xLowLimTextField" />
+        </VBox>
+        <HBox alignment="CENTER" spacing="5.0">
+            <TextField fx:id="integrandTextField" prefColumnCount="8" text="ws" />
+            <Label styleClass="d-symbol" text="d" />
+            <TextField fx:id="xIntVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="1" text="x" />
+            <Label fx:id="yDLabel" styleClass="d-symbol" text="d" visible="false" />
+            <TextField fx:id="yIntVarTextField" onKeyTyped="#yIntVarKeyTyped" prefColumnCount="1" />
+            <Label fx:id="zDLabel" styleClass="d-symbol" text="d" visible="false" />
+            <TextField fx:id="zIntVarTextField" onKeyTyped="#zIntVarKeyTyped" prefColumnCount="1" />
+        </HBox>
     </HBox>
     <GridPane fx:id="numGridPane" hgap="10.0" maxWidth="-Infinity" prefWidth="160.0" vgap="5.0" visible="false">
         <columnConstraints>
-            <ColumnConstraints percentWidth="50.0"/>
-            <ColumnConstraints percentWidth="50.0"/>
+            <ColumnConstraints percentWidth="50.0" />
+            <ColumnConstraints percentWidth="50.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
         <Label text="Accuracy" GridPane.halignment="RIGHT">
             <tooltip>
-                <Tooltip fx:id="accuracyTooltip" text=
-                        "The accuracy 'a' must be a positive integer. Continue iterating until the relative total
-&#10;discretization error (comparison of order 1 and order 2 approximations) is below 10^(-a)."/>
+                <Tooltip fx:id="accuracyTooltip" text="The accuracy 'a' must be a positive integer. Continue iterating until the relative total &#10;discretization error (comparison of order 1 and order 2 approximations) is below 10^(-a)." />
             </tooltip>
         </Label>
         <TextField fx:id="accuracyTextBox" prefColumnCount="5" promptText="posint" GridPane.columnIndex="1">
             <tooltip>
-                <fx:reference source="accuracyTooltip"/>
+                <fx:reference source="accuracyTooltip" />
             </tooltip>
         </TextField>
         <Label text="Iterations" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip fx:id="iterationsTooltip" text=
-                        "The iterations 'i' must be a positive integer. Terminate with an error message if the maximum
-&#10;number of local interval intersection levels 'i' fails to achieve the required accuracy."/>
+                <Tooltip fx:id="iterationsTooltip" text="The iterations 'i' must be a positive integer. Terminate with an error message if the maximum &#10;number of local interval intersection levels 'i' fails to achieve the required accuracy." />
             </tooltip>
         </Label>
-        <TextField fx:id="iterationsTextBox" prefColumnCount="5" promptText="posint" GridPane.columnIndex="1"
-                   GridPane.rowIndex="1">
+        <TextField fx:id="iterationsTextBox" prefColumnCount="5" promptText="posint" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <fx:reference source="iterationsTooltip"/>
+                <fx:reference source="iterationsTooltip" />
             </tooltip>
         </TextField>
-        <VBox.margin>
-            <Insets bottom="15.0"/>
-        </VBox.margin>
     </GridPane>
 </VBox>
