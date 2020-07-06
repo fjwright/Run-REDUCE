@@ -70,10 +70,12 @@ top-level directory.
 * V1.31 Sum or Product template. Use Text instead of Label for the
   text at the top of each template. This seems to avoid truncated text
   reliably and portably.
-* Add a Symbolic/Numeric switch to the Integrate template. Make the
+* Add a Symbolic/Numeric option to the Integrate template. Make the
   expression templates a little wider.
 * Add a Limit template. Make template dialogues non-modal and don't
   close them automatically on applying them.  Rename some templates
   using nouns rather than verbs consistently.
 * V1.32 Add a pop-up keyboard for entering non-ASCII characters:
   currently some symbolic constants and the Greek alphabet.
+* Add a Solve template with a Symbolic/Numeric option and access to relevant switches/options.
+* Add numeric options to the Integral template.

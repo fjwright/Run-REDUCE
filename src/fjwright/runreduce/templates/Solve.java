@@ -119,7 +119,7 @@ public class Solve extends Template {
         else text.append("{").append(String.join(", ", eqns)).append("}");
         // Process variables and, if numeric, start values:
         String[] vars = stream(varTextFields).map(t -> t.getText().trim()).filter(s -> !s.isEmpty()).toArray(String[]::new);
-        if (numRadioButton.isSelected()) {
+            if (numRadioButton.isSelected()) {
             // Numeric:
             if (vars.length == 0) {
                 RunREDUCE.errorMessageDialog("Solve Numeric Template Error",
@@ -153,7 +153,6 @@ public class Solve extends Template {
                 else text.append("{").append(String.join(", ", vars)).append("}");
             }
         }
-        text.append(")");
-        return text.toString();
+        return text.append(")").toString();
     }
 }
