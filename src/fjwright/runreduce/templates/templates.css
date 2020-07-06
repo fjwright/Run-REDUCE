@@ -30,6 +30,14 @@
     -fx-translate-y: -10;
 }
 
+.e-symbol {
+    -fx-font-size: 25px;
+}
+.sub-script {
+    -fx-font-size: 15px;
+    -fx-translate-y: +10;
+}
+
 /* TextFields */
 
 .styled-textfields .text-field {
@@ -41,6 +49,14 @@
     -fx-font-size: 15px;
     -fx-translate-y: -5;
     -fx-font-style: normal;
+}
+.styled-textfields .super-script {
+    -fx-font-size: 15px;
+    -fx-translate-y: -10;
+}
+.styled-textfields .sub-script {
+    -fx-font-size: 15px;
+    -fx-translate-y: +10;
 }
 .styled-textfields .limit {
     -fx-font-size: 15px;
