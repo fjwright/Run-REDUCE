@@ -2,6 +2,7 @@ package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -27,6 +28,8 @@ public class Integrate extends Template {
     private VBox yIntVBox, zIntVBox;
     @FXML
     private Label yDLabel, zDLabel;
+    @FXML
+    private CheckBox algintCheckBox;
     @FXML
     private GridPane numGridPane;
     @FXML
@@ -54,19 +57,8 @@ public class Integrate extends Template {
     private void numRadioButtonAction() {
         numText.setVisible(numRadioButton.isSelected());
         symText.setVisible(!numRadioButton.isSelected());
-//        startFromLabel.setVisible(numRadioButton.isSelected());
-//        for (var startTextField : startTextFields) {
-//            startTextField.setVisible(numRadioButton.isSelected());
-//        }
-//        if (numRadioButton.isSelected()) {
-//            mainGridPane.getColumnConstraints().setAll(numColumnConstraints);
-//            mainGridPane.setPadding(numInsets);
-//        } else {
-//            mainGridPane.getColumnConstraints().setAll(symColumnConstraints);
-//            mainGridPane.setPadding(symInsets);
-//        }
         numGridPane.setVisible(numRadioButton.isSelected());
-//        symGridPane.setVisible(!numRadioButton.isSelected());
+        algintCheckBox.setVisible(!numRadioButton.isSelected());
     }
 
     @FXML
@@ -106,12 +98,12 @@ public class Integrate extends Template {
                             .append(getTextCheckNonEmpty(upLimTextFields[i])).append(")");
                 }
             }
-            switchNameOnOff("rounded");
             var s = accuracyTextBox.getText().trim();
             if (!s.isEmpty()) text.append(", accuracy = ").append(s);
             s = iterationsTextBox.getText().trim();
             if (!s.isEmpty()) text.append(", iterations = ").append(s);
             text.append(")");
+            switchNameOnOff("rounded");
             // End numerical integration
         } else {
             // Begin symbolic integration
@@ -133,6 +125,7 @@ public class Integrate extends Template {
                     text.append(")");
                 }
             }
+            switchCheckBoxesOnOff(algintCheckBox);
             // End symbolic integration
         }
         return text.toString();
