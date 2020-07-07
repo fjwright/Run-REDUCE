@@ -1,0 +1,16 @@
+.label {
+    -fx-font-size: 25px;
+}
+.text-field {
+    -fx-font-size: 20px;
+    -fx-font-style: italic;
+    -fx-padding: 0;
+}
+.superscript {
+    -fx-font-size: 15px;
+    -fx-translate-y: -10;
+}
+.subscript {
+    -fx-font-size: 15px;
+    -fx-translate-y: +10;
+}

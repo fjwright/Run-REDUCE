@@ -483,6 +483,11 @@ public class RunREDUCEFrame {
      * ************** */
 
     @FXML
+    private void expLogEtcMenuItemAction() {
+        showDialogAndWait("Create an Exponential, Logarithm, Power, etc", "templates/ExpLogEtc.fxml", Modality.NONE);
+    }
+
+    @FXML
     private void derivativeMenuItemAction() {
         showDialogAndWait("Create a (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
     }

@@ -54,6 +54,7 @@
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
+                <MenuItem mnemonicParsing="false" onAction="#expLogEtcMenuItemAction" text="Exp, Log, Power, etc..." />
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..." />
                 <MenuItem mnemonicParsing="false" onAction="#integralMenuItemAction" text="Integral..." />
                 <MenuItem mnemonicParsing="false" onAction="#limitMenuItemAction" text="Limit..." />
