@@ -484,27 +484,27 @@ public class RunREDUCEFrame {
 
     @FXML
     private void expLogEtcMenuItemAction() {
-        showDialogAndWait("Create an Exponential, Logarithm, Power, etc", "templates/ExpLogEtc.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate an Exponential, Logarithm, Power, Root, etc", "templates/ExpLogEtc.fxml", Modality.NONE);
     }
 
     @FXML
     private void derivativeMenuItemAction() {
-        showDialogAndWait("Create a (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate a Multiple (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
     }
 
     @FXML
     private void integralMenuItemAction() {
-        showDialogAndWait("Create an Integral", "templates/Integral.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate a Multiple Integral", "templates/Integral.fxml", Modality.NONE);
     }
 
     @FXML
     private void limitMenuItemAction() {
-        showDialogAndWait("Create a Limit", "templates/Limit.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate a Limit of a Function", "templates/Limit.fxml", Modality.NONE);
     }
 
     @FXML
     private void sumProdMenuItemAction() {
-        showDialogAndWait("Create a Sum or Product", "templates/SumProd.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate a Finite Sum or Product", "templates/SumProd.fxml", Modality.NONE);
     }
 
     @FXML
@@ -514,12 +514,12 @@ public class RunREDUCEFrame {
 
     @FXML
     private void solveMenuItemAction() {
-        showDialogAndWait("Solve Equation(s)", "templates/Solve.fxml", Modality.NONE);
+        showDialogAndWait("Solve Algebraic Equations", "templates/Solve.fxml", Modality.NONE);
     }
 
     @FXML
     private void forMenuItemAction() {
-        showDialogAndWait("Create a For Statement", "templates/For.fxml", Modality.NONE);
+        showDialogAndWait("Execute a For Statement", "templates/For.fxml", Modality.NONE);
     }
 
     /* ********* *
@@ -558,7 +558,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.32, July 2020\n" +
+                "Version 1.33, July 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);

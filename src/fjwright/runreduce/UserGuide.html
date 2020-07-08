@@ -578,6 +578,27 @@
     must evaluate to a number), the template will check this and
     report an error immediately an inappropriate character is entered.
     </p>
+    <p>Some templates have a pair of toggle buttons at the top
+    labelled <em>Symbolic</em> and <em>Numeric</em> that allow you to
+    switch between the two modes of evaluation; the default
+    is <em>Symbolic</em>.  The <em>Numeric</em> option causes the
+    template output to turn <em>rounded</em> mode on before the main
+    template result is output and off again afterwards; it may also
+    load the <em>numeric</em> package and use specific numerical
+    versions of functions.  The text message towards the top of each
+    template may vary depending on the <em>Symbolic/Numeric</em>
+    option.
+    </p>
+    <p>Some templates have one or more switches towards the bottom,
+    which may vary depending on the <em>Symbolic/Numeric</em> option.
+    The switches consist of check boxes that initially show default
+    settings (not those currently in effect in REDUCE).  Any switches
+    that are changed from their defaults are set in the template
+    output to reflect the change before the main template result is
+    output and reset afterwards.  (Beware that this will override any
+    changes from the default switch settings that were in effect
+    before the template was used.)
+    </p>
     <p>These templates are intended only for creating simple
     structures, but they can form the basis for arbitrarily complex
     structures if they are entered into the input editor for further
@@ -586,6 +607,12 @@
     normally be typeset.
     </p>
     <p>The <em>Templates</em> menu provides the following items:</p>
+    <h3>Exp, Log, Power, etc...</h3>
+    <p>This provides templates for the exponential function, various
+    logarithms, powers and roots, surds or radicals, and factorial.
+    Select the required template by clicking on the radio button to
+    its left in the grid.  All but the active template is disabled and
+    greyed out.
     <h3>Derivative...</h3>
     <p>This template supports (partial) differentiation involving up
     to three independent variables, each to arbitrary order.  The
@@ -601,19 +628,17 @@
     <p>This template supports both indefinite and definite
     integration: if both limits are omitted then the integral is
     indefinite; if both limits are specified then the integral is
-    definite.  The integrand defaults to <em>ws</em> and the
-    integration variable defaults to <em>x</em>, but both can be
-    changed.</p>
-    <p>A pair of toggle buttons labelled <em>Symbolic</em>
-    and <em>Numeric</em> allow you to switch between the two modes of
-    evaluation; the default is <em>Symbolic</em>.  Note that only a
-    definite integral can be evaluated numerically and the template
-    checks this.  When the template sends a numeric integral to
-    REDUCE, it also loads the <em>numeric</em> package and turns
-    on <em>rounded</em> mode because otherwise the result gets
-    converted to a rational, which is probably not what you want!
-    Remember that you may need to turn off <em>rounded</em> mode
-    before you continue with symbolic computations.
+    definite.  Note that only a definite integral can be evaluated
+    numerically and the template checks this.  The integrand defaults
+    to <em>ws</em> and the integration variable defaults
+    to <em>x</em>, but both can be changed.</p>
+    <p>By default, the template provides a single integral, but if you
+    enter another integration variable in one of the boxes to the
+    right of the primary integration variable then an additional
+    integral appears wrapping the previous integral, thus supporting
+    double and triple integrals.  Matching &int; and <em>d</em> symbol
+    pairs have the same colour (blue, green or red) to facilitate
+    adding limits to the right &int; symbol.
     </p>
     <h3>Limit...</h3>
     <p>This template supports limits of (mostly) continuous functions

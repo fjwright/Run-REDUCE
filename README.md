@@ -77,6 +77,8 @@ top-level directory.
   using nouns rather than verbs consistently.
 * V1.32 Add a pop-up keyboard for entering non-ASCII characters:
   currently some symbolic constants and the Greek alphabet.
-* Add a Solve template with a Symbolic/Numeric option and access to relevant switches/options.
+* Add a Solve template with a Symbolic/Numeric option and access to
+  relevant switches/options.
 * Add numeric options to the Integral template.
 * Support multiple integrals.
+* V1.33 Add an Exp Log etc. template.
