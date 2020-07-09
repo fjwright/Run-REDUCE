@@ -16,15 +16,15 @@ public class GammaEtc extends Template {
     @FXML
     private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7;
     @FXML
-    private TextField expTextField, powATextField, powBTextField, pow10TextField;
+    private TextField gammaTextField, digammaTextField, binCoeffNTextField, binCoeffMTextField;
     @FXML
-    private TextField lnTextField, logATextField, logBTextField, log10TextField;
+    private TextField betaATextField, betaBTextField, polygammaNTextField, polygammaZTextField;
     @FXML
-    private TextField sqrtTextField, rootATextField, rootBTextField, facTextField;
+    private TextField pochhammerATextField, pochhammerNTextField, zetaTextField;
     @FXML /* Switches: default off */
-    private CheckBox expandlogsCheckBox, preciseComplexCheckBox, complexCheckBox;
+    private CheckBox complexCheckBox;
     @FXML /* Switches: default on */
-    private CheckBox preciseCheckBox;
+    private CheckBox savesfsCheckBox;
 
     private HBox[] hBoxes;
 
@@ -36,16 +36,9 @@ public class GammaEtc extends Template {
     }
 
     @FXML
-    private void symRadioButtonAction() {
-        numRadioButtonAction();
-    }
-
-    @FXML
-    private void numRadioButtonAction() {
+    private void symNumRadioButtonAction() {
         complexCheckBox.setVisible(numRadioButton.isSelected());
-        expandlogsCheckBox.setVisible(!numRadioButton.isSelected());
-        preciseCheckBox.setVisible(!numRadioButton.isSelected());
-        preciseComplexCheckBox.setVisible(!numRadioButton.isSelected());
+        savesfsCheckBox.setVisible(numRadioButton.isSelected());
     }
 
     @FXML
@@ -60,41 +53,36 @@ public class GammaEtc extends Template {
         if (numRadioButton.isSelected()) {
             switchNameOnOff("rounded");
             switchCheckBoxesOnOff(complexCheckBox);
-        } else {
-            switchCheckBoxesOnOff(preciseComplexCheckBox, expandlogsCheckBox);
-            switchCheckBoxesOffOn(preciseCheckBox);
+            switchCheckBoxesOffOn(savesfsCheckBox);
         }
         StringBuilder text = new StringBuilder();
         switch ((int) templateToggleGroup.getSelectedToggle().getUserData()) {
             case 0:
-                text.append("exp(").append(getTextCheckNonEmpty(expTextField));
+                text.append("Gamma(").append(getTextCheckNonEmpty(gammaTextField));
                 break;
             case 1:
-                text.append("(").append(getTextCheckNonEmpty(powATextField)).append(")^(")
-                        .append(getTextCheckNonEmpty(powBTextField));
+                text.append("psi(").append(getTextCheckNonEmpty(digammaTextField));
                 break;
             case 2:
-                text.append("10^(").append(getTextCheckNonEmpty(pow10TextField));
-                break;
+                return "Euler_gamma";
             case 3:
-                text.append("log(").append(getTextCheckNonEmpty(lnTextField));
+                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffNTextField))
+                        .append(", ").append(getTextCheckNonEmpty(binCoeffMTextField));
                 break;
             case 4:
-                text.append("logb(").append(getTextCheckNonEmpty(logBTextField)).append(", ")
-                        .append(getTextCheckNonEmpty(logATextField));
+                text.append("Beta(").append(getTextCheckNonEmpty(betaATextField))
+                        .append(", ").append(getTextCheckNonEmpty(betaBTextField));
                 break;
             case 5:
-                text.append("log10(").append(getTextCheckNonEmpty(log10TextField));
+                text.append("polygamma(").append(getTextCheckNonEmpty(polygammaNTextField))
+                        .append(", ").append(getTextCheckNonEmpty(polygammaZTextField));
                 break;
             case 6:
-                text.append("sqrt(").append(getTextCheckNonEmpty(sqrtTextField));
+                text.append("Pochhammer(").append(getTextCheckNonEmpty(pochhammerATextField))
+                        .append(", ").append(getTextCheckNonEmpty(pochhammerNTextField));
                 break;
             case 7:
-                text.append("(").append(getTextCheckNonEmpty(rootBTextField)).append(")^(1/(")
-                        .append(getTextCheckNonEmpty(rootATextField)).append(")");
-                break;
-            case 8:
-                text.append("factorial(").append(getTextCheckNonEmpty(facTextField));
+                text.append("zeta(").append(getTextCheckNonEmpty(zetaTextField));
                 break;
         }
         return text.append(")").toString();
