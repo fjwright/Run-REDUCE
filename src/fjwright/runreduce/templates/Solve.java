@@ -64,12 +64,7 @@ public class Solve extends Template {
     }
 
     @FXML
-    private void symRadioButtonAction() {
-        numRadioButtonAction();
-    }
-
-    @FXML
-    private void numRadioButtonAction() {
+    private void symNumRadioButtonAction() {
         numText.setVisible(numRadioButton.isSelected());
         symText.setVisible(!numRadioButton.isSelected());
         startFromLabel.setVisible(numRadioButton.isSelected());

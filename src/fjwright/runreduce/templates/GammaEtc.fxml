@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.Integer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.templates.GammaEtc">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.GammaEtc">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -88,7 +96,7 @@
         <Label text="Binomial Coefficient" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <Label styleClass="bracket" text="("/>
-            <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="60.0">
+            <VBox alignment="CENTER">
                 <TextField fx:id="binCoeffNTextField" prefColumnCount="1"/>
                 <TextField fx:id="binCoeffMTextField" prefColumnCount="1"/>
             </VBox>

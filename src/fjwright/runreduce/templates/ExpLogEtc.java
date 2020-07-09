@@ -36,12 +36,7 @@ public class ExpLogEtc extends Template {
     }
 
     @FXML
-    private void symRadioButtonAction() {
-        numRadioButtonAction();
-    }
-
-    @FXML
-    private void numRadioButtonAction() {
+    private void symNumRadioButtonAction() {
         complexCheckBox.setVisible(numRadioButton.isSelected());
         expandlogsCheckBox.setVisible(!numRadioButton.isSelected());
         preciseCheckBox.setVisible(!numRadioButton.isSelected());
