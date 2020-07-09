@@ -488,6 +488,11 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void gammaEtcMenuItemAction() {
+        showDialogAndWait("Evaluate a Gamma Function, etc", "templates/GammaEtc.fxml", Modality.NONE);
+    }
+
+    @FXML
     private void derivativeMenuItemAction() {
         showDialogAndWait("Evaluate a Multiple (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
     }

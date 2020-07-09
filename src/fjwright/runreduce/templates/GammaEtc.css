@@ -1,0 +1,20 @@
+.symbol {
+    -fx-font-size: 25px;
+}
+.text-field {
+    -fx-font-size: 20px;
+    -fx-font-style: italic;
+    -fx-padding: 0;
+}
+.superscript {
+    -fx-font-size: 15px;
+    -fx-translate-y: -8;
+}
+.subscript {
+    -fx-font-size: 15px;
+    -fx-translate-y: +15;
+}
+.bracket {
+    -fx-font-size: 60px;
+    -fx-translate-y: -5;
+}

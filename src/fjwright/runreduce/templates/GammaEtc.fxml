@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.Integer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.GammaEtc">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <HBox alignment="CENTER" spacing="10.0">
+        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symRadioButtonAction"
+                     selected="true" text="Symbolic">
+            <toggleGroup>
+                <ToggleGroup fx:id="symNumToggleGroup"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#numRadioButtonAction" text="Numeric"
+                     toggleGroup="$symNumToggleGroup"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Text fontSmoothingType="LCD" text="Click on the radio button to the left of the template you want to use."
+              textAlignment="CENTER" wrappingWidth="460.0"/>
+    </HBox>
+
+    <GridPane stylesheets="@GammaEtc.css" vgap="10.0">
+        <columnConstraints>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints percentWidth="25.0"/>
+            <ColumnConstraints percentWidth="15.0"/>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints percentWidth="30.0"/>
+            <ColumnConstraints percentWidth="20.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints maxHeight="-Infinity" prefHeight="60.0"/>
+        </rowConstraints>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" selected="true">
+            <userData>
+                <Integer fx:value="0"/>
+            </userData>
+            <toggleGroup>
+                <ToggleGroup fx:id="templateToggleGroup"/>
+            </toggleGroup>
+        </RadioButton>
+        <Label text="Gamma Function" GridPane.columnIndex="1"/>
+        <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
+            <Label styleClass="symbol" text="Γ("/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="1">
+            <userData>
+                <Integer fx:value="1"/>
+            </userData>
+        </RadioButton>
+        <Label text="Digamma Function" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label styleClass="symbol" text="ψ("/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="2">
+            <userData>
+                <Integer fx:value="2"/>
+            </userData>
+        </RadioButton>
+        <Label text="Euler's Constant" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label styleClass="symbol" text="γ"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="3"/>
+            </userData>
+        </RadioButton>
+        <Label text="Binomial Coefficient" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Label styleClass="bracket" text="("/>
+            <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="60.0">
+                <TextField prefColumnCount="1"/>
+                <TextField layoutX="10.0" layoutY="10.0" prefColumnCount="1"/>
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+            </VBox>
+            <Label styleClass="bracket" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4">
+            <userData>
+                <Integer fx:value="4"/>
+            </userData>
+        </RadioButton>
+        <Label text="Beta Function" GridPane.columnIndex="5"/>
+        <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="6">
+            <Label styleClass="symbol" text="Β("/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=","/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <userData>
+                <Integer fx:value="5"/>
+            </userData>
+        </RadioButton>
+        <Label text="Polygamma Function" GridPane.columnIndex="5" GridPane.rowIndex="1"/>
+        <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
+            <Label styleClass="symbol" text="ψ"/>
+            <Label styleClass="superscript" text="("/>
+            <TextField prefColumnCount="1" styleClass="superscript"/>
+            <Label styleClass="superscript" text=")"/>
+            <Label styleClass="symbol" text="("/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4" GridPane.rowIndex="2">
+            <userData>
+                <Integer fx:value="6"/>
+            </userData>
+        </RadioButton>
+        <Label text="Pochhammer's Symbol" GridPane.columnIndex="5" GridPane.rowIndex="2"/>
+        <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
+            <Label styleClass="symbol" text="(a)"/>
+            <TextField prefColumnCount="1" styleClass="subscript"/>
+        </HBox>
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4" GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="7"/>
+            </userData>
+        </RadioButton>
+        <Label text="Riemann's Zeta Function" GridPane.columnIndex="5" GridPane.rowIndex="3"/>
+        <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="ζ("/>
+            <TextField prefColumnCount="1"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+        <padding>
+            <Insets bottom="-25.0"/>
+        </padding>
+    </GridPane>
+
+    <GridPane alignment="CENTER" hgap="30.0" maxWidth="-Infinity" prefWidth="400.0" vgap="10.0">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="33.0"/>
+            <ColumnConstraints percentWidth="33.0"/>
+            <ColumnConstraints percentWidth="33.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+        </rowConstraints>
+        <CheckBox fx:id="expandlogsCheckBox" mnemonicParsing="false" text="expandlogs">
+            <tooltip>
+                <Tooltip
+                        text="Expand a logarithm of a product into a sum of logarithms.&#10;May only be effective if 'precise' is deselected."/>
+            </tooltip>
+        </CheckBox>
+        <StackPane GridPane.columnIndex="1">
+            <CheckBox fx:id="preciseCheckBox" mnemonicParsing="false" selected="true" text="precise">
+                <tooltip>
+                    <Tooltip text="Prevent simplifications that may be invalid if variables take negative values."/>
+                </tooltip>
+            </CheckBox>
+            <CheckBox fx:id="complexCheckBox" mnemonicParsing="false" text="complex" visible="false">
+                <tooltip>
+                    <Tooltip text="Use complex arithmetic."/>
+                </tooltip>
+            </CheckBox>
+        </StackPane>
+        <CheckBox fx:id="preciseComplexCheckBox" mnemonicParsing="false" text="precise_complex" GridPane.columnIndex="2"
+                  GridPane.rowIndex="0">
+            <tooltip>
+                <Tooltip text="Prevent simplifications that may be invalid in the complex domain."/>
+            </tooltip>
+        </CheckBox>
+    </GridPane>
+</VBox>
