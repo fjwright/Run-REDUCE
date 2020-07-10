@@ -486,6 +486,11 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void integralFunctionsMenuItemAction() {
+        showDialogAndWait("Evaluate Integral Functions", "templates/IntegralFunctions.fxml", Modality.NONE);
+    }
+
+    @FXML
     private void gammaEtcMenuItemAction() {
         showDialogAndWait("Evaluate a Gamma Function, etc", "templates/GammaEtc.fxml", Modality.NONE);
     }
