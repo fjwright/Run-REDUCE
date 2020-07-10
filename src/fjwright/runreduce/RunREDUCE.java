@@ -9,6 +9,7 @@
 package fjwright.runreduce;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +50,8 @@ public class RunREDUCE extends Application {
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
     static REDUCEConfiguration reduceConfiguration;
+
+    public static HostServices hostServices;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -95,7 +98,7 @@ public class RunREDUCE extends Application {
                 useTabPane(true);
         }
 
-        RunREDUCEFrame.hostServices = getHostServices();
+        hostServices = getHostServices();
     }
 
     static void useSplitPane(boolean enable) {

@@ -1,11 +1,14 @@
 package fjwright.runreduce.templates;
 
+import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public class GammaEtc extends Template {
@@ -16,7 +19,7 @@ public class GammaEtc extends Template {
     @FXML
     private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7;
     @FXML
-    private TextField gammaTextField, digammaTextField, binCoeffNTextField, binCoeffMTextField;
+    private TextField gammaTextField, digammaTextField, binCoeffMTextField, binCoeffNTextField;
     @FXML
     private TextField betaATextField, betaBTextField, polygammaNTextField, polygammaZTextField;
     @FXML
@@ -48,6 +51,12 @@ public class GammaEtc extends Template {
         hBoxes[i].setDisable(false);
     }
 
+    @FXML
+    private void hyperlinkOnMouseClickedAction(MouseEvent mouseEvent) {
+        RunREDUCE.hostServices.showDocument(
+                (String) ((Node) mouseEvent.getTarget()).getParent().getUserData());
+    }
+
     @Override
     String result() throws EmptyFieldException {
         if (numRadioButton.isSelected()) {
@@ -66,8 +75,8 @@ public class GammaEtc extends Template {
             case 2:
                 return "Euler_gamma";
             case 3:
-                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffNTextField))
-                        .append(", ").append(getTextCheckNonEmpty(binCoeffMTextField));
+                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffMTextField))
+                        .append(", ").append(getTextCheckNonEmpty(binCoeffNTextField));
                 break;
             case 4:
                 text.append("Beta(").append(getTextCheckNonEmpty(betaATextField))

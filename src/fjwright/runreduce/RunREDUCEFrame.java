@@ -1,6 +1,5 @@
 package fjwright.runreduce;
 
-import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -82,7 +81,6 @@ public class RunREDUCEFrame {
             new FileChooser.ExtensionFilter("All Files", "*.*");
 
     static List<String> packageList;
-    static HostServices hostServices;
     static Desktop desktop;
 
     /**
@@ -158,7 +156,7 @@ public class RunREDUCEFrame {
             if (i == 0 || RRPreferences.windowsOS) {
                 MenuItem menuItem = new MenuItem(manual[0]);
                 helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
-                menuItem.setOnAction(e -> hostServices.showDocument(
+                menuItem.setOnAction(e -> RunREDUCE.hostServices.showDocument(
                         new File(RunREDUCE.reduceConfiguration.docRootDir,
                                 manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
             } else {
@@ -545,7 +543,7 @@ public class RunREDUCEFrame {
                 RunREDUCE.errorMessageDialog("Run-REDUCE-FX User Guide",
                         "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
             } else if (url.getProtocol().equals("file")) // Useful during development only!
-                hostServices.showDocument(url.toString());
+                RunREDUCE.hostServices.showDocument(url.toString());
             else { // Normal case: when running a jar file the protocol is jar.
                 if (file == null || !file.exists()) {
                     file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
@@ -553,7 +551,7 @@ public class RunREDUCEFrame {
                         Files.copy(in, file.toPath(), REPLACE_EXISTING);
                     }
                 }
-                hostServices.showDocument(file.toString());
+                RunREDUCE.hostServices.showDocument(file.toString());
             }
         } catch (IOException exc) {
             exc.printStackTrace();
