@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.GammaEtc">
     <padding>
@@ -23,21 +23,20 @@
                      toggleGroup="$symNumToggleGroup"/>
     </HBox>
     <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD" text="Click on the radio button to the left of the template you want to use.
-&#10;Hover over a function name for a very brief description. For more details, click on a function name to go
-to the relevant entry in the NIST Digital Library of Mathematical Functions at https://dlmf.nist.gov/."
-              textAlignment="CENTER" wrappingWidth="460.0"/>
+        <Text fontSmoothingType="LCD"
+              text="Click on the radio button to the left of the template you want to use.&#10;Hover over a function name for a very brief description. For more details, click on a function name to go to the relevant entry in the NIST Digital Library of Mathematical Functions at https://dlmf.nist.gov/."
+              textAlignment="CENTER" wrappingWidth="560.0"/>
     </HBox>
 
-    <GridPane stylesheets="@GammaEtc.css" vgap="10.0">
+    <GridPane alignment="CENTER" stylesheets="@GammaEtc.css" vgap="10.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
-            <ColumnConstraints percentWidth="25.0"/>
-            <ColumnConstraints percentWidth="13.0"/>
-            <ColumnConstraints halignment="CENTER" percentWidth="4.0"/>
+            <ColumnConstraints percentWidth="15.0"/>
+            <ColumnConstraints percentWidth="20.0"/>
             <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints percentWidth="20.0"/>
             <ColumnConstraints percentWidth="30.0"/>
-            <ColumnConstraints percentWidth="18.0"/>
         </columnConstraints>
         <rowConstraints>
             <RowConstraints/>
@@ -54,7 +53,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <ToggleGroup fx:id="templateToggleGroup"/>
             </toggleGroup>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Gamma Function"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Gamma&#10;Function"
                GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Γ(z) = (z-1)!"/>
@@ -65,7 +64,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         </Label>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
             <Label styleClass="symbol" text="Γ("/>
-            <TextField fx:id="gammaTextField" prefColumnCount="1"/>
+            <TextField fx:id="gammaTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -75,7 +74,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="1"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Digamma Function"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Digamma&#10;Function"
                GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="ψ(z) = Γ′(z)/Γ(z)"/>
@@ -86,7 +85,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         </Label>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="ψ("/>
-            <TextField fx:id="digammaTextField" prefColumnCount="1"/>
+            <TextField fx:id="digammaTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -96,7 +95,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="2"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Euler's Constant"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Euler's&#10;Constant"
                GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="γ = -ψ(1) = 0.57721…"/>
@@ -115,10 +114,10 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="3"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Binomial Coefficients"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Binomial&#10;Coefficients"
                GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="m choose n = m!/((m-n)!n!)"/>
+                <Tooltip text="(m over n) = m!/((m-n)!n!)"/>
             </tooltip>
             <userData>
                 <String fx:value="https://dlmf.nist.gov/26.3"/>
@@ -127,8 +126,8 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <Label styleClass="bracket" text="("/>
             <VBox alignment="CENTER">
-                <TextField fx:id="binCoeffMTextField" prefColumnCount="1"/>
-                <TextField fx:id="binCoeffNTextField" prefColumnCount="1"/>
+                <TextField fx:id="binCoeffMTextField" prefColumnCount="3"/>
+                <TextField fx:id="binCoeffNTextField" prefColumnCount="3"/>
             </VBox>
             <Label styleClass="bracket" text=")"/>
         </HBox>
@@ -139,7 +138,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="4"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Beta Function"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Beta&#10;Function"
                GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="B(a,b) = Γ(a)Γ(b)/Γ(a+b)"/>
@@ -150,9 +149,9 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         </Label>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="6">
             <Label styleClass="symbol" text="Β("/>
-            <TextField fx:id="betaATextField" prefColumnCount="1"/>
+            <TextField fx:id="betaATextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=","/>
-            <TextField fx:id="betaBTextField" prefColumnCount="1"/>
+            <TextField fx:id="betaBTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -162,10 +161,10 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="5"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Polygamma Functions"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Polygamma&#10;Functions"
                GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="ψ^n(z) = d^nψ(z)/dz^n"/>
+                <Tooltip text="ψ^(n)(z) = d^nψ(z)/dz^n"/>
             </tooltip>
             <userData>
                 <String fx:value="https://dlmf.nist.gov/5.15"/>
@@ -174,10 +173,10 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="ψ"/>
             <Label styleClass="superscript" text="("/>
-            <TextField fx:id="polygammaNTextField" prefColumnCount="1" styleClass="superscript"/>
+            <TextField fx:id="polygammaNTextField" prefColumnCount="3" styleClass="superscript"/>
             <Label styleClass="superscript" text=")"/>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="polygammaZTextField" prefColumnCount="1"/>
+            <TextField fx:id="polygammaZTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -187,7 +186,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="6"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Pochhammer's Symbol"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Pochhammer's&#10;Symbol"
                GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="(a)_n = Γ(a+n)/Γ(a)"/>
@@ -198,9 +197,9 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         </Label>
         <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="pochhammerATextField" prefColumnCount="1"/>
+            <TextField fx:id="pochhammerATextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
-            <TextField fx:id="pochhammerNTextField" prefColumnCount="1" styleClass="subscript"/>
+            <TextField fx:id="pochhammerNTextField" prefColumnCount="3" styleClass="subscript"/>
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
@@ -209,7 +208,7 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
                 <Integer fx:value="7"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Riemann Zeta Function"
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Riemann Zeta&#10;Function"
                GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="ζ(s) = ∑_{n=1}^∞ 1/n^s"/>
@@ -220,11 +219,13 @@ to the relevant entry in the NIST Digital Library of Mathematical Functions at h
         </Label>
         <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
             <Label styleClass="symbol" text="ζ("/>
-            <TextField fx:id="zetaTextField" prefColumnCount="1"/>
+            <TextField fx:id="zetaTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
+        <Separator orientation="VERTICAL" GridPane.columnIndex="3" GridPane.halignment="CENTER"
+                   GridPane.rowSpan="2147483647"/>
         <padding>
-            <Insets bottom="-25.0"/>
+            <Insets bottom="-10.0" top="-10.0"/>
         </padding>
     </GridPane>
 
