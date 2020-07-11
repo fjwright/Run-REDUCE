@@ -17,11 +17,11 @@ public class IntegralFunctions extends Template {
     @FXML
     private ToggleGroup templateToggleGroup;
     @FXML
-    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11;
+    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9;
     @FXML
     private TextField expIntTextField, logIntTextField, sinIntTextField, cosIntTextField;
     @FXML
-    private TextField altSinIntTextField, altCosIntTextField, hypSinIntTextField, hypCosIntTextField;
+    private TextField hypSinIntTextField, hypCosIntTextField;
     @FXML
     private TextField erfTextField, erfcTextField, fresnelSinIntTextField, fresnelCosIntTextField;
     @FXML /* Switches: default off */
@@ -35,7 +35,7 @@ public class IntegralFunctions extends Template {
     @Override
     protected void initialize() {
         super.initialize();
-        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11};
+        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9};
     }
 
     @FXML
@@ -71,6 +71,7 @@ public class IntegralFunctions extends Template {
                 break;
             case 1:
                 text.append("li(").append(getTextCheckNonEmpty(logIntTextField));
+                preamble("load_package specfn;\n");
                 break;
             case 2:
                 text.append("Si(").append(getTextCheckNonEmpty(sinIntTextField));
@@ -79,28 +80,26 @@ public class IntegralFunctions extends Template {
                 text.append("Ci(").append(getTextCheckNonEmpty(cosIntTextField));
                 break;
             case 4:
-                text.append("s_i(").append(getTextCheckNonEmpty(altSinIntTextField));
+                text.append("Shi(").append(getTextCheckNonEmpty(hypSinIntTextField));
+                preamble("load_package specfn;\n");
                 break;
             case 5:
-                text.append("Cin(").append(getTextCheckNonEmpty(altCosIntTextField));
+                text.append("Chi(").append(getTextCheckNonEmpty(hypCosIntTextField));
+                preamble("load_package specfn;\n");
                 break;
             case 6:
-                text.append("Shi(").append(getTextCheckNonEmpty(hypSinIntTextField));
-                break;
-            case 7:
-                text.append("Chi(").append(getTextCheckNonEmpty(hypCosIntTextField));
-                break;
-            case 8:
                 text.append("erf(").append(getTextCheckNonEmpty(erfTextField));
                 break;
-            case 9:
+            case 7:
                 text.append("erfc(").append(getTextCheckNonEmpty(erfcTextField));
                 break;
-            case 10:
+            case 8:
                 text.append("Fresnel_S(").append(getTextCheckNonEmpty(fresnelSinIntTextField));
+                preamble("load_package specfn;\n");
                 break;
-            case 11:
+            case 9:
                 text.append("Fresnel_C(").append(getTextCheckNonEmpty(fresnelCosIntTextField));
+                preamble("load_package specfn;\n");
                 break;
         }
         return text.append(")").toString();

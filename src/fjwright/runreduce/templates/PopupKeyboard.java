@@ -28,15 +28,18 @@ class PopupKeyboard {
     private final static Popup popup = new Popup();
 
     static void showPopupKeyboard(MouseEvent mouseEvent) {
-        if (((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
-                (mouseEvent.getButton() == MouseButton.MIDDLE))
-                &&
-                ((((target = ((Node) mouseEvent.getTarget()).getParent()) instanceof TextField) || // on TextField
-                        ((target = target.getParent()) instanceof TextField) || // on TextField content
-                        ((target = target.getParent()) instanceof TextField)))) // on TextField content caret
-        {
-            popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
-            applyShiftButton(mouseEvent.isShiftDown());
+        if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
+                (mouseEvent.getButton() == MouseButton.MIDDLE)) {
+            // A TextField contains content that contains a caret, so...
+            target = (Node) mouseEvent.getTarget();
+            while (target != null) {
+                if (target instanceof TextField) {
+                    popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                    applyShiftButton(mouseEvent.isShiftDown());
+                    break;
+                }
+                target = target.getParent();
+            }
         }
     }
 

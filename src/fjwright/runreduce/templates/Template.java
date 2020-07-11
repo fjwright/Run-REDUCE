@@ -155,15 +155,15 @@ public abstract class Template {
     private String processResult() throws EmptyFieldException {
         // result() must be called early because it sets the switch lists.
         String decodedResult = PopupKeyboard.decode(result());
-        if (switchOnOffList.isEmpty() && switchOffOnList.isEmpty())
-            return decodedResult;
         String switchOnOffString = null, switchOffOnString = null;
-        if (!switchOnOffList.isEmpty())
+        if (!switchOnOffList.isEmpty()) {
             switchOnOffString = String.join(", ", switchOnOffList);
-        if (!switchOffOnList.isEmpty())
+            switchOnOffList.clear();
+        }
+        if (!switchOffOnList.isEmpty()) {
             switchOffOnString = String.join(", ", switchOffOnList);
-        switchOnOffList.clear();
-        switchOffOnList.clear();
+            switchOffOnList.clear();
+        }
         StringBuilder result = new StringBuilder();
         if (preambleText != null) {
             result.append(preambleText);
