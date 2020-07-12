@@ -71,7 +71,7 @@ public class Differentiate extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         final String depVar = depVarTextField.getText();
         if (depVar.isEmpty()) {
             RunREDUCE.errorMessageDialog("Differentiate Template Error",

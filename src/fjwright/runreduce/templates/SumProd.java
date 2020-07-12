@@ -24,7 +24,7 @@ public class SumProd extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         final var text = new StringBuilder();
         text.append("for ").append(getTextCheckNonEmpty(varTextField))
                 .append(" := ").append(getTextCheckNonEmpty(lowLimTextField))

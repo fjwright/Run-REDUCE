@@ -54,10 +54,6 @@
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction" text="Add Another Tab" />
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
-                <MenuItem mnemonicParsing="false" onAction="#expLogEtcMenuItemAction" text="Exp, Log, Power, etc..." />
-                <MenuItem mnemonicParsing="false" onAction="#gammaEtcMenuItemAction" text="Gamma Function, etc..." />
-                <MenuItem mnemonicParsing="false" onAction="#integralFunctionsMenuItemAction" text="Integral Functions..." />
-                <MenuItem mnemonicParsing="false" onAction="#airyBesselMenuItemAction" text="Airy &amp; Bessel Functions..." />
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..." />
                 <MenuItem mnemonicParsing="false" onAction="#integralMenuItemAction" text="Integral..." />
                 <MenuItem mnemonicParsing="false" onAction="#limitMenuItemAction" text="Limit..." />
@@ -65,6 +61,12 @@
                 <MenuItem mnemonicParsing="false" onAction="#matrixMenuItemAction" text="Matrix..." />
                 <MenuItem mnemonicParsing="false" onAction="#solveMenuItemAction" text="Solve Equation(s)..." />
                 <MenuItem mnemonicParsing="false" onAction="#forMenuItemAction" text="For Statement..." />
+            </Menu>
+            <Menu fx:id="functionsMenu" disable="true" mnemonicParsing="false" text="Functions">
+                <MenuItem mnemonicParsing="false" onAction="#expLogEtcMenuItemAction" text="Exp, Log, Power, Root, etc..." />
+                <MenuItem mnemonicParsing="false" onAction="#gammaEtcMenuItemAction" text="Gamma &amp; Beta Functions, etc..." />
+                <MenuItem mnemonicParsing="false" onAction="#integralFunctionsMenuItemAction" text="Integral Functions..." />
+                <MenuItem mnemonicParsing="false" onAction="#airyBesselMenuItemAction" text="Airy &amp; Bessel Functions, etc..." />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />

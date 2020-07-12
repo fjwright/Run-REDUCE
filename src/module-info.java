@@ -5,5 +5,6 @@ module Run.REDUCE.FX {
     requires javafx.fxml;
     opens fjwright.runreduce to javafx.fxml;
     opens fjwright.runreduce.templates to javafx.fxml;
+    opens fjwright.runreduce.functions to javafx.fxml;
     exports fjwright.runreduce;
 }

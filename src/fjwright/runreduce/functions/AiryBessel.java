@@ -1,14 +1,12 @@
-package fjwright.runreduce.templates;
+package fjwright.runreduce.functions;
 
-import fjwright.runreduce.RunREDUCE;
+import fjwright.runreduce.templates.Template;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 public class AiryBessel extends Template {
@@ -53,14 +51,8 @@ public class AiryBessel extends Template {
         hBoxes[i].setDisable(false);
     }
 
-    @FXML
-    private void hyperlinkOnMouseClickedAction(MouseEvent mouseEvent) {
-        RunREDUCE.hostServices.showDocument(
-                (String) ((Node) mouseEvent.getTarget()).getParent().getUserData());
-    }
-
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         if (numRadioButton.isSelected()) {
             switchNameOnOff("rounded");
             switchCheckBoxesOnOff(complexCheckBox);

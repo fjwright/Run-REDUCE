@@ -73,7 +73,7 @@ public class Integrate extends Template {
     }
 
     @Override
-    String result() throws Template.EmptyFieldException {
+    protected String result() throws Template.EmptyFieldException {
         final String integrand = integrandTextField.getText();
         if (integrand.isEmpty() || xIntVarTextField.getText().isEmpty()) {
             RunREDUCE.errorMessageDialog("Integrate Template Error",

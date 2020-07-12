@@ -1,5 +1,6 @@
-package fjwright.runreduce.templates;
+package fjwright.runreduce.functions;
 
+import fjwright.runreduce.templates.Template;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -51,7 +52,7 @@ public class ExpLogEtc extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         if (numRadioButton.isSelected()) {
             switchNameOnOff("rounded");
             switchCheckBoxesOnOff(complexCheckBox);

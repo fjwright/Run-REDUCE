@@ -83,7 +83,7 @@ public class Solve extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         if (numRadioButton.isSelected()) {
             preamble("load_package numeric;\n");
             switchNameOnOff("rounded");

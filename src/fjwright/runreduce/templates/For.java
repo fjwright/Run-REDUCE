@@ -38,7 +38,7 @@ public class For extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         final var text = new StringBuilder();
         if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
             // Iterate over a numerical range:

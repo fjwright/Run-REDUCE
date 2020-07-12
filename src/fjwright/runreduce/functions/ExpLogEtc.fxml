@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Text?>
 
 <VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.ExpLogEtc">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.functions.ExpLogEtc">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>

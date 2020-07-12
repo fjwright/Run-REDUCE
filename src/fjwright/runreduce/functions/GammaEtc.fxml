@@ -8,7 +8,7 @@
 
 <VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.templates.GammaEtc">
+      fx:controller="fjwright.runreduce.functions.GammaEtc">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -22,13 +22,9 @@
         <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#symNumRadioButtonAction" text="Numeric"
                      toggleGroup="$symNumToggleGroup"/>
     </HBox>
-    <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD"
-              text="Click on the radio button to the left of the template you want to use.&#10;Hover over a function name for a very brief description. For more details, click on a function name to go to the relevant entry in the NIST Digital Library of Mathematical Functions at https://dlmf.nist.gov/."
-              textAlignment="CENTER" wrappingWidth="560.0"/>
-    </HBox>
+    <fx:include source="FunctionsText.fxml"/>
 
-    <GridPane alignment="CENTER" stylesheets="@GammaEtc.css" vgap="10.0">
+    <GridPane alignment="CENTER" stylesheets="@Functions.css" vgap="10.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
             <ColumnConstraints percentWidth="15.0"/>

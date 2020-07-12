@@ -29,7 +29,7 @@ public class Matrix extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         // Construct an array of Strings from the array of TextFields:
         final String[][] stringArray =
                 stream(cells).map(

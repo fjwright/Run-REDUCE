@@ -50,6 +50,16 @@ public abstract class Template {
         templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKeyboard);
     }
 
+    /**
+     * Register this method as the OnMouseClicked action for
+     * a control to display the URL specified as User Data.
+     */
+    @FXML
+    protected void hyperlinkOnMouseClickedAction(MouseEvent mouseEvent) {
+        RunREDUCE.hostServices.showDocument(
+                (String) ((Node) mouseEvent.getTarget()).getParent().getUserData());
+    }
+
 // Check field entries dynamically ================================================================
 
     protected static final Pattern VAR_PATTERN =
@@ -138,7 +148,7 @@ public abstract class Template {
      * This method may be called by a specific template class
      * to construct output that precedes the main result.
      */
-    void preamble(String preambleText) {
+    protected void preamble(String preambleText) {
         this.preambleText = preambleText;
     }
 
@@ -146,7 +156,7 @@ public abstract class Template {
      * This method must be overridden by each specific template class
      * to construct the result.
      */
-    abstract String result() throws EmptyFieldException;
+    abstract protected String result() throws EmptyFieldException;
 
     /**
      * This method processes the result returned by each specific template class to decode any

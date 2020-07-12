@@ -60,9 +60,9 @@ public class RunREDUCEFrame {
     private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
-    // Templates menu:
+    // Templates and Functions menus:
     @FXML
-    Menu templatesMenu;
+    Menu templatesMenu, functionsMenu;
     // Help menu:
     @FXML
     private Menu helpMenu;
@@ -481,26 +481,6 @@ public class RunREDUCEFrame {
      * ************** */
 
     @FXML
-    private void expLogEtcMenuItemAction() {
-        showDialogAndWait("Evaluate an Exponential, Logarithm, Power, Root, etc", "templates/ExpLogEtc.fxml", Modality.NONE);
-    }
-
-    @FXML
-    private void gammaEtcMenuItemAction() {
-        showDialogAndWait("Evaluate a Gamma Function, etc", "templates/GammaEtc.fxml", Modality.NONE);
-    }
-
-    @FXML
-    private void integralFunctionsMenuItemAction() {
-        showDialogAndWait("Evaluate Integral Functions", "templates/IntegralFunctions.fxml", Modality.NONE);
-    }
-
-    @FXML
-    private void airyBesselMenuItemAction() {
-        showDialogAndWait("Evaluate Airy & Bessel Functions", "templates/AiryBessel.fxml", Modality.NONE);
-    }
-
-    @FXML
     private void derivativeMenuItemAction() {
         showDialogAndWait("Evaluate a Multiple (Partial) Derivative", "templates/Derivative.fxml", Modality.NONE);
     }
@@ -533,6 +513,30 @@ public class RunREDUCEFrame {
     @FXML
     private void forMenuItemAction() {
         showDialogAndWait("Execute a For Statement", "templates/For.fxml", Modality.NONE);
+    }
+
+    /* ************** *
+     * Functions menu *
+     * ************** */
+
+    @FXML
+    private void expLogEtcMenuItemAction() {
+        showDialogAndWait("Exponentials, Logarithms, Powers, Roots, etc", "functions/ExpLogEtc.fxml", Modality.NONE);
+    }
+
+    @FXML
+    private void gammaEtcMenuItemAction() {
+        showDialogAndWait("Gamma, Beta and Related Functions", "functions/GammaEtc.fxml", Modality.NONE);
+    }
+
+    @FXML
+    private void integralFunctionsMenuItemAction() {
+        showDialogAndWait("Integral Functions", "functions/IntegralFunctions.fxml", Modality.NONE);
+    }
+
+    @FXML
+    private void airyBesselMenuItemAction() {
+        showDialogAndWait("Airy, Bessel and Related Functions", "functions/AiryBessel.fxml", Modality.NONE);
     }
 
     /* ********* *

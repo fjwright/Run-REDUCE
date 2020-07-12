@@ -19,7 +19,7 @@ public class Limit extends Template {
     }
 
     @Override
-    String result() throws EmptyFieldException {
+    protected String result() throws EmptyFieldException {
         final var text = new StringBuilder("limit");
         switch (dirInd) {
             case 0:
