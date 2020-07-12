@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.Integer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.IntegralFunctions">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.AiryBessel">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -48,13 +59,13 @@
                 <ToggleGroup fx:id="templateToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Exponential&#10;Integral" userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Airy Function of&#10;the First Kind" userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Ei(x) = ⨍_{-∞}^x e^t/t dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
-            <Label styleClass="symbol" text="Ei(" />
+            <Label styleClass="symbol" text="Ai(" />
             <TextField fx:id="expIntTextField" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
@@ -64,13 +75,13 @@
                 <Integer fx:value="1" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Logarithmic&#10;Integral" userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Airy Function of&#10;the Second Kind" userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="li(x) = ⨍_0^x 1/ln(t) dt = Ei(ln x)" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
-            <Label styleClass="symbol" text="li(" />
+            <Label styleClass="symbol" text="Bi(" />
             <TextField fx:id="logIntTextField" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
@@ -80,13 +91,13 @@
                 <Integer fx:value="2" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Sine Integral" userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Derivative of Ai" userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Si(z) = ∫_0^z sin(t)/t dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="Si(" />
+            <Label styleClass="symbol" text="Ai'(" />
             <TextField fx:id="sinIntTextField" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
@@ -96,13 +107,13 @@
                 <Integer fx:value="3" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Cosine Integral" userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Derivative of Bi" userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Ci(z) = -∫_z^∞ cos(t)/t dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="Ci(" />
+            <Label styleClass="symbol" text="Bi'(" />
             <TextField fx:id="cosIntTextField" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
@@ -112,14 +123,16 @@
                 <Integer fx:value="4" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Hyperbolic&#10;Sine Integral" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Bessel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Shi(z) = ∫_0^z sinh(t)/t dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="Shi(" />
-            <TextField fx:id="hypSinIntTextField" prefColumnCount="3" />
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="J" />
+            <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
 
@@ -128,14 +141,16 @@
                 <Integer fx:value="5" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Hyperbolic&#10;Cosine Integral" userData="https://dlmf.nist.gov/6.2.E16" GridPane.columnIndex="5" GridPane.rowIndex="2">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Bessel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/6.2.E16" GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Chi(z) = γ + ln z + ∫_0^z (cosh t - 1)/t dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="Chi(" />
-            <TextField fx:id="hypCosIntTextField" prefColumnCount="3" />
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="Y" />
+            <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
 
@@ -144,14 +159,17 @@
                 <Integer fx:value="6" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Error Function" userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Modified&#10;Bessel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="erf z = 2/√π ∫_0^z e^{-t^2} dt" />
             </tooltip>
         </Label>
-        <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="erf" />
-            <TextField fx:id="erfTextField" prefColumnCount="3" />
+        <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="I" />
+            <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4" GridPane.rowIndex="3">
@@ -159,14 +177,17 @@
                 <Integer fx:value="7" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Complementary&#10;Error Function" userData="https://dlmf.nist.gov/7.2.E2" GridPane.columnIndex="5" GridPane.rowIndex="3">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Modified&#10;Bessel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/7.2.E2" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="erfc z = 2/√π ∫_z^∞ e^{-t^2} dt = 1 - erf z" />
             </tooltip>
         </Label>
-        <HBox fx:id="hBox7" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="erfc" />
-            <TextField fx:id="erfcTextField" prefColumnCount="3" />
+        <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="K" />
+            <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.rowIndex="4">
@@ -174,14 +195,19 @@
                 <Integer fx:value="8" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Fresnel&#10;Sine Integral" userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Hankel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="S(z) = ∫_0^z sin(½πt^2) dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
-            <Label styleClass="symbol" text="S(" />
-            <TextField fx:id="fresnelSinIntTextField" prefColumnCount="3" />
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="H" />
+            <StackPane>
+                <Label styleClass="superscript" text="(1)" />
+                <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            </StackPane>
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
 
@@ -190,14 +216,19 @@
                 <Integer fx:value="9" />
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Fresnel&#10;Cosine Integral" userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Hankel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="C(z) = ∫_0^z cos(½πt^2) dt" />
             </tooltip>
         </Label>
         <HBox fx:id="hBox9" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
-            <Label styleClass="symbol" text="C(" />
-            <TextField fx:id="fresnelCosIntTextField" prefColumnCount="3" />
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="H" />
+            <StackPane>
+                <Label styleClass="superscript" text="(2)" />
+                <TextField fx:id="" prefColumnCount="2" styleClass="subscript" />
+            </StackPane>
+            <Label styleClass="symbol" text="(" />
+            <TextField fx:id="" prefColumnCount="3" />
             <Label styleClass="symbol" text=")" />
         </HBox>
 
