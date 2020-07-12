@@ -57,6 +57,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#expLogEtcMenuItemAction" text="Exp, Log, Power, etc..." />
                 <MenuItem mnemonicParsing="false" onAction="#gammaEtcMenuItemAction" text="Gamma Function, etc..." />
                 <MenuItem mnemonicParsing="false" onAction="#integralFunctionsMenuItemAction" text="Integral Functions..." />
+                <MenuItem mnemonicParsing="false" onAction="#airyBesselMenuItemAction" text="Airy &amp; Bessel Functions..." />
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..." />
                 <MenuItem mnemonicParsing="false" onAction="#integralMenuItemAction" text="Integral..." />
                 <MenuItem mnemonicParsing="false" onAction="#limitMenuItemAction" text="Limit..." />
