@@ -4,7 +4,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
@@ -38,6 +37,7 @@
             <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
+            <RowConstraints/>
             <RowConstraints maxHeight="-Infinity" prefHeight="60.0"/>
         </rowConstraints>
 
@@ -50,13 +50,10 @@
             </toggleGroup>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Gamma&#10;Function"
-               GridPane.columnIndex="1">
+               userData="https://dlmf.nist.gov/5.2.i" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Γ(z) = (z-1)!"/>
             </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.2.i"/>
-            </userData>
         </Label>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
             <Label styleClass="symbol" text="Γ("/>
@@ -65,61 +62,163 @@
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="1">
+                     GridPane.columnIndex="4">
             <userData>
                 <Integer fx:value="1"/>
             </userData>
         </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Beta&#10;Function"
+               userData="https://dlmf.nist.gov/5.12" GridPane.columnIndex="5">
+            <tooltip>
+                <Tooltip text="B(a,b) = Γ(a)Γ(b)/Γ(a+b)"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
+            <Label styleClass="symbol" text="Β("/>
+            <TextField fx:id="betaATextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=","/>
+            <TextField fx:id="betaBTextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="1">
+            <userData>
+                <Integer fx:value="2"/>
+            </userData>
+        </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Digamma&#10;Function"
-               GridPane.columnIndex="1" GridPane.rowIndex="1">
+               userData="https://dlmf.nist.gov/5.2.i" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="ψ(z) = Γ′(z)/Γ(z)"/>
             </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.2.i"/>
-            </userData>
         </Label>
-        <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="ψ("/>
             <TextField fx:id="digammaTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="2">
-            <userData>
-                <Integer fx:value="2"/>
-            </userData>
-        </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Euler's&#10;Constant"
-               GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <tooltip>
-                <Tooltip text="γ = -ψ(1) = 0.57721…"/>
-            </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.2.ii"/>
-            </userData>
-        </Label>
-        <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="γ"/>
-        </HBox>
-
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="3">
+                     GridPane.columnIndex="4" GridPane.rowIndex="1">
             <userData>
                 <Integer fx:value="3"/>
             </userData>
         </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Polygamma&#10;Functions"
+               userData="https://dlmf.nist.gov/5.15" GridPane.columnIndex="5" GridPane.rowIndex="1">
+            <tooltip>
+                <Tooltip text="ψ^(n)(z) = d^nψ(z)/dz^n"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
+            <Label styleClass="symbol" text="ψ"/>
+            <Label styleClass="superscript" text="("/>
+            <TextField fx:id="polygammaNTextField" prefColumnCount="2" styleClass="superscript"/>
+            <Label styleClass="superscript" text=")"/>
+            <Label styleClass="symbol" text="("/>
+            <TextField fx:id="polygammaZTextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="2">
+            <userData>
+                <Integer fx:value="4"/>
+            </userData>
+        </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
+               text="Normalized&#10;Incomplete&#10;Gamma Function" userData="https://dlmf.nist.gov/8.2.i"
+               GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <tooltip>
+                <Tooltip text="P(a,z) = 1/Γ(a) ∫_0^z t^{a-1} e^{-t} dt"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="P"/>
+            <Label styleClass="symbol" text="("/>
+            <TextField fx:id="pATextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=","/>
+            <TextField fx:id="pZTextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4" GridPane.rowIndex="2">
+            <userData>
+                <Integer fx:value="5"/>
+            </userData>
+        </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
+               text="Normalized&#10;Incomplete&#10;Beta Function" userData="https://dlmf.nist.gov/8.17.i"
+               GridPane.columnIndex="5" GridPane.rowIndex="2">
+            <tooltip>
+                <Tooltip text="I_x(a,b) = 1/B(a,b) ∫_0^x t^{a-1} (1-t)^{b-1} dt"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="I"/>
+            <TextField fx:id="iXTextField" prefColumnCount="2" styleClass="subscript"/>
+            <Label styleClass="symbol" text="("/>
+            <TextField fx:id="iATextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=","/>
+            <TextField fx:id="iBTextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="6"/>
+            </userData>
+        </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Dilogarithm"
+               userData="https://dlmf.nist.gov/25.12.i" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <tooltip>
+                <Tooltip text="Li_2(z) ≡ ∑_{n=1}^∞ z^n/n^2"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="Li"/>
+            <Label styleClass="subscript" text="2"/>
+            <Label styleClass="symbol" text="("/>
+            <TextField fx:id="dilogTextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="4" GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="7"/>
+            </userData>
+        </RadioButton>
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Pochhammer's&#10;Symbol"
+               userData="https://dlmf.nist.gov/5.2.iii" GridPane.columnIndex="5" GridPane.rowIndex="3">
+            <tooltip>
+                <Tooltip text="(a)_n = Γ(a+n)/Γ(a)"/>
+            </tooltip>
+        </Label>
+        <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="("/>
+            <TextField fx:id="pochhammerATextField" prefColumnCount="3"/>
+            <Label styleClass="symbol" text=")"/>
+            <TextField fx:id="pochhammerNTextField" prefColumnCount="2" styleClass="subscript"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="4">
+            <userData>
+                <Integer fx:value="8"/>
+            </userData>
+        </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Binomial&#10;Coefficients"
-               GridPane.columnIndex="1" GridPane.rowIndex="3">
+               userData="https://dlmf.nist.gov/26.3" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="(m over n) = m!/((m-n)!n!)"/>
             </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/26.3"/>
-            </userData>
         </Label>
-        <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+        <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <Label styleClass="bracket" text="("/>
             <VBox alignment="CENTER">
                 <TextField fx:id="binCoeffMTextField" prefColumnCount="3"/>
@@ -129,95 +228,23 @@
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4">
+                     GridPane.columnIndex="4" GridPane.rowIndex="4">
             <userData>
-                <Integer fx:value="4"/>
-            </userData>
-        </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Beta&#10;Function"
-               GridPane.columnIndex="5">
-            <tooltip>
-                <Tooltip text="B(a,b) = Γ(a)Γ(b)/Γ(a+b)"/>
-            </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.12"/>
-            </userData>
-        </Label>
-        <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="6">
-            <Label styleClass="symbol" text="Β("/>
-            <TextField fx:id="betaATextField" prefColumnCount="3"/>
-            <Label styleClass="symbol" text=","/>
-            <TextField fx:id="betaBTextField" prefColumnCount="3"/>
-            <Label styleClass="symbol" text=")"/>
-        </HBox>
-
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="1">
-            <userData>
-                <Integer fx:value="5"/>
-            </userData>
-        </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Polygamma&#10;Functions"
-               GridPane.columnIndex="5" GridPane.rowIndex="1">
-            <tooltip>
-                <Tooltip text="ψ^(n)(z) = d^nψ(z)/dz^n"/>
-            </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.15"/>
-            </userData>
-        </Label>
-        <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="ψ"/>
-            <Label styleClass="superscript" text="("/>
-            <TextField fx:id="polygammaNTextField" prefColumnCount="3" styleClass="superscript"/>
-            <Label styleClass="superscript" text=")"/>
-            <Label styleClass="symbol" text="("/>
-            <TextField fx:id="polygammaZTextField" prefColumnCount="3"/>
-            <Label styleClass="symbol" text=")"/>
-        </HBox>
-
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="2">
-            <userData>
-                <Integer fx:value="6"/>
-            </userData>
-        </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Pochhammer's&#10;Symbol"
-               GridPane.columnIndex="5" GridPane.rowIndex="2">
-            <tooltip>
-                <Tooltip text="(a)_n = Γ(a+n)/Γ(a)"/>
-            </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/5.2.iii"/>
-            </userData>
-        </Label>
-        <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="("/>
-            <TextField fx:id="pochhammerATextField" prefColumnCount="3"/>
-            <Label styleClass="symbol" text=")"/>
-            <TextField fx:id="pochhammerNTextField" prefColumnCount="3" styleClass="subscript"/>
-        </HBox>
-
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="3">
-            <userData>
-                <Integer fx:value="7"/>
+                <Integer fx:value="9"/>
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Riemann Zeta&#10;Function"
-               GridPane.columnIndex="5" GridPane.rowIndex="3">
+               userData="https://dlmf.nist.gov/25" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="ζ(s) = ∑_{n=1}^∞ 1/n^s"/>
             </tooltip>
-            <userData>
-                <String fx:value="https://dlmf.nist.gov/25"/>
-            </userData>
         </Label>
-        <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+        <HBox fx:id="hBox9" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
             <Label styleClass="symbol" text="ζ("/>
             <TextField fx:id="zetaTextField" prefColumnCount="3"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
+
         <Separator orientation="VERTICAL" GridPane.columnIndex="3" GridPane.halignment="CENTER"
                    GridPane.rowSpan="2147483647"/>
         <padding>

@@ -17,11 +17,11 @@ public class GammaEtc extends Template {
     @FXML
     private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7;
     @FXML
-    private TextField gammaTextField, digammaTextField, binCoeffMTextField, binCoeffNTextField;
-    @FXML
-    private TextField betaATextField, betaBTextField, polygammaNTextField, polygammaZTextField;
-    @FXML
-    private TextField pochhammerATextField, pochhammerNTextField, zetaTextField;
+    private TextField gammaTextField, betaATextField, betaBTextField,
+            digammaTextField, polygammaNTextField, polygammaZTextField,
+            pATextField, pZTextField, iXTextField, iATextField, iBTextField,
+            dilogTextField, pochhammerATextField, pochhammerNTextField,
+            binCoeffMTextField, binCoeffNTextField, zetaTextField;
     @FXML /* Switches: default off */
     private CheckBox complexCheckBox;
     @FXML /* Switches: default on */
@@ -62,27 +62,37 @@ public class GammaEtc extends Template {
                 text.append("Gamma(").append(getTextCheckNonEmpty(gammaTextField));
                 break;
             case 1:
-                text.append("psi(").append(getTextCheckNonEmpty(digammaTextField));
-                break;
-            case 2:
-                return "Euler_gamma";
-            case 3:
-                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffMTextField))
-                        .append(", ").append(getTextCheckNonEmpty(binCoeffNTextField));
-                break;
-            case 4:
                 text.append("Beta(").append(getTextCheckNonEmpty(betaATextField))
                         .append(", ").append(getTextCheckNonEmpty(betaBTextField));
                 break;
-            case 5:
+            case 2:
+                text.append("psi(").append(getTextCheckNonEmpty(digammaTextField));
+                break;
+            case 3:
                 text.append("polygamma(").append(getTextCheckNonEmpty(polygammaNTextField))
                         .append(", ").append(getTextCheckNonEmpty(polygammaZTextField));
                 break;
+            case 4:
+                text.append("iGamma(").append(getTextCheckNonEmpty(pATextField))
+                        .append(", ").append(getTextCheckNonEmpty(pZTextField));
+                break;
+            case 5:
+                text.append("iBeta(").append(getTextCheckNonEmpty(iATextField))
+                        .append(", ").append(getTextCheckNonEmpty(iBTextField))
+                        .append(", ").append(getTextCheckNonEmpty(iXTextField));
+                break;
             case 6:
+                text.append("dilog(").append(getTextCheckNonEmpty(dilogTextField));
+                break;
+            case 7:
                 text.append("Pochhammer(").append(getTextCheckNonEmpty(pochhammerATextField))
                         .append(", ").append(getTextCheckNonEmpty(pochhammerNTextField));
                 break;
-            case 7:
+            case 8:
+                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffMTextField))
+                        .append(", ").append(getTextCheckNonEmpty(binCoeffNTextField));
+                break;
+            case 9:
                 text.append("zeta(").append(getTextCheckNonEmpty(zetaTextField));
                 break;
         }
