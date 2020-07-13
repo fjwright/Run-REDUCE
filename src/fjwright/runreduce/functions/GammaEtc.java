@@ -15,7 +15,7 @@ public class GammaEtc extends Template {
     @FXML
     private ToggleGroup templateToggleGroup;
     @FXML
-    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7;
+    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9;
     @FXML
     private TextField gammaTextField, betaATextField, betaBTextField,
             digammaTextField, polygammaNTextField, polygammaZTextField,
@@ -33,7 +33,7 @@ public class GammaEtc extends Template {
     @Override
     protected void initialize() {
         super.initialize();
-        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7};
+        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9};
     }
 
     @FXML
