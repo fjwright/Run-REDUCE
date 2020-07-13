@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.*?>
 
 <VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
@@ -50,15 +50,14 @@
             </toggleGroup>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Airy Function of&#10;the First Kind" userData="https://dlmf.nist.gov/9.2"
-               GridPane.columnIndex="1">
+               text="Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Solution of d^2w/dz^2 = z w"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
             <Label styleClass="symbol" text="Ai("/>
-            <TextField fx:id="aiTextField" prefColumnCount="3"/>
+            <TextField fx:id="aiTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -69,15 +68,14 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Airy Function of&#10;the Second Kind" userData="https://dlmf.nist.gov/9.2"
-               GridPane.columnIndex="5">
+               text="Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="Solution of d^2w/dz^2 = z w"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
             <Label styleClass="symbol" text="Bi("/>
-            <TextField fx:id="biTextField" prefColumnCount="3"/>
+            <TextField fx:id="biTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -87,15 +85,16 @@
                 <Integer fx:value="2"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Derivative of Ai"
-               userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
+               text="Derivative of&#10;Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2"
+               GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="dAi(z)/dz"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="Ai'("/>
-            <TextField fx:id="aiPrimeTextField" prefColumnCount="3"/>
+            <TextField fx:id="aiPrimeTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -105,15 +104,16 @@
                 <Integer fx:value="3"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Derivative of Bi"
-               userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
+               text="Derivative of&#10;Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2"
+               GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="dBi(z)/dz"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="Bi'("/>
-            <TextField fx:id="biPrimeTextField" prefColumnCount="3"/>
+            <TextField fx:id="biPrimeTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -124,17 +124,17 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Bessel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/10.2"
-               GridPane.columnIndex="1" GridPane.rowIndex="2">
+               text="Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1"
+               GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="J"/>
-            <TextField fx:id="jNuTextField" prefColumnCount="2" styleClass="subscript"/>
+            <TextField fx:id="jNuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="ν"/>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="jZTextField" prefColumnCount="3"/>
+            <TextField fx:id="jZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -145,17 +145,17 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Bessel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/10.2"
-               GridPane.columnIndex="5" GridPane.rowIndex="2">
+               text="Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5"
+               GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="Y"/>
-            <TextField fx:id="yNuTextField" prefColumnCount="2" styleClass="subscript"/>
+            <TextField fx:id="yNuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="ν"/>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="yZTextField" prefColumnCount="3"/>
+            <TextField fx:id="yZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -166,7 +166,7 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Modified&#10;Bessel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/10.25"
+               text="Modified&#10;Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.25"
                GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0"/>
@@ -174,9 +174,9 @@
         </Label>
         <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="I"/>
-            <TextField fx:id="iNuTextField" prefColumnCount="2" styleClass="subscript"/>
+            <TextField fx:id="iNuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="ν"/>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="iZTextField" prefColumnCount="3"/>
+            <TextField fx:id="iZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -187,7 +187,7 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Modified&#10;Bessel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/10.25"
+               text="Modified&#10;Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.25"
                GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0"/>
@@ -195,9 +195,9 @@
         </Label>
         <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="K"/>
-            <TextField fx:id="kNuTextField" prefColumnCount="2" styleClass="subscript"/>
+            <TextField fx:id="kNuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="ν"/>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="kZTextField" prefColumnCount="3"/>
+            <TextField fx:id="kZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -208,8 +208,8 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Hankel Function&#10;of the First Kind" userData="https://dlmf.nist.gov/10.2"
-               GridPane.columnIndex="1" GridPane.rowIndex="4">
+               text="Hankel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1"
+               GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
             </tooltip>
@@ -218,10 +218,11 @@
             <Label style="-fx-font-style:italic" styleClass="symbol" text="H"/>
             <StackPane>
                 <Label styleClass="superscript" text="(1)"/>
-                <TextField fx:id="h1NuTextField" prefColumnCount="2" styleClass="subscript"/>
+                <TextField fx:id="h1NuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="ν"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="h1ZTextField" prefColumnCount="3"/>
+            <TextField fx:id="h1ZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
@@ -232,8 +233,8 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Hankel Function&#10;of the Second Kind" userData="https://dlmf.nist.gov/10.2"
-               GridPane.columnIndex="5" GridPane.rowIndex="4">
+               text="Hankel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5"
+               GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
             </tooltip>
@@ -242,10 +243,11 @@
             <Label style="-fx-font-style:italic" styleClass="symbol" text="H"/>
             <StackPane>
                 <Label styleClass="superscript" text="(2)"/>
-                <TextField fx:id="h2NuTextField" prefColumnCount="2" styleClass="subscript"/>
+                <TextField fx:id="h2NuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="ν"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
-            <TextField fx:id="h2ZTextField" prefColumnCount="3"/>
+            <TextField fx:id="h2ZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
