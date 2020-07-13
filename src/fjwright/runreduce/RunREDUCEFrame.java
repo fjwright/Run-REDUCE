@@ -171,9 +171,9 @@ public class RunREDUCEFrame {
     }
 
     /*
-    * This method is based on https://www.tfzx.net/article/9082893.html
-    * Thanks to Rainer Schöpf for the reference.
-    */
+     * This method is based on https://www.tfzx.net/article/9082893.html
+     * Thanks to Rainer Schöpf for the reference.
+     */
     private void documentOpen(File manual) {
         final Task<Void> openFile = new Task<>() {
             @Override
@@ -521,22 +521,32 @@ public class RunREDUCEFrame {
 
     @FXML
     private void expLogEtcMenuItemAction() {
-        showDialogAndWait("Exponentials, Logarithms, Powers, Roots, etc", "functions/ExpLogEtc.fxml", Modality.NONE);
+        showDialogAndWait("Exponentials, Logarithms, Powers, Roots, etc",
+                "functions/ExpLogEtc.fxml", Modality.NONE);
     }
 
     @FXML
     private void gammaEtcMenuItemAction() {
-        showDialogAndWait("Gamma, Beta and Related Functions", "functions/GammaEtc.fxml", Modality.NONE);
+        showDialogAndWait("Gamma, Beta and Related Functions",
+                "functions/GammaEtc.fxml", Modality.NONE);
     }
 
     @FXML
     private void integralFunctionsMenuItemAction() {
-        showDialogAndWait("Integral Functions", "functions/IntegralFunctions.fxml", Modality.NONE);
+        showDialogAndWait("Integral Functions",
+                "functions/IntegralFunctions.fxml", Modality.NONE);
     }
 
     @FXML
     private void airyBesselMenuItemAction() {
-        showDialogAndWait("Airy, Bessel and Related Functions", "functions/AiryBessel.fxml", Modality.NONE);
+        showDialogAndWait("Airy, Bessel and Related Functions",
+                "functions/AiryBessel.fxml", Modality.NONE);
+    }
+
+    @FXML
+    private void struveEtcMenuItemAction() {
+        showDialogAndWait("Struve, Lommel, Kummer, Whittaker and Spherical Harmonic Functions",
+                "functions/StruveEtc.fxml", Modality.NONE);
     }
 
     /* ********* *

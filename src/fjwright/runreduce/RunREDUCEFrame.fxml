@@ -67,6 +67,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#gammaEtcMenuItemAction" text="Gamma &amp; Beta Functions, etc..." />
                 <MenuItem mnemonicParsing="false" onAction="#integralFunctionsMenuItemAction" text="Integral Functions..." />
                 <MenuItem mnemonicParsing="false" onAction="#airyBesselMenuItemAction" text="Airy &amp; Bessel Functions, etc..." />
+                <MenuItem mnemonicParsing="false" onAction="#struveEtcMenuItemAction" text="Struve &amp; Kummer Functions, etc..." />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />

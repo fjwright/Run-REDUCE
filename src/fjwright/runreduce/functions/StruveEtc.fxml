@@ -98,7 +98,7 @@
             </tooltip>
         </Label>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="s"/>
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="s"/>
             <TextField fx:id="lommel1MuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
                        text="μ"/>
             <Label styleClass="subscript" text=","/>
@@ -123,7 +123,7 @@
             </tooltip>
         </Label>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="S"/>
+            <Label style="-fx-font-style:italic" styleClass="symbol" text="S"/>
             <TextField fx:id="lommel2MuTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
                        text="μ"/>
             <Label styleClass="subscript" text=","/>
@@ -249,19 +249,28 @@
                 <Integer fx:value="8"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" text="Spherical Harmonic Function"
-               GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Spherical Harmonic Function"
+               userData="https://dlmf.nist.gov/14.30" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <tooltip>
-                <Tooltip text="Solution of the angular component of Laplace's PDE in 3D"/>
+                <Tooltip
+                        text="Solution of angular component of Laplace's PDE in 3D.&#10;Y_{n,m}(θ,ϕ) in notation of DLMF."/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="0">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="Y"/>
             <StackPane>
                 <TextField fx:id="sphericalHarmonicNTextField" alignment="CENTER" prefColumnCount="2"
-                           styleClass="subscript" text="n"/>
+                           styleClass="subscript" text="n">
+                    <tooltip>
+                        <Tooltip text="Must be, or evaluate to, an integer."/>
+                    </tooltip>
+                </TextField>
                 <TextField fx:id="sphericalHarmonicMTextField" alignment="CENTER" prefColumnCount="2"
-                           styleClass="superscript" text="m"/>
+                           styleClass="superscript" text="m">
+                    <tooltip>
+                        <Tooltip text="Must be, or evaluate to, an integer."/>
+                    </tooltip>
+                </TextField>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="sphericalHarmonicThetaTextField" alignment="CENTER" prefColumnCount="3" text="θ"/>
@@ -286,9 +295,17 @@
             <Label style="-fx-font-style:italic" styleClass="symbol" text="Y"/>
             <StackPane>
                 <TextField fx:id="solidHarmonicNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
-                           text="n"/>
+                           text="n">
+                    <tooltip>
+                        <Tooltip text="Must be, or evaluate to, an integer."/>
+                    </tooltip>
+                </TextField>
                 <TextField fx:id="solidHarmonicMTextField" alignment="CENTER" prefColumnCount="2"
-                           styleClass="superscript" text="m"/>
+                           styleClass="superscript" text="m">
+                    <tooltip>
+                        <Tooltip text="Must be, or evaluate to, an integer."/>
+                    </tooltip>
+                </TextField>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="solidHarmonicXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -297,7 +314,7 @@
             <Label styleClass="symbol" text=","/>
             <TextField fx:id="solidHarmonicZTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
             <Label styleClass="symbol" text=","/>
-            <TextField fx:id="solidHarmonicR2TextField" alignment="CENTER" prefColumnCount="3" text="r2"/>
+            <TextField fx:id="solidHarmonicR2TextField" alignment="CENTER" prefColumnCount="3" text="r²"/>
             <Label styleClass="symbol" text=")"/>
         </HBox>
 
