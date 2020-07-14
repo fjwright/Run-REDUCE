@@ -50,9 +50,9 @@
             </toggleGroup>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Jacobi&#10;Polynomials"
-               userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1">
+               userData="https://dlmf.nist.gov/18.3#T1.t1.r2" GridPane.columnIndex="1">
             <tooltip>
-                <Tooltip text="Solution of d^2w/dz^2 = z w"/>
+                <Tooltip text="Orthogonal on (-1,1) with weight function (1-x)^α (1+x)^β"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
@@ -60,12 +60,15 @@
             <StackPane>
                 <HBox alignment="CENTER">
                     <Label styleClass="superscript" text="("/>
-                    <TextField fx:id="jacobiAlphaTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="α"/>
+                    <TextField fx:id="jacobiAlphaTextField" alignment="CENTER" prefColumnCount="2"
+                               styleClass="superscript" text="α"/>
                     <Label styleClass="superscript" text=","/>
-                    <TextField fx:id="jacobiBetaTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="β"/>
+                    <TextField fx:id="jacobiBetaTextField" alignment="CENTER" prefColumnCount="2"
+                               styleClass="superscript" text="β"/>
                     <Label styleClass="superscript" text=")"/>
                 </HBox>
-                <TextField fx:id="jacobiNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+                <TextField fx:id="jacobiNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="n"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="jacobiXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -79,10 +82,10 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Ultraspherical&#10;(Gegenbauer)&#10;Polynomials" userData="https://dlmf.nist.gov/9.2"
+               text="Ultraspherical&#10;(Gegenbauer)&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r3"
                GridPane.columnIndex="5">
             <tooltip>
-                <Tooltip text="Solution of d^2w/dz^2 = z w"/>
+                <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^{λ-½}"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
@@ -90,10 +93,12 @@
             <StackPane>
                 <HBox alignment="CENTER">
                     <Label styleClass="superscript" text="("/>
-                    <TextField fx:id="gegenbauerLambdaTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="λ"/>
+                    <TextField fx:id="gegenbauerLambdaTextField" alignment="CENTER" prefColumnCount="2"
+                               styleClass="superscript" text="λ"/>
                     <Label styleClass="superscript" text=")"/>
                 </HBox>
-                <TextField fx:id="gegenbauerNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+                <TextField fx:id="gegenbauerNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="n"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="gegenbauerXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -107,15 +112,16 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Chebyshev&#10;Polynomials&#10;First Kind" userData="https://dlmf.nist.gov/9.2"
+               text="Chebyshev&#10;Polynomials&#10;First Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r4"
                GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="dAi(z)/dz"/>
+                <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^{-½}"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="T"/>
-            <TextField fx:id="chebyshev1NTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+            <TextField fx:id="chebyshev1NTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                       text="n"/>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="chebyshev1XTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
             <Label styleClass="symbol" text=")"/>
@@ -128,10 +134,10 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Chebyshev&#10;Polynomials&#10;Second Kind" userData="https://dlmf.nist.gov/9.2"
+               text="Chebyshev&#10;Polynomials&#10;Second Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r5"
                GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="dBi(z)/dz"/>
+                <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^½"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
@@ -150,14 +156,15 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Legendre&#10;Polynomials"
-               userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               userData="https://dlmf.nist.gov/18.3#T1.t1.r10" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
+                <Tooltip text="Orthogonal on (-1,1) with weight function 1"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="P"/>
-            <TextField fx:id="legendreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+            <TextField fx:id="legendreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                       text="n"/>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="legendreXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
             <Label styleClass="symbol" text=")"/>
@@ -170,10 +177,10 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Associated&#10;Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/10.2"
+               text="Associated&#10;Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/14.7.E8"
                GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
+                <Tooltip text="P_n^m(x) = (-1)^m (1-x^2)^{m/2} d^m/dx^m P_n(x)"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
@@ -181,10 +188,12 @@
             <StackPane>
                 <HBox alignment="CENTER">
                     <Label styleClass="superscript" text="("/>
-                    <TextField fx:id="assocLegendreMTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="m"/>
+                    <TextField fx:id="assocLegendreMTextField" alignment="CENTER" prefColumnCount="2"
+                               styleClass="superscript" text="m"/>
                     <Label styleClass="superscript" text=")"/>
                 </HBox>
-                <TextField fx:id="assocLegendreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+                <TextField fx:id="assocLegendreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="n"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="assocLegendreXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -198,14 +207,15 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Laguerre&#10;Polynomials"
-               userData="https://dlmf.nist.gov/10.25" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               userData="https://dlmf.nist.gov/18.3#T1.t1.r12" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0"/>
+                <Tooltip text="Orthogonal on (0,∞) with weight function e^{-x}"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="L"/>
-            <TextField fx:id="laguerreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+            <TextField fx:id="laguerreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                       text="n"/>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="laguerreXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
             <Label styleClass="symbol" text=")"/>
@@ -218,10 +228,10 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Generalized&#10;Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/10.25"
+               text="Generalized&#10;Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r12"
                GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0"/>
+                <Tooltip text="Orthogonal on (0,∞) with weight function e^{-x} x^α"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
@@ -229,10 +239,12 @@
             <StackPane>
                 <HBox alignment="CENTER">
                     <Label styleClass="superscript" text="("/>
-                    <TextField fx:id="genLaguerreAlphaTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="α"/>
+                    <TextField fx:id="genLaguerreAlphaTextField" alignment="CENTER" prefColumnCount="2"
+                               styleClass="superscript" text="α"/>
                     <Label styleClass="superscript" text=")"/>
                 </HBox>
-                <TextField fx:id="genLaguerreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+                <TextField fx:id="genLaguerreNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                           text="n"/>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="genLaguerreXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -246,14 +258,15 @@
             </userData>
         </RadioButton>
         <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Hermite&#10;Polynomials"
-               userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               userData="https://dlmf.nist.gov/18.3#T1.t1.r13" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
-                <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0"/>
+                <Tooltip text="Orthogonal on (-∞,∞) with weight function e^{-x^2}"/>
             </tooltip>
         </Label>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="H"/>
-            <TextField fx:id="hermiteNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="n"/>
+            <TextField fx:id="hermiteNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                       text="n"/>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="hermiteXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
             <Label styleClass="symbol" text=")"/>
