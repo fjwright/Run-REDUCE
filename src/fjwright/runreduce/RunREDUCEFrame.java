@@ -549,6 +549,12 @@ public class RunREDUCEFrame {
                 "functions/StruveEtc.fxml", Modality.NONE);
     }
 
+    @FXML
+    private void orthoPolyMenuItemAction() {
+        showDialogAndWait("Classical Orthogonal Polynomials",
+                "functions/OrthoPoly.fxml", Modality.NONE);
+    }
+
     /* ********* *
      * Help menu *
      * ********* */

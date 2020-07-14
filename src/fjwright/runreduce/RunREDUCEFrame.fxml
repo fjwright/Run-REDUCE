@@ -68,6 +68,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#integralFunctionsMenuItemAction" text="Integral Functions..." />
                 <MenuItem mnemonicParsing="false" onAction="#airyBesselMenuItemAction" text="Airy &amp; Bessel Functions, etc..." />
                 <MenuItem mnemonicParsing="false" onAction="#struveEtcMenuItemAction" text="Struve &amp; Kummer Functions, etc..." />
+                <MenuItem mnemonicParsing="false" onAction="#orthoPolyMenuItemAction" text="Classical Orthogonal Polynomials..." />
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />
