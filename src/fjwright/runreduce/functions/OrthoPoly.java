@@ -24,6 +24,7 @@ public class OrthoPoly extends Functions {
             switchCheckBoxesOnOff(complexCheckBox);
             switchCheckBoxesOffOn(savesfsCheckBox);
         }
+        preamble("load_package specfn;\n");
         StringBuilder text = new StringBuilder();
         switch ((int) templateToggleGroup.getSelectedToggle().getUserData()) {
             case 0:

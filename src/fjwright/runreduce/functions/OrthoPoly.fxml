@@ -67,8 +67,10 @@
                                styleClass="superscript" text="β"/>
                     <Label styleClass="superscript" text=")"/>
                 </HBox>
-                <TextField fx:id="jacobiNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
-                           text="n"/>
+                <HBox alignment="CENTER">
+                    <TextField fx:id="jacobiNTextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript"
+                               text="n"/>
+                </HBox>
             </StackPane>
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="jacobiXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
