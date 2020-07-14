@@ -1,53 +1,15 @@
 package fjwright.runreduce.functions;
 
-import fjwright.runreduce.templates.Template;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
-public class GammaEtc extends Template {
-    @FXML
-    private RadioButton numRadioButton;
-    @FXML
-    private ToggleGroup templateToggleGroup;
-    @FXML
-    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9;
+public class GammaEtc extends Functions {
     @FXML
     private TextField gammaTextField, betaATextField, betaBTextField,
             digammaTextField, polygammaNTextField, polygammaZTextField,
             pATextField, pZTextField, iXTextField, iATextField, iBTextField,
             dilogTextField, pochhammerATextField, pochhammerNTextField,
             binCoeffMTextField, binCoeffNTextField, zetaTextField;
-    @FXML /* Switches: default off */
-    private CheckBox complexCheckBox;
-    @FXML /* Switches: default on */
-    private CheckBox savesfsCheckBox;
-
-    private HBox[] hBoxes;
-
-    @FXML
-    @Override
-    protected void initialize() {
-        super.initialize();
-        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9};
-    }
-
-    @FXML
-    private void symNumRadioButtonAction() {
-        complexCheckBox.setVisible(numRadioButton.isSelected());
-        savesfsCheckBox.setVisible(numRadioButton.isSelected());
-    }
-
-    @FXML
-    private void templateRadioButtonOnAction(ActionEvent actionEvent) {
-        for (var hBox : hBoxes) hBox.setDisable(true);
-        int i = (int) ((RadioButton) actionEvent.getSource()).getUserData();
-        hBoxes[i].setDisable(false);
-    }
 
     @Override
     protected String result() throws EmptyFieldException {

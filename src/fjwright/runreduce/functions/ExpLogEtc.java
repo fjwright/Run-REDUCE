@@ -1,21 +1,10 @@
 package fjwright.runreduce.functions;
 
-import fjwright.runreduce.templates.Template;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
-public class ExpLogEtc extends Template {
-    @FXML
-    private RadioButton numRadioButton;
-    @FXML
-    private ToggleGroup templateToggleGroup;
-    @FXML
-    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8;
+public class ExpLogEtc extends Functions {
     @FXML
     private TextField expTextField, powATextField, powBTextField, pow10TextField;
     @FXML
@@ -27,28 +16,13 @@ public class ExpLogEtc extends Template {
     @FXML /* Switches: default on */
     private CheckBox preciseCheckBox;
 
-    private HBox[] hBoxes;
-
     @FXML
     @Override
-    protected void initialize() {
-        super.initialize();
-        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8};
-    }
-
-    @FXML
-    private void symNumRadioButtonAction() {
+    protected void symNumRadioButtonAction() {
         complexCheckBox.setVisible(numRadioButton.isSelected());
         expandlogsCheckBox.setVisible(!numRadioButton.isSelected());
         preciseCheckBox.setVisible(!numRadioButton.isSelected());
         preciseComplexCheckBox.setVisible(!numRadioButton.isSelected());
-    }
-
-    @FXML
-    private void templateRadioButtonOnAction(ActionEvent actionEvent) {
-        for (var hBox : hBoxes) hBox.setDisable(true);
-        int i = (int) ((RadioButton) actionEvent.getSource()).getUserData();
-        hBoxes[i].setDisable(false);
     }
 
     @Override
