@@ -18,3 +18,8 @@
     -fx-font-size: 60px;
     -fx-translate-y: -5;
 }
+.tooltip {
+    -fx-font-size: 12px;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+}

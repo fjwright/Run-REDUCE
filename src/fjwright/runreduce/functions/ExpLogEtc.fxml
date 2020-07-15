@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.Integer?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="700.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.functions.ExpLogEtc">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="700.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.functions.ExpLogEtc">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -23,7 +33,10 @@
                      toggleGroup="$symNumToggleGroup"/>
     </HBox>
     <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD" text="Click on the radio button to the left of the template you want to use."
+        <Text fontSmoothingType="LCD" text=
+                "Click on the radio button to the left of the function you want to use.
+&#10;Hover over an active function name or symbol for a brief description. Some functions
+&#10;do not simplify symbolically but evaluate numerically, as indicated in their tooltips."
               textAlignment="CENTER"/>
     </HBox>
 
@@ -54,7 +67,11 @@
             </userData>
         </RadioButton>
         <HBox fx:id="hBox0" alignment="CENTER" spacing="2.0" GridPane.columnIndex="1">
-            <Label styleClass="symbol" text="e"/>
+            <Label styleClass="symbol" text="e">
+                <tooltip>
+                    <Tooltip text="Exponential: e^x = exp(x)"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="expTextField" alignment="CENTER" prefColumnCount="3" styleClass="superscript" text="ws"/>
         </HBox>
 
@@ -65,7 +82,11 @@
             </userData>
         </RadioButton>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4">
-            <Label styleClass="symbol" text="ln"/>
+            <Label styleClass="symbol" text="ln">
+                <tooltip>
+                    <Tooltip text="Natural, i.e. base e, logarithm: ln e = 1"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="lnTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
         </HBox>
 
@@ -76,7 +97,12 @@
             </userData>
         </RadioButton>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="7">
-            <Label styleClass="symbol" text="atan2("/>
+            <Label styleClass="symbol" text="atan2(">
+                <tooltip>
+                    <Tooltip text="Two argument version of atan(y/x) that returns an angle in the interval
+&#10;(-π/2, π/2] in the correct quadrant depending on the signs of x and y."/>
+                </tooltip>
+            </Label>
             <TextField fx:id="atan2YTextField" alignment="CENTER" prefColumnCount="3" text="y"/>
             <Label text=","/>
             <TextField fx:id="atan2XTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
@@ -91,7 +117,11 @@
         </RadioButton>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
               GridPane.rowIndex="1">
-            <TextField fx:id="powATextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+            <TextField fx:id="powATextField" alignment="CENTER" prefColumnCount="3" text="ws">
+                <tooltip>
+                    <Tooltip text="Power, e.g. x^2"/>
+                </tooltip>
+            </TextField>
             <TextField fx:id="powBTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="2"/>
         </HBox>
 
@@ -103,7 +133,11 @@
         </RadioButton>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
               GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="√"/>
+            <Label styleClass="symbol" text="√">
+                <tooltip>
+                    <Tooltip text="Square root"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="sqrtTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
         </HBox>
 
@@ -116,7 +150,11 @@
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
               GridPane.rowIndex="1">
             <TextField fx:id="rootATextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="3"/>
-            <Label styleClass="symbol" text="√"/>
+            <Label styleClass="symbol" text="√">
+                <tooltip>
+                    <Tooltip text="Any root, e.g. cube or third root: (n√x)^n = x"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="rootBTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
         </HBox>
 
@@ -129,7 +167,11 @@
         <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
               GridPane.rowIndex="2">
             <TextField fx:id="facTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
-            <Label styleClass="symbol" text="!"/>
+            <Label styleClass="symbol" text="!">
+                <tooltip>
+                    <Tooltip text="Factorial: n! = n×(n-1)×…×2×1"/>
+                </tooltip>
+            </Label>
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
@@ -139,12 +181,20 @@
             </userData>
         </RadioButton>
         <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
-            <Label styleClass="bracket" text="("/>
+            <Label styleClass="bracket" text="(">
+                <tooltip>
+                    <Tooltip fx:id="binCoeffTooltip" text="Binomial coefficient: (n over m) = n!/((n-m)!m!)"/>
+                </tooltip>
+            </Label>
             <VBox alignment="CENTER">
                 <TextField fx:id="binCoeffNTextField" alignment="CENTER" prefColumnCount="3" text="n"/>
                 <TextField fx:id="binCoeffMTextField" alignment="CENTER" prefColumnCount="3" text="m"/>
             </VBox>
-            <Label styleClass="bracket" text=")"/>
+            <Label styleClass="bracket" text=")">
+                <tooltip>
+                    <fx:reference source="binCoeffTooltip"/>
+                </tooltip>
+            </Label>
         </HBox>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
@@ -154,7 +204,11 @@
             </userData>
         </RadioButton>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="7" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="hypot("/>
+            <Label styleClass="symbol" text="hypot(">
+                <tooltip>
+                    <Tooltip text="hypot(x,y) = √(x^2+y^2); numerical only!"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="hypotXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
             <Label text=","/>
             <TextField fx:id="hypotYTextField" alignment="CENTER" prefColumnCount="3" text="y"/>
@@ -182,7 +236,11 @@
         </RadioButton>
         <HBox fx:id="hBox10" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
               GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="log"/>
+            <Label styleClass="symbol" text="log">
+                <tooltip>
+                    <Tooltip text="Base 10 logarithm"/>
+                </tooltip>
+            </Label>
             <Label styleClass="subscript" text="10"/>
             <TextField fx:id="log10TextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
         </HBox>
@@ -195,7 +253,11 @@
         </RadioButton>
         <HBox fx:id="hBox11" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
               GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="log"/>
+            <Label styleClass="symbol" text="log">
+                <tooltip>
+                    <Tooltip text="Logarithm to any base, e.g. 2; numerical only!"/>
+                </tooltip>
+            </Label>
             <TextField fx:id="logATextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="2"/>
             <TextField fx:id="logBTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
         </HBox>
