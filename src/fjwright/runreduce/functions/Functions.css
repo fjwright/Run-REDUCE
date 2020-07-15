@@ -23,3 +23,6 @@
     -fx-font-style: normal;
     -fx-font-weight: normal;
 }
+.sqrt-symbol {
+    -fx-font-size: 40px;
+}
