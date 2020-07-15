@@ -14,7 +14,7 @@ public abstract class Functions extends Template {
     @FXML
     protected ToggleGroup templateToggleGroup;
     @FXML
-    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9;
+    private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11;
 
     @FXML /* Switches: default off */ protected CheckBox complexCheckBox;
     @FXML /* Switches: default on */ protected CheckBox savesfsCheckBox;
@@ -25,7 +25,7 @@ public abstract class Functions extends Template {
     @Override
     protected void initialize() {
         super.initialize();
-        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9};
+        hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11};
     }
 
     @FXML

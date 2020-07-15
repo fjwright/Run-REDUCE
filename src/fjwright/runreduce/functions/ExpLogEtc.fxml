@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.Integer?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.functions.ExpLogEtc">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="700.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fjwright.runreduce.functions.ExpLogEtc">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -34,72 +24,27 @@
     </HBox>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD" text="Click on the radio button to the left of the template you want to use."
-              textAlignment="CENTER" wrappingWidth="460.0"/>
+              textAlignment="CENTER"/>
     </HBox>
-    <GridPane alignment="CENTER" stylesheets="@ExpLogEtc.css">
+
+    <GridPane alignment="CENTER" styleClass="explogetc" stylesheets="@Functions.css" vgap="10.0">
         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
+            <ColumnConstraints percentWidth="20.0"/>
+            <ColumnConstraints halignment="CENTER"/>
             <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
             <ColumnConstraints percentWidth="25.0"/>
             <ColumnConstraints halignment="CENTER"/>
             <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
             <ColumnConstraints percentWidth="35.0"/>
-            <ColumnConstraints halignment="CENTER"/>
-            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
-            <ColumnConstraints percentWidth="25.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints prefHeight="30.0"/>
-            <RowConstraints/>
-            <RowConstraints prefHeight="30.0"/>
-            <RowConstraints/>
+            <RowConstraints prefHeight="60.0"/>
+            <RowConstraints prefHeight="60.0"/>
+            <RowConstraints prefHeight="60.0"/>
+            <RowConstraints prefHeight="60.0"/>
         </rowConstraints>
-        <HBox fx:id="hBox0" alignment="CENTER" spacing="2.0" GridPane.columnIndex="1">
-            <Label text="e"/>
-            <TextField fx:id="expTextField" prefColumnCount="3" styleClass="superscript" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox1" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4">
-            <TextField fx:id="powATextField" prefColumnCount="3" text="ws"/>
-            <TextField fx:id="powBTextField" prefColumnCount="3" styleClass="superscript" text="2"/>
-        </HBox>
-        <HBox fx:id="hBox2" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7">
-            <Label text="10"/>
-            <TextField fx:id="pow10TextField" prefColumnCount="3" styleClass="superscript" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox3" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
-              GridPane.rowIndex="2">
-            <Label text="log"/>
-            <Label styleClass="subscript" text="e"/>
-            <TextField fx:id="lnTextField" prefColumnCount="3" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox4" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
-              GridPane.rowIndex="2">
-            <Label text="log"/>
-            <TextField fx:id="logATextField" prefColumnCount="3" styleClass="subscript" text="2"/>
-            <TextField fx:id="logBTextField" prefColumnCount="3" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox5" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
-              GridPane.rowIndex="2">
-            <Label text="log"/>
-            <Label styleClass="subscript" text="10"/>
-            <TextField fx:id="log10TextField" prefColumnCount="3" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
-              GridPane.rowIndex="4">
-            <Label text="√"/>
-            <TextField fx:id="sqrtTextField" prefColumnCount="3" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox7" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
-              GridPane.rowIndex="4">
-            <TextField fx:id="rootATextField" prefColumnCount="3" styleClass="superscript" text="3"/>
-            <Label text="√"/>
-            <TextField fx:id="rootBTextField" prefColumnCount="3" text="ws"/>
-        </HBox>
-        <HBox fx:id="hBox8" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
-              GridPane.rowIndex="4">
-            <TextField fx:id="facTextField" prefColumnCount="3" text="ws"/>
-            <Label text="!"/>
-        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" selected="true">
             <toggleGroup>
                 <ToggleGroup fx:id="templateToggleGroup"/>
@@ -108,59 +53,158 @@
                 <Integer fx:value="0"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox0" alignment="CENTER" spacing="2.0" GridPane.columnIndex="1">
+            <Label styleClass="symbol" text="e"/>
+            <TextField fx:id="expTextField" alignment="CENTER" prefColumnCount="3" styleClass="superscript" text="ws"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
                      GridPane.columnIndex="3">
             <userData>
                 <Integer fx:value="1"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox1" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4">
+            <Label styleClass="symbol" text="ln"/>
+            <TextField fx:id="lnTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
                      GridPane.columnIndex="6">
             <userData>
                 <Integer fx:value="2"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="7">
+            <Label styleClass="symbol" text="atan2("/>
+            <TextField fx:id="atan2YTextField" alignment="CENTER" prefColumnCount="3" text="y"/>
+            <Label text=","/>
+            <TextField fx:id="atan2XTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="2">
+                     GridPane.rowIndex="1">
             <userData>
                 <Integer fx:value="3"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox3" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="1">
+            <TextField fx:id="powATextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+            <TextField fx:id="powBTextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="2"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     GridPane.columnIndex="3" GridPane.rowIndex="1">
             <userData>
                 <Integer fx:value="4"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox4" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
+              GridPane.rowIndex="1">
+            <Label styleClass="symbol" text="√"/>
+            <TextField fx:id="sqrtTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="6" GridPane.rowIndex="2">
+                     GridPane.columnIndex="6" GridPane.rowIndex="1">
             <userData>
                 <Integer fx:value="5"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox5" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
+              GridPane.rowIndex="1">
+            <TextField fx:id="rootATextField" alignment="CENTER" prefColumnCount="2" styleClass="superscript" text="3"/>
+            <Label styleClass="symbol" text="√"/>
+            <TextField fx:id="rootBTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="4">
+                     GridPane.rowIndex="2">
             <userData>
                 <Integer fx:value="6"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="2">
+            <TextField fx:id="facTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+            <Label styleClass="symbol" text="!"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="3" GridPane.rowIndex="4">
+                     GridPane.columnIndex="3" GridPane.rowIndex="2">
             <userData>
                 <Integer fx:value="7"/>
             </userData>
         </RadioButton>
+        <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
+            <Label styleClass="bracket" text="("/>
+            <VBox alignment="CENTER">
+                <TextField fx:id="binCoeffNTextField" alignment="CENTER" prefColumnCount="3" text="n"/>
+                <TextField fx:id="binCoeffMTextField" alignment="CENTER" prefColumnCount="3" text="m"/>
+            </VBox>
+            <Label styleClass="bracket" text=")"/>
+        </HBox>
+
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="6" GridPane.rowIndex="4">
+                     GridPane.columnIndex="6" GridPane.rowIndex="2">
             <userData>
                 <Integer fx:value="8"/>
             </userData>
         </RadioButton>
-        <Separator GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
-        <Separator GridPane.columnSpan="2147483647" GridPane.rowIndex="3"/>
+        <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="7" GridPane.rowIndex="2">
+            <Label styleClass="symbol" text="hypot("/>
+            <TextField fx:id="hypotXTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
+            <Label text=","/>
+            <TextField fx:id="hypotYTextField" alignment="CENTER" prefColumnCount="3" text="y"/>
+            <Label styleClass="symbol" text=")"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="9"/>
+            </userData>
+        </RadioButton>
+        <HBox fx:id="hBox9" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="10"/>
+            <TextField fx:id="pow10TextField" alignment="CENTER" prefColumnCount="3" styleClass="superscript"
+                       text="ws"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="10"/>
+            </userData>
+        </RadioButton>
+        <HBox fx:id="hBox10" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="4"
+              GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="log"/>
+            <Label styleClass="subscript" text="10"/>
+            <TextField fx:id="log10TextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+        </HBox>
+
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
+                     GridPane.columnIndex="6" GridPane.rowIndex="3">
+            <userData>
+                <Integer fx:value="11"/>
+            </userData>
+        </RadioButton>
+        <HBox fx:id="hBox11" alignment="CENTER" disable="true" spacing="2.0" GridPane.columnIndex="7"
+              GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="log"/>
+            <TextField fx:id="logATextField" alignment="CENTER" prefColumnCount="2" styleClass="subscript" text="2"/>
+            <TextField fx:id="logBTextField" alignment="CENTER" prefColumnCount="3" text="ws"/>
+        </HBox>
+
         <Separator orientation="VERTICAL" GridPane.columnIndex="2" GridPane.rowSpan="2147483647"/>
         <Separator orientation="VERTICAL" GridPane.columnIndex="5" GridPane.rowSpan="2147483647"/>
+
     </GridPane>
+
     <GridPane alignment="CENTER" hgap="30.0" maxWidth="-Infinity" prefWidth="400.0" vgap="10.0">
         <columnConstraints>
             <ColumnConstraints percentWidth="33.0"/>
