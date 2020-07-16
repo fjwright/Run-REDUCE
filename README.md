@@ -89,3 +89,5 @@ top-level directory.
   orthogonal Polynomials.  The function names link to the online NIST
   Digital Library of Mathematical Functions.
 * Add a switch to load SPECFN to the Limit template.
+* Do not check for missing input when saving template output using the
+  Edit button.

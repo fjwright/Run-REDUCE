@@ -132,9 +132,11 @@ public abstract class Template {
     protected static class EmptyFieldException extends Exception {
     }
 
+    private static boolean getTextCheckNonEmpty;
+
     protected static String getTextCheckNonEmpty(final TextField textField) throws EmptyFieldException {
         final String text = textField.getText().trim();
-        if (text.isEmpty()) {
+        if (getTextCheckNonEmpty && text.isEmpty()) {
             RunREDUCE.errorMessageDialog("Template Error",
                     "A required field is empty.");
             throw new EmptyFieldException();
@@ -192,6 +194,8 @@ public abstract class Template {
 
     @FXML
     private void editButtonAction(ActionEvent actionEvent) {
+        // No fields are required:
+        getTextCheckNonEmpty = false;
         // Insert in input editor if valid:
         try {
             final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
@@ -204,6 +208,8 @@ public abstract class Template {
 
     @FXML
     private void evaluateButtonAction(ActionEvent actionEvent) {
+        // Check required fields provided:
+        getTextCheckNonEmpty = true;
         // Send to REDUCE if valid:
         try {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(processResult() + ";\n");
