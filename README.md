@@ -82,3 +82,10 @@ top-level directory.
 * Add numeric options to the Integral template.
 * Support multiple integrals.
 * V1.33 Add an Exp Log etc. template.
+* Add Functions menu and move Exp Log etc. dialogue to it.
+* Add dialogues for Gamma, Beta and Related Functions, Integral
+  Functions, Airy, Bessel and Related Functions, Struve, Lommel,
+  Kummer, Whittaker and Spherical Harmonic Functions, and Classical
+  orthogonal Polynomials.  The function names link to the online NIST
+  Digital Library of Mathematical Functions.
+* Add a switch to load SPECFN to the Limit template.

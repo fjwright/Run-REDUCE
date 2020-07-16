@@ -42,6 +42,7 @@
       <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
       <li><a href="#ViewMenu">The View Menu</a></li>
       <li><a href="#TemplatesMenu">The Templates Menu</a></li>
+      <li><a href="#FunctionsMenu">The Functions Menu</a></li>
       <li><a href="#HelpMenu">The Help Menu</a></li>
     </ul>
 
@@ -558,11 +559,10 @@
 
     <p>The <em>Templates</em> menu facilitates construction of
     structured expressions and statements whose syntax might not be
-    immediately obvious, especially to a novice.  This menu is
-    disabled unless REDUCE is running.  The template dialogues all
-    provide two buttons that apply the filled-in template:
-    the <em>Edit</em> button inserts the template into the input
-    editor at the current cursor position; the <em>Evaluate</em>
+    immediately obvious, especially to a novice.  The template
+    dialogues all provide two buttons that apply the filled-in
+    template: the <em>Edit</em> button inserts the template into the
+    input editor at the current cursor position; the <em>Evaluate</em>
     button sends the template directly to REDUCE for evaluation.
     These buttons do not close the dialogue, which is non-modal
     (meaning it does not prevent access to other windows) and can be
@@ -578,7 +578,7 @@
     must evaluate to a number), the template will check this and
     report an error immediately an inappropriate character is entered.
     </p>
-    <p>Some templates have a pair of toggle buttons at the top
+    <p>Some templates have a pair of radio buttons at the top
     labelled <em>Symbolic</em> and <em>Numeric</em> that allow you to
     switch between the two modes of evaluation; the default
     is <em>Symbolic</em>.  The <em>Numeric</em> option causes the
@@ -606,13 +606,8 @@
     formatting intended to hint at how such an expression would
     normally be typeset.
     </p>
-    <p>The <em>Templates</em> menu provides the following items:</p>
-    <h3>Exp, Log, Power, etc...</h3>
-    <p>This provides templates for the exponential function, various
-    logarithms, powers and roots, surds or radicals, and factorial.
-    Select the required template by clicking on the radio button to
-    its left in the grid.  All but the active template is disabled and
-    greyed out.
+    <p>This menu is disabled unless REDUCE is running.
+    The <em>Templates</em> menu provides the following items:</p>
     <h3>Derivative...</h3>
     <p>This template supports (partial) differentiation involving up
     to three independent variables, each to arbitrary order.  The
@@ -648,7 +643,10 @@
     the right of the limit point field you cycle through the limit
     from the right/above, indicated by a superscript +, the limit from
     the left/below, indicated by a superscript -, and the default
-    two-sided limit.  All fields are required.
+    two-sided limit.  All fields are required.  The template includes
+    an option to load the SPECFN package, which may improve some
+    results (according to the SPECFN section of the REDUCE User’s
+    Manual).
     </p>
     <h3>Sum or Product...</h3>
     <p>This template supports finite repeated sums and products of
@@ -681,6 +679,103 @@
     allowed in symbolic mode, but the template does not check this.)
     The field for the expression to be executed by the <em>for</em>
     statement is on a separate line to allow it more space.
+    </p>
+
+    <h2 id="FunctionsMenu">The Functions Menu</h2>
+
+    <p>The <em>Functions</em> menu facilitates access to some of the
+      mathematical functions provided by REDUCE via dialogue boxes
+      similar to those provided by the <em>Templates</em> menu.  The
+      functions provided include all the special functions listed in
+      section 7.2 <em>Mathematical Functions</em> of the REDUCE User’s
+      Manual.  They also include some functions listed only in the
+      section on the SPECFN package and when necessary the template
+      output loads the SPECFN package.
+    </p>
+    <p>Hover over a function name to pop up a tooltip that gives a
+      hint at its definition, which often uses linearlized
+      mathematical notation similar to LaTeX (but without any
+      backslashes).  Click on the name of a special function to go to
+      its full definition in the online
+      NIST <a href="https://dlmf.nist.gov/">Digital Library of
+      Mathematical Functions</a> (DLMF), which the notation used in
+      the templates generally follows. (This occasionally differs
+      slightly from the notation used in the REDUCE Manual.)
+    </p>
+    <p>The function dialogue boxes provide a grid of function
+      templates.  Click on the radio button to the left of the
+      function you want to use.  All but the active template is
+      disabled and greyed out.  The templates display the conventional
+      notation used for the functions but with editable text fields
+      holding the function arguments.  The default arguments are
+      either <em>ws</em>, where this seems appropriate, or the
+      conventional variable names, usually those used in the DLMF.
+    </p>
+    <p>All <em>Functions</em> dialogue boxes have a pair of radio
+      buttons at the top labelled <em>Symbolic</em>
+      and <em>Numeric</em> that allow you to switch between the two
+      modes of evaluation; the default is <em>Symbolic</em>.
+      The <em>Numeric</em> option causes the template output to
+      turn <em>rounded</em> mode on before the main template result is
+      output and off again afterwards.
+    </p>
+    <p>There are also some switches towards the bottom, depending on
+      the <em>Symbolic/Numeric</em> option.  The switches consist of
+      check boxes that initially show default settings (not those
+      currently in effect in REDUCE).  Any switches that are changed
+      from their defaults are set in the template output to reflect
+      the change before the main template result is output and reset
+      afterwards.  (Beware that this will override any changes from
+      the default switch settings that were in effect before the
+      template was used.)  All dialogues provide the
+      switch <em>complex</em>, which in most cases is available only
+      in <em>numeric</em> mode and turns on the use of complex
+      arithmetic; it is off by default.  All dialogues also provide
+      the switch <em>savesfs</em>, which turns on caching of numerical
+      values of special functions; it is on by default.
+    </p>
+    <p>This menu is disabled unless REDUCE is running.
+    The <em>Templates</em> menu provides the following items:</p>
+    <h3>Exp, Log, Power, etc...</h3>
+    <p>This provides the exponential function, various logarithms,
+    powers and roots, surds or radicals, factorial and binomial
+    coefficient, and the <em>atan</em><sub>2</sub> and <em>hypot</em>
+    functions.
+    </p>
+    <h3>Gamma & Beta Functions, etc...</h3>
+    <p>This provides the Gamma, Beta, digamma, polygamma, normalized
+    incomplete Gamma and Beta, and dilogarithm functions, Pochhammer's
+    symbols, binomial coefficients and the Riemann zeta function.
+    </p>
+   <h3>Integral Functions...</h3>
+    <p>This provides exponential, logarithmic, sine, cosine,
+    hyperbolic sine and hyperbolic cosine integral functions, the
+    error function and complementary error function, and the Fresnel
+    sine and cosine integral functions.
+    </p>
+    <h3>Airy & Bessel Functions, etc...</h3>
+    <p>This provides Airy functions of the first (Ai) and second (Bi)
+    kind and their derivatives (Ai' and Bi'), and the families of
+    Bessel functions of the first (<em>J</em>) and second (<em>Y</em>)
+    kind, modified Bessel functions of the first (<em>I</em>) and
+    second (<em>K</em>) kind, and Hankel functions of the first and
+    second kind.
+    </p>
+    <h3>Struve & Kummer Functions, etc...</h3>
+    <p>This provides the families of Struve (<b>H</b>) and modified
+    Struve (<b>L</b>) functions, Lommel functions of the first
+    (<em>s</em>) and second (<em>S</em>) kind, Kummer <em>M</em>
+    and <em>U</em> functions, Whittaker <em>M</em> and <em>W</em>
+    functions, and spherical and solid harmonic (<em>Y</em>)
+    functions.
+    </p>
+    <h3>Classical Orthogonal Polynomials...</h3>
+    <p>This provides the families of Jacobi (<em>P</em>) and
+    Ultraspherical or Gegenbauer (<em>C</em>) polynomials, Chebyshev
+    polynomials of the first (<em>T</em>) and second (<em>U</em>)
+    kind, Legendre (<em>P</em>) and associated Legendre polynomials,
+    Laguerre (<em>L</em>) and generalized Legendre polynomials, and
+    Hermite (<em>H</em>) polynomials.
     </p>
 
     <h2 id="HelpMenu">The Help Menu</h2>
