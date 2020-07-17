@@ -43,17 +43,19 @@ class PopupKeyboard {
         }
     }
 
+// Upper keyboard data: constants and Greek letters ===============================================
+
     // Array [0][...] is unshifted; [1][...] is shifted.
     // '\u200B' is a zero-width space used to distinguish characters to be decoded on input to REDUCE.
-    private static final String[][] constants = new String[][]{
+    private static final String[][] constants = {
             {"\u200B∞", "\u200Bπ"},
             {"\u200Bγ", "\u200Bφ"}};
-    private static final String[][] constantTooltips = new String[][]{
-            {"INFINITY: bigger than any real or natural number",
-                    "PI: Archimedes' circle constant = 3.14159..."},
-            {"EULER_GAMMA: Euler-Mascheroni constant = 0.57722...",
-                    "GOLDEN_RATIO: (1+√5)/2 = 1.61803..."}};
-    private static final String[][] constantNames = new String[][]
+    private static final String[][] constantTooltips = {
+            {"Infinity: bigger than any real or natural number",
+                    "Archimedes' circle constant = 3.14159..."},
+            {"Euler's constant = 0.57722...",
+                    "Golden ratio: (1+√5)/2 = 1.61803..."}};
+    private static final String[][] constantNames =
             {{"infinity", "pi"}, {"euler_gamma", "golden_ratio"}};
 
     private static final String[][][] greekLetters = new String[2][2][12];
@@ -62,7 +64,7 @@ class PopupKeyboard {
 
     private static final String[][][] greekLetterNames = new String[2][2][12];
 
-    static {
+    static { // Initialise greekLetters and greekLetterNames:
         char gl = '\u03B1'; // α
         for (int s = 0; s < greekLetters.length; s++) {
             for (int i = 0; i < greekLetters[0].length; i++)
@@ -82,51 +84,111 @@ class PopupKeyboard {
         }
     }
 
-    private static final String GRIDPANE_TEXT_STYLE =
+// Lower keyboard data: trigonometric and hyperbolic functions ====================================
+
+    // Array [0][][] is unshifted; [1][][] is shifted.
+    // Array [][0][] is elementary functions; [][1][] is predicates.
+    private static final String[][][] elemPredFunctions = {
+            {{"exp", "ln"}, {"sqrt", "!"}},
+            {{"numberp", "fixp"}, {"evenp", "primep"}}
+    };
+    private static final String[][][] elemPredTooltips = {
+            {
+                    {"exponential function",
+                            "natural logarithm, i.e. to base e"},
+                    {"square root",
+                            "factorial"}},
+            {
+                    {"numberp n is true if n is a number.",
+                            "fixp n is true if n is an integer."},
+                    {"evenp n is true if the number n is an even integer.",
+                            "primep n is true if n is prime."}}
+    };
+
+    // Array [0][][] is unshifted; [1][][] is shifted.
+    // Array [][0][] is trigonometric; [][1][] is hyperbolic.
+    private static final String[][][] trigHypFunctions = new String[2][2][6];
+
+    private static final String[][][] trigHypFunctionNames = new String[2][2][6];
+
+    static { // Initialise trigHypFunctions:
+        trigHypFunctions[0][0] = new String[]{"sin", "cos", "tan", "csc", "sec", "cot"};
+        trigHypFunctionNames[0][0] = new String[]{"sine", "cosine", "tangent", "cosecant", "secant", "cotangent"};
+        for (int j = 0; j < trigHypFunctions[0][0].length; j++) {
+            // Hyperbolic analogues:
+            trigHypFunctions[0][1][j] = trigHypFunctions[0][0][j] + "h";
+            trigHypFunctionNames[0][1][j] = "hyperbolic " + trigHypFunctionNames[0][0][j];
+            // Inverses:
+            for (int i = 0; i < 2; i++) {
+                trigHypFunctions[1][i][j] = "a" + trigHypFunctions[0][i][j];
+                trigHypFunctionNames[1][i][j] = "inverse " + trigHypFunctionNames[0][i][j];
+            }
+        }
+    }
+
+    private static final String HEADING_TEXT_STYLE =
             "-fx-font-smoothing-type:lcd;-fx-font-size:6pt";
 
     private static final ToggleButton shiftButton = new ToggleButton();
-    private static final GridPane[] gridPane0 = new GridPane[2];
-    private static final GridPane[] gridPane1 = new GridPane[2];
-    private static final Text[] gridPane1Text =
+    private static final ToggleButton englishButton = new ToggleButton();
+    private static final ToggleButton degreesButton = new ToggleButton();
+    private static final GridPane[] topLeftGridPane = new GridPane[2];
+    private static final GridPane[] topRightGridPane = new GridPane[2];
+    private static final GridPane[] bottomLeftGridPane = new GridPane[2];
+    private static final GridPane[] bottomRightGridPane = new GridPane[2];
+    private static final Text[] topRightGridPaneText =
             {new Text("Greek Lower-Case Letters"), new Text("Greek Upper-Case Letters")};
+    private static final Text[] bottomLeftGridPaneText =
+            {new Text("Elementary Functions"), new Text("Predicates")};
+    private static final Text[] bottomRightGridPaneText =
+            {new Text("Trigonometric and Hyperbolic Functions"),
+                    new Text("Inverse Trigonometric and Hyperbolic Functions")};
 
-    private static final double BUTTON_WIDTH = 30;
+    private static final double LETTER_BUTTON_WIDTH = 30;
+    private static final double ELEM_FN_BUTTON_WIDTH = 62;
+    private static final double TRIG_FN_BUTTON_WIDTH = 47;
 
     static {
-        final var hBox = new HBox();
-        popup.getContent().add(hBox);
-        hBox.setSpacing(5);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setStyle("-fx-background-color:lightgray;-fx-border-color:darkgray;-fx-border-width:2px;" +
+        final var vBox = new VBox();
+        popup.getContent().add(vBox);
+        vBox.setStyle("-fx-background-color:lightgray;-fx-border-color:darkgray;-fx-border-width:2px;" +
                 "-fx-background-radius:3px;-fx-border-radius:3px;");
+        final var topHBox = new HBox();
+        final var bottomHBox = new HBox();
+        vBox.getChildren().setAll(topHBox, bottomHBox);
+        topHBox.setSpacing(5);
+        topHBox.setAlignment(Pos.CENTER);
+        bottomHBox.setSpacing(5);
+        bottomHBox.setAlignment(Pos.CENTER);
+
+// Upper keyboard: constants and Greek letters ====================================================
 
         // Shift button
         final var shiftText = new Text("Shift");
         shiftText.setRotate(-90);
         shiftButton.setGraphic(shiftText);
-        hBox.getChildren().add(shiftButton);
+        topHBox.getChildren().add(shiftButton);
         shiftButton.setMaxHeight(Double.MAX_VALUE);
-        shiftButton.setPrefWidth(BUTTON_WIDTH);
+        shiftButton.setPrefWidth(LETTER_BUTTON_WIDTH);
         shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
         shiftButton.setTooltip(new Tooltip(
                 "Click, or hold the Shift key, to show the secondary keyboard." +
                         "\nClick again, or release the Shift key, to show the primary keyboard."));
 
         // Consts button grid
-        // Ths unshifted and shifted button grids are superimposed, but one is hidden.
-        final var gridPane0Text = new Text("Consts");
-        gridPane0Text.setStyle(GRIDPANE_TEXT_STYLE);
-        final var gridStackPane0 = new StackPane();
-        final var vBox0 = new VBox(gridPane0Text, gridStackPane0);
-        vBox0.setAlignment(Pos.CENTER);
-        hBox.getChildren().add(vBox0);
+        // The unshifted and shifted button grids are superimposed, but one is hidden.
+        final var topLeftGridPaneText = new Text("Consts");
+        topLeftGridPaneText.setStyle(HEADING_TEXT_STYLE);
+        final var topLeftStackPane = new StackPane();
+        final var topLeftVBox = new VBox(topLeftGridPaneText, topLeftStackPane);
+        topLeftVBox.setAlignment(Pos.CENTER);
+        topHBox.getChildren().add(topLeftVBox);
         for (int s = 0; s < 2; s++) {
-            gridStackPane0.getChildren().add(gridPane0[s] = new GridPane());
+            topLeftStackPane.getChildren().add(topLeftGridPane[s] = new GridPane());
             for (int i = 0; i < constants[s].length; i++) {
                 Button button = new Button(constants[s][i]);
-                gridPane0[s].add(button, 0, i);
-                button.setPrefWidth(BUTTON_WIDTH);
+                topLeftGridPane[s].add(button, 0, i);
+                button.setPrefWidth(LETTER_BUTTON_WIDTH);
                 button.setTooltip(new Tooltip(constantTooltips[s][i]));
                 int[] indices = {s, i};
                 button.setOnMouseClicked(mouseEvent ->
@@ -135,21 +197,21 @@ class PopupKeyboard {
         }
 
         // Greek letters button grid
-        // Ths unshifted and shifted button grids are superimposed, but one is hidden.
-        final var textStackPane1 = new StackPane();
-        final var gridStackPane1 = new StackPane();
-        final var vBox1 = new VBox(textStackPane1, gridStackPane1);
-        vBox1.setAlignment(Pos.CENTER);
-        hBox.getChildren().add(vBox1);
+        // The unshifted and shifted button grids are superimposed, but one is hidden.
+        final var topRightTextStackPane = new StackPane();
+        final var topRightGridStackPane = new StackPane();
+        final var topRightVBox = new VBox(topRightTextStackPane, topRightGridStackPane);
+        topRightVBox.setAlignment(Pos.CENTER);
+        topHBox.getChildren().add(topRightVBox);
         for (int s = 0; s < 2; s++) {
-            gridStackPane1.getChildren().add(gridPane1[s] = new GridPane());
-            textStackPane1.getChildren().add(gridPane1Text[s]);
-            gridPane1Text[s].setStyle(GRIDPANE_TEXT_STYLE);
+            topRightTextStackPane.getChildren().add(topRightGridPaneText[s]);
+            topRightGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
+            topRightGridStackPane.getChildren().add(topRightGridPane[s] = new GridPane());
             for (int i = 0; i < greekLetters[s].length; i++)
                 for (int j = 0; j < greekLetters[s][i].length; j++) {
                     Button button = new Button(greekLetters[s][i][j]);
-                    gridPane1[s].add(button, j, i);
-                    button.setPrefWidth(BUTTON_WIDTH);
+                    topRightGridPane[s].add(button, j, i);
+                    button.setPrefWidth(LETTER_BUTTON_WIDTH);
                     button.setTooltip(new Tooltip(greekLetterNames[s][i][j]));
                     int[] indices = {s, i, j};
                     button.setOnMouseClicked(mouseEvent ->
@@ -157,22 +219,100 @@ class PopupKeyboard {
                 }
         }
 
+        // English button
+        final var englishText = new Text("English");
+        englishText.setRotate(90);
+        englishButton.setGraphic(englishText);
+        topHBox.getChildren().add(englishButton);
+        englishButton.setMaxHeight(Double.MAX_VALUE);
+        englishButton.setPrefWidth(LETTER_BUTTON_WIDTH);
+//        romanButton.setOnAction(actionEvent -> applyAlt(englishButton.isSelected()));
+        englishButton.setTooltip(new Tooltip(
+                "Click, or hold the Alt key, to output Greek letters spelt out in English." +
+                        "\nClick again, or release the Alt key, to output Greek letters normally."));
+
+        // Initialise the shift state
+        topLeftGridPane[1].setVisible(false);
+        topRightGridPane[1].setVisible(false);
+        topRightGridPaneText[1].setVisible(false);
+
+// Lower keyboard: trigonometric and hyperbolic functions =========================================
+
         // Close button
         final var closeText = new Text("Close");
-        closeText.setRotate(90);
+        closeText.setRotate(-90);
         final var closeButton = new Button();
         closeButton.setGraphic(closeText);
-        hBox.getChildren().add(closeButton);
+        bottomHBox.getChildren().add(closeButton);
         closeButton.setMaxHeight(Double.MAX_VALUE);
-        closeButton.setPrefWidth(BUTTON_WIDTH);
+        closeButton.setPrefWidth(LETTER_BUTTON_WIDTH);
         closeButton.setOnAction(actionEvent -> popup.hide());
         closeButton.setTooltip(new Tooltip(
                 "Close the pop-up.\nPressing the Escape key also closes the pop-up."));
 
+        // ElemPredFunctions button grid
+        // The unshifted and shifted button grids are superimposed, but one is hidden.
+        final var bottomLeftTextStackPane = new StackPane();
+        final var bottomLeftStackPane = new StackPane();
+        final var bottomLeftVBox = new VBox(bottomLeftTextStackPane, bottomLeftStackPane);
+        bottomLeftVBox.setAlignment(Pos.CENTER);
+        bottomHBox.getChildren().add(bottomLeftVBox);
+        for (int s = 0; s < 2; s++) {
+            bottomLeftTextStackPane.getChildren().add(bottomLeftGridPaneText[s]);
+            bottomLeftGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
+            bottomLeftStackPane.getChildren().add(bottomLeftGridPane[s] = new GridPane());
+            for (int i = 0; i < elemPredFunctions[s].length; i++)
+                for (int j = 0; j < elemPredFunctions[s][i].length; j++) {
+                    Button button = new Button(elemPredFunctions[s][i][j]);
+                    bottomLeftGridPane[s].add(button, j, i);
+                    button.setPrefWidth(ELEM_FN_BUTTON_WIDTH);
+                    button.setTooltip(new Tooltip(elemPredTooltips[s][i][j]));
+                    int[] indices = {s, i, j};
+                    button.setOnMouseClicked(mouseEvent ->
+                            charButtonAction(mouseEvent, indices)); // FixMe
+                }
+        }
+
+        // TrigHyp functions button grid
+        // The unshifted and shifted button grids are superimposed, but one is hidden.
+        final var bottomRightTextStackPane = new StackPane();
+        final var bottomRightGridStackPane = new StackPane();
+        final var bottomRightVBox = new VBox(bottomRightTextStackPane, bottomRightGridStackPane);
+        bottomRightVBox.setAlignment(Pos.CENTER);
+        bottomHBox.getChildren().add(bottomRightVBox);
+        for (int s = 0; s < 2; s++) {
+            bottomRightTextStackPane.getChildren().add(bottomRightGridPaneText[s]);
+            bottomRightGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
+            bottomRightGridStackPane.getChildren().add(bottomRightGridPane[s] = new GridPane());
+            for (int i = 0; i < trigHypFunctions[s].length; i++)
+                for (int j = 0; j < trigHypFunctions[s][i].length; j++) {
+                    Button button = new Button(trigHypFunctions[s][i][j]);
+                    bottomRightGridPane[s].add(button, j, i);
+                    button.setPrefWidth(TRIG_FN_BUTTON_WIDTH);
+                    button.setTooltip(new Tooltip(trigHypFunctionNames[s][i][j]));
+                    int[] indices = {s, i, j};
+                    button.setOnMouseClicked(mouseEvent ->
+                            charButtonAction(mouseEvent, indices)); // FixMe
+                }
+        }
+
+        // Degrees button
+        final var degreesText = new Text("Degrees"); // FixMe
+        degreesText.setRotate(90);
+        degreesButton.setGraphic(degreesText);
+        bottomHBox.getChildren().add(degreesButton);
+        degreesButton.setMaxHeight(Double.MAX_VALUE);
+        degreesButton.setPrefWidth(LETTER_BUTTON_WIDTH);
+//        degreesButton.setOnAction(actionEvent -> applyAlt(degreesButton.isSelected()));
+        degreesButton.setTooltip(new Tooltip(
+                "Click, or hold the Alt key, to use degrees for trigonometric functions." +
+                        "\nClick again, or release the Alt key, to use radians for trigonometric functions."));
+
         // Initialise the shift state
-        gridPane0[1].setVisible(false);
-        gridPane1[1].setVisible(false);
-        gridPane1Text[1].setVisible(false);
+        bottomLeftGridPane[1].setVisible(false);
+        bottomLeftGridPaneText[1].setVisible(false);
+        bottomRightGridPane[1].setVisible(false);
+        bottomRightGridPaneText[1].setVisible(false);
     }
 
     /**
@@ -198,12 +338,21 @@ class PopupKeyboard {
 // Handle shifting ================================================================================
 
     private static void applyShift(boolean shifted) {
-        gridPane0[1].setVisible(shifted);
-        gridPane0[0].setVisible(!shifted);
-        gridPane1[1].setVisible(shifted);
-        gridPane1[0].setVisible(!shifted);
-        gridPane1Text[1].setVisible(shifted);
-        gridPane1Text[0].setVisible(!shifted);
+        topLeftGridPane[1].setVisible(shifted);
+        topLeftGridPane[0].setVisible(!shifted);
+        topRightGridPane[1].setVisible(shifted);
+        topRightGridPane[0].setVisible(!shifted);
+        topRightGridPaneText[1].setVisible(shifted);
+        topRightGridPaneText[0].setVisible(!shifted);
+
+        bottomLeftGridPane[1].setVisible(shifted);
+        bottomLeftGridPane[0].setVisible(!shifted);
+        bottomLeftGridPaneText[1].setVisible(shifted);
+        bottomLeftGridPaneText[0].setVisible(!shifted);
+        bottomRightGridPane[1].setVisible(shifted);
+        bottomRightGridPane[0].setVisible(!shifted);
+        bottomRightGridPaneText[1].setVisible(shifted);
+        bottomRightGridPaneText[0].setVisible(!shifted);
     }
 
     private static void applyShiftButton(boolean shifted) {
@@ -223,10 +372,10 @@ class PopupKeyboard {
     static Map<Character, String> map = new HashMap<>();
 
     static {
-        map.put('∞', "INFINITY");
-        map.put('π', "PI");
-        map.put('γ', "EULER_GAMMA");
-        map.put('φ', "GOLDEN_RATIO");
+        map.put('∞', "infinity");
+        map.put('π', "pi");
+        map.put('γ', "euler_gamma");
+        map.put('φ', "golden_ratio");
     }
 
     static String decode(final String text) {
