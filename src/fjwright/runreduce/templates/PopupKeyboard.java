@@ -1,5 +1,7 @@
 package fjwright.runreduce.templates;
 
+import javafx.beans.binding.When;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -8,7 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
@@ -24,6 +29,9 @@ class PopupKeyboard {
     private static Node target;
     private final static Popup popup = new Popup();
 
+    /**
+     * This method is registered as an event filter on the root node by the Template class.
+     */
     static void showPopupKeyboard(MouseEvent mouseEvent) {
         if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
                 (mouseEvent.getButton() == MouseButton.MIDDLE)) {
@@ -33,7 +41,7 @@ class PopupKeyboard {
                 if (target instanceof TextField) {
                     popup.show(((Node) mouseEvent.getSource()).getScene().getWindow(),
                             mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                    applyShiftButton(mouseEvent.isShiftDown());
+                    shiftButton.setSelected(mouseEvent.isShiftDown());
                     break;
                 }
                 target = target.getParent();
@@ -127,7 +135,7 @@ class PopupKeyboard {
 
     private static final ToggleButton shiftButton = new ToggleButton("Shift");
     private static final ToggleButton englishButton = new ToggleButton("English");
-    private static final ToggleButton degreesButton = new ToggleButton("Degrees");
+    private static final ToggleButton degreesButton = new ToggleButton("Radians");
     private static final GridPane[] topLeftGridPane = new GridPane[2];
     private static final GridPane[] topRightGridPane = new GridPane[2];
     private static final GridPane[] bottomLeftGridPane = new GridPane[2];
@@ -161,7 +169,6 @@ class PopupKeyboard {
         // Embed in Group to accommodate the rotation:
         mainGridPane.add(new Group(shiftButton), 0, 0);
         shiftButton.setPrefWidth(CORNER_BUTTON_WIDTH);
-        shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
         shiftButton.setTooltip(new Tooltip(
                 "Click, or hold the Shift key, to show the secondary keyboard." +
                         "\nClick again, or release the Shift key, to show the primary keyboard."));
@@ -220,11 +227,6 @@ class PopupKeyboard {
         englishButton.setTooltip(new Tooltip(
                 "Click, or hold the Alt key, to output Greek letters spelt out in English." +
                         "\nClick again, or release the Alt key, to output Greek letters normally."));
-
-        // Initialise the shift state
-        topLeftGridPane[1].setVisible(false);
-        topRightGridPane[1].setVisible(false);
-        topRightGridPaneText[1].setVisible(false);
 
 // Lower keyboard: trigonometric and hyperbolic functions =========================================
 
@@ -293,12 +295,39 @@ class PopupKeyboard {
         degreesButton.setTooltip(new Tooltip(
                 "Click, or hold the Alt key, to use degrees for trigonometric functions." +
                         "\nClick again, or release the Alt key, to use radians for trigonometric functions."));
+        degreesButton.textProperty().bind(
+                new When(degreesButton.selectedProperty()).then("Degrees").otherwise("Radians"));
 
-        // Initialise the shift state
-        bottomLeftGridPane[1].setVisible(false);
-        bottomLeftGridPaneText[1].setVisible(false);
-        bottomRightGridPane[1].setVisible(false);
-        bottomRightGridPaneText[1].setVisible(false);
+        // Handle the shift state
+        ObservableBooleanValue prop = shiftButton.selectedProperty().not();
+        for (int s = 0; s < 2; s++) {
+            topLeftGridPane[s].visibleProperty().bind(prop);
+            topRightGridPane[s].visibleProperty().bind(prop);
+            topRightGridPaneText[s].visibleProperty().bind(prop);
+            bottomLeftGridPane[s].visibleProperty().bind(prop);
+            bottomLeftGridPaneText[s].visibleProperty().bind(prop);
+            bottomRightGridPane[s].visibleProperty().bind(prop);
+            bottomRightGridPaneText[s].visibleProperty().bind(prop);
+            prop = shiftButton.selectedProperty();
+        }
+
+        topRightGridPaneText[0].textProperty().bind(
+                new When(englishButton.selectedProperty())
+                        .then("Greek Lower-Case Letter Names in English")
+                        .otherwise("Greek Lower-Case Letters"));
+        topRightGridPaneText[1].textProperty().bind(
+                new When(englishButton.selectedProperty())
+                        .then("Greek Upper-Case Letter Names in English")
+                        .otherwise("Greek Upper-Case Letters"));
+
+        bottomRightGridPaneText[0].textProperty().bind(
+                new When(degreesButton.selectedProperty())
+                        .then("Trigonometric (Degree) and Hyperbolic Functions")
+                        .otherwise("Trigonometric (Radian) and Hyperbolic Functions"));
+        bottomRightGridPaneText[1].textProperty().bind(
+                new When(degreesButton.selectedProperty())
+                        .then("Inverse Trigonometric (Degree) and Hyperbolic Functions")
+                        .otherwise("Inverse Trigonometric (Radian) and Hyperbolic Functions"));
     }
 
     /**
@@ -368,34 +397,11 @@ class PopupKeyboard {
 
 // Handle shifting, and physical Shift and Alt keys ===============================================
 
-    private static void applyShift(boolean shifted) {
-        topLeftGridPane[1].setVisible(shifted);
-        topLeftGridPane[0].setVisible(!shifted);
-        topRightGridPane[1].setVisible(shifted);
-        topRightGridPane[0].setVisible(!shifted);
-        topRightGridPaneText[1].setVisible(shifted);
-        topRightGridPaneText[0].setVisible(!shifted);
-
-        bottomLeftGridPane[1].setVisible(shifted);
-        bottomLeftGridPane[0].setVisible(!shifted);
-        bottomLeftGridPaneText[1].setVisible(shifted);
-        bottomLeftGridPaneText[0].setVisible(!shifted);
-        bottomRightGridPane[1].setVisible(shifted);
-        bottomRightGridPane[0].setVisible(!shifted);
-        bottomRightGridPaneText[1].setVisible(shifted);
-        bottomRightGridPaneText[0].setVisible(!shifted);
-    }
-
-    private static void applyShiftButton(boolean shifted) {
-        applyShift(shifted);
-        shiftButton.setSelected(shifted);
-    }
-
     static {
         popup.addEventHandler(KeyEvent.ANY, keyEvent -> {
             switch (keyEvent.getCode()) {
                 case SHIFT:
-                    applyShiftButton(keyEvent.isShiftDown());
+                    shiftButton.setSelected(keyEvent.isShiftDown());
                     break;
                 case ALT:
                     englishButton.setSelected(keyEvent.isAltDown());
