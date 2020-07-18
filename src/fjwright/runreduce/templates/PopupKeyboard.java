@@ -4,10 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -96,10 +93,10 @@ class PopupKeyboard {
                     {"square root",
                             "factorial"}},
             {
-                    {"numberp n is true if n is a number.",
-                            "fixp n is true if n is an integer."},
-                    {"evenp n is true if the number n is an even integer.",
-                            "primep n is true if n is prime."}}
+                    {"numberp n is true if n is a number",
+                            "fixp n is true if n is an integer"},
+                    {"evenp n is true if the number n is an even integer",
+                            "primep n is true if n is prime"}}
     };
 
     // Array [0][][], unshifted, is direct functions; [1][][], shifted, is inverse functions.
@@ -188,7 +185,7 @@ class PopupKeyboard {
                 button.setPrefWidth(LETTER_BUTTON_WIDTH);
                 button.setTooltip(new Tooltip(constantTooltips[s][i]));
                 int[] indices = {s, i};
-                button.setOnMouseClicked(mouseEvent -> charButtonAction(indices));
+                button.setOnMouseClicked(mouseEvent -> topKbdButtonAction(indices));
             }
         }
 
@@ -210,7 +207,7 @@ class PopupKeyboard {
                     button.setPrefWidth(LETTER_BUTTON_WIDTH);
                     button.setTooltip(new Tooltip(greekLetterNames[s][i][j]));
                     int[] indices = {s, i, j};
-                    button.setOnMouseClicked(mouseEvent -> charButtonAction(indices));
+                    button.setOnMouseClicked(mouseEvent -> topKbdButtonAction(indices));
                 }
         }
 
@@ -259,7 +256,7 @@ class PopupKeyboard {
                     Button button = new Button(elemPredFunctions[s][i][j]);
                     bottomLeftGridPane[s].add(button, j, i);
                     button.setPrefWidth(ELEM_FN_BUTTON_WIDTH);
-//                    button.setPadding(new Insets(4,0,4,0)); // causes strange behaviour of *other* buttons!
+                    button.setPadding(new Insets(4, 0, 4, 0));
                     button.setTooltip(new Tooltip(elemPredTooltips[s][i][j]));
                     button.setOnMouseClicked(PopupKeyboard::elemPredButtonAction);
                 }
@@ -281,7 +278,7 @@ class PopupKeyboard {
                     Button button = new Button(trigHypFunctions[s][i][j]);
                     bottomRightGridPane[s].add(button, j, i);
                     button.setPrefWidth(TRIG_FN_BUTTON_WIDTH);
-//                    button.setPadding(new Insets(4,0,4,0)); // causes strange behaviour of *other* buttons!
+                    button.setPadding(new Insets(4, 0, 4, 0));
                     button.setTooltip(new Tooltip(trigHypFunctionNames[s][i][j]));
                     button.setOnMouseClicked(PopupKeyboard::trigHypButtonAction);
                 }
@@ -303,21 +300,9 @@ class PopupKeyboard {
     }
 
     /**
-     * Overwrite selected text in target TextField or insert text at caret.
-     */
-    private static void allButtonAction(String text) {
-        TextField textField = (TextField) target;
-        if (textField.getSelectedText() == null)
-            textField.insertText(textField.getCaretPosition(), text);
-        else
-            textField.replaceSelection(text);
-        popup.hide();
-    }
-
-    /**
      * This method is called when a top keyboard button is clicked.
      */
-    private static void charButtonAction(int[] indices) {
+    private static void topKbdButtonAction(int[] indices) {
         String text;
         if (englishButton.isSelected()) {
             if (indices.length == 2) text = constantNames[indices[0]][indices[1]];
@@ -326,14 +311,46 @@ class PopupKeyboard {
             if (indices.length == 2) text = constants[indices[0]][indices[1]];
             else text = greekLetters[indices[0]][indices[1]][indices[2]];
         }
-        allButtonAction(text);
+        // Overwrite selected text in target TextField or
+        // insert text at caret if no text is selected:
+        TextField textField = (TextField) target;
+        if (textField.getSelectedText().isEmpty())
+            textField.insertText(textField.getCaretPosition(), text);
+        else
+            textField.replaceSelection(text);
+        popup.hide();
+    }
+
+    /**
+     * Wrap selected text in target TextField or
+     * insert text at caret if no text is selected.
+     */
+    private static void btmKbdButtonAction(String text) {
+        final TextField textField = (TextField) target;
+        if (textField.getSelectedText().isEmpty())
+            textField.insertText(textField.getCaretPosition(), text);
+        else {
+            final IndexRange selection = textField.getSelection();
+            textField.insertText(selection.getStart(), text + "(");
+            textField.insertText(selection.getEnd() + text.length() + 1, ")");
+        }
+        popup.hide();
     }
 
     /**
      * This method is called when a bottom left keyboard button is clicked.
      */
     private static void elemPredButtonAction(MouseEvent mouseEvent) {
-        allButtonAction(((Button) mouseEvent.getSource()).getText());
+        String text = ((Button) mouseEvent.getSource()).getText();
+        switch (text) {
+            case "√‾":
+                text = "\u200B√ ";
+                break;
+            case "!":
+                text = "factorial";
+                break;
+        }
+        btmKbdButtonAction(text);
     }
 
     /**
@@ -342,7 +359,9 @@ class PopupKeyboard {
     private static void trigHypButtonAction(MouseEvent mouseEvent) {
         String text = ((Button) mouseEvent.getSource()).getText();
         if (degreesButton.isSelected()) text += "d";
-        allButtonAction(text);
+        // FixMe Need to call preamble("load_package trigd;\n") -- just once! --
+        // FixMe but can't do that from this static context!
+        btmKbdButtonAction(text);
     }
 
 // Handle shifting, and physical Shift and Alt keys ===============================================
@@ -393,6 +412,7 @@ class PopupKeyboard {
         map.put('π', "pi");
         map.put('γ', "euler_gamma");
         map.put('φ', "golden_ratio");
+        map.put('√', "sqrt");
     }
 
     static String decode(final String text) {
