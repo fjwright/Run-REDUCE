@@ -31,7 +31,8 @@ class PopupKeyboard {
             target = (Node) mouseEvent.getTarget();
             while (target != null) {
                 if (target instanceof TextField) {
-                    popup.show(((Node) mouseEvent.getSource()), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                    popup.show(((Node) mouseEvent.getSource()).getScene().getWindow(),
+                            mouseEvent.getScreenX(), mouseEvent.getScreenY());
                     applyShiftButton(mouseEvent.isShiftDown());
                     break;
                 }
@@ -145,6 +146,7 @@ class PopupKeyboard {
     private static final double CORNER_BUTTON_WIDTH = 60;
 
     static {
+        popup.setAutoHide(true);
         final var mainGridPane = new GridPane();
         popup.getContent().add(mainGridPane);
         mainGridPane.setHgap(5);
