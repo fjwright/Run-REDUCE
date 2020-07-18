@@ -1,6 +1,8 @@
 package fjwright.runreduce.templates;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -17,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class provides a pop-up keyboard on the middle mouse button for special symbols and Greek letters.
+ * This class provides a pop-up keyboard on Control-left-mouse-button and middle-mouse-button
+ * providing special symbols, Greek letters, some elementary functions and predicates, and
+ * all trigonometric (except atan2) and hyperbolic functions, using either radians or degrees.
  */
 class PopupKeyboard {
     private static Node target;
@@ -70,7 +74,6 @@ class PopupKeyboard {
                     if (s == 0) name = name.toLowerCase();
                     else name = Character.toString(name.charAt(0))
                             .concat(name.substring(1).toLowerCase());
-//                    System.err.println("'" + name + "'");
                     greekLetterNames[s][i][j] = name;
                     // Skip ς and empty UC ς code point:
                     if (gl == '\u03C2' || gl == '\u03A2') gl++;
@@ -81,10 +84,9 @@ class PopupKeyboard {
 
 // Lower keyboard data: trigonometric and hyperbolic functions ====================================
 
-    // Array [0][][] is unshifted; [1][][] is shifted.
-    // Array [][0][] is elementary functions; [][1][] is predicates.
+    // Array [0][][], unshifted, is elementary functions; [1][][], shifted, is predicates.
     private static final String[][][] elemPredFunctions = {
-            {{"exp", "ln"}, {"sqrt", "!"}},
+            {{"exp", "ln"}, {"√‾", "!"}},
             {{"numberp", "fixp"}, {"evenp", "primep"}}
     };
     private static final String[][][] elemPredTooltips = {
@@ -100,7 +102,7 @@ class PopupKeyboard {
                             "primep n is true if n is prime."}}
     };
 
-    // Array [0][][] is unshifted; [1][][] is shifted.
+    // Array [0][][], unshifted, is direct functions; [1][][], shifted, is inverse functions.
     // Array [][0][] is trigonometric; [][1][] is hyperbolic.
     private static final String[][][] trigHypFunctions = new String[2][2][6];
     private static final String[][][] trigHypFunctionNames = new String[2][2][6];
@@ -125,9 +127,9 @@ class PopupKeyboard {
     private static final String HEADING_TEXT_STYLE =
             "-fx-font-smoothing-type:lcd;-fx-font-size:6pt";
 
-    private static final ToggleButton shiftButton = new ToggleButton();
-    private static final ToggleButton englishButton = new ToggleButton();
-    private static final ToggleButton degreesButton = new ToggleButton();
+    private static final ToggleButton shiftButton = new ToggleButton("Shift");
+    private static final ToggleButton englishButton = new ToggleButton("English");
+    private static final ToggleButton degreesButton = new ToggleButton("Degrees");
     private static final GridPane[] topLeftGridPane = new GridPane[2];
     private static final GridPane[] topRightGridPane = new GridPane[2];
     private static final GridPane[] bottomLeftGridPane = new GridPane[2];
@@ -142,32 +144,24 @@ class PopupKeyboard {
 
     private static final double LETTER_BUTTON_WIDTH = 30;
     private static final double ELEM_FN_BUTTON_WIDTH = 62;
-    private static final double TRIG_FN_BUTTON_WIDTH = 47;
+    private static final double TRIG_FN_BUTTON_WIDTH = 46;
+    private static final double CORNER_BUTTON_WIDTH = 60;
 
     static {
         final var mainGridPane = new GridPane();
         popup.getContent().add(mainGridPane);
-        mainGridPane.getColumnConstraints().addAll(
-                new ColumnConstraints(30),
-                new ColumnConstraints(),
-                new ColumnConstraints(30));
         mainGridPane.setHgap(5);
         mainGridPane.setVgap(5);
-        // never size the gridpane larger than its preferred size:
-//        mainGridPane.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE); // no help!
         mainGridPane.setStyle("-fx-background-color:lightgray;-fx-border-color:darkgray;-fx-border-width:2px;" +
                 "-fx-background-radius:3px;-fx-border-radius:3px;");
 
 // Upper keyboard: constants and Greek letters ====================================================
 
         // Shift button
-        final var shiftText = new Text("Shift");
-        shiftText.setRotate(-90);
-        shiftButton.setGraphic(shiftText);
-        mainGridPane.add(shiftButton, 0, 0);
-        shiftButton.setMaxHeight(Double.MAX_VALUE);
-        shiftButton.setPrefWidth(LETTER_BUTTON_WIDTH);
-        shiftButton.setMaxWidth(LETTER_BUTTON_WIDTH);
+        shiftButton.setRotate(-90);
+        // Embed in Group to accommodate the rotation:
+        mainGridPane.add(new Group(shiftButton), 0, 0);
+        shiftButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         shiftButton.setOnAction(actionEvent -> applyShift(shiftButton.isSelected()));
         shiftButton.setTooltip(new Tooltip(
                 "Click, or hold the Shift key, to show the secondary keyboard." +
@@ -221,14 +215,9 @@ class PopupKeyboard {
         }
 
         // English button
-        final var englishText = new Text("English");
-        englishText.setRotate(90);
-        englishButton.setGraphic(englishText);
-        mainGridPane.add(englishButton, 2, 0);
-        englishButton.setMaxHeight(Double.MAX_VALUE);
-        englishButton.setPrefWidth(LETTER_BUTTON_WIDTH);
-        englishButton.setMaxWidth(LETTER_BUTTON_WIDTH);
-//        englishButton.setOnAction(actionEvent -> applyAlt(englishButton.isSelected()));
+        englishButton.setRotate(90);
+        mainGridPane.add(new Group(englishButton), 2, 0);
+        englishButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         englishButton.setTooltip(new Tooltip(
                 "Click, or hold the Alt key, to output Greek letters spelt out in English." +
                         "\nClick again, or release the Alt key, to output Greek letters normally."));
@@ -241,14 +230,10 @@ class PopupKeyboard {
 // Lower keyboard: trigonometric and hyperbolic functions =========================================
 
         // Close button
-        final var closeText = new Text("Close");
-        closeText.setRotate(-90);
-        final var closeButton = new Button();
-        closeButton.setGraphic(closeText);
-        mainGridPane.add(closeButton, 0, 1);
-        closeButton.setMaxHeight(Double.MAX_VALUE);
-        closeButton.setPrefWidth(LETTER_BUTTON_WIDTH);
-        closeButton.setMaxWidth(LETTER_BUTTON_WIDTH);
+        final var closeButton = new Button("Close");
+        closeButton.setRotate(-90);
+        mainGridPane.add(new Group(closeButton), 0, 1);
+        closeButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         closeButton.setOnAction(actionEvent -> popup.hide());
         closeButton.setTooltip(new Tooltip(
                 "Close the pop-up.\nPressing the Escape key also closes the pop-up."));
@@ -274,6 +259,7 @@ class PopupKeyboard {
                     Button button = new Button(elemPredFunctions[s][i][j]);
                     bottomLeftGridPane[s].add(button, j, i);
                     button.setPrefWidth(ELEM_FN_BUTTON_WIDTH);
+//                    button.setPadding(new Insets(4,0,4,0)); // causes strange behaviour of *other* buttons!
                     button.setTooltip(new Tooltip(elemPredTooltips[s][i][j]));
                     button.setOnMouseClicked(PopupKeyboard::elemPredButtonAction);
                 }
@@ -295,20 +281,16 @@ class PopupKeyboard {
                     Button button = new Button(trigHypFunctions[s][i][j]);
                     bottomRightGridPane[s].add(button, j, i);
                     button.setPrefWidth(TRIG_FN_BUTTON_WIDTH);
+//                    button.setPadding(new Insets(4,0,4,0)); // causes strange behaviour of *other* buttons!
                     button.setTooltip(new Tooltip(trigHypFunctionNames[s][i][j]));
                     button.setOnMouseClicked(PopupKeyboard::trigHypButtonAction);
                 }
         }
 
         // Degrees button
-        final var degreesText = new Text("Degrees"); // FixMe
-        degreesText.setRotate(90);
-        degreesButton.setGraphic(degreesText);
-        mainGridPane.add(degreesButton, 2, 1);
-        degreesButton.setMaxHeight(Double.MAX_VALUE);
-        degreesButton.setPrefWidth(LETTER_BUTTON_WIDTH);
-        degreesButton.setMaxWidth(LETTER_BUTTON_WIDTH);
-//        degreesButton.setOnAction(actionEvent -> applyAlt(degreesButton.isSelected()));
+        degreesButton.setRotate(90);
+        mainGridPane.add(new Group(degreesButton), 2, 1);
+        degreesButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         degreesButton.setTooltip(new Tooltip(
                 "Click, or hold the Alt key, to use degrees for trigonometric functions." +
                         "\nClick again, or release the Alt key, to use radians for trigonometric functions."));
@@ -332,6 +314,9 @@ class PopupKeyboard {
         popup.hide();
     }
 
+    /**
+     * This method is called when a top keyboard button is clicked.
+     */
     private static void charButtonAction(int[] indices) {
         String text;
         if (englishButton.isSelected()) {
@@ -344,17 +329,23 @@ class PopupKeyboard {
         allButtonAction(text);
     }
 
+    /**
+     * This method is called when a bottom left keyboard button is clicked.
+     */
     private static void elemPredButtonAction(MouseEvent mouseEvent) {
         allButtonAction(((Button) mouseEvent.getSource()).getText());
     }
 
+    /**
+     * This method is called when a bottom right keyboard button is clicked.
+     */
     private static void trigHypButtonAction(MouseEvent mouseEvent) {
         String text = ((Button) mouseEvent.getSource()).getText();
         if (degreesButton.isSelected()) text += "d";
         allButtonAction(text);
     }
 
-// Handle shifting ================================================================================
+// Handle shifting, and physical Shift and Alt keys ===============================================
 
     private static void applyShift(boolean shifted) {
         topLeftGridPane[1].setVisible(shifted);
