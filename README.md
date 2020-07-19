@@ -97,3 +97,5 @@ top-level directory.
   and degrees.  Auto-hide the keyboard so that the text insertion
   point is unambiguous.  **Still need to arrange to load the trigd
   package as appropriate.**
+* Revise ExpLogEtc to replace 10^n with atan2d and have it load
+  trigd.  Also, revise the layout (again).

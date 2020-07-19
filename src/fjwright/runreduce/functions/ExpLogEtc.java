@@ -6,13 +6,13 @@ import javafx.scene.control.TextField;
 
 public class ExpLogEtc extends Functions {
     @FXML
-    private TextField expTextField, powATextField, powBTextField, pow10TextField;
+    private TextField expTextField, powATextField, powBTextField;
     @FXML
     private TextField lnTextField, logATextField, logBTextField, log10TextField;
     @FXML
     private TextField sqrtTextField, rootATextField, rootBTextField, facTextField;
     @FXML
-    private TextField atan2YTextField, atan2XTextField;
+    private TextField atan2YTextField, atan2XTextField, atan2DYTextField, atan2DXTextField;
     @FXML
     private TextField binCoeffNTextField, binCoeffMTextField;
     @FXML
@@ -49,8 +49,8 @@ public class ExpLogEtc extends Functions {
                 text.append("log(").append(getTextCheckNonEmpty(lnTextField));
                 break;
             case 2:
-                text.append("atan2(").append(getTextCheckNonEmpty(atan2YTextField))
-                        .append(", ").append(getTextCheckNonEmpty(atan2XTextField));
+                text.append("logb(").append(getTextCheckNonEmpty(logBTextField))
+                        .append(", ").append(getTextCheckNonEmpty(logATextField));
                 break;
             case 3:
                 text.append("(").append(getTextCheckNonEmpty(powATextField))
@@ -60,29 +60,31 @@ public class ExpLogEtc extends Functions {
                 text.append("sqrt(").append(getTextCheckNonEmpty(sqrtTextField));
                 break;
             case 5:
-                text.append("(").append(getTextCheckNonEmpty(rootBTextField)).append(")^(1/(")
-                        .append(getTextCheckNonEmpty(rootATextField)).append(")");
-                break;
-            case 6:
-                text.append("factorial(").append(getTextCheckNonEmpty(facTextField));
-                break;
-            case 7:
-                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffNTextField))
-                        .append(", ").append(getTextCheckNonEmpty(binCoeffMTextField));
-                break;
-            case 8:
                 text.append("hypot(").append(getTextCheckNonEmpty(hypotXTextField))
                         .append(", ").append(getTextCheckNonEmpty(hypotYTextField));
                 break;
-            case 9:
-                text.append("10^(").append(getTextCheckNonEmpty(pow10TextField));
-                break;
-            case 10:
+            case 6:
                 text.append("log10(").append(getTextCheckNonEmpty(log10TextField));
                 break;
+            case 7:
+                text.append("(").append(getTextCheckNonEmpty(rootBTextField)).append(")^(1/(")
+                        .append(getTextCheckNonEmpty(rootATextField)).append(")");
+                break;
+            case 8:
+                text.append("atan2(").append(getTextCheckNonEmpty(atan2YTextField))
+                        .append(", ").append(getTextCheckNonEmpty(atan2XTextField));
+                break;
+            case 9:
+                text.append("factorial(").append(getTextCheckNonEmpty(facTextField));
+                break;
+            case 10:
+                text.append("binomial(").append(getTextCheckNonEmpty(binCoeffNTextField))
+                        .append(", ").append(getTextCheckNonEmpty(binCoeffMTextField));
+                break;
             case 11:
-                text.append("logb(").append(getTextCheckNonEmpty(logBTextField))
-                        .append(", ").append(getTextCheckNonEmpty(logATextField));
+                preamble("load_package trigd;\n");
+                text.append("atan2d(").append(getTextCheckNonEmpty(atan2DYTextField))
+                        .append(", ").append(getTextCheckNonEmpty(atan2DXTextField));
                 break;
         }
         return text.append(")").toString();
