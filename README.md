@@ -91,3 +91,9 @@ top-level directory.
 * Add a switch to load SPECFN to the Limit template.
 * Do not check for missing input when saving template output using the
   Edit button.
+* V1.34 Add a lower keyboard to PopupKeyboard providing access to
+  elementary functions.  Add buttons to enable spelling out Greek
+  letters etc. in English and to switch trig functions between radians
+  and degrees.  Auto-hide the keyboard so that the text insertion
+  point is unambiguous.  **Still need to arrange to load the trigd
+  package as appropriate.**

@@ -177,16 +177,23 @@
 
     <h2 id="PopupKeyboard">The Pop-up Keyboard</h2>
 
-    <p>The pop-up keyboard provides access to some non-ASCII
-    characters.  It is currently available only for
-    the <a href="#TemplatesMenu">templates</a> by clicking the primary
-    (normally the left) mouse-button while holding down
+    <p>The pop-up keyboard provides access to special symbols and
+    Greek letters on the top half of the keyboard and elementary
+    functions on the bottom half.  It is currently available only on
+    the <a href="#TemplatesMenu">template</a>
+    and <a href="#FunctionsMenu">function</a> dialogues by clicking
+    the primary (normally the left) mouse-button while holding down
     the <em>Control</em> key, or clicking the middle mouse-button, on
-    any text field.  Clicking on a character button on the pop-up
-    keyboard then causes that character to overwrite the selected text
-    if there is any or otherwise to insert at the text cursor (caret).
-    The pop-up then closes.  You can also close it by clicking on
-    the <em>Close</em> button at the right-hand side of the pop-up or
+    any text field.  Clicking on a character button on the top half of
+    the pop-up keyboard causes that character to overwrite the
+    selected text if there is any or otherwise to insert at the text
+    cursor (caret).  Clicking on a function button on the bottom half
+    of the pop-up keyboard causes that function to be applied to
+    (i.e. wrapped around) the selected text (using parentheses) if
+    there is any or otherwise to insert (without parentheses) at the
+    text cursor (caret).  The pop-up then closes.  The pop-up also
+    closes if you click anywhere outside it or you can close it by
+    clicking on the <em>Close</em> button in the bottom left corner or
     by pressing the <em>Escape</em> key on your main keyboard.
     </p>
     <p>If you don't have a middle mouse-button but you have a wheel
@@ -201,31 +208,34 @@
     Note that clicking the secondary (normally the right) mouse-button
     on any text field pops up a generic editor context menu.
     </p>
-    <p>The characters provided by the pop-up keyboard consist of some
-    REDUCE symbolic constants and the upper- and lower-case Greek
-    alphabet.  The pop-up keyboard has two layers and the secondary
-    layer is accessed by either holding down the <em>Shift</em> key on
-    your main keyboard or clicking on the <em>Shift</em> button at the
-    left-hand side of the pop-up.  Note that the
+    <p>By default, the top half of the pop-up keyboard provides the
+    REDUCE symbolic constants &infin; infinity and &pi; in the left
+    column and the lower-case Greek alphabet in the right block, and
+    the bottom half of the pop-up keyboard provides common elementary
+    functions in the left block and trigonometric and hyperbolic
+    functions in the right block.  The pop-up keyboard has two layers
+    and the secondary layer is accessed by either clicking on
+    the <em>Shift</em> button in the top left corner or holding down
+    the <em>Shift</em> key on your main keyboard.  Note that the
     physical <em>Shift</em> key does not act as a toggle but the
-    virtual <em>Shift</em> button does.  The secondary keyboard layer
-    provides access to additional symbolic constants and upper-case
-    Greek letters.
+    virtual <em>Shift</em> button does.  The top half of the secondary
+    keyboard layer provides additional REDUCE symbolic constants and
+    upper-case Greek letters; the bottom half provides common
+    predicates and inverse trigonometric and hyperbolic functions.
     </p>
-    <p>The symbolic constants are in the left-hand block of buttons
-    and the Greek alphabet is in the right-hand block of buttons.  The
-    two classes of characters look similar but are treated slightly
-    differently.  REDUCE only recognises symbolic constants if their
-    names are spelt out appropriately using ASCII characters, so this
-    is done before sending them to REDUCE.  However, REDUCE appears to
-    accept non-ASCII characters as letters with no predefined meaning,
-    so the Greek letters in the right-hand block of buttons are all
-    sent to REDUCE with no processing.  REDUCE outputs them exactly as
-    they are input, without case-folding.  Beware that many upper-case
-    Greek letters look like upper-case Roman letters but are in fact
-    distinct!  If you hover your mouse pointer over a symbolic
-    constant button then a tooltip will pop up giving the REDUCE name
-    of the constant and a brief description of it and/or its
+    <p>The symbolic constants in the left column of buttons and the
+    Greek alphabet in the right block look similar but are treated
+    slightly differently.  REDUCE only recognises symbolic constants
+    if their names are spelt out appropriately using ASCII characters,
+    so this is done before sending them to REDUCE.  However, REDUCE
+    accepts non-ASCII characters as letters with no predefined
+    meaning, so the Greek letters in the right block of buttons are
+    all sent to REDUCE with no processing.  REDUCE outputs them
+    exactly as they are input, without case-folding.  Beware that many
+    upper-case Greek letters look like upper-case Roman letters but
+    are in fact distinct!  If you hover your mouse pointer over a
+    symbolic constant button then a tooltip pops up giving the REDUCE
+    name of the constant and a brief description of it and/or its
     conventional name and approximate numerical value (if
     appropriate).
     </p>
@@ -233,14 +243,29 @@
     a tooltip pops up giving its name spelt out in English, using the
     same capitalisation convention as (La)TeX.  (But note that the
     Greek letters that look like Roman letters are not available as
-    distinct characters in (La)TeX.)  If you hold down
-    the <em>Control</em> key whilst clicking on any pop-up keyboard
-    button then its name spelt-out using ASCII characters is output
-    instead of the single non-ASCII character.  This may occasionally
-    be useful, for example when using the REDUCE LaTeX formula
-    interface provided by the RLFI package.  Holding down
-    the <em>Control</em> key whilst clicking also outputs the REDUCE
-    names of symbolic constants directly.
+    distinct characters in (La)TeX.)  If you click on
+    the <em>English</em> button in the top right corner of the pop-up
+    keyboard or hold down the <em>Alt</em> key whilst clicking on any
+    button on the top half of the pop-up keyboard then its name
+    spelt-out using ASCII characters is output instead of the single
+    non-ASCII character.  This may occasionally be useful, for example
+    when using the REDUCE LaTeX formula interface provided by the RLFI
+    package.  For symbolic constants the REDUCE names are output
+    directly.
+    </p>
+    <p>If you hover your mouse pointer over a function key then a
+    tooltip pops up giving its full name.  If you click on
+    the <em>Radians</em> button in the bottom right corner of the
+    pop-up keyboard or hold down the <em>Alt</em> key whilst clicking
+    on any trigonometric function button then the degree version of
+    the function is used.  The label on the <em>Radians</em> button
+    changes to <em>Degrees</em> it you click on it or hold down
+    the <em>Alt</em> key, and changes back to <em>Radians</em> if you
+    click on it again or release the <em>Alt</em> key.  This label
+    shows the <strong>current</strong> trigonometric function mode.
+    Note that degree mode only works if the TRIGD package has been
+    loaded in REDUCE.  At some later date I hope to be able to
+    automate this, but for now it needs to be done by hand.
     </p>
     <p>Note that some characters are available as both symbolic
     constants and as Greek letters.  For example, &pi; as a symbolic

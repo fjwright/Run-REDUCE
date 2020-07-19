@@ -58,9 +58,9 @@ class PopupKeyboard {
             {"\u200Bγ", "\u200Bφ"}};
     private static final String[][] constantTooltips = {
             {"Infinity: bigger than any real or natural number",
-                    "Archimedes' circle constant = 3.14159..."},
-            {"Euler's constant = 0.57722...",
-                    "Golden ratio: (1+√5)/2 = 1.61803..."}};
+                    "Pi: Archimedes' circle constant = 3.14159..."},
+            {"Euler_gamma: Euler's constant = 0.57722...",
+                    "Golden_ratio: (1+√5)/2 = 1.61803..."}};
     private static final String[][] constantNames =
             {{"infinity", "pi"}, {"euler_gamma", "golden_ratio"}};
 
@@ -197,6 +197,14 @@ class PopupKeyboard {
         // Greek letters button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
         topRightGridPaneText.setStyle(HEADING_TEXT_STYLE);
+        topRightGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then(new When(englishButton.selectedProperty())
+                                .then("Greek Upper-Case Letter Names in English")
+                                .otherwise("Greek Upper-Case Letters"))
+                        .otherwise(new When(englishButton.selectedProperty())
+                                .then("Greek Lower-Case Letter Names in English")
+                                .otherwise("Greek Lower-Case Letters")));
         final var topRightGridStackPane = new StackPane();
         final var topRightVBox = new VBox(topRightGridPaneText, topRightGridStackPane);
         topRightVBox.setAlignment(Pos.CENTER);
@@ -241,6 +249,10 @@ class PopupKeyboard {
         // ElemPredFunctions button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
         bottomLeftGridPaneText.setStyle(HEADING_TEXT_STYLE);
+        bottomLeftGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then("Predicates")
+                        .otherwise("Elementary Functions"));
         final var bottomLeftStackPane = new StackPane();
         final var bottomLeftVBox = new VBox(bottomLeftGridPaneText, bottomLeftStackPane);
         bottomLeftVBox.setAlignment(Pos.CENTER);
@@ -254,13 +266,22 @@ class PopupKeyboard {
                     button.setPrefWidth(ELEM_FN_BUTTON_WIDTH);
                     button.setPadding(new Insets(4, 0, 4, 0));
                     button.setTooltip(new Tooltip(elemPredTooltips[s][i][j]));
-                    button.setOnMouseClicked(PopupKeyboard::elemPredButtonAction);
+                    button.setOnMouseClicked(mouseEvent ->
+                            btmKbdButtonAction(mouseEvent, false));
                 }
         }
 
         // TrigHyp functions button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
         bottomRightGridPaneText.setStyle(HEADING_TEXT_STYLE);
+        bottomRightGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then(new When(degreesButton.selectedProperty())
+                                .then("Inverse Trigonometric (Degrees) and Hyperbolic Functions")
+                                .otherwise("Inverse Trigonometric (Radians) and Hyperbolic Functions"))
+                        .otherwise(new When(degreesButton.selectedProperty())
+                                .then("Trigonometric (Degrees) and Hyperbolic Functions")
+                                .otherwise("Trigonometric (Radians) and Hyperbolic Functions")));
         final var bottomRightGridStackPane = new StackPane();
         final var bottomRightVBox = new VBox(bottomRightGridPaneText, bottomRightGridStackPane);
         bottomRightVBox.setAlignment(Pos.CENTER);
@@ -274,7 +295,8 @@ class PopupKeyboard {
                     button.setPrefWidth(TRIG_FN_BUTTON_WIDTH);
                     button.setPadding(new Insets(4, 0, 4, 0));
                     button.setTooltip(new Tooltip(trigHypFunctionNames[s][i][j]));
-                    button.setOnMouseClicked(PopupKeyboard::trigHypButtonAction);
+                    button.setOnMouseClicked(mouseEvent ->
+                            btmKbdButtonAction(mouseEvent, true));
                 }
         }
 
@@ -288,7 +310,7 @@ class PopupKeyboard {
         degreesButton.textProperty().bind(
                 new When(degreesButton.selectedProperty()).then("Degrees").otherwise("Radians"));
 
-        // Handle the shift state
+        // Handle the shift state for the button grids
         ObservableBooleanValue prop = shiftButton.selectedProperty().not();
         for (int s = 0; s < 2; s++) {
             topLeftGridPane[s].visibleProperty().bind(prop);
@@ -297,29 +319,6 @@ class PopupKeyboard {
             bottomRightGridPane[s].visibleProperty().bind(prop);
             prop = shiftButton.selectedProperty();
         }
-
-        topRightGridPaneText.textProperty().bind(
-                new When(shiftButton.selectedProperty())
-                        .then(new When(englishButton.selectedProperty())
-                                .then("Greek Upper-Case Letter Names in English")
-                                .otherwise("Greek Upper-Case Letters"))
-                        .otherwise(new When(englishButton.selectedProperty())
-                                .then("Greek Lower-Case Letter Names in English")
-                                .otherwise("Greek Lower-Case Letters")));
-
-        bottomLeftGridPaneText.textProperty().bind(
-                new When(shiftButton.selectedProperty())
-                        .then("Predicates")
-                        .otherwise("Elementary Functions"));
-
-        bottomRightGridPaneText.textProperty().bind(
-                new When(shiftButton.selectedProperty())
-                        .then(new When(degreesButton.selectedProperty())
-                                .then("Inverse Trigonometric (Degrees) and Hyperbolic Functions")
-                                .otherwise("Inverse Trigonometric (Radians) and Hyperbolic Functions"))
-                        .otherwise(new When(degreesButton.selectedProperty())
-                                .then("Trigonometric (Degrees) and Hyperbolic Functions")
-                                .otherwise("Trigonometric (Radians) and Hyperbolic Functions")));
     }
 
     /**
@@ -336,7 +335,7 @@ class PopupKeyboard {
         }
         // Overwrite selected text in target TextField or
         // insert text at caret if no text is selected:
-        TextField textField = (TextField) target;
+        final TextField textField = (TextField) target;
         if (textField.getSelectedText().isEmpty())
             textField.insertText(textField.getCaretPosition(), text);
         else
@@ -345,10 +344,25 @@ class PopupKeyboard {
     }
 
     /**
-     * Wrap selected text in target TextField or
-     * insert text at caret if no text is selected.
+     * This method is called when a bottom keyboard button is clicked.
      */
-    private static void btmKbdButtonAction(String text) {
+    private static void btmKbdButtonAction(MouseEvent mouseEvent, boolean trigHyp) {
+        String text = ((Button) mouseEvent.getSource()).getText();
+        if (trigHyp) {
+            if (degreesButton.isSelected()) text += "d";
+            // FixMe Need to call preamble("load_package trigd;\n") -- just once! --
+            // FixMe but can't do that from this static context!
+        } else
+            switch (text) {
+                case "√‾":
+                    text = "\u200B√ ";
+                    break;
+                case "!":
+                    text = "factorial";
+                    break;
+            }
+        // Wrap selected text in target TextField or
+        // insert text at caret if no text is selected:
         final TextField textField = (TextField) target;
         if (textField.getSelectedText().isEmpty())
             textField.insertText(textField.getCaretPosition(), text);
@@ -360,34 +374,7 @@ class PopupKeyboard {
         popup.hide();
     }
 
-    /**
-     * This method is called when a bottom left keyboard button is clicked.
-     */
-    private static void elemPredButtonAction(MouseEvent mouseEvent) {
-        String text = ((Button) mouseEvent.getSource()).getText();
-        switch (text) {
-            case "√‾":
-                text = "\u200B√ ";
-                break;
-            case "!":
-                text = "factorial";
-                break;
-        }
-        btmKbdButtonAction(text);
-    }
-
-    /**
-     * This method is called when a bottom right keyboard button is clicked.
-     */
-    private static void trigHypButtonAction(MouseEvent mouseEvent) {
-        String text = ((Button) mouseEvent.getSource()).getText();
-        if (degreesButton.isSelected()) text += "d";
-        // FixMe Need to call preamble("load_package trigd;\n") -- just once! --
-        // FixMe but can't do that from this static context!
-        btmKbdButtonAction(text);
-    }
-
-// Handle shifting, and physical Shift and Alt keys ===============================================
+// Handle physical Shift and Alt keys =============================================================
 
     static {
         popup.addEventHandler(KeyEvent.ANY, keyEvent -> {
