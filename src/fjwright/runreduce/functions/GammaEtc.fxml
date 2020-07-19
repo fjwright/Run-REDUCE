@@ -49,12 +49,12 @@
                 <ToggleGroup fx:id="templateToggleGroup"/>
             </toggleGroup>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Gamma&#10;Function"
-               userData="https://dlmf.nist.gov/5.2.E1" GridPane.columnIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Gamma&#10;Function"
+                   userData="https://dlmf.nist.gov/5.2.E1" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Γ(z) = (z-1)!"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
             <Label styleClass="symbol" text="Γ("/>
             <TextField fx:id="gammaTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
@@ -67,12 +67,12 @@
                 <Integer fx:value="1"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Beta&#10;Function"
-               userData="https://dlmf.nist.gov/5.12" GridPane.columnIndex="5">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Beta&#10;Function"
+                   userData="https://dlmf.nist.gov/5.12" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="B(a,b) = Γ(a)Γ(b)/Γ(a+b)"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
             <Label styleClass="symbol" text="Β("/>
             <TextField fx:id="betaATextField" alignment="CENTER" prefColumnCount="3" text="a"/>
@@ -87,12 +87,12 @@
                 <Integer fx:value="2"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Digamma&#10;Function"
-               userData="https://dlmf.nist.gov/5.2.E2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Digamma&#10;Function"
+                   userData="https://dlmf.nist.gov/5.2.E2" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="ψ(z) = Γ′(z)/Γ(z)"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="ψ("/>
             <TextField fx:id="digammaTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
@@ -105,12 +105,12 @@
                 <Integer fx:value="3"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Polygamma&#10;Functions"
-               userData="https://dlmf.nist.gov/5.15" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Polygamma&#10;Functions"
+                   userData="https://dlmf.nist.gov/5.15" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="ψ^(n)(z) = d^nψ(z)/dz^n"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
             <Label styleClass="symbol" text="ψ"/>
             <Label styleClass="superscript" text="("/>
@@ -128,13 +128,13 @@
                 <Integer fx:value="4"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Normalized&#10;Incomplete&#10;Gamma" userData="https://dlmf.nist.gov/8.2.i"
-               GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction"
+                   text="Normalized&#10;Incomplete&#10;Gamma" userData="https://dlmf.nist.gov/8.2.i"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="P(a,z) = 1/Γ(a) ∫_0^z t^{a-1} e^{-t} dt"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="P"/>
             <Label styleClass="symbol" text="("/>
@@ -150,13 +150,13 @@
                 <Integer fx:value="5"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink"
-               text="Normalized&#10;Incomplete&#10;Beta" userData="https://dlmf.nist.gov/8.17.i"
-               GridPane.columnIndex="5" GridPane.rowIndex="2">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction"
+                   text="Normalized&#10;Incomplete&#10;Beta" userData="https://dlmf.nist.gov/8.17.i"
+                   GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="I_x(a,b) = 1/B(a,b) ∫_0^x t^{a-1} (1-t)^{b-1} dt"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
             <Label style="-fx-font-style:italic" styleClass="symbol" text="I"/>
             <TextField fx:id="iXTextField" alignment="CENTER" prefColumnCount="2" text="x" styleClass="subscript"/>
@@ -174,12 +174,12 @@
                 <Integer fx:value="6"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Dilogarithm"
-               userData="https://dlmf.nist.gov/25.12.i" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Dilogarithm"
+                   userData="https://dlmf.nist.gov/25.12.i" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Li_2(z) ≡ ∑_{n=1}^∞ z^n/n^2"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox6" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
             <Label styleClass="symbol" text="Li"/>
             <Label styleClass="subscript" text="2"/>
@@ -194,12 +194,12 @@
                 <Integer fx:value="7"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Pochhammer's&#10;Symbol"
-               userData="https://dlmf.nist.gov/5.2.iii" GridPane.columnIndex="5" GridPane.rowIndex="3">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Pochhammer's&#10;Symbol"
+                   userData="https://dlmf.nist.gov/5.2.iii" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="(a)_n = Γ(a+n)/Γ(a)"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox7" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
             <Label styleClass="symbol" text="("/>
             <TextField fx:id="pochhammerATextField" alignment="CENTER" prefColumnCount="3" text="a"/>
@@ -214,12 +214,12 @@
                 <Integer fx:value="8"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Binomial&#10;Coefficients"
-               userData="https://dlmf.nist.gov/26.3.E1" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Binomial&#10;Coefficients"
+                   userData="https://dlmf.nist.gov/26.3.E1" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="(m over n) = m!/((m-n)!n!)"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <Label styleClass="bracket" text="("/>
             <VBox alignment="CENTER">
@@ -235,12 +235,12 @@
                 <Integer fx:value="9"/>
             </userData>
         </RadioButton>
-        <Label onMouseClicked="#hyperlinkOnMouseClickedAction" styleClass="hyperlink" text="Riemann Zeta&#10;Function"
-               userData="https://dlmf.nist.gov/25.2.E1" GridPane.columnIndex="5" GridPane.rowIndex="4">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Riemann Zeta&#10;Function"
+                   userData="https://dlmf.nist.gov/25.2.E1" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="ζ(s) = ∑_{n=1}^∞ 1/n^s"/>
             </tooltip>
-        </Label>
+        </Hyperlink>
         <HBox fx:id="hBox9" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
             <Label styleClass="symbol" text="ζ("/>
             <TextField fx:id="zetaTextField" alignment="CENTER" prefColumnCount="3" text="s"/>
