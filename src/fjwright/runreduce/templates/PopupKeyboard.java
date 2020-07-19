@@ -135,18 +135,14 @@ class PopupKeyboard {
 
     private static final ToggleButton shiftButton = new ToggleButton("Shift");
     private static final ToggleButton englishButton = new ToggleButton("English");
-    private static final ToggleButton degreesButton = new ToggleButton("Radians");
+    private static final ToggleButton degreesButton = new ToggleButton();
     private static final GridPane[] topLeftGridPane = new GridPane[2];
     private static final GridPane[] topRightGridPane = new GridPane[2];
     private static final GridPane[] bottomLeftGridPane = new GridPane[2];
     private static final GridPane[] bottomRightGridPane = new GridPane[2];
-    private static final Text[] topRightGridPaneText =
-            {new Text("Greek Lower-Case Letters"), new Text("Greek Upper-Case Letters")};
-    private static final Text[] bottomLeftGridPaneText =
-            {new Text("Elementary Functions"), new Text("Predicates")};
-    private static final Text[] bottomRightGridPaneText =
-            {new Text("Trigonometric and Hyperbolic Functions"),
-                    new Text("Inverse Trigonometric and Hyperbolic Functions")};
+    private static final Text topRightGridPaneText = new Text();
+    private static final Text bottomLeftGridPaneText = new Text();
+    private static final Text bottomRightGridPaneText = new Text();
 
     private static final double LETTER_BUTTON_WIDTH = 30;
     private static final double ELEM_FN_BUTTON_WIDTH = 62;
@@ -200,14 +196,12 @@ class PopupKeyboard {
 
         // Greek letters button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
-        final var topRightTextStackPane = new StackPane();
+        topRightGridPaneText.setStyle(HEADING_TEXT_STYLE);
         final var topRightGridStackPane = new StackPane();
-        final var topRightVBox = new VBox(topRightTextStackPane, topRightGridStackPane);
+        final var topRightVBox = new VBox(topRightGridPaneText, topRightGridStackPane);
         topRightVBox.setAlignment(Pos.CENTER);
         topHBox.getChildren().add(topRightVBox);
         for (int s = 0; s < 2; s++) {
-            topRightTextStackPane.getChildren().add(topRightGridPaneText[s]);
-            topRightGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
             topRightGridStackPane.getChildren().add(topRightGridPane[s] = new GridPane());
             for (int i = 0; i < greekLetters[s].length; i++)
                 for (int j = 0; j < greekLetters[s][i].length; j++) {
@@ -246,14 +240,12 @@ class PopupKeyboard {
 
         // ElemPredFunctions button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
-        final var bottomLeftTextStackPane = new StackPane();
+        bottomLeftGridPaneText.setStyle(HEADING_TEXT_STYLE);
         final var bottomLeftStackPane = new StackPane();
-        final var bottomLeftVBox = new VBox(bottomLeftTextStackPane, bottomLeftStackPane);
+        final var bottomLeftVBox = new VBox(bottomLeftGridPaneText, bottomLeftStackPane);
         bottomLeftVBox.setAlignment(Pos.CENTER);
         bottomHBox.getChildren().add(bottomLeftVBox);
         for (int s = 0; s < 2; s++) {
-            bottomLeftTextStackPane.getChildren().add(bottomLeftGridPaneText[s]);
-            bottomLeftGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
             bottomLeftStackPane.getChildren().add(bottomLeftGridPane[s] = new GridPane());
             for (int i = 0; i < elemPredFunctions[s].length; i++)
                 for (int j = 0; j < elemPredFunctions[s][i].length; j++) {
@@ -268,14 +260,12 @@ class PopupKeyboard {
 
         // TrigHyp functions button grid
         // The unshifted and shifted button grids are superimposed, but one is hidden.
-        final var bottomRightTextStackPane = new StackPane();
+        bottomRightGridPaneText.setStyle(HEADING_TEXT_STYLE);
         final var bottomRightGridStackPane = new StackPane();
-        final var bottomRightVBox = new VBox(bottomRightTextStackPane, bottomRightGridStackPane);
+        final var bottomRightVBox = new VBox(bottomRightGridPaneText, bottomRightGridStackPane);
         bottomRightVBox.setAlignment(Pos.CENTER);
         bottomHBox.getChildren().add(bottomRightVBox);
         for (int s = 0; s < 2; s++) {
-            bottomRightTextStackPane.getChildren().add(bottomRightGridPaneText[s]);
-            bottomRightGridPaneText[s].setStyle(HEADING_TEXT_STYLE);
             bottomRightGridStackPane.getChildren().add(bottomRightGridPane[s] = new GridPane());
             for (int i = 0; i < trigHypFunctions[s].length; i++)
                 for (int j = 0; j < trigHypFunctions[s][i].length; j++) {
@@ -303,31 +293,33 @@ class PopupKeyboard {
         for (int s = 0; s < 2; s++) {
             topLeftGridPane[s].visibleProperty().bind(prop);
             topRightGridPane[s].visibleProperty().bind(prop);
-            topRightGridPaneText[s].visibleProperty().bind(prop);
             bottomLeftGridPane[s].visibleProperty().bind(prop);
-            bottomLeftGridPaneText[s].visibleProperty().bind(prop);
             bottomRightGridPane[s].visibleProperty().bind(prop);
-            bottomRightGridPaneText[s].visibleProperty().bind(prop);
             prop = shiftButton.selectedProperty();
         }
 
-        topRightGridPaneText[0].textProperty().bind(
-                new When(englishButton.selectedProperty())
-                        .then("Greek Lower-Case Letter Names in English")
-                        .otherwise("Greek Lower-Case Letters"));
-        topRightGridPaneText[1].textProperty().bind(
-                new When(englishButton.selectedProperty())
-                        .then("Greek Upper-Case Letter Names in English")
-                        .otherwise("Greek Upper-Case Letters"));
+        topRightGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then(new When(englishButton.selectedProperty())
+                                .then("Greek Upper-Case Letter Names in English")
+                                .otherwise("Greek Upper-Case Letters"))
+                        .otherwise(new When(englishButton.selectedProperty())
+                                .then("Greek Lower-Case Letter Names in English")
+                                .otherwise("Greek Lower-Case Letters")));
 
-        bottomRightGridPaneText[0].textProperty().bind(
-                new When(degreesButton.selectedProperty())
-                        .then("Trigonometric (Degree) and Hyperbolic Functions")
-                        .otherwise("Trigonometric (Radian) and Hyperbolic Functions"));
-        bottomRightGridPaneText[1].textProperty().bind(
-                new When(degreesButton.selectedProperty())
-                        .then("Inverse Trigonometric (Degree) and Hyperbolic Functions")
-                        .otherwise("Inverse Trigonometric (Radian) and Hyperbolic Functions"));
+        bottomLeftGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then("Predicates")
+                        .otherwise("Elementary Functions"));
+
+        bottomRightGridPaneText.textProperty().bind(
+                new When(shiftButton.selectedProperty())
+                        .then(new When(degreesButton.selectedProperty())
+                                .then("Inverse Trigonometric (Degrees) and Hyperbolic Functions")
+                                .otherwise("Inverse Trigonometric (Radians) and Hyperbolic Functions"))
+                        .otherwise(new When(degreesButton.selectedProperty())
+                                .then("Trigonometric (Degrees) and Hyperbolic Functions")
+                                .otherwise("Trigonometric (Radians) and Hyperbolic Functions")));
     }
 
     /**
