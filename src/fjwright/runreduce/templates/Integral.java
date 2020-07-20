@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Integrate extends Template {
+public class Integral extends Template {
     @FXML
     private HBox symText, numText;
     @FXML
@@ -76,7 +76,7 @@ public class Integrate extends Template {
     protected String result() throws Template.EmptyFieldException {
         final String integrand = integrandTextField.getText();
         if (integrand.isEmpty() || xIntVarTextField.getText().isEmpty()) {
-            RunREDUCE.errorMessageDialog("Integrate Template Error",
+            RunREDUCE.errorMessageDialog("Integral Template Error",
                     "The integrand and integration variable are both required.");
             throw new EmptyFieldException();
         }
@@ -111,7 +111,7 @@ public class Integrate extends Template {
                     final String lowLim = lowLimTextFields[i].getText(), upLim = upLimTextFields[i].getText();
                     final boolean indefInt;
                     if ((indefInt = lowLim.isEmpty()) ^ upLim.isEmpty()) {
-                        RunREDUCE.errorMessageDialog("Integrate Template Error",
+                        RunREDUCE.errorMessageDialog("Integral Template Error",
                                 "The limits must be both empty or both specified.");
                         throw new EmptyFieldException();
                     }
