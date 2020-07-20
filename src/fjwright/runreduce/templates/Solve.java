@@ -58,9 +58,9 @@ public class Solve extends Template {
         symColumnConstraints[0].setPercentWidth(75);
         symColumnConstraints[1].setPercentWidth(25);
         symColumnConstraints[2].setPercentWidth(0);
-        numColumnConstraints[0].setPercentWidth(65);
+        numColumnConstraints[0].setPercentWidth(60);
         numColumnConstraints[1].setPercentWidth(20);
-        numColumnConstraints[2].setPercentWidth(15);
+        numColumnConstraints[2].setPercentWidth(20);
     }
 
     @FXML

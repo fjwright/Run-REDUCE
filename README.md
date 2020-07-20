@@ -65,37 +65,25 @@ top-level directory.
   statements.
 * Add a hyperlinked Contents section to the User Guide.
 
-### Updates since last release
+### Version 1.4
 
-* V1.31 Sum or Product template. Use Text instead of Label for the
-  text at the top of each template. This seems to avoid truncated text
-  reliably and portably.
-* Add a Symbolic/Numeric option to the Integrate template. Make the
-  expression templates a little wider.
-* Add a Limit template. Make template dialogues non-modal and don't
-  close them automatically on applying them.  Rename some templates
-  using nouns rather than verbs consistently.
-* V1.32 Add a pop-up keyboard for entering non-ASCII characters:
-  currently some symbolic constants and the Greek alphabet.
-* Add a Solve template with a Symbolic/Numeric option and access to
-  relevant switches/options.
-* Add numeric options to the Integral template.
-* Support multiple integrals.
-* V1.33 Add an Exp Log etc. template.
-* Add Functions menu and move Exp Log etc. dialogue to it.
-* Add dialogues for Gamma, Beta and Related Functions, Integral
-  Functions, Airy, Bessel and Related Functions, Struve, Lommel,
-  Kummer, Whittaker and Spherical Harmonic Functions, and Classical
-  orthogonal Polynomials.  The function names link to the online NIST
-  Digital Library of Mathematical Functions.
-* Add a switch to load SPECFN to the Limit template.
-* Do not check for missing input when saving template output using the
-  Edit button.
-* V1.34 Add a lower keyboard to PopupKeyboard providing access to
-  elementary functions.  Add buttons to enable spelling out Greek
-  letters etc. in English and to switch trig functions between radians
-  and degrees.  Auto-hide the keyboard so that the text insertion
-  point is unambiguous.  **Still need to arrange to load the trigd
-  package as appropriate.**
-* Revise ExpLogEtc to replace 10^n with atan2d and have it load
-  trigd.  Also, revise the layout (again).
+* Provide templates for multiple integrals, finite sums and products,
+  double- and single-sided limits, and solve.
+* Provide a Functions menu offering dialogues that facilitate access
+  to key elementary functions, Gamma, Beta and related functions,
+  integral functions, Airy, Bessel and related functions, Struve,
+  Lommel, Kummer, Whittaker and spherical harmonic functions, and
+  classical orthogonal polynomials.  Special function names link to
+  the online NIST Digital Library of Mathematical Functions.
+* Appropriate templates include a symbolic/numeric option and access
+  to relevant REDUCE switches and packages.
+* Provide a pop-up keyboard (currently only on template and function
+  dialogues) for symbolic constants, Greek letters, elementary
+  functions, trigonometric functions (using radians or degrees) and
+  hyperbolic functions.  **Still need to arrange that the pop-up
+  keyboard loads the trigd package as appropriate.**
+* The function dialogues and pop-up keyboard together offer all the
+  functions listed in section 7.2 Mathematical Functions of the REDUCE
+  Manual plus degree versions of all trigonometric functions.
+
+### Updates since last release

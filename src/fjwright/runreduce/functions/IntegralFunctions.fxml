@@ -5,250 +5,218 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.functions.IntegralFunctions">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="650.0" spacing="20.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.functions.IntegralFunctions">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <HBox alignment="CENTER" spacing="10.0">
-        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symNumRadioButtonAction"
-                     selected="true" text="Symbolic">
+        <RadioButton mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#symNumRadioButtonAction" selected="true" text="Symbolic">
             <toggleGroup>
-                <ToggleGroup fx:id="symNumToggleGroup"/>
+                <ToggleGroup fx:id="symNumToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#symNumRadioButtonAction" text="Numeric"
-                     toggleGroup="$symNumToggleGroup"/>
+        <RadioButton fx:id="numRadioButton" mnemonicParsing="false" onAction="#symNumRadioButtonAction" text="Numeric" toggleGroup="$symNumToggleGroup" />
     </HBox>
-    <fx:include source="FunctionsText.fxml"/>
+    <fx:include source="FunctionsText.fxml" />
 
     <GridPane alignment="CENTER" stylesheets="@Functions.css" vgap="10.0">
         <columnConstraints>
-            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
-            <ColumnConstraints percentWidth="20.0"/>
-            <ColumnConstraints percentWidth="25.0"/>
-            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
-            <ColumnConstraints halignment="CENTER" percentWidth="5.0"/>
-            <ColumnConstraints percentWidth="20.0"/>
-            <ColumnConstraints percentWidth="25.0"/>
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0" />
+            <ColumnConstraints percentWidth="20.0" />
+            <ColumnConstraints percentWidth="25.0" />
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0" />
+            <ColumnConstraints halignment="CENTER" percentWidth="5.0" />
+            <ColumnConstraints percentWidth="20.0" />
+            <ColumnConstraints percentWidth="25.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
 
         <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" selected="true">
             <userData>
-                <Integer fx:value="0"/>
+                <Integer fx:value="0" />
             </userData>
             <toggleGroup>
-                <ToggleGroup fx:id="templateToggleGroup"/>
+                <ToggleGroup fx:id="templateToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Exponential&#10;Integral"
-                   userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Exponential&#10;Integral" userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
             <tooltip>
-                <Tooltip text="Ei(x) = ⨍_{-∞}^x e^t/t dt"/>
+                <Tooltip text="Ei(x) = ⨍_{-∞}^x e^t/t dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox0" alignment="CENTER" GridPane.columnIndex="2">
-            <Label styleClass="symbol" text="Ei("/>
-            <TextField fx:id="expIntTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="Ei(" />
+            <TextField fx:id="expIntTextField" alignment="CENTER" prefColumnCount="3" text="x" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4">
             <userData>
-                <Integer fx:value="1"/>
+                <Integer fx:value="1" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Logarithmic&#10;Integral"
-                   userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Logarithmic&#10;Integral" userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
             <tooltip>
-                <Tooltip text="li(x) = ⨍_0^x 1/ln(t) dt = Ei(ln x)"/>
+                <Tooltip text="li(x) = ⨍_0^x 1/ln(t) dt = Ei(ln x)" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox1" alignment="CENTER" disable="true" GridPane.columnIndex="6">
-            <Label styleClass="symbol" text="li("/>
-            <TextField fx:id="logIntTextField" alignment="CENTER" prefColumnCount="3" text="x"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="li(" />
+            <TextField fx:id="logIntTextField" alignment="CENTER" prefColumnCount="3" text="x" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="1">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.rowIndex="1">
             <userData>
-                <Integer fx:value="2"/>
+                <Integer fx:value="2" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Sine Integral"
-                   userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Sine Integral" userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="Si(z) = ∫_0^z sin(t)/t dt"/>
+                <Tooltip text="Si(z) = ∫_0^z sin(t)/t dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox2" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="Si("/>
-            <TextField fx:id="sinIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="Si(" />
+            <TextField fx:id="sinIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="1">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4" GridPane.rowIndex="1">
             <userData>
-                <Integer fx:value="3"/>
+                <Integer fx:value="3" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Cosine Integral"
-                   userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Cosine Integral" userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="Ci(z) = -∫_z^∞ cos(t)/t dt"/>
+                <Tooltip text="Ci(z) = -∫_z^∞ cos(t)/t dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox3" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
-            <Label styleClass="symbol" text="Ci("/>
-            <TextField fx:id="cosIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="Ci(" />
+            <TextField fx:id="cosIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="2">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.rowIndex="2">
             <userData>
-                <Integer fx:value="4"/>
+                <Integer fx:value="4" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction"
-                   text="Hyperbolic&#10;Sine Integral" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1"
-                   GridPane.rowIndex="2">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hyperbolic&#10;Sine Integral" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Shi(z) = ∫_0^z sinh(t)/t dt"/>
+                <Tooltip text="Shi(z) = ∫_0^z sinh(t)/t dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox4" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="Shi("/>
-            <TextField fx:id="hypSinIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="Shi(" />
+            <TextField fx:id="hypSinIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="2">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4" GridPane.rowIndex="2">
             <userData>
-                <Integer fx:value="5"/>
+                <Integer fx:value="5" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction"
-                   text="Hyperbolic&#10;Cosine Integral" userData="https://dlmf.nist.gov/6.2.E16"
-                   GridPane.columnIndex="5"
-                   GridPane.rowIndex="2">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hyperbolic&#10;Cosine Integral" userData="https://dlmf.nist.gov/6.2.E16" GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Chi(z) = γ + ln z + ∫_0^z (cosh t - 1)/t dt"/>
+                <Tooltip text="Chi(z) = γ + ln z + ∫_0^z (cosh t - 1)/t dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox5" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
-            <Label styleClass="symbol" text="Chi("/>
-            <TextField fx:id="hypCosIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="Chi(" />
+            <TextField fx:id="hypCosIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="3">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.rowIndex="3">
             <userData>
-                <Integer fx:value="6"/>
+                <Integer fx:value="6" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Error Function"
-                   userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Error Function" userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="erf z = 2/√π ∫_0^z e^{-t^2} dt"/>
+                <Tooltip text="erf z = 2/√π ∫_0^z e^{-t^2} dt" />
             </tooltip>
         </Hyperlink>
-        <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="2"
-              GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="erf"/>
-            <TextField fx:id="erfTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
+        <HBox fx:id="hBox6" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="erf" />
+            <TextField fx:id="erfTextField" alignment="CENTER" prefColumnCount="3" text="z" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="3">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4" GridPane.rowIndex="3">
             <userData>
-                <Integer fx:value="7"/>
+                <Integer fx:value="7" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction"
-                   text="Complementary&#10;Error Function" userData="https://dlmf.nist.gov/7.2.E2"
-                   GridPane.columnIndex="5"
-                   GridPane.rowIndex="3">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Complementary&#10;Error Function" userData="https://dlmf.nist.gov/7.2.E2" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="erfc z = 2/√π ∫_z^∞ e^{-t^2} dt = 1 - erf z"/>
+                <Tooltip text="erfc z = 2/√π ∫_z^∞ e^{-t^2} dt = 1 - erf z" />
             </tooltip>
         </Hyperlink>
-        <HBox fx:id="hBox7" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="6"
-              GridPane.rowIndex="3">
-            <Label styleClass="symbol" text="erfc"/>
-            <TextField fx:id="erfcTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
+        <HBox fx:id="hBox7" alignment="CENTER" disable="true" spacing="5.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
+            <Label styleClass="symbol" text="erfc" />
+            <TextField fx:id="erfcTextField" alignment="CENTER" prefColumnCount="3" text="z" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.rowIndex="4">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.rowIndex="4">
             <userData>
-                <Integer fx:value="8"/>
+                <Integer fx:value="8" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Sine Integral"
-                   userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Sine Integral" userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
-                <Tooltip text="S(z) = ∫_0^z sin(½πt^2) dt"/>
+                <Tooltip text="S(z) = ∫_0^z sin(½πt^2) dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox8" alignment="CENTER" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
-            <Label styleClass="symbol" text="S("/>
-            <TextField fx:id="fresnelSinIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="S(" />
+            <TextField fx:id="fresnelSinIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup"
-                     GridPane.columnIndex="4" GridPane.rowIndex="4">
+        <RadioButton mnemonicParsing="false" onAction="#templateRadioButtonOnAction" toggleGroup="$templateToggleGroup" GridPane.columnIndex="4" GridPane.rowIndex="4">
             <userData>
-                <Integer fx:value="9"/>
+                <Integer fx:value="9" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Cosine Integral"
-                   userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
+        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Cosine Integral" userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
-                <Tooltip text="C(z) = ∫_0^z cos(½πt^2) dt"/>
+                <Tooltip text="C(z) = ∫_0^z cos(½πt^2) dt" />
             </tooltip>
         </Hyperlink>
         <HBox fx:id="hBox9" alignment="CENTER" disable="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
-            <Label styleClass="symbol" text="C("/>
-            <TextField fx:id="fresnelCosIntTextField" alignment="CENTER" prefColumnCount="3" text="z"/>
-            <Label styleClass="symbol" text=")"/>
+            <Label styleClass="symbol" text="C(" />
+            <TextField fx:id="fresnelCosIntTextField" alignment="CENTER" prefColumnCount="3" text="z" />
+            <Label styleClass="symbol" text=")" />
         </HBox>
 
-        <Separator orientation="VERTICAL" GridPane.columnIndex="3" GridPane.halignment="CENTER"
-                   GridPane.rowSpan="2147483647"/>
+        <Separator orientation="VERTICAL" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowSpan="2147483647" />
     </GridPane>
 
-    <GridPane alignment="CENTER" hgap="100.0" maxWidth="-Infinity" prefWidth="250.0">
+    <GridPane alignment="CENTER" hgap="100.0" maxWidth="-Infinity" prefWidth="300.0">
         <columnConstraints>
-            <ColumnConstraints percentWidth="50.0"/>
-            <ColumnConstraints percentWidth="50.0"/>
+            <ColumnConstraints percentWidth="50.0" />
+            <ColumnConstraints percentWidth="50.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
+            <RowConstraints />
         </rowConstraints>
         <CheckBox fx:id="complexCheckBox" mnemonicParsing="false" text="complex" visible="false">
             <tooltip>
-                <Tooltip text="Use complex arithmetic."/>
+                <Tooltip text="Use complex arithmetic." />
             </tooltip>
         </CheckBox>
-        <CheckBox fx:id="savesfsCheckBox" mnemonicParsing="false" selected="true" text="savesfs" visible="false"
-                  GridPane.columnIndex="1">
+        <CheckBox fx:id="savesfsCheckBox" mnemonicParsing="false" selected="true" text="savesfs" visible="false" GridPane.columnIndex="1">
             <tooltip>
-                <Tooltip text="Cache numerical approximations."/>
+                <Tooltip text="Cache numerical approximations." />
             </tooltip>
         </CheckBox>
     </GridPane>

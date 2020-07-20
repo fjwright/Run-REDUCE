@@ -42,9 +42,12 @@ that it currently provides:
 * Menu options to make the REDUCE input prompt bold and to colour the
   input/output display based on the input mode or redfront.
 * Templates to construct structured expressions and statements.
+* A popup keyboard to access symbolic constants, Greek letters and
+  elementary functions.
+* Dialogues to access functions using conventional notation.
 * Easy access to the Run-REDUCE-FX User Guide and the standard
   documentation distributed with REDUCE as HTML or PDF files.
 
 In future I hope to implement typeset-style display of mathematics.
 
-Francis Wright, June 2020
+Francis Wright, July 2020
