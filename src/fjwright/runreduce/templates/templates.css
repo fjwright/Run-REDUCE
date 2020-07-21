@@ -16,8 +16,14 @@
     -fx-font-size: 50px;
     -fx-translate-y: -5;
 }
-.sum-prod-button {
-    -fx-font-size: 15px;
+/*
+The JavaFX CSS Reference Guide appears to be wrong.
+A radio button label is actually a LabeledText object that extends javafx.scene.text.Text
+and its style class is text, not label.
+*/
+.sum-prod-buttons .radio-button .text {
+    -fx-font-size: 20px;
+    -fx-translate-y: -2;
 }
 .bracket {
     -fx-font-size: 130px;

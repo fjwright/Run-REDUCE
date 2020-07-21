@@ -497,7 +497,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void sumProdMenuItemAction() {
-        showDialogAndWait("Evaluate a Finite Sum or Product", "templates/SumProd.fxml", Modality.NONE);
+        showDialogAndWait("Evaluate a Sum or Product", "templates/SumProd.fxml", Modality.NONE);
     }
 
     @FXML

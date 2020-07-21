@@ -25,7 +25,7 @@ public abstract class Template {
 // set up the pop-up keyboard on the middle mouse button for all template dialogues ===============
 
     @FXML
-    private VBox templateRoot;
+    protected VBox templateRoot;
 
     @FXML
     protected void initialize() {
