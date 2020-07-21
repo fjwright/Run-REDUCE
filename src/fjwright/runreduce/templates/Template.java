@@ -3,6 +3,7 @@ package fjwright.runreduce.templates;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -20,6 +21,23 @@ import java.util.regex.Pattern;
  * This is the base class for the specific template classes.
  */
 public abstract class Template {
+
+    protected RadioButton numRadioButton;
+
+    /**
+     * This method adds a pair of Symbolic/Numeric radio buttons to the top of the dialogue.
+     */
+    protected void addSymNumRadioButtons() {
+        numRadioButton = new RadioButton("Numeric");
+        var symRadioButton = new RadioButton("Symbolic");
+        symRadioButton.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        symRadioButton.setSelected(true);
+        new ToggleGroup().getToggles().addAll(symRadioButton, numRadioButton);
+        var hBox = new HBox(symRadioButton, numRadioButton);
+        hBox.setSpacing(10);
+        hBox.setAlignment(Pos.CENTER);
+        templateRoot.getChildren().add(0, hBox);
+    }
 
 // Add the button bar to the bottom of the dialogue box and
 // set up the pop-up keyboard on the middle mouse button for all template dialogues ===============

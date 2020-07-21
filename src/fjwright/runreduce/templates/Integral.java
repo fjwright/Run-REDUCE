@@ -4,7 +4,6 @@ import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -14,8 +13,6 @@ import javafx.scene.layout.VBox;
 public class Integral extends Template {
     @FXML
     private HBox symText, numText;
-    @FXML
-    private RadioButton numRadioButton;
     @FXML
     private TextField integrandTextField;
     @FXML
@@ -43,17 +40,14 @@ public class Integral extends Template {
     @Override
     protected void initialize() {
         super.initialize();
+        addSymNumRadioButtons();
         intVarTextFields = new TextField[]{xIntVarTextField, yIntVarTextField, zIntVarTextField};
         lowLimTextFields = new TextField[]{xLowLimTextField, yLowLimTextField, zLowLimTextField};
         upLimTextFields = new TextField[]{xUpLimTextField, yUpLimTextField, zUpLimTextField};
-    }
-
-    @FXML
-    private void symNumRadioButtonAction() {
-        numText.setVisible(numRadioButton.isSelected());
-        symText.setVisible(!numRadioButton.isSelected());
-        numGridPane.setVisible(numRadioButton.isSelected());
-        algintCheckBox.setVisible(!numRadioButton.isSelected());
+        numText.visibleProperty().bind(numRadioButton.selectedProperty());
+        symText.visibleProperty().bind(numRadioButton.selectedProperty().not());
+        numGridPane.visibleProperty().bind(numRadioButton.selectedProperty());
+        algintCheckBox.visibleProperty().bind(numRadioButton.selectedProperty().not());
     }
 
     @FXML

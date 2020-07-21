@@ -1,11 +1,11 @@
 package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
+import javafx.beans.binding.When;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -16,8 +16,6 @@ import static java.util.Arrays.stream;
 public class Solve extends Template {
     @FXML
     private HBox symText, numText;
-    @FXML
-    private RadioButton numRadioButton;
     @FXML
     private TextField eqn1TextField, eqn2TextField, eqn3TextField;
     @FXML
@@ -37,49 +35,37 @@ public class Solve extends Template {
     @FXML
     private TextField accuracyTextBox, iterationsTextBox;
 
-    private TextField[] eqnTextFields, varTextFields, startTextFields;
+    private TextField[] eqnTextFields, varTextFields;
 
-    private final ColumnConstraints[] symColumnConstraints = new ColumnConstraints[]{
+    private final ColumnConstraints[] columnConstraints = new ColumnConstraints[]{
             new ColumnConstraints(), new ColumnConstraints(), new ColumnConstraints()
     };
     private final Insets symInsets = new Insets(0, -10, 0, 0);
-    private final ColumnConstraints[] numColumnConstraints = new ColumnConstraints[]{
-            new ColumnConstraints(), new ColumnConstraints(), new ColumnConstraints()
-    };
     private final Insets numInsets = new Insets(0);
 
     @FXML
     @Override
     protected void initialize() {
         super.initialize();
+        addSymNumRadioButtons();
         eqnTextFields = new TextField[]{eqn1TextField, eqn2TextField, eqn3TextField};
         varTextFields = new TextField[]{var1TextField, var2TextField, var3TextField};
-        startTextFields = new TextField[]{start1TextField, start2TextField, start3TextField};
-        symColumnConstraints[0].setPercentWidth(75);
-        symColumnConstraints[1].setPercentWidth(25);
-        symColumnConstraints[2].setPercentWidth(0);
-        numColumnConstraints[0].setPercentWidth(60);
-        numColumnConstraints[1].setPercentWidth(20);
-        numColumnConstraints[2].setPercentWidth(20);
-    }
-
-    @FXML
-    private void symNumRadioButtonAction() {
-        numText.setVisible(numRadioButton.isSelected());
-        symText.setVisible(!numRadioButton.isSelected());
-        startFromLabel.setVisible(numRadioButton.isSelected());
-        for (var startTextField : startTextFields) {
-            startTextField.setVisible(numRadioButton.isSelected());
-        }
-        if (numRadioButton.isSelected()) {
-            mainGridPane.getColumnConstraints().setAll(numColumnConstraints);
-            mainGridPane.setPadding(numInsets);
-        } else {
-            mainGridPane.getColumnConstraints().setAll(symColumnConstraints);
-            mainGridPane.setPadding(symInsets);
-        }
-        numGridPane.setVisible(numRadioButton.isSelected());
-        symGridPane.setVisible(!numRadioButton.isSelected());
+        numText.visibleProperty().bind(numRadioButton.selectedProperty());
+        symText.visibleProperty().bind(numRadioButton.selectedProperty().not());
+        startFromLabel.visibleProperty().bind(numRadioButton.selectedProperty());
+        for (var startTextField : new TextField[]{start1TextField, start2TextField, start3TextField})
+            startTextField.visibleProperty().bind(numRadioButton.selectedProperty());
+        mainGridPane.paddingProperty().bind(
+                new When(numRadioButton.selectedProperty()).then(numInsets).otherwise(symInsets));
+        mainGridPane.getColumnConstraints().setAll(columnConstraints);
+        columnConstraints[0].percentWidthProperty().bind(
+                new When(numRadioButton.selectedProperty()).then(60).otherwise(75));
+        columnConstraints[1].percentWidthProperty().bind(
+                new When(numRadioButton.selectedProperty()).then(20).otherwise(25));
+        columnConstraints[2].percentWidthProperty().bind(
+                new When(numRadioButton.selectedProperty()).then(20).otherwise(0));
+        numGridPane.visibleProperty().bind(numRadioButton.selectedProperty());
+        symGridPane.visibleProperty().bind(numRadioButton.selectedProperty().not());
     }
 
     @Override
@@ -107,7 +93,7 @@ public class Solve extends Template {
         else text.append("{").append(String.join(", ", eqns)).append("}");
         // Process variables and, if numeric, start values:
         String[] vars = stream(varTextFields).map(t -> t.getText().trim()).filter(s -> !s.isEmpty()).toArray(String[]::new);
-            if (numRadioButton.isSelected()) {
+        if (numRadioButton.isSelected()) {
             // Numeric:
             if (vars.length == 0) {
                 RunREDUCE.errorMessageDialog("Solve Numeric Template Error",

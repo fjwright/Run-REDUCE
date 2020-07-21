@@ -2,13 +2,9 @@ package fjwright.runreduce.templates;
 
 import javafx.beans.binding.When;
 import javafx.fxml.FXML;
-import javafx.geometry.NodeOrientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 
 public class SumProd extends Template {
     @FXML
@@ -18,20 +14,11 @@ public class SumProd extends Template {
     @FXML
     private TextField varTextField, lowLimTextField, upLimTextField, operandTextField;
 
-    private final RadioButton numRadioButton = new RadioButton("Numeric");
-
     @FXML
     @Override
     protected void initialize() {
         super.initialize();
-        var symRadioButton = new RadioButton("Symbolic");
-        symRadioButton.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-        symRadioButton.setSelected(true);
-        new ToggleGroup().getToggles().addAll(symRadioButton, numRadioButton);
-        var hBox = new HBox(symRadioButton, numRadioButton);
-        hBox.setSpacing(10);
-        hBox.setAlignment(Pos.CENTER);
-        templateRoot.getChildren().add(0, hBox);
+        addSymNumRadioButtons();
         sumProdLabel.textProperty().bind(
                 new When(sumRadioButton.selectedProperty()).then("∑").otherwise("∏"));
     }
