@@ -15,9 +15,10 @@ public class AiryBessel extends Functions {
 
     @FXML
     @Override
-    protected void symNumRadioButtonAction() {
-//        complexCheckBox.setVisible(numRadioButton.isSelected());
-        savesfsCheckBox.setVisible(numRadioButton.isSelected());
+    protected void initialize() {
+        super.initialize();
+        complexCheckBox.visibleProperty().unbind();
+        complexCheckBox.setVisible(true);
     }
 
     @Override

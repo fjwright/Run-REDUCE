@@ -24,11 +24,11 @@ public class ExpLogEtc extends Functions {
 
     @FXML
     @Override
-    protected void symNumRadioButtonAction() {
-        complexCheckBox.setVisible(numRadioButton.isSelected());
-        expandlogsCheckBox.setVisible(!numRadioButton.isSelected());
-        preciseCheckBox.setVisible(!numRadioButton.isSelected());
-        preciseComplexCheckBox.setVisible(!numRadioButton.isSelected());
+    protected void initialize() {
+        super.initialize();
+        expandlogsCheckBox.visibleProperty().bind(numRadioButton.selectedProperty().not());
+        preciseCheckBox.visibleProperty().bind(numRadioButton.selectedProperty().not());
+        preciseComplexCheckBox.visibleProperty().bind(numRadioButton.selectedProperty().not());
     }
 
     @Override

@@ -10,8 +10,6 @@ import javafx.scene.layout.HBox;
 
 public abstract class Functions extends Template {
     @FXML
-    protected RadioButton numRadioButton;
-    @FXML
     protected ToggleGroup templateToggleGroup;
     @FXML
     private HBox hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11;
@@ -25,13 +23,10 @@ public abstract class Functions extends Template {
     @Override
     protected void initialize() {
         super.initialize();
+        addSymNumRadioButtons();
+        if (complexCheckBox != null) complexCheckBox.visibleProperty().bind(numRadioButton.selectedProperty());
+        if (savesfsCheckBox != null) savesfsCheckBox.visibleProperty().bind(numRadioButton.selectedProperty());
         hBoxes = new HBox[]{hBox0, hBox1, hBox2, hBox3, hBox4, hBox5, hBox6, hBox7, hBox8, hBox9, hBox10, hBox11};
-    }
-
-    @FXML
-    protected void symNumRadioButtonAction() {
-        complexCheckBox.setVisible(numRadioButton.isSelected());
-        savesfsCheckBox.setVisible(numRadioButton.isSelected());
     }
 
     @FXML
