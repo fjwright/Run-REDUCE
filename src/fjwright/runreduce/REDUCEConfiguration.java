@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class RRPreferences {
-    static final boolean windowsOS = System.getProperty("os.name").startsWith("Windows");
     static final Preferences prefs = Preferences.userRoot().node("/fjwright/runreduce");  // cf. package name
     // On Microsoft Windows the preferences for this application are stored in the registry under the key
     // Computer\HKEY_CURRENT_USER\Software\JavaSoft\Prefs\fjwright\runreduce
@@ -129,9 +128,10 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
  * This class defines a template for REDUCEConfigurationDefaults and REDUCEConfiguration.
  */
 abstract class REDUCEConfigurationType {
+    public static final boolean windowsOS = System.getProperty("os.name").startsWith("Windows");
     String reduceRootDir;
     String packagesRootDir;
-    String docRootDir;
+    public String docRootDir;
     REDUCECommandList reduceCommandList;
 }
 
@@ -148,7 +148,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
         if (RunREDUCE.debugPlatform) System.err.println("OS name: " + System.getProperty("os.name"));
 
         reduceCommandList = new REDUCECommandList();
-        if (RRPreferences.windowsOS) {
+        if (windowsOS) {
             // On Windows, all REDUCE directories should be found automatically in "/Program Files/Reduce".
             docRootDir = packagesRootDir = reduceRootDir = findREDUCERootDir();
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
@@ -195,7 +195,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
  * This class represents the current REDUCE directory and command configuration.
  * It is initialised when the application starts and can be updated and saved using the REDUCEConfigDialog class.
  */
-class REDUCEConfiguration extends REDUCEConfigurationType {
+public class REDUCEConfiguration extends REDUCEConfigurationType {
     // Preference keys:
     static final String REDUCE_ROOT_DIR = "reduceRootDir";
     static final String PACKAGES_ROOT_DIR = "packagesRootDir";

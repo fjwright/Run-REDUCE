@@ -49,7 +49,7 @@ public class RunREDUCE extends Application {
             primaryScreenBounds.getHeight() * initialSceneFactor);
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
-    static REDUCEConfiguration reduceConfiguration;
+    public static REDUCEConfiguration reduceConfiguration;
 
     public static HostServices hostServices;
 
@@ -68,7 +68,7 @@ public class RunREDUCE extends Application {
         // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
         // ("DejaVu Sans Mono" is my only "user" font.)
         // ToDo Consider bundling a font as a resource.
-        reduceFontFamilyName = RRPreferences.windowsOS ? "Consolas" : "DejaVu Sans Mono";
+        reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         Font reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);

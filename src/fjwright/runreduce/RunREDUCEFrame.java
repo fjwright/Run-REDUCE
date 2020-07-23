@@ -136,7 +136,7 @@ public class RunREDUCEFrame {
         // This code causes the following warning on Ubuntu 18.04.4 LTS:
         // (java:6572): Gdk-WARNING **: 17:06:21.689: XSetErrorHandler() called with a GDK error trap pushed. Don't do that.
         // It is avoided by using the JVM option -Djdk.gtk.version=2, which also makes dialogs behave better.
-        if (!RRPreferences.windowsOS &&
+        if (!REDUCEConfiguration.windowsOS &&
                 (!Desktop.isDesktopSupported()
                         || !(desktop = Desktop.getDesktop()).isSupported(Desktop.Action.OPEN)))
             desktop = null;
@@ -153,12 +153,12 @@ public class RunREDUCEFrame {
         int helpMenuItemIndex = 2;
         for (int i = 0; i < manuals.length; i++) {
             String[] manual = manuals[i];
-            if (i == 0 || RRPreferences.windowsOS) {
+            if (i == 0 || REDUCEConfiguration.windowsOS) {
                 MenuItem menuItem = new MenuItem(manual[0]);
                 helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
                 menuItem.setOnAction(e -> RunREDUCE.hostServices.showDocument(
                         new File(RunREDUCE.reduceConfiguration.docRootDir,
-                                manual[RRPreferences.windowsOS ? 1 : 2]).toString()));
+                                manual[REDUCEConfiguration.windowsOS ? 1 : 2]).toString()));
             } else {
                 if (desktop == null) break;
                 MenuItem menuItem = new MenuItem(manual[0]);
