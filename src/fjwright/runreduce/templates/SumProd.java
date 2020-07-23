@@ -17,8 +17,6 @@ public class SumProd extends Template {
     @FXML
     private RadioButton sumRadioButton;
     @FXML
-    private Hyperlink symHyperlink, numHyperlink;
-    @FXML
     private Label sumProdLabel;
     @FXML
     private TextField varTextField, lowLimTextField, upLimTextField, operandTextField;
@@ -30,8 +28,6 @@ public class SumProd extends Template {
         addSymNumRadioButtons();
         sumProdLabel.textProperty().bind(
                 new When(sumRadioButton.selectedProperty()).then("∑").otherwise("∏"));
-        symHyperlink.visibleProperty().bind(numRadioButton.selectedProperty().not());
-        numHyperlink.visibleProperty().bind(numRadioButton.selectedProperty());
     }
 
     @Override
@@ -63,13 +59,5 @@ public class SumProd extends Template {
             text.append(")");
         }
         return text.toString();
-    }
-
-    @FXML
-    private void redManHyperlinkOnAction(ActionEvent actionEvent) {
-        RunREDUCE.hostServices.showDocument(
-                (new File(RunREDUCE.reduceConfiguration.docRootDir,
-                        (REDUCEConfiguration.windowsOS ? "lib/csl/reduce.doc/" : "/")
-                                + ((Node) actionEvent.getTarget()).getUserData())).toString());
     }
 }

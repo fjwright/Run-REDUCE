@@ -37,7 +37,7 @@
                 <ToggleGroup fx:id="templateToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Exponential&#10;Integral" userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Exponential&#10;Integral" userData="https://dlmf.nist.gov/6.2.E5" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Ei(x) = ⨍_{-∞}^x e^t/t dt" />
             </tooltip>
@@ -53,7 +53,7 @@
                 <Integer fx:value="1" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Logarithmic&#10;Integral" userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Logarithmic&#10;Integral" userData="https://dlmf.nist.gov/6.2.E8" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="li(x) = ⨍_0^x 1/ln(t) dt = Ei(ln x)" />
             </tooltip>
@@ -69,7 +69,7 @@
                 <Integer fx:value="2" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Sine Integral" userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Sine Integral" userData="https://dlmf.nist.gov/6.2.E9" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Si(z) = ∫_0^z sin(t)/t dt" />
             </tooltip>
@@ -85,7 +85,7 @@
                 <Integer fx:value="3" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Cosine Integral" userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Cosine Integral" userData="https://dlmf.nist.gov/6.2.E11" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Ci(z) = -∫_z^∞ cos(t)/t dt" />
             </tooltip>
@@ -101,7 +101,7 @@
                 <Integer fx:value="4" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hyperbolic&#10;Sine Integral" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Hyperbolic&#10;Sine Integral" userData="https://dlmf.nist.gov/6.2.E15" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Shi(z) = ∫_0^z sinh(t)/t dt" />
             </tooltip>
@@ -117,7 +117,7 @@
                 <Integer fx:value="5" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hyperbolic&#10;Cosine Integral" userData="https://dlmf.nist.gov/6.2.E16" GridPane.columnIndex="5" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Hyperbolic&#10;Cosine Integral" userData="https://dlmf.nist.gov/6.2.E16" GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Chi(z) = γ + ln z + ∫_0^z (cosh t - 1)/t dt" />
             </tooltip>
@@ -133,7 +133,7 @@
                 <Integer fx:value="6" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Error Function" userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Error Function" userData="https://dlmf.nist.gov/7.2.E1" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="erf z = 2/√π ∫_0^z e^{-t^2} dt" />
             </tooltip>
@@ -148,7 +148,7 @@
                 <Integer fx:value="7" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Complementary&#10;Error Function" userData="https://dlmf.nist.gov/7.2.E2" GridPane.columnIndex="5" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Complementary&#10;Error Function" userData="https://dlmf.nist.gov/7.2.E2" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="erfc z = 2/√π ∫_z^∞ e^{-t^2} dt = 1 - erf z" />
             </tooltip>
@@ -163,7 +163,7 @@
                 <Integer fx:value="8" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Sine Integral" userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Fresnel&#10;Sine Integral" userData="https://dlmf.nist.gov/7.2.E8" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="S(z) = ∫_0^z sin(½πt^2) dt" />
             </tooltip>
@@ -179,7 +179,7 @@
                 <Integer fx:value="9" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Fresnel&#10;Cosine Integral" userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Fresnel&#10;Cosine Integral" userData="https://dlmf.nist.gov/7.2.E7" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="C(z) = ∫_0^z cos(½πt^2) dt" />
             </tooltip>

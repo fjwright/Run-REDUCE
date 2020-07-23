@@ -22,6 +22,21 @@
             </HBox>
         </StackPane>
     </VBox>
+    <StackPane>
+        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: INT package"
+                   userData="manualse35.html">
+            <tooltip>
+                <Tooltip fx:id="hyperlinkTooltip"
+                         text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+            </tooltip>
+        </Hyperlink>
+        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: NUMERIC package"
+                   userData="manualse138.html" visible="false">
+            <tooltip>
+                <fx:reference source="hyperlinkTooltip"/>
+            </tooltip>
+        </Hyperlink>
+    </StackPane>
     <HBox alignment="CENTER" spacing="5.0" styleClass="styled-textfields">
         <VBox fx:id="zIntVBox" alignment="CENTER" visible="false">
             <TextField fx:id="zUpLimTextField" prefColumnCount="3" styleClass="limit" />

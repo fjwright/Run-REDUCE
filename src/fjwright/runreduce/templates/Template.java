@@ -1,5 +1,6 @@
 package fjwright.runreduce.templates;
 
+import fjwright.runreduce.REDUCEConfiguration;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,6 +25,8 @@ import java.util.regex.Pattern;
 public abstract class Template {
 
     protected RadioButton numRadioButton;
+    @FXML
+    protected Hyperlink symHyperlink, numHyperlink;
 
     /**
      * This method adds a pair of Symbolic/Numeric radio buttons to the top of the dialogue.
@@ -37,6 +41,10 @@ public abstract class Template {
         hBox.setSpacing(10);
         hBox.setAlignment(Pos.CENTER);
         templateRoot.getChildren().add(0, hBox);
+        if (symHyperlink != null)
+            symHyperlink.visibleProperty().bind(numRadioButton.selectedProperty().not());
+        if (numHyperlink != null)
+            numHyperlink.visibleProperty().bind(numRadioButton.selectedProperty());
     }
 
 // Add the button bar to the bottom of the dialogue box and
@@ -69,13 +77,25 @@ public abstract class Template {
     }
 
     /**
-     * Register this method as the OnMouseClicked action for
-     * a control to display the URL specified as User Data.
+     * Register this method as the OnAction for any Hyperlink to display
+     * the URL specified as User Data.
      */
     @FXML
-    protected void hyperlinkOnMouseClickedAction(MouseEvent mouseEvent) {
+    protected void hyperlinkOnAction(ActionEvent actionEvent) {
         RunREDUCE.hostServices.showDocument(
-                (String) ((Node) mouseEvent.getTarget()).getParent().getUserData());
+                (String) ((Node) actionEvent.getTarget()).getUserData());
+    }
+
+    /**
+     * Register this method as the OnAction for a Hyperlink to display
+     * the local HTML REDUCE Manual section with the filename specified as User Data.
+     */
+    @FXML
+    protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
+        RunREDUCE.hostServices.showDocument(
+                (new File(RunREDUCE.reduceConfiguration.docRootDir,
+                        (REDUCEConfiguration.windowsOS ? "lib/csl/reduce.doc/" : "/")
+                                + ((Node) actionEvent.getTarget()).getUserData())).toString());
     }
 
 // Check field entries dynamically ================================================================

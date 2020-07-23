@@ -37,7 +37,7 @@
                 <ToggleGroup fx:id="templateToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Solution of d^2w/dz^2 = z w" />
             </tooltip>
@@ -53,7 +53,7 @@
                 <Integer fx:value="1" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="Solution of d^2w/dz^2 = z w" />
             </tooltip>
@@ -69,7 +69,7 @@
                 <Integer fx:value="2" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Derivative of&#10;Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Derivative of&#10;Airy Function&#10;First Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="dAi(z)/dz" />
             </tooltip>
@@ -85,7 +85,7 @@
                 <Integer fx:value="3" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Derivative of&#10;Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Derivative of&#10;Airy Function&#10;Second Kind" userData="https://dlmf.nist.gov/9.2" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="dBi(z)/dz" />
             </tooltip>
@@ -101,7 +101,7 @@
                 <Integer fx:value="4" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0" />
             </tooltip>
@@ -119,7 +119,7 @@
                 <Integer fx:value="5" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0" />
             </tooltip>
@@ -137,7 +137,7 @@
                 <Integer fx:value="6" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Modified&#10;Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.25" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Modified&#10;Bessel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.25" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0" />
             </tooltip>
@@ -155,7 +155,7 @@
                 <Integer fx:value="7" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Modified&#10;Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.25" GridPane.columnIndex="5" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Modified&#10;Bessel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.25" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz - (z^2 + ν^2) w = 0" />
             </tooltip>
@@ -173,7 +173,7 @@
                 <Integer fx:value="8" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hankel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Hankel Function&#10;First Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0" />
             </tooltip>
@@ -194,7 +194,7 @@
                 <Integer fx:value="9" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hankel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5" GridPane.rowIndex="4">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Hankel Function&#10;Second Kind" userData="https://dlmf.nist.gov/10.2" GridPane.columnIndex="5" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="Solution of z^2 d^2w/dz^2 + z dw/dz + (z^2 - ν^2) w = 0" />
             </tooltip>

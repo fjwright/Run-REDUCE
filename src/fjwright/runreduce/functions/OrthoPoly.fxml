@@ -37,7 +37,7 @@
                 <ToggleGroup fx:id="templateToggleGroup" />
             </toggleGroup>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Jacobi&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r2" GridPane.columnIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Jacobi&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r2" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Orthogonal on (-1,1) with weight function (1-x)^α (1+x)^β" />
             </tooltip>
@@ -66,7 +66,7 @@
                 <Integer fx:value="1" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Ultraspherical&#10;(Gegenbauer)&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r3" GridPane.columnIndex="5">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Ultraspherical&#10;(Gegenbauer)&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r3" GridPane.columnIndex="5">
             <tooltip>
                 <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^{λ-½}" />
             </tooltip>
@@ -91,7 +91,7 @@
                 <Integer fx:value="2" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Chebyshev&#10;Polynomials&#10;First Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Chebyshev&#10;Polynomials&#10;First Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r4" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^{-½}" />
             </tooltip>
@@ -109,7 +109,7 @@
                 <Integer fx:value="3" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Chebyshev&#10;Polynomials&#10;Second Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r5" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Chebyshev&#10;Polynomials&#10;Second Kind" userData="https://dlmf.nist.gov/18.3#T1.t1.r5" GridPane.columnIndex="5" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip text="Orthogonal on (-1,1) with weight function (1-x^2)^½" />
             </tooltip>
@@ -127,7 +127,7 @@
                 <Integer fx:value="4" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r10" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="Orthogonal on (-1,1) with weight function 1" />
             </tooltip>
@@ -145,7 +145,7 @@
                 <Integer fx:value="5" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Associated&#10;Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/14.7.E8" GridPane.columnIndex="5" GridPane.rowIndex="2">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Associated&#10;Legendre&#10;Polynomials" userData="https://dlmf.nist.gov/14.7.E8" GridPane.columnIndex="5" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="P_n^m(x) = (-1)^m (1-x^2)^{m/2} d^m/dx^m P_n(x)" />
             </tooltip>
@@ -170,7 +170,7 @@
                 <Integer fx:value="6" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r12" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r12" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Orthogonal on (0,∞) with weight function e^{-x}" />
             </tooltip>
@@ -188,7 +188,7 @@
                 <Integer fx:value="7" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Generalized&#10;Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r12" GridPane.columnIndex="5" GridPane.rowIndex="3">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Generalized&#10;Laguerre&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r12" GridPane.columnIndex="5" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="Orthogonal on (0,∞) with weight function e^{-x} x^α" />
             </tooltip>
@@ -213,7 +213,7 @@
                 <Integer fx:value="8" />
             </userData>
         </RadioButton>
-        <Hyperlink onMouseClicked="#hyperlinkOnMouseClickedAction" text="Hermite&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r13" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Hyperlink onAction="#hyperlinkOnAction" text="Hermite&#10;Polynomials" userData="https://dlmf.nist.gov/18.3#T1.t1.r13" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="Orthogonal on (-∞,∞) with weight function e^{-x^2}" />
             </tooltip>
