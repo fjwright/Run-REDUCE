@@ -17,6 +17,11 @@
 Superscripts represent orders, which unless empty must be positive integers."
               textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
+    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: DF Operator" userData="manualse34.html">
+        <tooltip>
+            <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+        </tooltip>
+    </Hyperlink>
     <VBox alignment="CENTER" fillWidth="false" spacing="5.0" styleClass="styled-textfields">
         <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>

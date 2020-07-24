@@ -26,14 +26,14 @@
         <RadioButton mnemonicParsing="false" text="∏" toggleGroup="$sumProdToggleGroup"/>
     </HBox>
     <StackPane>
-        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: SUM package"
+        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: SUM Package"
                    userData="manualse163.html">
             <tooltip>
                 <Tooltip fx:id="hyperlinkTooltip"
                          text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
             </tooltip>
         </Hyperlink>
-        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR statement"
+        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR Statements"
                    userData="manualse17.html" visible="false">
             <tooltip>
                 <fx:reference source="hyperlinkTooltip"/>

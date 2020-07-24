@@ -6,17 +6,24 @@
 <?import javafx.scene.text.*?>
 
 <VBox fx:id="templateRoot" alignment="CENTER" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Matrix">
+      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fjwright.runreduce.templates.Matrix">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
-              text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty.
-The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero."
+              text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero."
               textAlignment="CENTER" wrappingWidth="400.0"/>
     </HBox>
+    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: MAT Operator" userData="manualse82.html">
+        <tooltip>
+            <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+        </tooltip>
+        <VBox.margin>
+            <Insets top="20.0"/>
+        </VBox.margin>
+    </Hyperlink>
     <HBox alignment="CENTER" styleClass="styled-textfields">
         <Label styleClass="bracket" text="("/>
         <GridPane alignment="CENTER">
