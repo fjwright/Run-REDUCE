@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" stylesheets="@templates.css"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.Matrix">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -14,7 +21,7 @@
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
               text="Form a matrix in the top left-hand corner of the grid, leaving any cells outside this matrix empty. The right-most and lowest non-empty cells define the matrix size. Any empty cells within this matrix default to zero."
-              textAlignment="CENTER" wrappingWidth="400.0"/>
+              textAlignment="CENTER" wrappingWidth="460.0"/>
     </HBox>
     <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: MAT Operator" userData="manualse82.html">
         <tooltip>
@@ -41,22 +48,38 @@
                 <RowConstraints/>
                 <RowConstraints/>
             </rowConstraints>
-            <TextField fx:id="cell00" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-            <TextField fx:id="cell01" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-            <TextField fx:id="cell02" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-            <TextField fx:id="cell03" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
-            <TextField fx:id="cell10" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <TextField fx:id="cell11" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-            <TextField fx:id="cell12" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-            <TextField fx:id="cell13" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
-            <TextField fx:id="cell20" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-            <TextField fx:id="cell21" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-            <TextField fx:id="cell22" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-            <TextField fx:id="cell23" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
-            <TextField fx:id="cell30" prefColumnCount="4" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-            <TextField fx:id="cell31" prefColumnCount="4" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-            <TextField fx:id="cell32" prefColumnCount="4" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-            <TextField fx:id="cell33" prefColumnCount="4" GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+            <TextField fx:id="cell00" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="1"
+                       GridPane.rowIndex="0"/>
+            <TextField fx:id="cell01" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="2"
+                       GridPane.rowIndex="0"/>
+            <TextField fx:id="cell02" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="3"
+                       GridPane.rowIndex="0"/>
+            <TextField fx:id="cell03" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="4"
+                       GridPane.rowIndex="0"/>
+            <TextField fx:id="cell10" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="1"
+                       GridPane.rowIndex="1"/>
+            <TextField fx:id="cell11" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="2"
+                       GridPane.rowIndex="1"/>
+            <TextField fx:id="cell12" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="3"
+                       GridPane.rowIndex="1"/>
+            <TextField fx:id="cell13" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="4"
+                       GridPane.rowIndex="1"/>
+            <TextField fx:id="cell20" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"/>
+            <TextField fx:id="cell21" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="2"
+                       GridPane.rowIndex="2"/>
+            <TextField fx:id="cell22" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="3"
+                       GridPane.rowIndex="2"/>
+            <TextField fx:id="cell23" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="4"
+                       GridPane.rowIndex="2"/>
+            <TextField fx:id="cell30" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="1"
+                       GridPane.rowIndex="3"/>
+            <TextField fx:id="cell31" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="2"
+                       GridPane.rowIndex="3"/>
+            <TextField fx:id="cell32" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="3"
+                       GridPane.rowIndex="3"/>
+            <TextField fx:id="cell33" alignment="CENTER" prefColumnCount="5" GridPane.columnIndex="4"
+                       GridPane.rowIndex="3"/>
         </GridPane>
         <Label styleClass="bracket" text=")"/>
     </HBox>

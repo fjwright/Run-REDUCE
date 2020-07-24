@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" spacing="20.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.For">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -16,14 +24,14 @@
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
               text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list."
-              textAlignment="CENTER" wrappingWidth="425.0"/>
+              textAlignment="CENTER" wrappingWidth="460.0"/>
     </HBox>
     <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR Statements" userData="manualse17.html">
         <tooltip>
             <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
         </tooltip>
     </Hyperlink>
-    <VBox>
+    <VBox fillWidth="false">
         <Label alignment="BOTTOM_LEFT" text="Iterate over a...">
             <padding>
                 <Insets bottom="-5.0"/>
@@ -35,26 +43,28 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for"/>
-                            <TextField fx:id="forVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="4"
-                                       promptText="var">
+                            <TextField fx:id="forVarTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped"
+                                       prefColumnCount="5" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier"/>
                                 </tooltip>
                             </TextField>
                             <Label text=":="/>
-                            <TextField fx:id="fromTextField" prefColumnCount="4" promptText="number">
+                            <TextField fx:id="fromTextField" alignment="CENTER" prefColumnCount="5" promptText="number">
                                 <tooltip>
                                     <Tooltip text="Must evaluate to a number"/>
                                 </tooltip>
                             </TextField>
                             <Label text="step"/>
-                            <TextField fx:id="stepTextField" prefColumnCount="4" promptText="number" text="1">
+                            <TextField fx:id="stepTextField" alignment="CENTER" prefColumnCount="5" promptText="number"
+                                       text="1">
                                 <tooltip>
                                     <Tooltip text="Must evaluate to a number"/>
                                 </tooltip>
                             </TextField>
                             <Label text="until"/>
-                            <TextField fx:id="untilTextField" prefColumnCount="4" promptText="number">
+                            <TextField fx:id="untilTextField" alignment="CENTER" prefColumnCount="5"
+                                       promptText="number">
                                 <tooltip>
                                     <Tooltip text="Must evaluate to a number"/>
                                 </tooltip>
@@ -66,8 +76,8 @@
                     <AnchorPane>
                         <HBox alignment="CENTER" spacing="5.0">
                             <Label text="for each"/>
-                            <TextField fx:id="foreachVarTextField" onKeyTyped="#varCheckKeyTyped" prefColumnCount="9"
-                                       promptText="var">
+                            <TextField fx:id="foreachVarTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped"
+                                       prefColumnCount="10" promptText="var">
                                 <tooltip>
                                     <Tooltip text="Must be an identifier"/>
                                 </tooltip>
@@ -84,8 +94,8 @@
                                             text="The 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list."/>
                                 </tooltip>
                             </ChoiceBox>
-                            <TextField fx:id="foreachListTextField" onKeyTyped="#listOrVarCheckKeyTyped"
-                                       prefColumnCount="10" promptText="list">
+                            <TextField fx:id="foreachListTextField" alignment="CENTER"
+                                       onKeyTyped="#listOrVarCheckKeyTyped" promptText="list">
                                 <tooltip>
                                     <Tooltip text="Must evaluate to a list"/>
                                 </tooltip>
@@ -111,7 +121,7 @@
             </ChoiceBox>
         </HBox>
         <HBox alignment="CENTER">
-            <TextField fx:id="exprnTextField" promptText="expression">
+            <TextField fx:id="exprnTextField" prefColumnCount="40" promptText="expression">
                 <tooltip>
                     <Tooltip text="Any expression, which is evaluated on each iteration"/>
                 </tooltip>

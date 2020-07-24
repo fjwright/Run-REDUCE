@@ -13,6 +13,8 @@ public class Derivative extends Template {
     @FXML
     private Label totalOrdLabel;
     @FXML
+    private Label d1Label, d2Label;
+    @FXML
     private TextField depVarTextField, indVar0TextField, indVar1TextField, indVar2TextField;
     @FXML
     private TextField ord0TextField, ord1TextField, ord2TextField;
@@ -27,6 +29,8 @@ public class Derivative extends Template {
         super.initialize();
         indVarTextFields = new TextField[]{indVar0TextField, indVar1TextField, indVar2TextField};
         ordTextFields = new TextField[]{ord0TextField, ord1TextField, ord2TextField};
+        d1Label.visibleProperty().bind(indVar1TextField.textProperty().isEmpty().not());
+        d2Label.visibleProperty().bind(indVar2TextField.textProperty().isEmpty().not());
     }
 
     private void indVarAction(final int n) {

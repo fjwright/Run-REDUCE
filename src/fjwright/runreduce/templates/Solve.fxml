@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="440.0" spacing="20.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.Solve">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -14,18 +23,18 @@
     <VBox>
         <HBox alignment="CENTER">
             <Text fontSmoothingType="LCD" text="At least one equation or expression is required." textAlignment="CENTER"
-                  wrappingWidth="400.0"/>
+                  wrappingWidth="460.0"/>
         </HBox>
         <StackPane>
             <HBox fx:id="symText" alignment="CENTER">
                 <Text fontSmoothingType="LCD"
                       text="If no unknowns are specified then REDUCE solves for all those found. Unknowns must be kernels."
-                      textAlignment="CENTER" wrappingWidth="400.0"/>
+                      textAlignment="CENTER" wrappingWidth="460.0"/>
             </HBox>
             <HBox fx:id="numText" alignment="CENTER" visible="false">
                 <Text fontSmoothingType="LCD"
                       text="All unknowns must be specified but their starting values are optional."
-                      textAlignment="CENTER" wrappingWidth="400.0"/>
+                      textAlignment="CENTER" wrappingWidth="460.0"/>
             </HBox>
         </StackPane>
     </VBox>

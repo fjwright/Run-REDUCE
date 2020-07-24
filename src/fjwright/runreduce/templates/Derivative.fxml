@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" spacing="10.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Derivative">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="10.0" stylesheets="@templates.css"
+      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fjwright.runreduce.templates.Derivative">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <HBox alignment="CENTER">
         <Text fontSmoothingType="LCD"
-              text="The dependent variable or expression and first independent variable are required. Other fields may be left empty.
-Superscripts represent orders, which unless empty must be positive integers."
-              textAlignment="CENTER" wrappingWidth="400.0"/>
+              text="The dependent variable or expression and first independent variable are required. Other fields may be left empty. Superscripts represent orders, which unless empty must be positive integers."
+              textAlignment="CENTER" wrappingWidth="460.0"/>
     </HBox>
     <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: DF Operator" userData="manualse34.html">
         <tooltip>
@@ -32,7 +35,7 @@ Superscripts represent orders, which unless empty must be positive integers."
             </padding>
             <Label styleClass="d-symbol" text="∂"/>
             <Label fx:id="totalOrdLabel" styleClass="order"/>
-            <TextField fx:id="depVarTextField" prefColumnCount="6" text="ws"/>
+            <TextField fx:id="depVarTextField" prefColumnCount="7" text="ws"/>
         </HBox>
         <HBox alignment="CENTER" spacing="2.0">
             <Label styleClass="d-symbol" text="∂"/>
@@ -40,9 +43,11 @@ Superscripts represent orders, which unless empty must be positive integers."
                        text="x"/>
             <TextField fx:id="ord0TextField" alignment="CENTER" onKeyTyped="#indVar1KeyTyped" prefColumnCount="1"
                        styleClass="order"/>
+            <Label fx:id="d1Label" styleClass="d-symbol" text="∂" visible="false"/>
             <TextField fx:id="indVar1TextField" alignment="CENTER" onKeyTyped="#indVar2KeyTyped" prefColumnCount="1"/>
             <TextField fx:id="ord1TextField" alignment="CENTER" onKeyTyped="#indVar2KeyTyped" prefColumnCount="1"
                        styleClass="order"/>
+            <Label fx:id="d2Label" styleClass="d-symbol" text="∂" visible="false"/>
             <TextField fx:id="indVar2TextField" alignment="CENTER" onKeyTyped="#indVar3KeyTyped" prefColumnCount="1"/>
             <TextField fx:id="ord2TextField" alignment="CENTER" onKeyTyped="#indVar3KeyTyped" prefColumnCount="1"
                        styleClass="order"/>

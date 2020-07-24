@@ -46,24 +46,24 @@
     </StackPane>
     <HBox alignment="CENTER" spacing="5.0" styleClass="styled-textfields">
         <VBox fx:id="zIntVBox" alignment="CENTER" visible="false">
-            <TextField fx:id="zUpLimTextField" prefColumnCount="3" styleClass="limit"/>
+            <TextField fx:id="zUpLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
             <Label styleClass="sum-prod-symbol" text="∫" textFill="red"/>
-            <TextField fx:id="zLowLimTextField" prefColumnCount="3" styleClass="limit"/>
+            <TextField fx:id="zLowLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
         </VBox>
         <VBox fx:id="yIntVBox" alignment="CENTER" visible="false">
-            <TextField fx:id="yUpLimTextField" prefColumnCount="3" styleClass="limit"/>
+            <TextField fx:id="yUpLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
             <Label styleClass="sum-prod-symbol" text="∫" textFill="green"/>
-            <TextField fx:id="yLowLimTextField" prefColumnCount="3" styleClass="limit"/>
+            <TextField fx:id="yLowLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
         </VBox>
         <VBox alignment="CENTER">
-            <TextField prefColumnCount="3" styleClass="limit" fx:id="xUpLimTextField"/>
+            <TextField fx:id="xUpLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
             <Label styleClass="sum-prod-symbol" text="∫" textFill="blue"/>
-            <TextField prefColumnCount="3" styleClass="limit" fx:id="xLowLimTextField"/>
+            <TextField fx:id="xLowLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>
         </VBox>
-        <TextField fx:id="integrandTextField" text="ws"/>
+        <TextField fx:id="integrandTextField" alignment="CENTER" text="ws"/>
         <Label styleClass="d-symbol" text="d" textFill="blue"/>
-        <TextField alignment="CENTER" onKeyTyped="#varCheckKeyTyped" prefColumnCount="1" text="x"
-                   fx:id="xIntVarTextField"/>
+        <TextField fx:id="xIntVarTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped" prefColumnCount="1"
+                   text="x"/>
         <Label fx:id="yDLabel" styleClass="d-symbol" text="d" textFill="green" visible="false"/>
         <TextField fx:id="yIntVarTextField" alignment="CENTER" onKeyTyped="#yIntVarKeyTyped" prefColumnCount="1"/>
         <Label fx:id="zDLabel" styleClass="d-symbol" text="d" textFill="red" visible="false"/>
