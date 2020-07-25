@@ -20,7 +20,7 @@
               text="The dependent variable or expression and first independent variable are required. Other fields may be left empty. Superscripts represent orders, which unless empty must be positive integers."
               textAlignment="CENTER" wrappingWidth="460.0"/>
     </HBox>
-    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: DF Operator" userData="manualse34.html">
+    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: DF Operator" userData="DF Operator">
         <tooltip>
             <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
         </tooltip>

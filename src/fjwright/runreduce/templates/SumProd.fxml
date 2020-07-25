@@ -27,14 +27,14 @@
     </HBox>
     <StackPane>
         <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: SUM Package"
-                   userData="manualse163.html">
+                   userData="SUM: A package for series summation">
             <tooltip>
                 <Tooltip fx:id="hyperlinkTooltip"
                          text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
             </tooltip>
         </Hyperlink>
         <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR Statements"
-                   userData="manualse17.html" visible="false">
+                   userData="FOR Statements" visible="false">
             <tooltip>
                 <fx:reference source="hyperlinkTooltip"/>
             </tooltip>

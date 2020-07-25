@@ -21,7 +21,7 @@
               text="Only limits of (mostly) continuous functions are supported, not sequences. All fields are required. The variable must be an identifier. &#10;Click the superscript box immediately after the limit point to cycle through the directions, from: right/above, left/below, both sides."
               textAlignment="CENTER" wrappingWidth="460.0"/>
     </HBox>
-    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: LIMITS Package" userData="manualse130.html">
+    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: LIMITS Package" userData="LIMITS: A package for ﬁnding limits">
         <tooltip>
             <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
         </tooltip>

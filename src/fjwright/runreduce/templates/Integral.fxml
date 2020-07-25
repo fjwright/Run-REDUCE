@@ -35,14 +35,14 @@
     </VBox>
     <StackPane>
         <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: INT Operator"
-                   userData="manualse35.html">
+                   userData="INT Operator">
             <tooltip>
                 <Tooltip fx:id="hyperlinkTooltip"
                          text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
             </tooltip>
         </Hyperlink>
         <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: NUMERIC Package"
-                   userData="manualse138.html" visible="false">
+                   userData="NUMERIC: Solving numerical problems" visible="false">
             <tooltip>
                 <fx:reference source="hyperlinkTooltip"/>
             </tooltip>

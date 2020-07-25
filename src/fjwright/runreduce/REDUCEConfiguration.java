@@ -1,6 +1,7 @@
 package fjwright.runreduce;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -277,6 +278,16 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                 prefs.put(ARG + i, cmd.command[i]);
             prefs = prefs.parent();
         }
+    }
+
+    /**
+     * This method gets the local REDUCE Manual root directory,
+     * which depends on the current configuration and OS.
+     */
+    public File getRedManRootDir() {
+        return windowsOS ?
+                new File(docRootDir, "lib/csl/reduce.doc") :
+                new File(docRootDir);
     }
 }
 

@@ -1,6 +1,5 @@
 package fjwright.runreduce.templates;
 
-import fjwright.runreduce.REDUCEConfiguration;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -74,28 +77,6 @@ public abstract class Template {
 
         // Register the pop-up handler on the template:
         templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKeyboard);
-    }
-
-    /**
-     * Register this method as the OnAction for any Hyperlink to display
-     * the URL specified as User Data.
-     */
-    @FXML
-    protected void hyperlinkOnAction(ActionEvent actionEvent) {
-        RunREDUCE.hostServices.showDocument(
-                (String) ((Node) actionEvent.getTarget()).getUserData());
-    }
-
-    /**
-     * Register this method as the OnAction for a Hyperlink to display
-     * the local HTML REDUCE Manual section with the filename specified as User Data.
-     */
-    @FXML
-    protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
-        RunREDUCE.hostServices.showDocument(
-                (new File(RunREDUCE.reduceConfiguration.docRootDir,
-                        (REDUCEConfiguration.windowsOS ? "lib/csl/reduce.doc/" : "/")
-                                + ((Node) actionEvent.getTarget()).getUserData())).toString());
     }
 
 // Check field entries dynamically ================================================================
@@ -263,5 +244,54 @@ public abstract class Template {
         final Node source = (Node) actionEvent.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+// Hyperlink support ==============================================================================
+
+    /**
+     * Register this as the OnAction method for any Hyperlink to display
+     * the URL specified as User Data.
+     */
+    @FXML
+    protected void hyperlinkOnAction(ActionEvent actionEvent) {
+        RunREDUCE.hostServices.showDocument(
+                (String) ((Node) actionEvent.getTarget()).getUserData());
+    }
+
+    private String redManIndex;
+
+    /**
+     * Register this as the OnAction method for a Hyperlink to display
+     * the local HTML REDUCE Manual section with the filename specified as User Data.
+     */
+    @FXML
+    protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
+        // FixMe Should getRedManRootDir() return a Path?
+        File redManRootDir = RunREDUCE.reduceConfiguration.getRedManRootDir();
+        // Create redManIndex if necessary:
+        // FixMe Do this also if getRedManRootDir() returns a different value.
+        if (redManIndex == null) {
+            try {
+                redManIndex = Files.readString(
+                        Paths.get(redManRootDir.toString(), "index.html"));
+            } catch (IOException e) {
+                e.printStackTrace(); // FixMe Use an error dialogue.
+            }
+        }
+        // Use redManIndex as a jump table:
+        // Search for (e.g.)
+        // <a href="manualse33.html#x44-760007.7" id="QQ2-44-77">CONTINUED_FRACTION Operator</a>
+        String searchText = (String) ((Node) actionEvent.getTarget()).getUserData();
+        Pattern pattern = Pattern.compile(
+                String.format(".*<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s</a>.*", searchText));
+        Matcher matcher = pattern.matcher(redManIndex);
+        if (matcher.find()) {
+//            System.err.print("User Data: ");
+//            System.err.println(searchText);
+//            System.err.print("Link: ");
+//            System.err.println(matcher.group(1));
+            RunREDUCE.hostServices.showDocument(
+                    new File(redManRootDir, matcher.group(1)).toString());
+        } else System.err.println("Error: Link not found!");
     }
 }
