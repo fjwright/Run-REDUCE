@@ -87,3 +87,6 @@ top-level directory.
   Manual plus degree versions of all trigonometric functions.
 
 ### Updates since last release
+
+* Add REDUCE Manual hyperlinks to all template dialogues.
+* V1.41 Add Help menu item that opens the REDUCE Web Site in the default browser.

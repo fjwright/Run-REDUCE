@@ -74,6 +74,8 @@
                 <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem mnemonicParsing="false" onAction="#webSiteMenuItemAction" text="REDUCE Web Site" />
+                <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE-FX" />
             </Menu>
         </MenuBar>

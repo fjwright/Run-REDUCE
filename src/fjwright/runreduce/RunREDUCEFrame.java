@@ -15,7 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.awt.Desktop;
+import java.awt.Desktop; // only Desktop needed
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
@@ -560,7 +560,7 @@ public class RunREDUCEFrame {
      * ********* */
 
     private static final String USERGUIDE_FILENAME = "UserGuide.html";
-    private static File file;
+    private static File userGuideTmpFile;
 
     @FXML
     private void userGuideMenuItemAction() {
@@ -575,13 +575,13 @@ public class RunREDUCEFrame {
             } else if (url.getProtocol().equals("file")) // Useful during development only!
                 RunREDUCE.hostServices.showDocument(url.toString());
             else { // Normal case: when running a jar file the protocol is jar.
-                if (file == null || !file.exists()) {
-                    file = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
+                if (userGuideTmpFile == null || !userGuideTmpFile.exists()) {
+                    userGuideTmpFile = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
                     try (InputStream in = url.openStream()) {
-                        Files.copy(in, file.toPath(), REPLACE_EXISTING);
+                        Files.copy(in, userGuideTmpFile.toPath(), REPLACE_EXISTING);
                     }
                 }
-                RunREDUCE.hostServices.showDocument(file.toString());
+                RunREDUCE.hostServices.showDocument(userGuideTmpFile.toString());
             }
         } catch (IOException exc) {
             exc.printStackTrace();
@@ -589,9 +589,14 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void webSiteMenuItemAction() {
+        RunREDUCE.hostServices.showDocument("https://reduce-algebra.sourceforge.io/");
+    }
+
+    @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.4, July 2020\n" +
+                "Version 1.41, July 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
