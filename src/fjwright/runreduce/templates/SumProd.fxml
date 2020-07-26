@@ -11,11 +11,9 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD"
-              text="The main operand field must be specified and may be any algebraic expression. The variable (bottom left) field must also be specified. Symbolic sums and products are exact, may be indefinite so the upper or both limits may be omitted or the limits may be symbolic, and the variable may be a kernel. Numeric sums and products are normally approximate and require both limits to evaluate to numbers."
-              textAlignment="CENTER" wrappingWidth="460.0"/>
-    </HBox>
+    <Text fontSmoothingType="LCD"
+          text="The main operand field must be specified and may be any algebraic expression. The variable (bottom left) field must also be specified. Symbolic sums and products are exact, may be indefinite so the upper or both limits may be omitted or the limits may be symbolic, and the variable may be a kernel. Numeric sums and products are normally approximate and require both limits to evaluate to numbers."
+          textAlignment="CENTER" wrappingWidth="460.0"/>
     <HBox alignment="CENTER" spacing="10.0" styleClass="sum-prod-buttons">
         <RadioButton fx:id="sumRadioButton" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" selected="true"
                      text="∑">
@@ -25,21 +23,24 @@
         </RadioButton>
         <RadioButton mnemonicParsing="false" text="∏" toggleGroup="$sumProdToggleGroup"/>
     </HBox>
-    <StackPane>
-        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: SUM Package"
-                   userData="SUM: A package for series summation">
-            <tooltip>
-                <Tooltip fx:id="hyperlinkTooltip"
-                         text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
-            </tooltip>
-        </Hyperlink>
-        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR Statements"
-                   userData="FOR Statements" visible="false">
-            <tooltip>
-                <fx:reference source="hyperlinkTooltip"/>
-            </tooltip>
-        </Hyperlink>
-    </StackPane>
+    <HBox alignment="CENTER">
+        <Label text="REDUCE Manual: "/>
+        <StackPane>
+            <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="SUM Package"
+                       userData="SUM: A package for series summation">
+                <tooltip>
+                    <Tooltip fx:id="hyperlinkTooltip"
+                             text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+                </tooltip>
+            </Hyperlink>
+            <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="FOR Statements"
+                       userData="FOR Statements" visible="false">
+                <tooltip>
+                    <fx:reference source="hyperlinkTooltip"/>
+                </tooltip>
+            </Hyperlink>
+        </StackPane>
+    </HBox>
     <HBox alignment="CENTER" styleClass="styled-textfields">
         <VBox alignment="CENTER">
             <HBox alignment="CENTER">

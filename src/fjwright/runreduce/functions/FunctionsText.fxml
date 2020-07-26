@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER">
-    <Text fontSmoothingType="LCD"
-          text="Click on the radio button to the left of the function you want to use.
+<Text fontSmoothingType="LCD"
+      text="Click on the radio button to the left of the function you want to use.
 &#10;Hover over a function name for a hint at its definition. Click on a function name
 to go to the full definition in the NIST Digital Library of Mathematical Functions."
-          textAlignment="CENTER" wrappingWidth="560.0"/>
-</HBox>
+      textAlignment="CENTER" wrappingWidth="660.0"/>

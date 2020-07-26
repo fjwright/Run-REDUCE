@@ -14,40 +14,39 @@
     </padding>
     <VBox>
         <fx:define>
+            <!-- This prevents use of SceneBuilder! -->
             <Double fx:id="textWrappingWidth" fx:value="460.0"/>
         </fx:define>
-        <HBox alignment="CENTER">
-            <Text fontSmoothingType="LCD"
-                  text="The integrand and at least one integration variable are required. Enter additional integration variables to create a double or triple integral and display additional ∫ symbols. ∫ and d symbol pairs nest and their colours show how they match."
-                  textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
-        </HBox>
+        <Text fontSmoothingType="LCD"
+              text="The integrand and at least one integration variable are required. Enter additional integration variables to create a double or triple integral and display additional ∫ symbols. ∫ and d symbol pairs nest and their colours show how they match."
+              textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
         <StackPane>
-            <HBox fx:id="symText" alignment="CENTER">
-                <Text fontSmoothingType="LCD"
-                      text="Each pair of limits must be both empty, giving an indefinite integral, or both specified, giving a definite integral."
-                      textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
-            </HBox>
-            <HBox fx:id="numText" alignment="CENTER" visible="false">
-                <Text fontSmoothingType="LCD" text="All limits must be specified and must be, or evaluate to, numbers."
-                      textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
-            </HBox>
+            <Text fx:id="symText" fontSmoothingType="LCD"
+                  text="Each pair of limits must be both empty, giving an indefinite integral, or both specified, giving a definite integral."
+                  textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
+            <Text fx:id="numText" fontSmoothingType="LCD" visible="false"
+                  text="All limits must be specified and must be, or evaluate to, numbers."
+                  textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
         </StackPane>
     </VBox>
-    <StackPane>
-        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: INT Operator"
-                   userData="INT Operator">
-            <tooltip>
-                <Tooltip fx:id="hyperlinkTooltip"
-                         text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
-            </tooltip>
-        </Hyperlink>
-        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: NUMERIC Package"
-                   userData="NUMERIC: Solving numerical problems" visible="false">
-            <tooltip>
-                <fx:reference source="hyperlinkTooltip"/>
-            </tooltip>
-        </Hyperlink>
-    </StackPane>
+    <HBox alignment="CENTER">
+        <Label text="REDUCE Manual: "/>
+        <StackPane>
+            <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="INT Operator"
+                       userData="INT Operator">
+                <tooltip>
+                    <Tooltip fx:id="hyperlinkTooltip"
+                             text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+                </tooltip>
+            </Hyperlink>
+            <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="NUMERIC Package"
+                       userData="NUMERIC: Solving numerical problems" visible="false">
+                <tooltip>
+                    <fx:reference source="hyperlinkTooltip"/>
+                </tooltip>
+            </Hyperlink>
+        </StackPane>
+    </HBox>
     <HBox alignment="CENTER" spacing="5.0" styleClass="styled-textfields">
         <VBox fx:id="zIntVBox" alignment="CENTER" visible="false">
             <TextField fx:id="zUpLimTextField" alignment="CENTER" prefColumnCount="3" styleClass="limit"/>

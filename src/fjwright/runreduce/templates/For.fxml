@@ -21,16 +21,17 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
+    <Text fontSmoothingType="LCD"
+          text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list."
+          textAlignment="CENTER" wrappingWidth="460.0"/>
     <HBox alignment="CENTER">
-        <Text fontSmoothingType="LCD"
-              text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list."
-              textAlignment="CENTER" wrappingWidth="460.0"/>
+        <Label text="REDUCE Manual: "/>
+        <Hyperlink onAction="#redManHyperlinkOnAction" text="FOR Statements" userData="FOR Statements">
+            <tooltip>
+                <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+            </tooltip>
+        </Hyperlink>
     </HBox>
-    <Hyperlink onAction="#redManHyperlinkOnAction" text="REDUCE Manual: FOR Statements" userData="FOR Statements">
-        <tooltip>
-            <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
-        </tooltip>
-    </Hyperlink>
     <VBox fillWidth="false">
         <Label alignment="BOTTOM_LEFT" text="Iterate over a...">
             <padding>

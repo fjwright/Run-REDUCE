@@ -9,13 +9,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import static java.util.Arrays.stream;
 
 public class Solve extends Template {
     @FXML
-    private HBox symText, numText;
+    private Text symText, numText;
     @FXML
     private TextField eqn1TextField, eqn2TextField, eqn3TextField;
     @FXML

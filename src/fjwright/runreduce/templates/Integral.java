@@ -7,12 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class Integral extends Template {
     @FXML
-    private HBox symText, numText;
+    private Text symText, numText;
     @FXML
     private TextField integrandTextField;
     @FXML

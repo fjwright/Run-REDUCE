@@ -23,40 +23,38 @@
     </padding>
     <VBox>
         <fx:define>
+            <!-- This prevents use of SceneBuilder! -->
             <Double fx:id="textWrappingWidth" fx:value="460.0"/>
         </fx:define>
-        <HBox alignment="CENTER">
-            <Text fontSmoothingType="LCD" text="At least one equation or expression is required." textAlignment="CENTER"
-                  wrappingWidth="$textWrappingWidth"/>
-        </HBox>
+        <Text fontSmoothingType="LCD" text="At least one equation or expression is required." textAlignment="CENTER"
+              wrappingWidth="$textWrappingWidth"/>
         <StackPane>
-            <HBox fx:id="symText" alignment="CENTER">
-                <Text fontSmoothingType="LCD"
-                      text="If no unknowns are specified then REDUCE solves for all those found. Unknowns must be kernels."
-                      textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
-            </HBox>
-            <HBox fx:id="numText" alignment="CENTER" visible="false">
-                <Text fontSmoothingType="LCD"
-                      text="All unknowns must be specified but their starting values are optional."
-                      textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
-            </HBox>
+            <Text fx:id="symText" fontSmoothingType="LCD"
+                  text="If no unknowns are specified then REDUCE solves for all those found. Unknowns must be kernels."
+                  textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
+            <Text fx:id="numText" fontSmoothingType="LCD" visible="false"
+                  text="All unknowns must be specified but their starting values are optional."
+                  textAlignment="CENTER" wrappingWidth="$textWrappingWidth"/>
         </StackPane>
     </VBox>
-    <StackPane>
-        <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: SOLVE Operator"
-                   userData="SOLVE Operator">
-            <tooltip>
-                <Tooltip fx:id="hyperlinkTooltip"
-                         text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
-            </tooltip>
-        </Hyperlink>
-        <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="REDUCE Manual: NUMERIC Package"
-                   userData="NUMERIC: Solving numerical problems" visible="false">
-            <tooltip>
-                <fx:reference source="hyperlinkTooltip"/>
-            </tooltip>
-        </Hyperlink>
-    </StackPane>
+    <HBox alignment="CENTER">
+        <Label text="REDUCE Manual: "/>
+        <StackPane>
+            <Hyperlink fx:id="symHyperlink" onAction="#redManHyperlinkOnAction" text="SOLVE Operator"
+                       userData="SOLVE Operator">
+                <tooltip>
+                    <Tooltip fx:id="hyperlinkTooltip"
+                             text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+                </tooltip>
+            </Hyperlink>
+            <Hyperlink fx:id="numHyperlink" onAction="#redManHyperlinkOnAction" text="NUMERIC Package"
+                       userData="NUMERIC: Solving numerical problems" visible="false">
+                <tooltip>
+                    <fx:reference source="hyperlinkTooltip"/>
+                </tooltip>
+            </Hyperlink>
+        </StackPane>
+    </HBox>
     <GridPane fx:id="mainGridPane" alignment="CENTER" hgap="10.0">
         <columnConstraints>
             <ColumnConstraints percentWidth="75.0"/>
