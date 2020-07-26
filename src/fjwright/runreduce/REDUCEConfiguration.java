@@ -1,7 +1,6 @@
 package fjwright.runreduce;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -197,6 +196,8 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
  * It is initialised when the application starts and can be updated and saved using the REDUCEConfigDialog class.
  */
 public class REDUCEConfiguration extends REDUCEConfigurationType {
+    public Path redManRootDir;
+
     // Preference keys:
     static final String REDUCE_ROOT_DIR = "reduceRootDir";
     static final String PACKAGES_ROOT_DIR = "packagesRootDir";
@@ -251,6 +252,17 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         } catch (BackingStoreException e) {
             e.printStackTrace();
         }
+        redManRootDir = getRedManRootDir();
+    }
+
+    /**
+     * This method gets the local REDUCE Manual root directory,
+     * which depends on the current configuration and OS.
+     */
+    private Path getRedManRootDir() {
+        return windowsOS ?
+                Path.of(docRootDir, "lib/csl/reduce.doc") :
+                Path.of(docRootDir);
     }
 
     /**
@@ -278,16 +290,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                 prefs.put(ARG + i, cmd.command[i]);
             prefs = prefs.parent();
         }
-    }
-
-    /**
-     * This method gets the local REDUCE Manual root directory,
-     * which depends on the current configuration and OS.
-     */
-    public File getRedManRootDir() {
-        return windowsOS ?
-                new File(docRootDir, "lib/csl/reduce.doc") :
-                new File(docRootDir);
+        redManRootDir = getRedManRootDir();
     }
 }
 

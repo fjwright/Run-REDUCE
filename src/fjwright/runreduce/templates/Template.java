@@ -13,10 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -258,7 +257,8 @@ public abstract class Template {
                 (String) ((Node) actionEvent.getTarget()).getUserData());
     }
 
-    private String redManIndex;
+    private static String redManIndex;
+    private static Path redManRootDir;
 
     /**
      * Register this as the OnAction method for a Hyperlink to display
@@ -266,32 +266,38 @@ public abstract class Template {
      */
     @FXML
     protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
-        // FixMe Should getRedManRootDir() return a Path?
-        File redManRootDir = RunREDUCE.reduceConfiguration.getRedManRootDir();
-        // Create redManIndex if necessary:
-        // FixMe Do this also if getRedManRootDir() returns a different value.
-        if (redManIndex == null) {
+        // Cache redManIndex:
+        if (redManIndex == null || !redManRootDir.equals(RunREDUCE.reduceConfiguration.redManRootDir)) {
+            redManRootDir = RunREDUCE.reduceConfiguration.redManRootDir;
             try {
-                redManIndex = Files.readString(
-                        Paths.get(redManRootDir.toString(), "index.html"));
+                redManIndex = Files.readString(redManRootDir.resolve("index.html"));
             } catch (IOException e) {
-                e.printStackTrace(); // FixMe Use an error dialogue.
+                RunREDUCE.errorMessageDialog(
+                        "REDUCE Manual Hyperlink Error",
+                        "Cannot read the index file at\n"
+                                + redManRootDir.resolve("index.html"));
+                return;
+            }
+            String searchText = "<div class=\"tableofcontents\">";
+            int start = redManIndex.indexOf(searchText);
+            if (start != -1) {
+                start += searchText.length();
+                int finish = redManIndex.indexOf("</div>", start);
+                if (finish != -1) redManIndex = redManIndex.substring(start, finish);
             }
         }
-        // Use redManIndex as a jump table:
+        // Use redManIndex as a jump table for
+        String searchText = (String) ((Node) actionEvent.getTarget()).getUserData();
         // Search for (e.g.)
         // <a href="manualse33.html#x44-760007.7" id="QQ2-44-77">CONTINUED_FRACTION Operator</a>
-        String searchText = (String) ((Node) actionEvent.getTarget()).getUserData();
         Pattern pattern = Pattern.compile(
-                String.format(".*<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s</a>.*", searchText));
+                String.format("<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s</a>", searchText));
         Matcher matcher = pattern.matcher(redManIndex);
-        if (matcher.find()) {
-//            System.err.print("User Data: ");
-//            System.err.println(searchText);
-//            System.err.print("Link: ");
-//            System.err.println(matcher.group(1));
-            RunREDUCE.hostServices.showDocument(
-                    new File(redManRootDir, matcher.group(1)).toString());
-        } else System.err.println("Error: Link not found!");
+        if (matcher.find())
+            RunREDUCE.hostServices.showDocument(redManRootDir.resolve(matcher.group(1)).toString());
+        else
+            RunREDUCE.errorMessageDialog(
+                    "REDUCE Manual Hyperlink Error",
+                    "Link not found for\n" + searchText);
     }
 }
