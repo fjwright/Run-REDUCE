@@ -75,6 +75,7 @@
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#webSiteMenuItemAction" text="REDUCE Web Site" />
+                <MenuItem mnemonicParsing="false" onAction="#sourceForgeMenuItemAction" text="SourceForge Project Site" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE-FX" />
             </Menu>

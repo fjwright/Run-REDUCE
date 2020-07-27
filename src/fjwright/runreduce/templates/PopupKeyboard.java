@@ -224,6 +224,7 @@ class PopupKeyboard {
 
         // English button
         englishButton.setRotate(90);
+        englishButton.setPadding(new Insets(4, 0, 4, 0));
         mainGridPane.add(new Group(englishButton), 2, 0);
         englishButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         englishButton.setTooltip(new Tooltip(
@@ -302,6 +303,7 @@ class PopupKeyboard {
 
         // Degrees button
         degreesButton.setRotate(90);
+        degreesButton.setPadding(new Insets(4, 0, 4, 0));
         mainGridPane.add(new Group(degreesButton), 2, 1);
         degreesButton.setPrefWidth(CORNER_BUTTON_WIDTH);
         degreesButton.setTooltip(new Tooltip(

@@ -86,7 +86,10 @@ top-level directory.
   functions listed in section 7.2 Mathematical Functions of the REDUCE
   Manual plus degree versions of all trigonometric functions.
 
-### Updates since last release
+### Version 1.5
 
-* Add REDUCE Manual hyperlinks to all template dialogues.
-* V1.41 Add Help menu item that opens the REDUCE Web Site in the default browser.
+* Add REDUCE Manual hyperlinks to all template and function dialogues.
+* Add Help menu items that open the REDUCE Web Site and SourceForge
+  Project Site in the default browser.
+
+### Updates since last release
