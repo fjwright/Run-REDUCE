@@ -1,21 +1,23 @@
 package fjwright.runreduce;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import org.w3c.dom.html.HTMLDocument;
+import org.w3c.dom.html.HTMLElement;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +31,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Label outputLabel;
     @FXML
-    private ScrollPane outputScrollPane;
-    @FXML
-    TextFlow outputTextFlow; // Accessed in RunREDUCEFrame.java
+    WebView outputWebView; // Accessed in RunREDUCEFrame.java
     @FXML
     private Label inputLabel;
     @FXML
@@ -43,7 +43,10 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Button laterButton;
 
-    private final ObservableList<Node> outputNodeList;
+    WebEngine webEngine;
+    HTMLDocument doc;
+    HTMLElement style, body, pre;
+
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
@@ -75,25 +78,72 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
+        webEngine = outputWebView.getEngine();
+        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
+        webEngine.getLoadWorker().stateProperty().addListener(
+                (ov, oldState, newState) -> {
+                    if (newState == State.SUCCEEDED) {
+                        outputWebViewAvailable();
+                    }
+                });
+
         // Note that a font name containing spaces needs quoting in CSS!
         inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
-
-        outputNodeList = outputTextFlow.getChildren();
-
-        Platform.runLater(() -> {
-            // Auto-run REDUCE if appropriate:
-            if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
-                for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
-                    if (RRPreferences.autoRunVersion.equals(cmd.name)) {
-                        // Run REDUCE.  (A direct call throws an error!)
-                        run(cmd);
-                        break;
-                    }
-            } else
-                // Reset enabled status of controls:
-                reduceStopped();
-        });
     }
+
+    // WebView control ****************************************************************************
+
+    // Evaluate this expression in the debugger to see the current document as HTML:
+    // webEngine.executeScript("document.documentElement.outerHTML");
+    // Ref: https://stackoverflow.com/questions/14273450/get-the-contents-from-the-webview-using-javafx
+
+    /**
+     * This method is run once the outputWebView is available.
+     * Setting up the REDUCEPanel output display can now continue here.
+     */
+    private void outputWebViewAvailable() {
+        // Use document factory methods to create new elements.
+        doc = (HTMLDocument) webEngine.getDocument();
+        style = (HTMLElement) doc.getElementsByTagName("style").item(0);
+        style.appendChild(doc.createTextNode( // MUST be the first child!
+                String.format("body{font-size:%d}", RRPreferences.fontSize)));
+        style.appendChild(doc.createTextNode( // MUST be the second child!
+                String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
+        // Note that a font name containing spaces needs quoting in CSS!
+        style.appendChild(doc.createTextNode(
+                String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
+        body = doc.getBody();
+        pre = (HTMLElement) body.getFirstChild();
+
+        // Auto-run REDUCE if appropriate:
+        if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
+            for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
+                if (RRPreferences.autoRunVersion.equals(cmd.name)) {
+                    // Run REDUCE.  (A direct call throws an error!)
+                    run(cmd);
+                    break;
+                }
+        } else
+            // Reset enabled status of controls:
+            reduceStopped();
+    }
+
+    void clearDisplay() {
+        HTMLElement newPre = (HTMLElement) doc.createElement("pre");
+        body.replaceChild(newPre, pre);
+        pre = newPre;
+    }
+
+    void updateFontSize(int newFontSize) {
+        style.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
+    }
+
+    void setBoldPrompts(boolean enabled) {
+        style.getChildNodes().item(1).setNodeValue(
+                String.format(".prompt{font-weight:%s}", enabled ? "bold" : "normal"));
+    }
+
+    // User input processing **********************************************************************
 
     @FXML
     private void sendButtonClicked(MouseEvent mouseEvent) {
@@ -185,12 +235,22 @@ public class REDUCEPanel extends BorderPane {
         sendStringToREDUCEAndEcho(text);
     }
 
-    public void sendStringToREDUCEAndEcho(String text) {
-        Text t = new Text(text);
-        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + inputColor);
-        outputNodeList.add(t);
+    /**
+     * Scroll the REDUCE output to the bottom.
+     * Must be run in the JavaFX Application Thread
+     */
+    private void scrollOutputToBottom() {
+        webEngine.executeScript("document.getElementsByTagName('body')[0].scrollIntoView(false)");
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    }
+
+    void sendStringToREDUCEAndEcho(String text) {
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setAttribute("style", "color:" + inputColor);
+        span.setTextContent(text);
+        pre.appendChild(span);
         // Make sure the new input text is visible:
-        outputScrollPane.setVvalue(1.0);
+        scrollOutputToBottom();
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -291,12 +351,13 @@ public class REDUCEPanel extends BorderPane {
                 for (; ; ) {
                     if (isCancelled()) break;
                     if (!br.ready()) {
-                        int textLength = text.length();
-                        if (textLength > 0) {
-//                        Platform.runLater(() -> {
-//                            // The TextFlow can only be modified on the JavaFX Application Thread!
-                            processOutput(text.toString(), textLength);
-//                        });
+                        // This type declaration (or similar) is critical for inter-thread communication:
+                        AtomicReference<String> textAtomicReferenceString = new AtomicReference<>(text.toString());
+                        if (text.length() > 0) {
+                            Platform.runLater(() -> {
+                                // The DOM can only be modified on the JavaFX Application Thread!
+                                processOutput(textAtomicReferenceString);
+                            });
                             text.setLength(0); // reset string builder to gather new output
                         } else
                             try {
@@ -328,64 +389,59 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-//    fontFamilyAndSizeStyle ="-fx-font-family:"+RunREDUCE.reduceFontFamilyName
-//                    +";-fx-font-size:"+RRPreferences.fontSize;
-
-    private Text outputText(String text) {
-        Text t = new Text(text);
-        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
-        return t;
+    private void outputText(String text) {
+        pre.appendChild(doc.createTextNode(text));
     }
 
-    private Text outputText(String text, String color) {
-        Text t = new Text(text);
-        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        return t;
+    private void outputText(String text, String color) {
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setAttribute("style", "color:" + color);
+        span.setTextContent(text);
+        pre.appendChild(span);
     }
 
-    private Text promptText(String text, String color) {
-        Text t = new Text(text);
-        if (RRPreferences.boldPromptsState)
-            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-font-weight:bold" + ";-fx-fill:" + color);
-        else
-            t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-        return t;
+    private void promptText(String text, String color) {
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setClassName("prompt");
+        span.setAttribute("style", "color:" + color);
+        span.setTextContent(text);
+        pre.appendChild(span);
     }
 
     private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
 
     /**
-     * Process a batch of output from the REDUCEOutputThread and
-     * pass is back to the JavaFX Application Thread for display.
+     * This method is run in the JavaFX Application Thread to process
+     * a batch of output from the REDUCEOutputThread for display.
      */
-    private void processOutput(String text, int textLength) {
+    private void processOutput(AtomicReference<String> textAtomicReferenceString) {
+        String text = textAtomicReferenceString.get();
         int promptIndex;
         String promptString;
         Matcher promptMatcher;
-        List<Text> textList = new ArrayList<>();
 
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
                 inputColor = DEFAULT_COLOR;
                 promptIndex = text.lastIndexOf("\n") + 1;
-                if (promptIndex < textLength &&
+                if (promptIndex < text.length() &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
-                    textList.add(outputText(text.substring(0, promptIndex)));
-                    textList.add(promptText(promptString, DEFAULT_COLOR));
+                    outputText(text.substring(0, promptIndex));
+                    promptText(promptString, DEFAULT_COLOR);
                 } else
-                    textList.add(outputText(text));
+                    outputText(text);
                 break;
 
             case MODAL: // mode coloured IO display processing
                 // Split off the final line, which should consist of the next input prompt:
                 promptIndex = text.lastIndexOf("\n") + 1;
-                if (promptIndex < textLength &&
+                if (promptIndex < text.length() &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
                     if (0 < promptIndex)
-                        textList.add(outputText(text.substring(0, promptIndex), outputColor));
+                        outputText(text.substring(0, promptIndex), outputColor);
                     // Only colour output *after* initial REDUCE header.
                     if (!questionPrompt) {
                         switch (promptMatcher.group(1)) {
@@ -402,9 +458,9 @@ public class REDUCEPanel extends BorderPane {
                                 break;
                         }
                     }
-                    textList.add(promptText(promptString, promptColor));
+                    promptText(promptString, promptColor);
                 } else
-                    textList.add(outputText(text, outputColor));
+                    outputText(text, outputColor);
                 break; // end of case RunREDUCEPrefs.MODAL
 
             case REDFRONT: // redfront coloured IO display processing
@@ -426,50 +482,46 @@ public class REDUCEPanel extends BorderPane {
                         if (algOutputStartMarker < algOutputEndMarker) {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
                             if (start < algOutputStartMarker)
-                                textList.add(outputText(text.substring(start, algOutputStartMarker)));
-                            textList.add(outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                                outputText(text.substring(start, algOutputStartMarker));
+                            outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
                             outputColor = DEFAULT_COLOR;
                             start = algOutputEndMarker + 1;
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                            textList.add(outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                            outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
                             if (algOutputEndMarker + 1 < algOutputStartMarker)
-                                textList.add(outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker)));
+                                outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker));
                             outputColor = ALGEBRAIC_OUTPUT_COLOR;
                             start = algOutputStartMarker + 1;
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
                         if (start < algOutputStartMarker)
-                            textList.add(outputText(text.substring(start, algOutputStartMarker)));
-                        textList.add(outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_COLOR));
+                            outputText(text.substring(start, algOutputStartMarker));
+                        outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_COLOR);
                         outputColor = ALGEBRAIC_OUTPUT_COLOR;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
-                        textList.add(outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR));
+                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
                         outputColor = DEFAULT_COLOR;
-                        processPromptMarkers(text, algOutputEndMarker + 1, textList);
+                        processPromptMarkers(text, algOutputEndMarker + 1);
                         break;
                     } else {
                         // No algebraic output markers
-                        processPromptMarkers(text, start, textList);
+                        processPromptMarkers(text, start);
                         break;
                     }
                 }
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
-        // This list can only be modified on the JavaFX Application Thread!
-        Platform.runLater(() -> {
-            outputNodeList.addAll(textList);
-            outputScrollPane.setVvalue(1.0);
-        });
+        scrollOutputToBottom();
     }
 
     private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
 
-    private void processPromptMarkers(String text, int start, List<Text> textList) {
+    private void processPromptMarkers(String text, int start) {
         // Delete the very first prompt. (This code may not be reliable!)
         Matcher matcher;
         if (firstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
@@ -481,12 +533,12 @@ public class REDUCEPanel extends BorderPane {
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
             if (start < promptStartMarker)
-                textList.add(outputText(text.substring(start, promptStartMarker), outputColor));
+                outputText(text.substring(start, promptStartMarker), outputColor);
             String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
             questionPrompt = promptString.equals("?");
-            textList.add(promptText(promptString, ALGEBRAIC_INPUT_COLOR));
+            promptText(promptString, ALGEBRAIC_INPUT_COLOR);
         } else
-            textList.add(outputText(text.substring(start), outputColor));
+            outputText(text.substring(start), outputColor);
     }
 
     // Menu processing etc. ***********************************************************************
