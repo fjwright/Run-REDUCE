@@ -83,7 +83,6 @@ public class REDUCEPanel extends BorderPane {
 
         webEngine = outputWebView.getEngine();
         webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
-//        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre><span>This is static spanned text.\n</span></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -239,13 +238,22 @@ public class REDUCEPanel extends BorderPane {
         sendStringToREDUCEAndEcho(text);
     }
 
+    /**
+     * Scroll the REDUCE output to the bottom.
+     * Must be run in the JavaFX Application Thread
+     */
+    private void scrollOutputToBottom() {
+        webEngine.executeScript("document.getElementsByTagName('body')[0].scrollIntoView(false)");
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    }
+
     void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setAttribute("style", "color:" + inputColor);
         span.setTextContent(text);
         pre.appendChild(span);
         // Make sure the new input text is visible:
-//        outputScrollPane.setVvalue(1.0);
+        scrollOutputToBottom();
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -346,7 +354,7 @@ public class REDUCEPanel extends BorderPane {
                 for (; ; ) {
                     if (isCancelled()) break;
                     if (!br.ready()) {
-                        // This type is critical for inter-thread communication:
+                        // This type declaration (or similar) is critical for inter-thread communication:
                         AtomicReference<String> textAtomicReferenceString = new AtomicReference<>(text.toString());
                         if (text.length() > 0) {
                             Platform.runLater(() -> {
@@ -385,18 +393,10 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private void outputText(String text) {
-//        Text t = new Text(text);
-//        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle);
-//        return (HTMLElement) doc.createTextNode(text); // TextImpl cannot be cast to HTMLElement
-        HTMLElement span = (HTMLElement) doc.createElement("span");
-        span.setTextContent(text);
-        pre.appendChild(span);
+        pre.appendChild(doc.createTextNode(text));
     }
 
     private void outputText(String text, String color) {
-//        Text t = new Text(text);
-//        t.setStyle(RunREDUCE.fontFamilyAndSizeStyle + ";-fx-fill:" + color);
-//        return (HTMLElement) doc.createTextNode(text);
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setAttribute("style", "color:" + color);
         span.setTextContent(text);
@@ -414,8 +414,8 @@ public class REDUCEPanel extends BorderPane {
     private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
 
     /**
-     * Process a batch of output from the REDUCEOutputThread and
-     * pass is back to the JavaFX Application Thread for display.
+     * This method is run in the JavaFX Application Thread to process
+     * a batch of output from the REDUCEOutputThread for display.
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
         String text = textAtomicReferenceString.get();
@@ -519,10 +519,7 @@ public class REDUCEPanel extends BorderPane {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
-        // The DOM can only be modified on the JavaFX Application Thread!
-//        Platform.runLater(() -> {
-//            outputScrollPane.setVvalue(1.0);
-//        });
+        scrollOutputToBottom();
     }
 
     private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
