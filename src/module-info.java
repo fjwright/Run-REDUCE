@@ -3,6 +3,8 @@ module Run.REDUCE.FX {
     requires java.prefs;
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.web;
+    requires jdk.xml.dom;
     opens fjwright.runreduce to javafx.fxml;
     opens fjwright.runreduce.templates to javafx.fxml;
     opens fjwright.runreduce.functions to javafx.fxml;

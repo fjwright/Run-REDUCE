@@ -78,6 +78,8 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
+        outputWebView.setContextMenuEnabled(false);
+
         webEngine = outputWebView.getEngine();
         webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
@@ -244,7 +246,7 @@ public class REDUCEPanel extends BorderPane {
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     }
 
-    void sendStringToREDUCEAndEcho(String text) {
+    public void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setAttribute("style", "color:" + inputColor);
         span.setTextContent(text);

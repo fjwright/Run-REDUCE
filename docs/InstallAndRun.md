@@ -1,6 +1,6 @@
 # Run-REDUCE-FX Install and Run Guide
 
-### Francis Wright, June 2020
+### Francis Wright, July 2020
 
 Run-REDUCE-FX is an open-source JavaFX GUI to run the REDUCE Computer
 Algebra System.  REDUCE must be obtained from
@@ -12,10 +12,7 @@ suitable configuration it **should** run on any platform that supports
 JavaFX 11 or later, but I can only test on Windows 10 and 64-bit
 Ubuntu 18.
 
-You need a suitable Java environment.  I now build Run-REDUCE-FX using
-Java 11 and JavaFX 11, so the Java 8 Runtime Environment available
-from [java.com](https://www.java.com/) is no longer sufficient.  You
-need to have a Java Runtime Environment (JRE) and JavaFX libraries
+You need to have a Java Runtime Environment (JRE) and JavaFX libraries
 installed, both version 11 or later; see below for details.
 
 You also need to download the file *Run-REDUCE-FX.jar*.  The easiest
@@ -28,7 +25,7 @@ somewhere convenient, such as your home directory or the directory in
 which you store your REDUCE projects.  You can then run Run-REDUCE-FX
 as an executable file by executing the shell command
 
-    java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml -jar Run-REDUCE-FX.jar
+    java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
 
 in the directory containing the file, where *JavaFXlibrary* represents
 the full pathname of your JavaFX library.
@@ -85,8 +82,8 @@ For 32-bit Windows, scroll down further and use the JavaFX 14 Windows
 x86 SDK distribution.  This is claimed to run with JRE 11, and indeed
 32-bit JRE 11 and 32-bit JavaFX 14 seem to run well together on my
 32-bit Windows computer.  Note also that the latest release of REDUCE
-that fully supports 32-bit Windows in version 5286 released on 1
-March 2020.  Later releases do not install correctly.
+that fully supports 32-bit Windows in version 5286 released on 1 March
+2020; later releases do not install correctly.
 
 ### Using a Package Manager
 

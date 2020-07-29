@@ -1,6 +1,6 @@
 ### [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) :: [Install and Run](InstallAndRun.md) :: [User Guide](UserGuide.html)
 
-### Run-REDUCE-FX now requires Java 11 plus JavaFX 11 &ndash; see the [Install and Run Guide](InstallAndRun.md)
+### Run-REDUCE-FX now requires the javafx.web module &ndash; see the [Install and Run Guide](InstallAndRun.md)
 
 Run-REDUCE-FX is a Graphical User Interface for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
@@ -45,9 +45,10 @@ that it currently provides:
 * A popup keyboard to access symbolic constants, Greek letters and
   elementary functions.
 * Dialogues to access functions using conventional notation.
-* Easy access to the Run-REDUCE-FX User Guide and the standard
-  documentation distributed with REDUCE as HTML or PDF files.
+* Easy access to the Run-REDUCE-FX User Guide, the standard
+  documentation distributed with REDUCE as HTML or PDF files, the
+  REDUCE Web Site and the SourceForge Project Site.
 
-In future I hope to implement typeset-style display of mathematics.
+I hope to implement typeset-style display of mathematics soon.
 
 Francis Wright, July 2020

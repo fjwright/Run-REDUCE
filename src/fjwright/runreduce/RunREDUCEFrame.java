@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -322,6 +321,7 @@ public class RunREDUCEFrame {
             fileChooser.setTitle("Save Session Log...");
             file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         }
+        // FixMe Need to update the code below for WebView!!!
 //        if (file != null) {
 //            try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
 //                RunREDUCE.reducePanel.outputTextFlow.getChildren().forEach(e -> {
@@ -602,7 +602,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.5, July 2020\n" +
+                "Version 1.6, July 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
