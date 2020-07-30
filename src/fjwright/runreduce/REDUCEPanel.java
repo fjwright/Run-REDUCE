@@ -79,7 +79,6 @@ public class REDUCEPanel extends BorderPane {
         }
 
         outputWebView.setContextMenuEnabled(false);
-
         webEngine = outputWebView.getEngine();
         webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
@@ -94,6 +93,15 @@ public class REDUCEPanel extends BorderPane {
     }
 
     // WebView control ****************************************************************************
+
+    /*
+     * Access to Document Model: The WebEngine objects create and manage a Document Object Model (DOM)
+     *     for their Web pages. The model can be accessed and modified using Java DOM Core classes.
+     *     The getDocument() method provides access to the root of the model.
+     *     Additionally DOM Event specification is supported to define event handlers in Java code.
+     * Threading: WebEngine objects must be created and accessed solely from the JavaFX Application thread.
+     *     This rule also applies to any DOM and JavaScript objects obtained from the WebEngine object.
+     */
 
     // Evaluate this expression in the debugger to see the current document as HTML:
     // webEngine.executeScript("document.documentElement.outerHTML");
@@ -226,7 +234,7 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    private void sendInteractiveInputToREDUCE(String text, boolean autoTerminate) {
+    public void sendInteractiveInputToREDUCE(String text, boolean autoTerminate) {
         // Strip trailing white space and if autoTerminate then ensure the input ends with a terminator:
         int i = text.length() - 1;
         char c = 0;
@@ -246,7 +254,7 @@ public class REDUCEPanel extends BorderPane {
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     }
 
-    public void sendStringToREDUCEAndEcho(String text) {
+    void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setAttribute("style", "color:" + inputColor);
         span.setTextContent(text);

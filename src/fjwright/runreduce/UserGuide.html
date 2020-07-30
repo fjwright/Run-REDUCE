@@ -378,9 +378,10 @@
     to which to save the entire contents of the <em>Input/Output
     Display</em> pane. By default, the file chooser shows
     only <code>*.log</code> and <code>*.rlg</code> files, but you can
-    reset it to show only <code>*.txt</code> files or all files. If
-    the specified file already exists then the session log overwrites
-    its previous content.
+    reset it to show only <code>*.txt</code> files or all files. The
+    filename defaults to <code>session.log</code>, but you can change
+    this.  If the specified file already exists then the session log
+    overwrites its previous content.
     </p>
     <h3>Append Session Log...</h3>
     <p>This works the same as the previous menu item except that if
@@ -530,8 +531,7 @@
     <h3>Bold Prompts</h3>
     <p>Selecting this item causes Run-REDUCE-FX to embolden the
     display of all input prompts. (This works independently of any I/O
-    colouring but does not take effect until the <strong>next</strong>
-    input prompt.)
+    colouring.)
     </p>
     <h3>I/O Colouring</h3>
     <p>This sub-menu allows you to select an I/O colouring
@@ -589,13 +589,15 @@
     HTML version of the REDUCE Manual, which open in your default web
     browser.  The dialogues all provide two buttons that apply the
     filled-in template: the <em>Edit</em> button inserts the template
-    into the input editor at the current cursor position;
-    the <em>Evaluate</em> button sends the template directly to REDUCE
-    for evaluation.  These buttons do not close the dialogue, which is
-    non-modal (meaning it does not prevent access to other windows)
-    and can be left open but moved out of the way.  In fact, several
-    template dialogues can be open at the same time.  To close a
-    template dialogue, click on the <em>Close</em> button.
+    output into the input editor at the current cursor position;
+    the <em>Evaluate</em> button sends the template output directly to
+    REDUCE for evaluation, adding a terminator if necessary, just as
+    the <em>Send Input</em> button does.  These buttons do not close
+    the dialogue, which is non-modal (meaning it does not prevent
+    access to other windows) and can be left open but moved out of the
+    way.  In fact, several template dialogues can be open at the same
+    time.  To close a template dialogue, click on the <em>Close</em>
+    button.
     </p>
     <p>If the template represents an operator with a primary operand
     then this defaults to <em>ws</em>, which is convenient for simple

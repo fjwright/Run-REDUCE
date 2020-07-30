@@ -230,7 +230,7 @@ public abstract class Template {
         getTextCheckNonEmpty = true;
         // Send to REDUCE if valid:
         try {
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(processResult() + ";\n");
+            RunREDUCE.reducePanel.sendInteractiveInputToREDUCE(processResult(), true);
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {

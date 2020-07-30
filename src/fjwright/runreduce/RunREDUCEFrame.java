@@ -13,6 +13,9 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import java.awt.Desktop; // only Desktop needed
 import java.io.*;
@@ -313,6 +316,7 @@ public class RunREDUCEFrame {
 
     private void saveLog(boolean append) {
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
+        fileChooser.setInitialFileName("session.log");
         File file;
         if (append) {
             fileChooser.setTitle("Append Session Log...");
@@ -321,20 +325,18 @@ public class RunREDUCEFrame {
             fileChooser.setTitle("Save Session Log...");
             file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         }
-        // FixMe Need to update the code below for WebView!!!
-//        if (file != null) {
-//            try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
-//                RunREDUCE.reducePanel.outputTextFlow.getChildren().forEach(e -> {
-//                    try {
-//                        out.write(((Text) e).getText());
-//                    } catch (IOException ioException) {
-//                        ioException.printStackTrace();
-//                    }
-//                });
-//            } catch (IOException ioe) {
-//                ioe.printStackTrace();
-//            }
-//        }
+        if (file != null) {
+            try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
+                NodeList nodeList = RunREDUCE.reducePanel.pre.getChildNodes();
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    Node node = nodeList.item(i);
+                    if (!(node instanceof Text)) node = node.getFirstChild(); // HTMLSpanElement
+                    out.write(node.getTextContent());
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
     }
 
     // Exit

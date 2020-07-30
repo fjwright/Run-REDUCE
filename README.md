@@ -93,3 +93,8 @@ top-level directory.
   Project Site in the default browser.
 
 ### Updates since last release
+
+* Use WebView to display REDUCE output, and update instructions and batch files
+  for running Run-REDUCE-FX as necessary.
+* Turning bold prompts on and off now works retrospectively.
+* Set the default Session Log filename to `session.log`.
