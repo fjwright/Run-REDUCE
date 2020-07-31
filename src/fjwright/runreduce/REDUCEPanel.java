@@ -63,7 +63,6 @@ public class REDUCEPanel extends BorderPane {
     private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
     private static final String ALGEBRAIC_INPUT_CSS_CLASS = "algebraic-input";
     private static final String SYMBOLIC_INPUT_CSS_CLASS = "symbolic-input";
-    private String promptCSSClass;
     private String inputCSSClass;
     private String outputCSSClass;
 
@@ -86,6 +85,7 @@ public class REDUCEPanel extends BorderPane {
                         outputWebViewAvailable();
                     }
                 });
+        webEngine.setOnError(System.err::println);
 
         // Note that a font name containing spaces needs quoting in CSS!
         inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
@@ -131,7 +131,6 @@ public class REDUCEPanel extends BorderPane {
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
             for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList)
                 if (RRPreferences.autoRunVersion.equals(cmd.name)) {
-                    // Run REDUCE.  (A direct call throws an error!)
                     run(cmd);
                     break;
                 }
@@ -256,14 +255,11 @@ public class REDUCEPanel extends BorderPane {
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     }
 
+    // FixMe Input that causes scrolling may not be displayed until it is redrawn, e.g. by explicit scrolling.
+    // Seems to be caused by scrollOutputToBottom()
     void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         if (inputCSSClass != null) span.setClassName(inputCSSClass);
-        // FixMe Apostrophes can cause symbolic input to be hidden until redrawn, e.g. by scrolling.
-        // This doesn't help since the &apos; is output verbatim!
-        // Ditto trying to use CDATA explicitly.
-        // Not sure what the real problem is!
-//        span.setTextContent(text.replaceAll("'", "&apos;"));
         span.setTextContent(text);
         pre.appendChild(span);
         // Make sure the new input text is visible:
@@ -469,19 +465,17 @@ public class REDUCEPanel extends BorderPane {
                     if (!questionPrompt) {
                         switch (promptMatcher.group(1)) {
                             case "*":
-                                promptCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                                 inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                                 outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
                                 break;
                             case ":":
                             default:
-                                promptCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                                 inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                                 outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                                 break;
                         }
                     }
-                    promptText(promptString, promptCSSClass);
+                    promptText(promptString, inputCSSClass);
                 } else
                     outputText(text, outputCSSClass);
                 break; // end of case RunREDUCEPrefs.MODAL
