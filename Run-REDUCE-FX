@@ -6,4 +6,4 @@
 # Then Run-REDUCE-FX.jar can be run from anywhere by running this batch file.
 # Any command-line arguments are passed on to Run-REDUCE-FX.jar.
 
-java -Djdk.gtk.version=2 --module-path "${PATH_TO_FX//\"/}" --add-modules javafx.controls,javafx.fxml -jar $(dirname $0)/Run-REDUCE-FX.jar $*
+java -Djdk.gtk.version=2 --module-path "${PATH_TO_FX//\"/}" --add-modules javafx.controls,javafx.fxml,javafx.web -jar $(dirname $0)/Run-REDUCE-FX.jar $*

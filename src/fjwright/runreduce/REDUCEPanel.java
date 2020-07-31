@@ -59,14 +59,13 @@ public class REDUCEPanel extends BorderPane {
     private boolean firstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
-    private static final String ALGEBRAIC_OUTPUT_COLOR = "blue";
-    private static final String SYMBOLIC_OUTPUT_COLOR = "#800080";
-    private static final String ALGEBRAIC_INPUT_COLOR = "red";
-    private static final String SYMBOLIC_INPUT_COLOR = "#800000";
-    private static final String DEFAULT_COLOR = "black";
-    private String promptColor = DEFAULT_COLOR;
-    private String inputColor = DEFAULT_COLOR;
-    private String outputColor = DEFAULT_COLOR;
+    private static final String ALGEBRAIC_OUTPUT_CSS_CLASS = "algebraic-output";
+    private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
+    private static final String ALGEBRAIC_INPUT_CSS_CLASS = "algebraic-input";
+    private static final String SYMBOLIC_INPUT_CSS_CLASS = "symbolic-input";
+    private String promptCSSClass;
+    private String inputCSSClass;
+    private String outputCSSClass;
 
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -119,6 +118,9 @@ public class REDUCEPanel extends BorderPane {
                 String.format("body{font-size:%d}", RRPreferences.fontSize)));
         style.appendChild(doc.createTextNode( // MUST be the second child!
                 String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
+        style.appendChild(doc.createTextNode( // MUST be the third child!
+                ".algebraic-output{color:blue}.symbolic-output{color:#800080}" +
+                        ".algebraic-input{color:red}.symbolic-input{color:#800000}"));
         // Note that a font name containing spaces needs quoting in CSS!
         style.appendChild(doc.createTextNode(
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace;}", RunREDUCE.reduceFontFamilyName)));
@@ -256,7 +258,12 @@ public class REDUCEPanel extends BorderPane {
 
     void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
-        span.setAttribute("style", "color:" + inputColor);
+        if (inputCSSClass != null) span.setClassName(inputCSSClass);
+        // FixMe Apostrophes can cause symbolic input to be hidden until redrawn, e.g. by scrolling.
+        // This doesn't help since the &apos; is output verbatim!
+        // Ditto trying to use CDATA explicitly.
+        // Not sure what the real problem is!
+//        span.setTextContent(text.replaceAll("'", "&apos;"));
         span.setTextContent(text);
         pre.appendChild(span);
         // Make sure the new input text is visible:
@@ -294,7 +301,7 @@ public class REDUCEPanel extends BorderPane {
      * Run the specified REDUCE command in this REDUCE panel.
      */
     void run(REDUCECommand reduceCommand) {
-        outputColor = DEFAULT_COLOR; // for initial header
+        outputCSSClass = null; // for initial header
         // Special support for Redfront I/O colouring:
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         firstPrompt = true;
@@ -403,17 +410,23 @@ public class REDUCEPanel extends BorderPane {
         pre.appendChild(doc.createTextNode(text));
     }
 
-    private void outputText(String text, String color) {
+    private void outputText(String text, String cssClass) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
-        span.setAttribute("style", "color:" + color);
+        if (cssClass != null) span.setClassName(cssClass);
         span.setTextContent(text);
         pre.appendChild(span);
     }
 
-    private void promptText(String text, String color) {
+    private void promptText(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setClassName("prompt");
-        span.setAttribute("style", "color:" + color);
+        span.setTextContent(text);
+        pre.appendChild(span);
+    }
+
+    private void promptText(String text, String cssClass) {
+        HTMLElement span = (HTMLElement) doc.createElement("span");
+        span.setClassName((cssClass != null) ? ("prompt " + cssClass) : "prompt");
         span.setTextContent(text);
         pre.appendChild(span);
     }
@@ -433,13 +446,13 @@ public class REDUCEPanel extends BorderPane {
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
-                inputColor = DEFAULT_COLOR;
+                inputCSSClass = null;
                 promptIndex = text.lastIndexOf("\n") + 1;
                 if (promptIndex < text.length() &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
                     outputText(text.substring(0, promptIndex));
-                    promptText(promptString, DEFAULT_COLOR);
+                    promptText(promptString);
                 } else
                     outputText(text);
                 break;
@@ -451,26 +464,26 @@ public class REDUCEPanel extends BorderPane {
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
                     if (0 < promptIndex)
-                        outputText(text.substring(0, promptIndex), outputColor);
+                        outputText(text.substring(0, promptIndex), outputCSSClass);
                     // Only colour output *after* initial REDUCE header.
                     if (!questionPrompt) {
                         switch (promptMatcher.group(1)) {
                             case "*":
-                                promptColor = SYMBOLIC_INPUT_COLOR;
-                                inputColor = SYMBOLIC_INPUT_COLOR;
-                                outputColor = SYMBOLIC_OUTPUT_COLOR;
+                                promptCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
+                                inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
+                                outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
                                 break;
                             case ":":
                             default:
-                                promptColor = ALGEBRAIC_INPUT_COLOR;
-                                inputColor = ALGEBRAIC_INPUT_COLOR;
-                                outputColor = ALGEBRAIC_OUTPUT_COLOR;
+                                promptCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
+                                inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
+                                outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                                 break;
                         }
                     }
-                    promptText(promptString, promptColor);
+                    promptText(promptString, promptCSSClass);
                 } else
-                    outputText(text, outputColor);
+                    outputText(text, outputCSSClass);
                 break; // end of case RunREDUCEPrefs.MODAL
 
             case REDFRONT: // redfront coloured IO display processing
@@ -483,7 +496,7 @@ public class REDUCEPanel extends BorderPane {
                  * but any other output (echoed input or symbolic-mode output) is not coloured.
                  */
                 // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
-                inputColor = ALGEBRAIC_INPUT_COLOR;
+                inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                 int start = 0;
                 for (; ; ) {
                     int algOutputStartMarker = text.indexOf("\u0003", start);
@@ -493,28 +506,28 @@ public class REDUCEPanel extends BorderPane {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
                             if (start < algOutputStartMarker)
                                 outputText(text.substring(start, algOutputStartMarker));
-                            outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
-                            outputColor = DEFAULT_COLOR;
+                            outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                            outputCSSClass = null;
                             start = algOutputEndMarker + 1;
                         } else {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                            outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
+                            outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
                             if (algOutputEndMarker + 1 < algOutputStartMarker)
                                 outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker));
-                            outputColor = ALGEBRAIC_OUTPUT_COLOR;
+                            outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                             start = algOutputStartMarker + 1;
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
                         if (start < algOutputStartMarker)
                             outputText(text.substring(start, algOutputStartMarker));
-                        outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_COLOR);
-                        outputColor = ALGEBRAIC_OUTPUT_COLOR;
+                        outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                        outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                         break;
                     } else if (algOutputEndMarker >= 0) {
                         // TEXT < algOutputEndMarker < TEXT
-                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_COLOR);
-                        outputColor = DEFAULT_COLOR;
+                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                        outputCSSClass = null;
                         processPromptMarkers(text, algOutputEndMarker + 1);
                         break;
                     } else {
@@ -543,12 +556,12 @@ public class REDUCEPanel extends BorderPane {
         int promptEndMarker = text.indexOf("\u0002", start);
         if (promptStartMarker >= 0 && promptEndMarker >= 0) {
             if (start < promptStartMarker)
-                outputText(text.substring(start, promptStartMarker), outputColor);
+                outputText(text.substring(start, promptStartMarker), outputCSSClass);
             String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
             questionPrompt = promptString.equals("?");
-            promptText(promptString, ALGEBRAIC_INPUT_COLOR);
+            promptText(promptString, ALGEBRAIC_INPUT_CSS_CLASS);
         } else
-            outputText(text.substring(start), outputColor);
+            outputText(text.substring(start), outputCSSClass);
     }
 
     // Menu processing etc. ***********************************************************************
