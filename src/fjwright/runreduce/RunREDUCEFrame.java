@@ -424,9 +424,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void boldPromptsCheckBoxAction() {
-        RunREDUCE.reducePanel.setBoldPrompts(
-                RRPreferences.boldPromptsState = boldPromptsCheckBox.isSelected());
-        RRPreferences.save(RRPreferences.BOLDPROMPTS);
+        RRPreferences.save(RRPreferences.BOLDPROMPTS, boldPromptsCheckBox.isSelected());
     }
 
     @FXML

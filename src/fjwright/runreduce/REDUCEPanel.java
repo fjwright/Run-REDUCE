@@ -45,7 +45,7 @@ public class REDUCEPanel extends BorderPane {
 
     WebEngine webEngine;
     HTMLDocument doc;
-    HTMLElement style, body, pre;
+    HTMLElement head, body, pre;
 
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
@@ -82,7 +82,7 @@ public class REDUCEPanel extends BorderPane {
 
         outputWebView.setContextMenuEnabled(false);
         webEngine = outputWebView.getEngine();
-        webEngine.loadContent("<html><head><style type='text/css'></style></head><body><pre></pre></body></html>");
+        webEngine.loadContent("<html><head></head><body><pre></pre></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -117,33 +117,33 @@ public class REDUCEPanel extends BorderPane {
     private void outputWebViewAvailable() {
         // Use document factory methods to create new elements.
         doc = (HTMLDocument) webEngine.getDocument();
+        head = (HTMLElement) doc.getElementsByTagName("head").item(0);
         body = doc.getBody();
         pre = (HTMLElement) body.getFirstChild();
 
         // Create default style elements:
 
         fontFamilyStyle = (HTMLElement) doc.createElement("style");
-        body.appendChild(fontFamilyStyle);
         // Note that a font name containing spaces needs quoting in CSS!
         fontFamilyStyle.appendChild(doc.createTextNode(
                 // Styling body doesn't work...
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace}", RunREDUCE.reduceFontFamilyName)));
+        head.appendChild(fontFamilyStyle);
 
         fontSizeStyle = (HTMLElement) doc.createElement("style");
-        body.appendChild(fontSizeStyle);
         fontSizeStyle.appendChild(doc.createTextNode(
                 String.format("body{font-size:%d}", RRPreferences.fontSize)));
+        head.appendChild(fontSizeStyle);
 
         promptWeightStyle = (HTMLElement) doc.createElement("style");
-        body.appendChild(promptWeightStyle);
-        promptWeightStyle.appendChild(doc.createTextNode(
-                String.format(".prompt{font-weight:%s}", RRPreferences.boldPromptsState ? "bold" : "normal")));
+        promptWeightStyle.appendChild(doc.createTextNode(".prompt{font-weight:bold}"));
+        if (RRPreferences.boldPromptsState) head.appendChild(promptWeightStyle);
 
         colorStyle = (HTMLElement) doc.createElement("style");
-        body.appendChild(colorStyle);
         colorStyle.appendChild(doc.createTextNode(
                 ".algebraic-output{color:blue}.symbolic-output{color:#800080}" +
                         ".algebraic-input{color:red}.symbolic-input{color:#800000}"));
+        if (RRPreferences.colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
@@ -168,8 +168,13 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void setBoldPrompts(boolean enabled) {
-        promptWeightStyle.getFirstChild().setNodeValue(
-                String.format(".prompt{font-weight:%s}", enabled ? "bold" : "normal"));
+        if (enabled) head.appendChild(promptWeightStyle);
+        else head.removeChild(promptWeightStyle);
+    }
+
+    void setColouredIO(boolean enabled) {
+        if (enabled) head.appendChild(colorStyle);
+        else head.removeChild(colorStyle);
     }
 
     // User input processing **********************************************************************

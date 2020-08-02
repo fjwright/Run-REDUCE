@@ -44,25 +44,27 @@ class RRPreferences {
             DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
     static ColouredIO colouredIOState = colouredIOIntent;
 
-    static void save(String key, Object... values) {
+    static void save(String key, Object value) {
         switch (key) {
             case AUTORUNVERSION:
-                prefs.put(AUTORUNVERSION, autoRunVersion = (String) values[0]);
+                prefs.put(AUTORUNVERSION, autoRunVersion = (String) value);
                 break;
             case FONTSIZE:
-                prefs.putInt(FONTSIZE, fontSize = (int) values[0]);
+                prefs.putInt(FONTSIZE, fontSize = (int) value);
                 break;
             case BOLDPROMPTS:
-                prefs.putBoolean(BOLDPROMPTS, boldPromptsState);
+                prefs.putBoolean(BOLDPROMPTS, boldPromptsState = (boolean) value);
+                RunREDUCE.reducePanel.setBoldPrompts(boldPromptsState);
                 break;
             case COLOUREDIO:
-                prefs.put(COLOUREDIO, (colouredIOIntent = (ColouredIO) values[0]).toString());
+                prefs.put(COLOUREDIO, (colouredIOIntent = (ColouredIO) value).toString());
                 // Update colouredIOState immediately unless switching to or from REDFRONT:
                 if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT)
                     colouredIOState = colouredIOIntent;
+                RunREDUCE.reducePanel.setColouredIO(colouredIOIntent != ColouredIO.NONE);
                 break;
             case DISPLAYPANE:
-                prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) values[0]).toString());
+                prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());
                 break;
             default:
                 System.err.println("Attempt to save unexpected preference key: " + key);
