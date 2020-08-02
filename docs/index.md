@@ -51,4 +51,4 @@ that it currently provides:
 
 I hope to implement typeset-style display of mathematics soon.
 
-Francis Wright, July 2020
+Francis Wright, August 2020

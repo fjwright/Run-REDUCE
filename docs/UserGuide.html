@@ -524,34 +524,39 @@
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
-    Editor</em> panes.  (Currently, only <em>subsequent</em> REDUCE
-    output is affected.)  Run-REDUCE-FX remembers the selected size
-    and uses it the next time you start Run-REDUCE-FX.
+    Editor</em> panes.  Run-REDUCE-FX remembers the selected size and
+    uses it the next time you start Run-REDUCE-FX.
     </p>
     <h3>Bold Prompts</h3>
     <p>Selecting this item causes Run-REDUCE-FX to embolden the
-    display of all input prompts. (This works independently of any I/O
-    colouring.)
+    display of all input prompts.
     </p>
     <h3>I/O Colouring</h3>
     <p>This sub-menu allows you to select an I/O colouring
     option: <em>None</em>, <em>Modal</em>
-    or <em>Redfront</em>. <em>Modal</em> colouring depends on REDUCE's
-    current input mode: algebraic-mode prompts and input are red,
-    algebraic-mode output is blue, symbolic-mode prompts and input are
-    brown, symbolic-mode output is purple. <em>Redfront</em> colouring
-    is intended to provide a full emulation of the standard
-    REDUCE <em>redfront</em> facility and it loads
-    the <em>redfront</em> package (silently), which outputs additional
-    markup that is interpreted by Run-REDUCE-FX in the same way that
-    it is normally interpreted by the <em>redfront</em> executable
-    running in a suitable terminal (emulator). With <em>Redfront</em>
-    colouring, all prompts and interactive input are red,
-    algebraic-mode output is blue, and echoed file input and
-    symbolic-mode output are not coloured. Note that
-    turning <em>Redfront</em> colouring on or off does not take effect
-    until REDUCE is (re-)started, and turning <em>Modal</em> colouring
-    on or off does not fully take effect until the next input prompt.
+    or <em>Redfront</em>.  <em>Modal</em> colouring depends on
+    REDUCE's current input mode: algebraic-mode prompts and input are
+    red, algebraic-mode output is blue, symbolic-mode prompts and
+    input are brown, symbolic-mode output is
+    purple.  <em>Redfront</em> colouring is intended to provide a full
+    emulation of the standard REDUCE <em>redfront</em> facility and it
+    loads the <em>redfront</em> package (silently), which outputs
+    additional markup that is interpreted by Run-REDUCE-FX in the same
+    way that it is normally interpreted by the <em>redfront</em>
+    executable running in a suitable terminal (emulator).
+    With <em>Redfront</em> colouring, all prompts and interactive
+    input are red, algebraic-mode output is blue, and echoed file
+    input and symbolic-mode output are not coloured.
+    </p>
+    <p>Note that turning <em>Redfront</em> colouring on does not take
+    effect until REDUCE is (re-)started, and turning <em>Modal</em>
+    colouring on does not fully take effect until the next input
+    prompt.  Turning I/O colouring off (by selecting <em>None</em>)
+    takes effect immediately and turning it back on mid-session turns
+    any previous I/O colouring back on, but any I/O produced while I/O
+    colouring was turned off will not be coloured.  (This is because
+    the required markup is only generated when I/O colouring is turned
+    on, which requires marginally more resources.)
     </p>
     <h3>Single Pane Display</h3>
     <p>Selecting this causes Run-REDUCE-FX to display the selected

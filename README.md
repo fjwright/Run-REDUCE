@@ -2,7 +2,7 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, July 2020
+### Francis Wright, August 2020
 
 Run-REDUCE-FX is a re-implementation of
 [Run-REDUCE](https://fjwright.github.io/Run-REDUCE/) using JavaFX
@@ -98,3 +98,4 @@ top-level directory.
   for running Run-REDUCE-FX as necessary.
 * Turning bold prompts on and off now works retrospectively.
 * Set the default Session Log filename to `session.log`.
+* Turning I/O colouring off now works retrospectively.

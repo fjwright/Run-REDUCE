@@ -1,6 +1,6 @@
 # Run-REDUCE-FX Install and Run Guide
 
-### Francis Wright, July 2020
+### Francis Wright, August 2020
 
 Run-REDUCE-FX is an open-source JavaFX GUI to run the REDUCE Computer
 Algebra System.  REDUCE must be obtained from
