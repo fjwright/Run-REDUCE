@@ -65,7 +65,6 @@ public class REDUCEPanel extends BorderPane {
     private static final String SYMBOLIC_INPUT_CSS_CLASS = "symbolic-input";
     private String inputCSSClass;
     private String outputCSSClass;
-    private HTMLElement fontFamilyStyle;
     private HTMLElement fontSizeStyle;
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
@@ -98,6 +97,8 @@ public class REDUCEPanel extends BorderPane {
     // WebView control ****************************************************************************
 
     /*
+     * WebView uses WebKit, which is also used in Safari and Chrome.
+     *
      * Access to Document Model: The WebEngine objects create and manage a Document Object Model (DOM)
      *     for their Web pages. The model can be accessed and modified using Java DOM Core classes.
      *     The getDocument() method provides access to the root of the model.
@@ -123,7 +124,7 @@ public class REDUCEPanel extends BorderPane {
 
         // Create default style elements:
 
-        fontFamilyStyle = (HTMLElement) doc.createElement("style");
+        HTMLElement fontFamilyStyle = (HTMLElement) doc.createElement("style");
         // Note that a font name containing spaces needs quoting in CSS!
         fontFamilyStyle.appendChild(doc.createTextNode(
                 // Styling body doesn't work...
@@ -271,15 +272,14 @@ public class REDUCEPanel extends BorderPane {
 
     /**
      * Scroll the REDUCE output to the bottom.
-     * Must be run in the JavaFX Application Thread
+     * Must be run in the JavaFX Application Thread.
+     * A sufficient delay seems necessary for the input to be rendered!
+     * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollOutputToBottom() {
-        webEngine.executeScript("document.getElementsByTagName('body')[0].scrollIntoView(false)");
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+        webEngine.executeScript("setTimeout(function(){document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
     }
 
-    // FixMe Input that causes scrolling may not be displayed until it is redrawn, e.g. by explicit scrolling.
-    // Seems to be caused by scrollOutputToBottom()
     void sendStringToREDUCEAndEcho(String text) {
         HTMLElement span = (HTMLElement) doc.createElement("span");
         if (inputCSSClass != null) span.setClassName(inputCSSClass);

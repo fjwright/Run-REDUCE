@@ -10,43 +10,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css"
-      xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="fjwright.runreduce.templates.Limit">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Limit">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Text fontSmoothingType="LCD"
-          text="Only limits of (mostly) continuous functions are supported, not sequences. All fields are required. The variable must be an identifier. &#10;Click the superscript box immediately after the limit point to cycle through the directions, from: right/above, left/below, both sides."
-          textAlignment="CENTER" wrappingWidth="460.0"/>
+    <Text fontSmoothingType="LCD" text="Only limits of (mostly) continuous functions are supported, not sequences. All fields are required. The variable must be an identifier. &#10;Click the superscript box immediately after the limit point to cycle through the directions, from: right/above, left/below, both sides." textAlignment="CENTER" wrappingWidth="460.0" />
     <HBox alignment="CENTER">
-        <Label text="REDUCE Manual: "/>
-        <Hyperlink onAction="#redManHyperlinkOnAction" text="LIMITS Package"
-                   userData="LIMITS: A package for ﬁnding limits">
+        <Label text="REDUCE Manual: " />
+        <Hyperlink onAction="#redManHyperlinkOnAction" text="LIMITS Package" userData="LIMITS: A package for ﬁnding limits">
             <tooltip>
-                <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser."/>
+                <Tooltip text="Click to visit the appropriate section of the REDUCE Manual in your default browser." />
             </tooltip>
         </Hyperlink>
     </HBox>
     <HBox alignment="CENTER" spacing="10.0" styleClass="styled-textfields">
         <VBox alignment="CENTER">
-            <Label styleClass="lim-symbol" text="lim"/>
+            <Label styleClass="lim-symbol" text="lim" />
             <HBox alignment="CENTER" spacing="2.0">
-                <TextField fx:id="varTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped" prefColumnCount="3"
-                           promptText="var" styleClass="limit" text="x"/>
-                <Label styleClass="limit" text="→"/>
-                <TextField fx:id="limPointTextField" alignment="CENTER" prefColumnCount="3" promptText="alg"
-                           styleClass="limit" text="0"/>
-                <Label fx:id="dirLabel" alignment="CENTER" minWidth="12.0" onMouseClicked="#dirMouseClicked"
-                       styleClass="lim-dir"/>
+                <TextField fx:id="varTextField" alignment="CENTER" onKeyTyped="#varCheckKeyTyped" prefColumnCount="3" promptText="var" styleClass="limit" text="x" />
+                <Label styleClass="limit" text="→" />
+                <TextField fx:id="limPointTextField" alignment="CENTER" prefColumnCount="3" promptText="alg" styleClass="limit" text="0" />
+                <Label fx:id="dirLabel" alignment="CENTER" minWidth="15.0" onMouseClicked="#dirMouseClicked" styleClass="lim-dir" />
             </HBox>
         </VBox>
-        <TextField fx:id="exprnTextField" prefColumnCount="15" promptText="algebraic" text="ws"/>
+        <TextField fx:id="exprnTextField" prefColumnCount="15" promptText="algebraic" text="ws" />
     </HBox>
     <HBox alignment="CENTER">
         <CheckBox fx:id="loadSPECFN" mnemonicParsing="false" text="Load SPECFN">
             <tooltip>
-                <Tooltip text="Load the SPECFN package, which may improve some results."/>
+                <Tooltip text="Load the SPECFN package, which may improve some results." />
             </tooltip>
         </CheckBox>
     </HBox>

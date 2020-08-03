@@ -92,10 +92,13 @@ top-level directory.
 * Add Help menu items that open the REDUCE Web Site and SourceForge
   Project Site in the default browser.
 
-### Updates since last release
+### Version 1.6
 
-* Use WebView to display REDUCE output, and update instructions and batch files
-  for running Run-REDUCE-FX as necessary.
-* Turning bold prompts on and off now works retrospectively.
+* Use WebView to display REDUCE output, and update instructions and
+  batch files for running Run-REDUCE-FX accordingly.
 * Set the default Session Log filename to `session.log`.
-* Turning I/O colouring off now works retrospectively.
+* Turning bold prompts on and off now works retrospectively.
+* Turning I/O colouring on and off now works retrospectively (as far
+  as possible).
+
+### Updates since last release
