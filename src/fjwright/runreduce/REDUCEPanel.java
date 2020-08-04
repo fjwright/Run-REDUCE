@@ -43,9 +43,16 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Button laterButton;
 
-    WebEngine webEngine;
-    HTMLDocument doc;
-    HTMLElement head, body, pre;
+    private final WebEngine webEngine;
+    private HTMLDocument doc;
+    private HTMLElement head, inputPre;
+    HTMLElement body;
+
+    /*
+     * The <body> content should look like repeats of this structure:
+     * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+     * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
+     */
 
     private final List<String> inputList = new ArrayList<>();
     private int inputListIndex = 0;
@@ -81,7 +88,32 @@ public class REDUCEPanel extends BorderPane {
 
         outputWebView.setContextMenuEnabled(false);
         webEngine = outputWebView.getEngine();
-        webEngine.loadContent("<html><head></head><body><pre></pre></body></html>");
+
+        webEngine.loadContent("<html><head><style>" +
+                "pre{margin:0}" +
+                "</style></head><body></body></html>");
+        // See https://katex.org/docs/browser.html
+//        webEngine.loadContent("<!DOCTYPE html>" +
+//                // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
+//                "<html>" +
+//                "<head>" +
+//                "<link rel = 'stylesheet' href = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css'" +
+//                "integrity = 'sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X'" +
+//                "crossorigin = 'anonymous'>" +
+//                // The loading of KaTeX is deferred to speed up page rendering.
+//                "<script defer src = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js'" +
+//                "integrity = 'sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4'" +
+//                "crossorigin = 'anonymous'>" +
+//                "</script>" +
+//                // To automatically render math in text elements, include the auto-render extension:
+//                "<script defer src = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js'" +
+//                "integrity = 'sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa'" +
+//                "crossorigin = 'anonymous' onload = 'renderMathInElement(document.body);'>" +
+//                "</script>" +
+//                "</head>" +
+//                "<body></body>" +
+//                "</html>");
+
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -120,7 +152,6 @@ public class REDUCEPanel extends BorderPane {
         doc = (HTMLDocument) webEngine.getDocument();
         head = (HTMLElement) doc.getElementsByTagName("head").item(0);
         body = doc.getBody();
-        pre = (HTMLElement) body.getFirstChild();
 
         // Create default style elements:
 
@@ -159,9 +190,9 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void clearDisplay() {
-        HTMLElement newPre = (HTMLElement) doc.createElement("pre");
-        body.replaceChild(newPre, pre);
-        pre = newPre;
+        HTMLElement newBody = (HTMLElement) doc.createElement("body");
+        doc.getFirstChild().replaceChild(newBody, body); // first child is <html>
+        body = newBody;
     }
 
     void updateFontSize(int newFontSize) {
@@ -280,11 +311,12 @@ public class REDUCEPanel extends BorderPane {
         webEngine.executeScript("setTimeout(function(){document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
     }
 
+    /**
+     * REDUCE prompt + input elements should look like this:
+     * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+     */
     void sendStringToREDUCEAndEcho(String text) {
-        HTMLElement span = (HTMLElement) doc.createElement("span");
-        if (inputCSSClass != null) span.setClassName(inputCSSClass);
-        span.setTextContent(text);
-        pre.appendChild(span);
+        inputPre.appendChild(doc.createTextNode(text));
         // Make sure the new input text is visible:
         scrollOutputToBottom();
         sendStringToREDUCENoEcho(text);
@@ -425,29 +457,40 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    private void outputText(String text) {
-        pre.appendChild(doc.createTextNode(text));
+    private void outputText(String text) { // FixMe TEMPORARY
+        HTMLElement outputPre = (HTMLElement) doc.createElement("pre");
+        body.appendChild(outputPre);
+        outputPre.setTextContent(text);
     }
 
-    private void outputText(String text, String cssClass) {
-        HTMLElement span = (HTMLElement) doc.createElement("span");
-        if (cssClass != null) span.setClassName(cssClass);
-        span.setTextContent(text);
-        pre.appendChild(span);
+    private void outputText(String text, String cssClass) { // FixMe TEMPORARY
+        HTMLElement outputPre = (HTMLElement) doc.createElement("pre");
+        body.appendChild(outputPre);
+        if (cssClass != null) outputPre.setClassName(cssClass);
+        outputPre.setTextContent(text);
     }
 
+    /**
+     * REDUCE prompt + input elements should look like this:
+     * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+     */
     private void promptText(String text) {
+        inputPre = (HTMLElement) doc.createElement("pre");
+        body.appendChild(inputPre);
         HTMLElement span = (HTMLElement) doc.createElement("span");
         span.setClassName("prompt");
         span.setTextContent(text);
-        pre.appendChild(span);
+        inputPre.appendChild(span);
     }
 
     private void promptText(String text, String cssClass) {
+        inputPre = (HTMLElement) doc.createElement("pre");
+        if (cssClass != null) inputPre.setClassName(cssClass);
+        body.appendChild(inputPre);
         HTMLElement span = (HTMLElement) doc.createElement("span");
-        span.setClassName((cssClass != null) ? ("prompt " + cssClass) : "prompt");
+        span.setClassName("prompt");
         span.setTextContent(text);
-        pre.appendChild(span);
+        inputPre.appendChild(span);
     }
 
     private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");

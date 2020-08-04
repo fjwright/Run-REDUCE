@@ -327,11 +327,14 @@ public class RunREDUCEFrame {
         }
         if (file != null) {
             try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
-                NodeList nodeList = RunREDUCE.reducePanel.pre.getChildNodes();
+                /*
+                 * The <body> content should look like repeats of this structure:
+                 * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+                 * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
+                 */
+                NodeList nodeList = RunREDUCE.reducePanel.body.getChildNodes();
                 for (int i = 0; i < nodeList.getLength(); i++) {
-                    Node node = nodeList.item(i);
-                    if (!(node instanceof Text)) node = node.getFirstChild(); // HTMLSpanElement
-                    out.write(node.getTextContent());
+                    out.write(nodeList.item(i).getTextContent());
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
@@ -602,7 +605,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.6, August 2020\n" +
+                "Version 1.61, August 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);

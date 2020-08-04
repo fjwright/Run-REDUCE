@@ -173,3 +173,7 @@ option
 in the *Run-REDUCE-FX* batch file.  This may not be necessary on all
 platforms and will, I hope, cease to be necessary at some future date,
 so you might like to experiment with removing it.
+
+I have been advised that on Kubuntu 18.04.4 it may be necessary to
+install the Gnome 2 theme Adwaita.  You may also find that the About
+and error dialogue boxes are too small by default.
