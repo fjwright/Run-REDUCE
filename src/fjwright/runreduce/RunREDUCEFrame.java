@@ -13,9 +13,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import java.awt.Desktop; // only Desktop needed
 import java.io.*;
@@ -56,6 +54,8 @@ public class RunREDUCEFrame {
     private CheckMenuItem boldPromptsCheckBox;
     @FXML
     private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
+    @FXML
+    private CheckMenuItem typesetIOCheckBox;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
@@ -125,6 +125,8 @@ public class RunREDUCEFrame {
             case REDFRONT:
                 redfrontColouredIORadioButton.setSelected(true);
         }
+
+        typesetIOCheckBox.setSelected(RRPreferences.typesetIOState);
 
         singlePaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SINGLE);
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
@@ -443,6 +445,11 @@ public class RunREDUCEFrame {
     @FXML
     private void redfrontColouredIORadioButtonAction() {
         RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.REDFRONT);
+    }
+
+    @FXML
+    private void typesetIOCheckBoxAction() {
+        RRPreferences.save(RRPreferences.TYPESETIO, typesetIOCheckBox.isSelected());
     }
 
     @FXML

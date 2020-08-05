@@ -42,6 +42,7 @@
                     <RadioMenuItem fx:id="modeColouredIORadioButton" mnemonicParsing="false" onAction="#modeColouredIORadioButtonAction" text="Modal" toggleGroup="$colouredIOButtonGroup" />
                     <RadioMenuItem fx:id="redfrontColouredIORadioButton" mnemonicParsing="false" onAction="#redfrontColouredIORadioButtonAction" text="Redfront" toggleGroup="$colouredIOButtonGroup" />
                 </Menu>
+                <CheckMenuItem fx:id="typesetIOCheckBox" mnemonicParsing="false" onAction="#typesetIOCheckBoxAction" text="Typeset I/O" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false" onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">
                     <toggleGroup>

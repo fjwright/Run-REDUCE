@@ -26,6 +26,7 @@ class RRPreferences {
     static final String BOLDPROMPTS = "boldPrompts";
     static final String COLOUREDIO = "colouredIO";
     static final String DISPLAYPANE = "displayPane";
+    static final String TYPESETIO = "typesetIO";
 
     enum ColouredIO {NONE, MODAL, REDFRONT}
 
@@ -43,6 +44,7 @@ class RRPreferences {
     static DisplayPane displayPane =
             DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
     static ColouredIO colouredIOState = colouredIOIntent;
+    static boolean typesetIOState = prefs.getBoolean(TYPESETIO, false);
 
     static void save(String key, Object value) {
         switch (key) {
@@ -62,6 +64,9 @@ class RRPreferences {
                 if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT)
                     colouredIOState = colouredIOIntent;
                 RunREDUCE.reducePanel.setColouredIO(colouredIOIntent != ColouredIO.NONE);
+                break;
+            case TYPESETIO:
+                prefs.putBoolean(TYPESETIO, typesetIOState = (boolean) value);
                 break;
             case DISPLAYPANE:
                 prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());

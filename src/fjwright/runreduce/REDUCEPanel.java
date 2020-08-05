@@ -89,30 +89,33 @@ public class REDUCEPanel extends BorderPane {
         outputWebView.setContextMenuEnabled(false);
         webEngine = outputWebView.getEngine();
 
-        webEngine.loadContent("<html><head><style>" +
-                "pre{margin:0}" +
-                "</style></head><body></body></html>");
         // See https://katex.org/docs/browser.html
-//        webEngine.loadContent("<!DOCTYPE html>" +
-//                // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
-//                "<html>" +
-//                "<head>" +
-//                "<link rel = 'stylesheet' href = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css'" +
-//                "integrity = 'sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X'" +
-//                "crossorigin = 'anonymous'>" +
-//                // The loading of KaTeX is deferred to speed up page rendering.
-//                "<script defer src = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js'" +
-//                "integrity = 'sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4'" +
-//                "crossorigin = 'anonymous'>" +
-//                "</script>" +
-//                // To automatically render math in text elements, include the auto-render extension:
-//                "<script defer src = 'https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js'" +
-//                "integrity = 'sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa'" +
-//                "crossorigin = 'anonymous' onload = 'renderMathInElement(document.body);'>" +
-//                "</script>" +
-//                "</head>" +
-//                "<body></body>" +
-//                "</html>");
+        // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
+        // JavaFX 11 WebView appears not to support the integrity attribute
+        // and the onload attribute does not work on <script> but works on <body>.
+        webEngine.loadContent("<!DOCTYPE html><html><head>" +
+
+                (RRPreferences.typesetIOState ?
+                        "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css' " +
+//                                "integrity='sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X' " +
+                                "crossorigin='anonymous'>" +
+                                // The loading of KaTeX is deferred to speed up page rendering:
+//                                "<script defer src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js'" +
+                                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js' " +
+//                                "integrity='sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4' " +
+                                "crossorigin='anonymous'>" +
+                                "</script>" +
+                                // To automatically render math in text elements, include the auto-render extension:
+//                                "<script defer src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js'" +
+                                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js' " +
+//                                "integrity='sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa' " +
+                                "crossorigin='anonymous'>" +
+                                "</script>"
+                        : "") +
+
+                "<style>pre{margin:0}</style>" +
+                "</head><body>" +
+                "</body></html>");
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -308,7 +311,12 @@ public class REDUCEPanel extends BorderPane {
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollOutputToBottom() {
-        webEngine.executeScript("setTimeout(function(){document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
+        if (RRPreferences.typesetIOState) {
+            webEngine.executeScript("setTimeout(function(){renderMathInElement(document.body);" +
+                    "document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
+        } else {
+            webEngine.executeScript("setTimeout(function(){document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
+        }
     }
 
     /**
@@ -457,32 +465,26 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
-    private void outputText(String text) { // FixMe TEMPORARY
-        HTMLElement outputPre = (HTMLElement) doc.createElement("pre");
-        body.appendChild(outputPre);
-        outputPre.setTextContent(text);
-    }
-
-    private void outputText(String text, String cssClass) { // FixMe TEMPORARY
-        HTMLElement outputPre = (HTMLElement) doc.createElement("pre");
-        body.appendChild(outputPre);
-        if (cssClass != null) outputPre.setClassName(cssClass);
-        outputPre.setTextContent(text);
+    /**
+     * fmprint delimits algebraic-mode output with DC0/DLE (0x10) before and DC1 (0x11) after.
+     */
+    private void outputText(String text, String cssClass) {
+        HTMLElement outputElement;
+        if (RRPreferences.typesetIOState) {
+            text = text.replace("\u0010", "$$").replace("\u0011", "$$");
+            outputElement = (HTMLElement) doc.createElement("div");
+        } else {
+            outputElement = (HTMLElement) doc.createElement("pre");
+        }
+        outputElement.setTextContent(text);
+        if (cssClass != null) outputElement.setClassName(cssClass);
+        body.appendChild(outputElement);
     }
 
     /**
      * REDUCE prompt + input elements should look like this:
      * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
      */
-    private void promptText(String text) {
-        inputPre = (HTMLElement) doc.createElement("pre");
-        body.appendChild(inputPre);
-        HTMLElement span = (HTMLElement) doc.createElement("span");
-        span.setClassName("prompt");
-        span.setTextContent(text);
-        inputPre.appendChild(span);
-    }
-
     private void promptText(String text, String cssClass) {
         inputPre = (HTMLElement) doc.createElement("pre");
         if (cssClass != null) inputPre.setClassName(cssClass);
@@ -513,10 +515,10 @@ public class REDUCEPanel extends BorderPane {
                 if (promptIndex < text.length() &&
                         (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
                     questionPrompt = promptMatcher.group(1) == null;
-                    outputText(text.substring(0, promptIndex));
-                    promptText(promptString);
+                    outputText(text.substring(0, promptIndex), null);
+                    promptText(promptString, null);
                 } else
-                    outputText(text);
+                    outputText(text, null);
                 break;
 
             case MODAL: // mode coloured IO display processing
@@ -565,7 +567,7 @@ public class REDUCEPanel extends BorderPane {
                         if (algOutputStartMarker < algOutputEndMarker) {
                             // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
                             if (start < algOutputStartMarker)
-                                outputText(text.substring(start, algOutputStartMarker));
+                                outputText(text.substring(start, algOutputStartMarker), null);
                             outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
                             outputCSSClass = null;
                             start = algOutputEndMarker + 1;
@@ -573,14 +575,14 @@ public class REDUCEPanel extends BorderPane {
                             // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
                             outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
                             if (algOutputEndMarker + 1 < algOutputStartMarker)
-                                outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker));
+                                outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
                             outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                             start = algOutputStartMarker + 1;
                         }
                     } else if (algOutputStartMarker >= 0) {
                         // TEXT < algOutputStartMarker < TEXT
                         if (start < algOutputStartMarker)
-                            outputText(text.substring(start, algOutputStartMarker));
+                            outputText(text.substring(start, algOutputStartMarker), null);
                         outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_CSS_CLASS);
                         outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                         break;
