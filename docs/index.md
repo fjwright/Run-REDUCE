@@ -1,6 +1,6 @@
-### [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) :: [Install and Run](InstallAndRun.md) :: [User Guide](UserGuide.html)
+### Key links: [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) | [Install and Run](InstallAndRun.md) | [User Guide](UserGuide.html)
 
-### Run-REDUCE-FX now requires the javafx.web module &ndash; see the [Install and Run Guide](InstallAndRun.md)
+Note that Run-REDUCE-FX now requires the javafx.web module &ndash; see the [Install and Run Guide](InstallAndRun.md).
 
 Run-REDUCE-FX is a Graphical User Interface for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra

@@ -15,15 +15,11 @@ Ubuntu 18.
 You need to have a Java Runtime Environment (JRE) and JavaFX libraries
 installed, both version 11 or later; see below for details.
 
-You also need to download the file *Run-REDUCE-FX.jar*.  The easiest
-way to do this is to click on the download link at the top of the
-[Run-REDUCE-FX web page](https://fjwright.github.io/Run-REDUCE-FX/).
-(Alternatively, you can click on the *release* tab on the [GitHub
-project page](https://github.com/fjwright/Run-REDUCE-FX), then click
-on *Run-REDUCE-FX.jar* under *Assets*.)  Save *Run-REDUCE-FX.jar*
-somewhere convenient, such as your home directory or the directory in
-which you store your REDUCE projects.  You can then run Run-REDUCE-FX
-as an executable file by executing the shell command
+You also need to download the file
+[Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar)
+and save it somewhere convenient, such as your home directory or the
+directory in which you store your REDUCE projects.  You can then run
+Run-REDUCE-FX as an executable file by executing the shell command
 
     java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
 
