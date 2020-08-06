@@ -67,6 +67,7 @@ class RRPreferences {
                 break;
             case TYPESETIO:
                 prefs.putBoolean(TYPESETIO, typesetIOState = (boolean) value);
+                RunREDUCE.reducePanel.setTypesetIO(typesetIOState);
                 break;
             case DISPLAYPANE:
                 prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());

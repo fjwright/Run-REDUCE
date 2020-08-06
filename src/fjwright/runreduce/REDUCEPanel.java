@@ -95,26 +95,25 @@ public class REDUCEPanel extends BorderPane {
         // and the onload attribute does not work on <script> but works on <body>.
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
 
-                (RRPreferences.typesetIOState ?
-                        "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css' " +
-//                                "integrity='sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X' " +
-                                "crossorigin='anonymous'>" +
-                                // The loading of KaTeX is deferred to speed up page rendering:
-//                                "<script defer src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js'" +
-                                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js' " +
-//                                "integrity='sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4' " +
-                                "crossorigin='anonymous'>" +
-                                "</script>" +
-                                // To automatically render math in text elements, include the auto-render extension:
-//                                "<script defer src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js'" +
-                                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js' " +
-//                                "integrity='sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa' " +
-                                "crossorigin='anonymous'>" +
-                                "</script>"
-                        : "") +
+                "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css' " +
+                "crossorigin='anonymous'>" +
+                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js' " +
+                "crossorigin='anonymous'>" +
+                "</script>" +
+                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js' " +
+                "crossorigin='anonymous'>" +
+                "</script>" +
 
                 "<style>pre{margin:0}</style>" +
                 "</head><body>" +
+//                "<style>\n" +
+//                "  .katex-version {display: none;}\n" +
+//                "  .katex-version::after {content:\"0.10.2 or earlier\";}\n" +
+//                "</style>\n" +
+//                "<span class=\"katex\">\n" +
+//                "  <span class=\"katex-mathml\">The KaTeX stylesheet is not loaded!</span>\n" +
+//                "  <span class=\"katex-version rule\">KaTeX stylesheet version: </span>\n" +
+//                "</span>" +
                 "</body></html>");
 
         webEngine.getLoadWorker().stateProperty().addListener(
@@ -190,6 +189,8 @@ public class REDUCEPanel extends BorderPane {
         } else
             // Reset enabled status of controls:
             reduceStopped();
+
+        if (runningREDUCE && RRPreferences.typesetIOState) setTypesetIO(true);
     }
 
     void clearDisplay() {
@@ -210,6 +211,38 @@ public class REDUCEPanel extends BorderPane {
     void setColouredIO(boolean enabled) {
         if (enabled) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
+    }
+
+    private boolean fmprintLoaded;
+
+    /**
+     * Control use of typeset I/O *provided* REDUCE is running.
+     */
+    void setTypesetIO(boolean enabled) {
+        if (enabled) {
+            if (fmprintLoaded) {
+                sendStringToREDUCEAndEcho("on fancy;\n");
+            } else {
+                // Load KaTeX, temporarily from the web:
+//                HTMLElement elem = (HTMLElement) doc.createElement("link");
+//                elem.setAttribute("rel", "stylesheet");
+//                elem.setAttribute("href", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css");
+//                elem.setAttribute("crossorigin", "anonymous");
+//                head.appendChild(elem); // This seems to work
+//                elem = (HTMLElement) doc.createElement("script");
+//                elem.setAttribute("src", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js");
+//                elem.setAttribute("crossorigin", "anonymous");
+//                body.appendChild(elem);
+//                elem = (HTMLElement) doc.createElement("script");
+//                elem.setAttribute("src", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js");
+//                elem.setAttribute("crossorigin", "anonymous");
+//                body.appendChild(elem);
+                sendStringToREDUCENoEcho("load_package fmprint;\n"); // FixMe Need to suppress prompt and fix input numbering
+                fmprintLoaded = true;
+            }
+        } else {
+            sendStringToREDUCEAndEcho("off fancy;\n");
+        }
     }
 
     // User input processing **********************************************************************
@@ -310,23 +343,20 @@ public class REDUCEPanel extends BorderPane {
      * A sufficient delay seems necessary for the input to be rendered!
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
-    private void scrollOutputToBottom() {
-        if (RRPreferences.typesetIOState) {
-            webEngine.executeScript("setTimeout(function(){renderMathInElement(document.body);" +
-                    "document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
-        } else {
-            webEngine.executeScript("setTimeout(function(){document.getElementsByTagName('body')[0].scrollIntoView(false)}, 100);");
-        }
+    private void scrollWebViewToBottom(boolean output) {
+        if (output && RRPreferences.typesetIOState)
+            webEngine.executeScript("renderMathInElement(document.body);");
+        webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)}, 200);");
     }
 
-    /**
+    /*
      * REDUCE prompt + input elements should look like this:
      * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
      */
     void sendStringToREDUCEAndEcho(String text) {
         inputPre.appendChild(doc.createTextNode(text));
         // Make sure the new input text is visible:
-        scrollOutputToBottom();
+        scrollWebViewToBottom(false);
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -481,7 +511,7 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
-    /**
+    /*
      * REDUCE prompt + input elements should look like this:
      * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
      */
@@ -601,7 +631,7 @@ public class REDUCEPanel extends BorderPane {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (RunREDUCEPrefs.colouredIOState)
 
-        scrollOutputToBottom();
+        scrollWebViewToBottom(true);
     }
 
     private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
@@ -638,6 +668,7 @@ public class REDUCEPanel extends BorderPane {
     private boolean shutLastMenuItemDisabled;
     private boolean loadPackagesMenuItemDisabled;
     private boolean stopREDUCEMenuItemDisabled;
+    private boolean typesetIOCheckBoxDisabled;
     private boolean runREDUCESubmenuDisabled;
     private boolean templatesMenuDisabled;
     private boolean functionsMenuDisabled;
@@ -667,6 +698,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        FRAME.typesetIOCheckBox.setDisable(typesetIOCheckBoxDisabled = !starting);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled = !starting);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled = !starting);
         // Items to disable/enable when REDUCE starts/stops running:
@@ -691,6 +723,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        FRAME.typesetIOCheckBox.setDisable(typesetIOCheckBoxDisabled);
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled);

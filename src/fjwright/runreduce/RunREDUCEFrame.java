@@ -55,7 +55,7 @@ public class RunREDUCEFrame {
     @FXML
     private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
     @FXML
-    private CheckMenuItem typesetIOCheckBox;
+    CheckMenuItem typesetIOCheckBox;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
