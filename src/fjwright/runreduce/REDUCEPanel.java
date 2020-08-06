@@ -91,19 +91,10 @@ public class REDUCEPanel extends BorderPane {
 
         // See https://katex.org/docs/browser.html
         // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
-        // JavaFX 11 WebView appears not to support the integrity attribute
-        // and the onload attribute does not work on <script> but works on <body>.
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
-
-                "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css' " +
-                "crossorigin='anonymous'>" +
-                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js' " +
-                "crossorigin='anonymous'>" +
-                "</script>" +
-                "<script src='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js' " +
-                "crossorigin='anonymous'>" +
-                "</script>" +
-
+                "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
+                "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
+                "<script src='" + REDUCEPanel.class.getResource("katex/auto-render.min.js") + "'></script>" +
                 "<style>pre{margin:0}</style>" +
                 "</head><body>" +
 //                "<style>\n" +
