@@ -63,7 +63,7 @@ public class REDUCEPanel extends BorderPane {
     boolean runningREDUCE;
     String title; // REDUCE version if REDUCE is running
     private static final String outputLabelDefault = "Input/Output Display";
-    private boolean firstPrompt, questionPrompt;
+    private boolean beforeFirstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
     private static final String ALGEBRAIC_OUTPUT_CSS_CLASS = "algebraic-output";
@@ -393,7 +393,7 @@ public class REDUCEPanel extends BorderPane {
         outputCSSClass = null; // for initial header
         // Special support for Redfront I/O colouring:
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
-        firstPrompt = true;
+        beforeFirstPrompt = true;
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -496,9 +496,19 @@ public class REDUCEPanel extends BorderPane {
     }
 
     /**
-     * fmprint delimits algebraic-mode output with DC0/DLE (0x10) before and DC1 (0x11) after.
+     * Output header text that is always preformatted and plain.
+     */
+    private void outputHeaderText(String text) {
+        HTMLElement outputElement = (HTMLElement) doc.createElement("pre");
+        outputElement.setTextContent(text);
+        body.appendChild(outputElement);
+    }
+
+    /**
+     * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
+        // fmprint delimits algebraic-mode output with DC0/DLE (0x10) before and DC1 (0x11) after.
         HTMLElement outputElement;
         if (RRPreferences.typesetIOState) {
             text = text.replace("\u0010", "$$").replace("\u0011", "$$");
@@ -511,11 +521,12 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
-    /*
-     * REDUCE prompt + input elements should look like this:
-     * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+    /**
+     * Append prompt text to the WebView control with the specified CSS class.
      */
     private void promptText(String text, String cssClass) {
+        // REDUCE prompt + input elements should look like this:
+        // <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
         inputPre = (HTMLElement) doc.createElement("pre");
         if (cssClass != null) inputPre.setClassName(cssClass);
         body.appendChild(inputPre);
@@ -533,18 +544,38 @@ public class REDUCEPanel extends BorderPane {
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
         String text = textAtomicReferenceString.get();
-        int promptIndex;
-        String promptString;
-        Matcher promptMatcher;
+        int promptIndex; // possible start index of a prompt
+        String promptString = null;
+        Matcher promptMatcher = null;
+        boolean promptFound = false;
+        // If text ends with a prompt then promptMatcher.matches() is true.
+        // Set promptString and set questionPrompt to true/false to indicate a question prompt.
+        // Split off the final line, which should consist of the next input prompt:
+        promptIndex = text.lastIndexOf("\n") + 1;
+        if (promptIndex < text.length() &&
+                (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
+            promptFound = true;
+            questionPrompt = promptMatcher.group(1) == null;
+        }
+        if (beforeFirstPrompt) {
+            // Do things relating to the first prompt here...
+            if (promptFound) {
+                // Text ends with the first prompt...
+//                outputHeaderText(text.substring(0, promptIndex));
+//                promptText(promptString, null);
+                beforeFirstPrompt = false;
+            } else {
+                // Before the first prompt...
+                outputHeaderText(text);
+                return;
+            }
+        }
 
         switch (RRPreferences.colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
                 inputCSSClass = null;
-                promptIndex = text.lastIndexOf("\n") + 1;
-                if (promptIndex < text.length() &&
-                        (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
-                    questionPrompt = promptMatcher.group(1) == null;
+                if (promptFound) {
                     outputText(text.substring(0, promptIndex), null);
                     promptText(promptString, null);
                 } else
@@ -552,26 +583,20 @@ public class REDUCEPanel extends BorderPane {
                 break;
 
             case MODAL: // mode coloured IO display processing
-                // Split off the final line, which should consist of the next input prompt:
-                promptIndex = text.lastIndexOf("\n") + 1;
-                if (promptIndex < text.length() &&
-                        (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
-                    questionPrompt = promptMatcher.group(1) == null;
+                if (promptFound) {
                     if (0 < promptIndex)
                         outputText(text.substring(0, promptIndex), outputCSSClass);
                     // Only colour output *after* initial REDUCE header.
-                    if (!questionPrompt) {
-                        switch (promptMatcher.group(1)) {
-                            case "*":
-                                inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
-                                outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
-                                break;
-                            case ":":
-                            default:
-                                inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
-                                outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                                break;
-                        }
+                    if (!questionPrompt) switch (promptMatcher.group(1)) {
+                        case "*":
+                            inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
+                            outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
+                            break;
+                        case ":":
+                        default:
+                            inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
+                            outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
+                            break;
                     }
                     promptText(promptString, inputCSSClass);
                 } else
@@ -639,8 +664,8 @@ public class REDUCEPanel extends BorderPane {
     private void processPromptMarkers(String text, int start) {
         // Delete the very first prompt. (This code may not be reliable!)
         Matcher matcher;
-        if (firstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
-            firstPrompt = false;
+        if (beforeFirstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
+            beforeFirstPrompt = false;
             text = matcher.replaceFirst("");
         }
         // Look for prompt markers:
