@@ -45,7 +45,7 @@ public class REDUCEPanel extends BorderPane {
 
     private final WebEngine webEngine;
     private HTMLDocument doc;
-    private HTMLElement head, inputPre;
+    private HTMLElement html, head, inputPre;
     HTMLElement body;
 
     /*
@@ -143,7 +143,8 @@ public class REDUCEPanel extends BorderPane {
     private void outputWebViewAvailable() {
         // Use document factory methods to create new elements.
         doc = (HTMLDocument) webEngine.getDocument();
-        head = (HTMLElement) doc.getElementsByTagName("head").item(0);
+        html = (HTMLElement) doc.getDocumentElement();
+        head = (HTMLElement) html.getElementsByTagName("head").item(0);
         body = doc.getBody();
 
         // Create default style elements:
@@ -186,7 +187,7 @@ public class REDUCEPanel extends BorderPane {
 
     void clearDisplay() {
         HTMLElement newBody = (HTMLElement) doc.createElement("body");
-        doc.getFirstChild().replaceChild(newBody, body); // first child is <html>
+        html.replaceChild(newBody, body);
         body = newBody;
     }
 
