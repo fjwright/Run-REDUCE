@@ -3,157 +3,179 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.REDUCEConfigDialog">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/11.0.1"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.REDUCEConfigDialog">
     <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
     </rowConstraints>
     <columnConstraints>
-        <ColumnConstraints />
-        <ColumnConstraints />
+        <ColumnConstraints/>
+        <ColumnConstraints/>
     </columnConstraints>
 
-    <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults" GridPane.halignment="CENTER">
+    <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults"
+            GridPane.halignment="CENTER">
         <tooltip>
-            <Tooltip text="Reset all directory and command information to its default values. &#10;This will also delete information about any non-default commands." />
+            <Tooltip
+                    text="Reset all directory and command information to its default values. &#10;This will also delete information about any non-default commands."/>
         </tooltip>
     </Button>
 
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="350.0" />
-            <ColumnConstraints prefWidth="24.0" />
+            <ColumnConstraints minWidth="-Infinity" prefWidth="170.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="350.0"/>
+            <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
         </rowConstraints>
         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:" GridPane.columnSpan="2147483647" />
-        <Label text="REDUCE Root Directory" GridPane.rowIndex="1" />
+        <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:"
+               GridPane.columnSpan="2147483647"/>
+        <Label text="REDUCE Root Directory" GridPane.rowIndex="1"/>
         <TextField fx:id="reduceRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="As an optional convenience, specify a root directory path &#10;that provides a default for all command root directories." />
+                <Tooltip
+                        text="As an optional convenience, specify a root directory path&#10;that provides a default for all command root directories."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#reduceRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="1" />
-        <Label text="Packages Root Directory" GridPane.rowIndex="2" />
+        <Button mnemonicParsing="false" onAction="#reduceRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="1"/>
+        <Label text="Packages Root Directory" GridPane.rowIndex="2"/>
         <TextField fx:id="packagesRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="A directory containing a standard REDUCE packages directory." />
+                <Tooltip text="A directory *containing* a standard REDUCE 'packages' directory."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <Label text="Documentation Root Dir" GridPane.rowIndex="3" />
+        <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="2"/>
+        <Label text="Documentation Root Dir" GridPane.rowIndex="3"/>
         <TextField fx:id="docRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="The common root directory for all the distributed REDUCE documentation." />
+                <Tooltip text="The common root directory for all the distributed REDUCE documentation."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#docRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="3" />
+        <Button mnemonicParsing="false" onAction="#docRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="3"/>
     </GridPane>
 
     <GridPane alignment="CENTER" vgap="10.0" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints />
+            <ColumnConstraints/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
         </rowConstraints>
         <padding>
-            <Insets bottom="10.0" top="10.0" />
+            <Insets bottom="10.0" top="10.0"/>
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER" />
-        <ListView fx:id="listView" editable="true" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-        <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+        <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER"/>
+        <ListView fx:id="listView" editable="true" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
+                  GridPane.rowIndex="1"/>
+        <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command"
+                GridPane.halignment="CENTER" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="Delete the configuration for the selected REDUCE command." />
+                <Tooltip text="Delete the configuration for the selected REDUCE command."/>
             </tooltip>
         </Button>
-        <Button mnemonicParsing="false" onAction="#duplicateCommandButtonAction" text="Duplicate Selected Command" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+        <Button mnemonicParsing="false" onAction="#duplicateCommandButtonAction" text="Duplicate Selected Command"
+                GridPane.halignment="CENTER" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="Duplicate below it in the list the configuration for the selected REDUCE command." />
+                <Tooltip text="Duplicate below it in the list the configuration for the selected REDUCE command."/>
             </tooltip>
         </Button>
-        <Button mnemonicParsing="false" onAction="#addCommandButtonAction" text="Add New Command" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+        <Button mnemonicParsing="false" onAction="#addCommandButtonAction" text="Add New Command"
+                GridPane.halignment="CENTER" GridPane.rowIndex="4">
             <tooltip>
-                <Tooltip text="Add at the bottom of the list an empty configuration for a new REDUCE command." />
+                <Tooltip text="Add at the bottom of the list an empty configuration for a new REDUCE command."/>
             </tooltip>
         </Button>
     </GridPane>
 
-    <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+    <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0"
+              GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity" prefWidth="170.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="350.0" />
-            <ColumnConstraints prefWidth="24.0" />
+            <ColumnConstraints minWidth="-Infinity" prefWidth="170.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="350.0"/>
+            <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
         </rowConstraints>
         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
-        <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:" GridPane.columnSpan="2147483647" />
-        <Label text="Command Name" GridPane.rowIndex="1" />
-        <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:"
+               GridPane.columnSpan="2147483647"/>
+        <Label text="Command Label" GridPane.rowIndex="1"/>
+        <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="An arbitrary name used to identify this REDUCE command." />
+                <Tooltip text="An arbitrary label used to identify this REDUCE command."/>
             </tooltip>
         </TextField>
-        <Label text="Command Root Directory" GridPane.rowIndex="2" />
+        <Label text="Command Root Directory" GridPane.rowIndex="2"/>
         <TextField fx:id="commandRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="As an optional convenience, specify a root directory path to be &#10;referenced as $REDUCE in the command path name and arguments below." />
+                <Tooltip
+                        text="As an optional convenience, specify a root directory path to be&#10;referenced as $REDUCE in the command path name and arguments below."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#commandRootDirDCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <Label text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'." wrapText="true" GridPane.columnSpan="3" GridPane.rowIndex="3" />
-        <Label text="Command Path Name" GridPane.rowIndex="4" />
-        <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Button mnemonicParsing="false" onAction="#commandRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="2"/>
+        <Text text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'."
+              wrappingWidth="550.0" GridPane.columnSpan="3" GridPane.rowIndex="3"/>
+        <Label text="Command Pathname" GridPane.rowIndex="4"/>
+        <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1"
+                   GridPane.rowIndex="4">
             <tooltip>
-                <Tooltip text="The filename part of the command to run REDUCE, which can optionally begin with $REDUCE." />
+                <Tooltip
+                        text="The filename part of the *binary* command (not shell script)&#10;to run REDUCE, which can optionally begin with $REDUCE."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#commandPathNameFCButtonAction" text="..." GridPane.columnIndex="2" GridPane.rowIndex="4" />
-        <Label text="Command Argument 1" GridPane.rowIndex="5" />
-        <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-        <Label text="Command Argument 2" GridPane.rowIndex="6" />
-        <TextField fx:id="arg2TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-        <Label text="Command Argument 3" GridPane.rowIndex="7" />
-        <TextField fx:id="arg3TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-        <Label text="Command Argument 4" GridPane.rowIndex="8" />
-        <TextField fx:id="arg4TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-        <Label text="Command Argument 5" GridPane.rowIndex="9" />
-        <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+        <Button mnemonicParsing="false" onAction="#commandPathNameFCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="4"/>
+        <Label text="Command Argument 1" GridPane.rowIndex="5"/>
+        <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <Label text="Command Argument 2" GridPane.rowIndex="6"/>
+        <TextField fx:id="arg2TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        <Label text="Command Argument 3" GridPane.rowIndex="7"/>
+        <TextField fx:id="arg3TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="Command Argument 4" GridPane.rowIndex="8"/>
+        <TextField fx:id="arg4TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        <Label text="Command Argument 5" GridPane.rowIndex="9"/>
+        <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
     </GridPane>
 
     <HBox alignment="CENTER_RIGHT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-        <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save" />
-        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel" />
+        <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save"/>
+        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
     </HBox>
 
     <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
 </GridPane>

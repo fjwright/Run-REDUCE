@@ -8,9 +8,10 @@ Algebra System.  REDUCE must be obtained from
 installed separately.  Run-REDUCE-FX should find a standard REDUCE
 installation automatically and not **require** any initial
 configuration, at least on Microsoft Windows and Ubuntu.  With
-suitable configuration it **should** run on any platform that supports
-JavaFX 11 or later, but I can only test on Windows 10 and 64-bit
-Ubuntu 18.
+[suitable
+configuration](https://fjwright.github.io/Run-REDUCE-FX/UserGuide.html#Configure)
+it **should** run on any platform that supports JavaFX 11 or later,
+but I can only test on Windows 10 and 64-bit Ubuntu 18.
 
 You need to have a Java Runtime Environment (JRE) and JavaFX libraries
 installed, both version 11 or later; see below for details.
