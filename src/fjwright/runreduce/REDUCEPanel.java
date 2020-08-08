@@ -45,7 +45,7 @@ public class REDUCEPanel extends BorderPane {
 
     private final WebEngine webEngine;
     private HTMLDocument doc;
-    private HTMLElement html, head, inputPre;
+    private HTMLElement html, head, inputPre, mathOutputElement;
     HTMLElement body;
 
     /*
@@ -500,17 +500,52 @@ public class REDUCEPanel extends BorderPane {
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        // fmprint delimits algebraic-mode output with DC0/DLE (0x10) before and DC1 (0x11) after.
-        HTMLElement outputElement;
-        if (RRPreferences.typesetIOState) {
-            text = text.replace("\u0010", "$$").replace("\u0011", "$$");
-            outputElement = (HTMLElement) doc.createElement("div");
-        } else {
-            outputElement = (HTMLElement) doc.createElement("pre");
-        }
+        if (RRPreferences.typesetIOState) outputTypesetText(text, cssClass);
+        else outputPlainText(text, cssClass);
+    }
+
+    private void outputPlainText(String text, String cssClass) {
+        HTMLElement outputElement = (HTMLElement) doc.createElement("pre");
         outputElement.setTextContent(text);
         if (cssClass != null) outputElement.setClassName(cssClass);
         body.appendChild(outputElement);
+    }
+
+    private boolean inMathOutput = false;
+
+    private void outputTypesetText(String text, String cssClass) {
+        // fmprint delimits LaTeX output with ^P (0x10) before and ^Q (0x11) after
+        // (always at the start/finish of a the end).
+        int start = 0, finish;
+        while (start < text.length())
+            if (inMathOutput) { // in maths; look for end of maths, ^Q:
+                if ((finish = text.indexOf('\u0011', start)) != -1) { // ^Q found
+                    // Finish current maths element:
+                    mathOutputElement.appendChild(doc.createTextNode(text.substring(start, finish) + "$$"));
+                    mathOutputElement.normalize();
+                    if (cssClass != null) mathOutputElement.setClassName(cssClass);
+                    body.appendChild(mathOutputElement);
+                    start = finish + 1; // skip ^Q
+                    inMathOutput = false;
+                } else { // ^Q not found so all maths
+                    mathOutputElement.appendChild(doc.createTextNode(text));
+                    return;
+                }
+            } else { // Not in maths so create a non-maths element:
+                // Look for start of maths, ^P:
+                if ((finish = text.indexOf('\u0010', start)) != -1) { // ^P found
+                    // Output current non-maths element:
+                    if (start < finish) outputPlainText(text.substring(start, finish), cssClass);
+                    start = finish + 1; // skip ^P
+                    // Start new maths element:
+                    mathOutputElement = (HTMLElement) doc.createElement("div");
+                    mathOutputElement.setTextContent("$$");
+                    inMathOutput = true;
+                } else { // ^P not found so all non-maths:
+                    outputPlainText(text.substring(start), cssClass);
+                    return;
+                }
+            }
     }
 
     /**

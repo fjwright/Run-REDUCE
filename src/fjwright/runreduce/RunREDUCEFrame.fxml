@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="frame" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.RunREDUCEFrame">
+<BorderPane fx:id="frame" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.RunREDUCEFrame">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
@@ -42,7 +42,7 @@
                     <RadioMenuItem fx:id="modeColouredIORadioButton" mnemonicParsing="false" onAction="#modeColouredIORadioButtonAction" text="Modal" toggleGroup="$colouredIOButtonGroup" />
                     <RadioMenuItem fx:id="redfrontColouredIORadioButton" mnemonicParsing="false" onAction="#redfrontColouredIORadioButtonAction" text="Redfront" toggleGroup="$colouredIOButtonGroup" />
                 </Menu>
-                <CheckMenuItem fx:id="typesetIOCheckBox" disable="true" mnemonicParsing="false" onAction="#typesetIOCheckBoxAction" text="Typeset I/O" />
+                <CheckMenuItem fx:id="typesetIOCheckBox" disable="true" mnemonicParsing="false" onAction="#typesetIOCheckBoxAction" text="Typeset I/O" visible="false" />
                 <SeparatorMenuItem mnemonicParsing="false" />
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false" onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">
                     <toggleGroup>

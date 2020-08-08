@@ -102,3 +102,8 @@ top-level directory.
   as possible).
 
 ### Updates since last release
+
+* V1.61. Add experimental Typeset I/O option to the View menu to use fmprint and KaTeX.
+* Update the documentation to try to make it easier to access the latest jar
+  and configure REDUCE.
+* Hide the Typeset I/O option, which is not yet usable.
