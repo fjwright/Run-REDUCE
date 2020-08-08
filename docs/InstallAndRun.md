@@ -18,24 +18,26 @@ installed, both version 11 or later; see below for details.
 
 You also need to download the file
 [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar)
-and save it somewhere convenient, such as your home directory or the
-directory in which you store your REDUCE projects.  You can then run
-Run-REDUCE-FX as an executable file by executing the shell command
+(by clicking on the link) and save it somewhere convenient, such as
+your home directory or the directory in which you store your REDUCE
+projects.  You can then run Run-REDUCE-FX as an executable file by
+executing the shell command
 
     java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
 
 in the directory containing the file, where *JavaFXlibrary* represents
 the full pathname of your JavaFX library.
 
-Because this is a little tedious, I provide two batch files on the
-[GitHub project page](https://github.com/fjwright/Run-REDUCE-FX) that
-make it easier to run Run-REDUCE-FX.  The file *Run-REDUCE-FX.bat* is
-for use on Microsoft Windows and the file *Run-REDUCE-FX* (no
-extension) is for use on non-Windows platforms that provide the *bash*
-shell (although I have only tested it on Ubuntu).  If you want to use
-one of these batch files, download it to the same directory to which
-you downloaded *Run-REDUCE-FX.jar*.  Then you can run Run-REDUCE-FX by
-executing the simpler shell command
+Because this is a little tedious, I provide two batch files that make
+it easier to run Run-REDUCE-FX.  The file
+[Run-REDUCE-FX.bat](https://github.com/fjwright/Run-REDUCE-FX/releases/download/v1.6/Run-REDUCE-FX.bat)
+is for use on Microsoft Windows and the file
+[Run-REDUCE-FX](https://github.com/fjwright/Run-REDUCE-FX/releases/download/v1.6/Run-REDUCE-FX)
+(no extension) is for use on non-Windows platforms that provide the
+*bash* shell (although I have only tested it on Ubuntu).  If you want
+to use one of these batch files, download it (by clicking on the link)
+to the same directory to which you downloaded *Run-REDUCE-FX.jar*.
+Then you can run Run-REDUCE-FX by executing the simpler shell command
 
     Run-REDUCE-FX
 
