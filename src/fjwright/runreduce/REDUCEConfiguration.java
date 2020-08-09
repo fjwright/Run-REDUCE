@@ -13,6 +13,8 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.System.getProperty;
+
 class RRPreferences {
     static final Preferences prefs = Preferences.userRoot().node("/fjwright/runreduce");  // cf. package name
     // On Microsoft Windows the preferences for this application are stored in the registry under the key
@@ -137,9 +139,9 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
  */
 abstract class REDUCEConfigurationType {
     public static final boolean windowsOS = System.getProperty("os.name").startsWith("Windows");
-    String reduceRootDir;
-    String packagesDir;
+    String reduceRootDir, packagesDir;
     public String manualDir, primersDir;
+    String initialIODir;
     REDUCECommandList reduceCommandList;
 }
 
@@ -186,6 +188,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
                     "$REDUCE/pslbuild/psl/bpsl",
                     "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
         }
+        initialIODir = getProperty("user.home");
     }
 
     /**
@@ -212,6 +215,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     static final String PACKAGES_DIR = "packagesDir";
     static final String MANUAL_DIR = "manualDir";
     static final String PRIMERS_DIR = "primersDir";
+    static final String INITIAL_IO_DIR = "initialIODir";
     static final String REDUCE_VERSIONS = "reduceVersions";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
@@ -227,6 +231,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         packagesDir = prefs.get(PACKAGES_DIR, RunREDUCE.reduceConfigurationDefault.packagesDir);
         manualDir = prefs.get(MANUAL_DIR, RunREDUCE.reduceConfigurationDefault.manualDir);
         primersDir = prefs.get(PRIMERS_DIR, RunREDUCE.reduceConfigurationDefault.primersDir);
+        initialIODir = prefs.get(INITIAL_IO_DIR, RunREDUCE.reduceConfigurationDefault.initialIODir);
         reduceCommandList = new REDUCECommandList();
 
         try {
@@ -274,6 +279,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         prefs.put(PACKAGES_DIR, packagesDir);
         prefs.put(MANUAL_DIR, manualDir);
         prefs.put(PRIMERS_DIR, primersDir);
+        prefs.put(INITIAL_IO_DIR, initialIODir);
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
         try {
             prefs.node(REDUCE_VERSIONS).removeNode();

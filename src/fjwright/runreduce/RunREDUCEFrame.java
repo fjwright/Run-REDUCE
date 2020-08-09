@@ -97,7 +97,8 @@ public class RunREDUCEFrame {
          * ********* */
 
         // Default initial directory on Windows 10 is "This PC", so...
-        fileChooser.setInitialDirectory(USER_HOME_DIR);
+//        fileChooser.setInitialDirectory(USER_HOME_DIR);
+        fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.initialIODir));
 
         /* *********** *
          * REDUCE menu *

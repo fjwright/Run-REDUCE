@@ -47,6 +47,7 @@ public class REDUCEConfigDialog {
         packagesDirTextField.setText(reduceConfiguration.packagesDir);
         manualDirTextField.setText(reduceConfiguration.manualDir);
         primersDirTextField.setText(reduceConfiguration.primersDir);
+        initialIODirTextField.setText(reduceConfiguration.initialIODir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
         showREDUCECommand(reduceCommandList.get(0));
         setListViewItems();
@@ -131,7 +132,8 @@ public class REDUCEConfigDialog {
                 reduceRootDirTextField.getText(),
                 packagesDirTextField.getText(),
                 manualDirTextField.getText(),
-                primersDirTextField.getText()};
+                primersDirTextField.getText(),
+                initialIODirTextField.getText()};
         for (String dir : dirs)
             if (!new File(dir).canRead()) {
                 RunREDUCE.errorMessageDialog("Invalid Directory",
@@ -142,6 +144,7 @@ public class REDUCEConfigDialog {
         RunREDUCE.reduceConfiguration.packagesDir = dirs[1];
         RunREDUCE.reduceConfiguration.manualDir = dirs[2];
         RunREDUCE.reduceConfiguration.primersDir = dirs[3];
+        RunREDUCE.reduceConfiguration.initialIODir = dirs[4];
         saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
         RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
         RunREDUCE.reduceConfiguration.save();
@@ -243,7 +246,9 @@ public class REDUCEConfigDialog {
 
     @FXML
     private void defaultIODirDCButtonAction() {
-
+        dcButtonAction("Initial I/O Directory",
+                RunREDUCE.reduceConfigurationDefault.initialIODir,
+                initialIODirTextField);
     }
 
     @FXML
