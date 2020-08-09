@@ -28,10 +28,12 @@
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
             <ColumnConstraints minWidth="-Infinity" prefWidth="170.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="350.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="400.0"/>
             <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
@@ -59,14 +61,31 @@
         </TextField>
         <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="2"/>
-        <Label text="Documentation Root Dir" GridPane.rowIndex="3"/>
-        <TextField fx:id="docRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <Label text="REDUCE Manual Directory" GridPane.rowIndex="3"/>
+        <TextField fx:id="manualDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <tooltip>
+                <Tooltip text="The directory containing the REDUCE User's Manual."/>
+            </tooltip>
+        </TextField>
+        <Button mnemonicParsing="false" onAction="#manualDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="3"/>
+        <Label text="REDUCE Primers Directory" GridPane.rowIndex="4"/>
+        <TextField fx:id="primersDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <tooltip>
+                <Tooltip
+                        text="The directory containing Inside Reduce, the REDUCE Symbolic Mode Primer, and the Standard Lisp Report."/>
+            </tooltip>
+        </TextField>
+        <Button mnemonicParsing="false" onAction="#primersDirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="4"/>
+        <Label text="Default I/O Directory" GridPane.rowIndex="5"/>
+        <TextField fx:id="defaultIODirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
                 <Tooltip text="The common root directory for all the distributed REDUCE documentation."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#docRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
-                GridPane.rowIndex="3"/>
+        <Button mnemonicParsing="false" onAction="#defaultIODirDCButtonAction" text="..." GridPane.columnIndex="2"
+                GridPane.rowIndex="5"/>
     </GridPane>
 
     <GridPane alignment="CENTER" vgap="10.0" GridPane.rowIndex="1">
@@ -110,7 +129,7 @@
               GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
             <ColumnConstraints minWidth="-Infinity" prefWidth="170.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="350.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0"/>
             <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
@@ -147,7 +166,7 @@
         <Button mnemonicParsing="false" onAction="#commandRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="2"/>
         <Text text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'."
-              wrappingWidth="550.0" GridPane.columnSpan="3" GridPane.rowIndex="3"/>
+              wrappingWidth="600.0" GridPane.columnSpan="3" GridPane.rowIndex="3"/>
         <Label text="Command Pathname" GridPane.rowIndex="4"/>
         <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1"
                    GridPane.rowIndex="4">

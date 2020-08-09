@@ -145,31 +145,32 @@ public class RunREDUCEFrame {
                         || !(desktop = Desktop.getDesktop()).isSupported(Desktop.Action.OPEN)))
             desktop = null;
 
-        String[][] manuals = {
-                // {Manual name, Windows location, non-Windows location}
-                {"REDUCE Manual (HTML)", "lib/csl/reduce.doc/manual.html", "manual.html"},
-                {"REDUCE Manual (PDF)", "lib/csl/reduce.doc/manual.pdf", "manual.pdf.gz"},
-                {"Inside Reduce", "doc/insidereduce.pdf", "insidereduce.pdf.gz"},
-                {"REDUCE Symbolic Mode Primer", "doc/primer.pdf", "primer.pdf.gz"},
-                {"Standard Lisp Report", "doc/sl.pdf", "sl.pdf.gz"}
+        String[][] manuals = { // FixMe Can this be handled more elegantly?
+                // {Manual name, Windows filename, non-Windows filename}
+                {"REDUCE Manual (HTML)", "manual.html", "manual.html"},
+                {"REDUCE Manual (PDF)", "manual.pdf", "manual.pdf.gz"},
+                {"Inside Reduce", "insidereduce.pdf", "insidereduce.pdf.gz"},
+                {"REDUCE Symbolic Mode Primer", "primer.pdf", "primer.pdf.gz"},
+                {"Standard Lisp Report", "sl.pdf", "sl.pdf.gz"}
         };
 
         int helpMenuItemIndex = 2;
         for (int i = 0; i < manuals.length; i++) {
             String[] manual = manuals[i];
+            String dir = (i < 2) ? RunREDUCE.reduceConfiguration.manualDir :
+                    RunREDUCE.reduceConfiguration.primersDir;
             if (i == 0 || REDUCEConfiguration.windowsOS) {
                 MenuItem menuItem = new MenuItem(manual[0]);
                 helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
                 menuItem.setOnAction(e -> RunREDUCE.hostServices.showDocument(
-                        new File(RunREDUCE.reduceConfiguration.docRootDir,
+                        new File(dir,
                                 manual[REDUCEConfiguration.windowsOS ? 1 : 2]).toString()));
             } else {
                 if (desktop == null) break;
                 MenuItem menuItem = new MenuItem(manual[0]);
                 helpMenu.getItems().add(helpMenuItemIndex++, menuItem);
                 menuItem.setOnAction(e -> documentOpen(
-                        new File(RunREDUCE.reduceConfiguration.docRootDir,
-                                manual[2])));
+                        new File(dir, manual[2])));
             }
         }
     }

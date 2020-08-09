@@ -139,7 +139,7 @@ abstract class REDUCEConfigurationType {
     public static final boolean windowsOS = System.getProperty("os.name").startsWith("Windows");
     String reduceRootDir;
     String packagesRootDir;
-    public String docRootDir;
+    public String manualDir, primersDir;
     REDUCECommandList reduceCommandList;
 }
 
@@ -158,7 +158,9 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
         reduceCommandList = new REDUCECommandList();
         if (windowsOS) {
             // On Windows, all REDUCE directories should be found automatically in "/Program Files/Reduce".
-            docRootDir = packagesRootDir = reduceRootDir = findREDUCERootDir();
+            packagesRootDir = reduceRootDir = findREDUCERootDir();
+            manualDir = Path.of(reduceRootDir, "lib/csl/reduce.doc").toString();
+            primersDir = Path.of(reduceRootDir, "doc").toString();
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
             // before attempting to run REDUCE.
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
@@ -173,7 +175,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             // This is appropriate for Ubuntu:
             reduceRootDir = "/usr/lib/reduce";
             packagesRootDir = "/usr/share/reduce";
-            docRootDir = "/usr/share/doc/reduce";
+            primersDir = manualDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     "",
                     "$REDUCE/cslbuild/csl/reduce",
@@ -209,7 +211,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     // Preference keys:
     static final String REDUCE_ROOT_DIR = "reduceRootDir";
     static final String PACKAGES_ROOT_DIR = "packagesRootDir";
-    static final String DOC_ROOT_DIR = "docRootDir";
+    static final String MANUAL_DIR = "manualDir";
+    static final String PRIMERS_DIR = "primersDir";
     static final String REDUCE_VERSIONS = "reduceVersions";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
@@ -223,7 +226,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         Preferences prefs = RRPreferences.prefs;
         reduceRootDir = prefs.get(REDUCE_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.reduceRootDir);
         packagesRootDir = prefs.get(PACKAGES_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.packagesRootDir);
-        docRootDir = prefs.get(DOC_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.docRootDir);
+        manualDir = prefs.get(MANUAL_DIR, RunREDUCE.reduceConfigurationDefault.manualDir);
+        primersDir = prefs.get(PRIMERS_DIR, RunREDUCE.reduceConfigurationDefault.primersDir);
         reduceCommandList = new REDUCECommandList();
 
         try {
@@ -267,10 +271,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
      * This method gets the local REDUCE Manual root directory,
      * which depends on the current configuration and OS.
      */
-    private Path getRedManRootDir() {
-        return windowsOS ?
-                Path.of(docRootDir, "lib/csl/reduce.doc") :
-                Path.of(docRootDir);
+    private Path getRedManRootDir() { // FixMe Is this relevant any more?
+        return Path.of(manualDir);
     }
 
     /**
@@ -280,7 +282,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         Preferences prefs = RRPreferences.prefs;
         prefs.put(REDUCE_ROOT_DIR, reduceRootDir);
         prefs.put(PACKAGES_ROOT_DIR, packagesRootDir);
-        prefs.put(DOC_ROOT_DIR, docRootDir);
+        prefs.put(MANUAL_DIR, manualDir);
+        prefs.put(PRIMERS_DIR, primersDir);
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
         try {
             prefs.node(REDUCE_VERSIONS).removeNode();

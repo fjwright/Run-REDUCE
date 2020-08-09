@@ -23,29 +23,14 @@ import java.util.stream.Collectors;
  */
 public class REDUCEConfigDialog {
     @FXML
-    private TextField reduceRootDirTextField;
-    @FXML
-    private TextField packagesRootDirTextField;
-    @FXML
-    private TextField docRootDirTextField;
+    private TextField reduceRootDirTextField, packagesRootDirTextField,
+            manualDirTextField, primersDirTextField, defaultIODirTextField;
     @FXML
     private ListView<String> listView;
     @FXML
-    private TextField commandNameTextField;
+    private TextField commandNameTextField, commandRootDirTextField, commandPathNameTextField;
     @FXML
-    private TextField commandRootDirTextField;
-    @FXML
-    private TextField commandPathNameTextField;
-    @FXML
-    private TextField arg1TextField;
-    @FXML
-    private TextField arg2TextField;
-    @FXML
-    private TextField arg3TextField;
-    @FXML
-    private TextField arg4TextField;
-    @FXML
-    private TextField arg5TextField;
+    private TextField arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField;
     @FXML
     private GridPane commandGridPane;
 
@@ -60,7 +45,8 @@ public class REDUCEConfigDialog {
     private void setupDialog(REDUCEConfigurationType reduceConfiguration) {
         reduceRootDirTextField.setText(reduceConfiguration.reduceRootDir);
         packagesRootDirTextField.setText(reduceConfiguration.packagesRootDir);
-        docRootDirTextField.setText(reduceConfiguration.docRootDir);
+        manualDirTextField.setText(reduceConfiguration.manualDir);
+        primersDirTextField.setText(reduceConfiguration.primersDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
         showREDUCECommand(reduceCommandList.get(0));
         setListViewItems();
@@ -144,7 +130,8 @@ public class REDUCEConfigDialog {
         String[] dirs = new String[]{
                 reduceRootDirTextField.getText(),
                 packagesRootDirTextField.getText(),
-                docRootDirTextField.getText()};
+                manualDirTextField.getText(),
+                primersDirTextField.getText()};
         for (String dir : dirs)
             if (!new File(dir).canRead()) {
                 RunREDUCE.errorMessageDialog("Invalid Directory",
@@ -153,7 +140,8 @@ public class REDUCEConfigDialog {
             }
         RunREDUCE.reduceConfiguration.reduceRootDir = dirs[0];
         RunREDUCE.reduceConfiguration.packagesRootDir = dirs[1];
-        RunREDUCE.reduceConfiguration.docRootDir = dirs[2];
+        RunREDUCE.reduceConfiguration.manualDir = dirs[2];
+        RunREDUCE.reduceConfiguration.primersDir = dirs[3];
         saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
         RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
         RunREDUCE.reduceConfiguration.save();
@@ -240,10 +228,22 @@ public class REDUCEConfigDialog {
     }
 
     @FXML
-    private void docRootDirDCButtonAction() {
-        dcButtonAction("Documentation Root Directory",
-                RunREDUCE.reduceConfigurationDefault.docRootDir,
-                docRootDirTextField);
+    private void manualDirDCButtonAction() {
+        dcButtonAction("REDUCE Manual Directory",
+                RunREDUCE.reduceConfigurationDefault.manualDir,
+                manualDirTextField);
+    }
+
+    @FXML
+    private void primersDirDCButtonAction() {
+        dcButtonAction("REDUCE Primers Directory",
+                RunREDUCE.reduceConfigurationDefault.primersDir,
+                primersDirTextField);
+    }
+
+    @FXML
+    private void defaultIODirDCButtonAction() {
+
     }
 
     @FXML
