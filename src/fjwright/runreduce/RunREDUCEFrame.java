@@ -70,7 +70,7 @@ public class RunREDUCEFrame {
     private Menu helpMenu;
 
     private static final File USER_HOME_DIR = new File(getProperty("user.home"));
-    private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesRootDir, "packages");
+    private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesDir);
 
     private static final FileChooser fileChooser = new FileChooser();
     private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =

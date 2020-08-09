@@ -138,7 +138,7 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
 abstract class REDUCEConfigurationType {
     public static final boolean windowsOS = System.getProperty("os.name").startsWith("Windows");
     String reduceRootDir;
-    String packagesRootDir;
+    String packagesDir;
     public String manualDir, primersDir;
     REDUCECommandList reduceCommandList;
 }
@@ -158,7 +158,8 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
         reduceCommandList = new REDUCECommandList();
         if (windowsOS) {
             // On Windows, all REDUCE directories should be found automatically in "/Program Files/Reduce".
-            packagesRootDir = reduceRootDir = findREDUCERootDir();
+            reduceRootDir = findREDUCERootDir();
+            packagesDir = Path.of(reduceRootDir, "packages").toString();
             manualDir = Path.of(reduceRootDir, "lib/csl/reduce.doc").toString();
             primersDir = Path.of(reduceRootDir, "doc").toString();
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
@@ -174,7 +175,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
         } else {
             // This is appropriate for Ubuntu:
             reduceRootDir = "/usr/lib/reduce";
-            packagesRootDir = "/usr/share/reduce";
+            packagesDir = "/usr/share/reduce/packages";
             primersDir = manualDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     "",
@@ -206,11 +207,9 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
  * It is initialised when the application starts and can be updated and saved using the REDUCEConfigDialog class.
  */
 public class REDUCEConfiguration extends REDUCEConfigurationType {
-    public Path redManRootDir;
-
     // Preference keys:
     static final String REDUCE_ROOT_DIR = "reduceRootDir";
-    static final String PACKAGES_ROOT_DIR = "packagesRootDir";
+    static final String PACKAGES_DIR = "packagesDir";
     static final String MANUAL_DIR = "manualDir";
     static final String PRIMERS_DIR = "primersDir";
     static final String REDUCE_VERSIONS = "reduceVersions";
@@ -225,7 +224,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     REDUCEConfiguration() {
         Preferences prefs = RRPreferences.prefs;
         reduceRootDir = prefs.get(REDUCE_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.reduceRootDir);
-        packagesRootDir = prefs.get(PACKAGES_ROOT_DIR, RunREDUCE.reduceConfigurationDefault.packagesRootDir);
+        packagesDir = prefs.get(PACKAGES_DIR, RunREDUCE.reduceConfigurationDefault.packagesDir);
         manualDir = prefs.get(MANUAL_DIR, RunREDUCE.reduceConfigurationDefault.manualDir);
         primersDir = prefs.get(PRIMERS_DIR, RunREDUCE.reduceConfigurationDefault.primersDir);
         reduceCommandList = new REDUCECommandList();
@@ -264,15 +263,6 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         } catch (BackingStoreException e) {
             e.printStackTrace();
         }
-        redManRootDir = getRedManRootDir();
-    }
-
-    /**
-     * This method gets the local REDUCE Manual root directory,
-     * which depends on the current configuration and OS.
-     */
-    private Path getRedManRootDir() { // FixMe Is this relevant any more?
-        return Path.of(manualDir);
     }
 
     /**
@@ -281,7 +271,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     void save() {
         Preferences prefs = RRPreferences.prefs;
         prefs.put(REDUCE_ROOT_DIR, reduceRootDir);
-        prefs.put(PACKAGES_ROOT_DIR, packagesRootDir);
+        prefs.put(PACKAGES_DIR, packagesDir);
         prefs.put(MANUAL_DIR, manualDir);
         prefs.put(PRIMERS_DIR, primersDir);
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
@@ -301,7 +291,6 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                 prefs.put(ARG + i, cmd.command[i]);
             prefs = prefs.parent();
         }
-        redManRootDir = getRedManRootDir();
     }
 }
 
@@ -312,11 +301,11 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
 class REDUCEPackageList extends ArrayList<String> {
 
     REDUCEPackageList() {
-        Path packagesRootPath = Paths.get(RunREDUCE.reduceConfiguration.packagesRootDir);
-        Path packageMapFile = packagesRootPath.resolve("packages/package.map");
+        Path packagesDirPath = Paths.get(RunREDUCE.reduceConfiguration.packagesDir);
+        Path packageMapFile = packagesDirPath.resolve("package.map");
         if (!Files.isReadable(packageMapFile)) {
-            RunREDUCE.errorMessageDialog("REDUCE Packages", "The REDUCE package map file is not available!" +
-                    "\nPlease correct 'Packages Root Dir' in the 'Configure REDUCE...' dialogue," +
+            RunREDUCE.errorMessageDialog("Packages", "The REDUCE package map file is not available!" +
+                    "\nPlease correct 'REDUCE Packages Directory' in the 'Configure REDUCE...' dialogue," +
                     "\nwhich will open automatically when you close this dialogue.");
             RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
                     "REDUCEConfigDialog.fxml");

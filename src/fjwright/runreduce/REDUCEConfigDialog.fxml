@@ -21,7 +21,7 @@
             GridPane.halignment="CENTER">
         <tooltip>
             <Tooltip
-                    text="Reset all directory and command information to its default values. &#10;This will also delete information about any non-default commands."/>
+                    text="Reset all directory and command information to its default values.&#10;This will also delete information about any non-default commands."/>
         </tooltip>
     </Button>
 
@@ -53,10 +53,10 @@
         </TextField>
         <Button mnemonicParsing="false" onAction="#reduceRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="1"/>
-        <Label text="Packages Root Directory" GridPane.rowIndex="2"/>
-        <TextField fx:id="packagesRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label text="REDUCE Packages Directory" GridPane.rowIndex="2"/>
+        <TextField fx:id="packagesDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
-                <Tooltip text="A directory *containing* a standard REDUCE 'packages' directory."/>
+                <Tooltip text="A directory containing the standard REDUCE packages: alg, algint, arith, etc."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
@@ -64,7 +64,7 @@
         <Label text="REDUCE Manual Directory" GridPane.rowIndex="3"/>
         <TextField fx:id="manualDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
-                <Tooltip text="The directory containing the REDUCE User's Manual."/>
+                <Tooltip text="A directory containing the REDUCE User's Manual."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#manualDirDCButtonAction" text="..." GridPane.columnIndex="2"
@@ -73,15 +73,15 @@
         <TextField fx:id="primersDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip
-                        text="The directory containing Inside Reduce, the REDUCE Symbolic Mode Primer, and the Standard Lisp Report."/>
+                        text="A directory containing Inside Reduce, the REDUCE Symbolic Mode Primer, and the Standard Lisp Report."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#primersDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="4"/>
-        <Label text="Default I/O Directory" GridPane.rowIndex="5"/>
-        <TextField fx:id="defaultIODirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <Label text="Initial I/O Directory" GridPane.rowIndex="5"/>
+        <TextField fx:id="initialIODirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
-                <Tooltip text="The common root directory for all the distributed REDUCE documentation."/>
+                <Tooltip text="The initial directory for the file choosers used by the File menu."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#defaultIODirDCButtonAction" text="..." GridPane.columnIndex="2"
@@ -189,9 +189,12 @@
         <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
     </GridPane>
 
-    <HBox alignment="CENTER_RIGHT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+    <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save"/>
         <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
     </HBox>
 
     <padding>

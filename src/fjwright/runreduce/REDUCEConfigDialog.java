@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
  */
 public class REDUCEConfigDialog {
     @FXML
-    private TextField reduceRootDirTextField, packagesRootDirTextField,
-            manualDirTextField, primersDirTextField, defaultIODirTextField;
+    private TextField reduceRootDirTextField, packagesDirTextField,
+            manualDirTextField, primersDirTextField, initialIODirTextField;
     @FXML
     private ListView<String> listView;
     @FXML
@@ -44,7 +44,7 @@ public class REDUCEConfigDialog {
 
     private void setupDialog(REDUCEConfigurationType reduceConfiguration) {
         reduceRootDirTextField.setText(reduceConfiguration.reduceRootDir);
-        packagesRootDirTextField.setText(reduceConfiguration.packagesRootDir);
+        packagesDirTextField.setText(reduceConfiguration.packagesDir);
         manualDirTextField.setText(reduceConfiguration.manualDir);
         primersDirTextField.setText(reduceConfiguration.primersDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
@@ -129,7 +129,7 @@ public class REDUCEConfigDialog {
         // after validating generic root directory fields:
         String[] dirs = new String[]{
                 reduceRootDirTextField.getText(),
-                packagesRootDirTextField.getText(),
+                packagesDirTextField.getText(),
                 manualDirTextField.getText(),
                 primersDirTextField.getText()};
         for (String dir : dirs)
@@ -139,7 +139,7 @@ public class REDUCEConfigDialog {
                 return;
             }
         RunREDUCE.reduceConfiguration.reduceRootDir = dirs[0];
-        RunREDUCE.reduceConfiguration.packagesRootDir = dirs[1];
+        RunREDUCE.reduceConfiguration.packagesDir = dirs[1];
         RunREDUCE.reduceConfiguration.manualDir = dirs[2];
         RunREDUCE.reduceConfiguration.primersDir = dirs[3];
         saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
@@ -223,8 +223,8 @@ public class REDUCEConfigDialog {
     @FXML
     private void packagesRootDirDCButtonAction() {
         dcButtonAction("Packages Root Directory",
-                RunREDUCE.reduceConfigurationDefault.packagesRootDir,
-                packagesRootDirTextField);
+                RunREDUCE.reduceConfigurationDefault.packagesDir,
+                packagesDirTextField);
     }
 
     @FXML
