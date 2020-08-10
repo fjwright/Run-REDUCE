@@ -107,3 +107,13 @@ top-level directory.
 * Update the documentation to try to make it easier to access the latest jar
   and configure REDUCE.
 * Hide the Typeset I/O option, which is not yet usable.
+* V1.62 Redesign the REDUCE Configuration dialogue:
+  - Improve the layout.
+  - Replace Packages Root Directory with REDUCE Packages Directory.
+  - Split Documentation Root Dir into REDUCE Manual Directory and
+    REDUCE Primers Directory.
+  - **The above two changes are backwards incompatible!**
+  - Add Initial I/O Directory, which defaults to the user's home
+    directory, as before.
+  - Add a ContextMenu to implement key choices for initialIODir: Home
+    Directory; Current Directory; Another Directory.

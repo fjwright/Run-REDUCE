@@ -62,8 +62,8 @@
     REDUCE installation. On Microsoft Windows it looks for the folder
     "<code>\Program Files\Reduce</code>" on all accessible drives. On
     Linux it assumes that executable files are under
-    "<code>/usr/lib/reduce</code>", package information is under
-    "<code>/usr/share/reduce</code>", and documentation is under
+    "<code>/usr/lib/reduce</code>", package information is in
+    "<code>/usr/share/reduce/packages</code>", and documentation is in
     "<code>/usr/share/doc/reduce</code>". But this information can all
     be <a href="#Configure">reconfigured</a>.
     </p>
@@ -426,18 +426,27 @@
     </p>
     <h3 id="Configure">Configure REDUCE...</h3>
     <p>This displays a dialogue that allows you to configure the
-    REDUCE directories and commands. The platform defaults should work
-    for Microsoft Windows and Linux.  Run-REDUCE-FX currently assumes
-    that if it is not running on Windows then the Linux default
-    configuration is appropriate, so that is what you will see by
-    default on (say) Apple MacOS. There is a button to reset the whole
-    REDUCE configuration to the platform defaults.
+    REDUCE directories and commands.  The defaults should work for
+    standard installations on Microsoft Windows and Linux.
+    Run-REDUCE-FX currently assumes that if it is not running on
+    Windows then the Linux default configuration is appropriate, so
+    that is what you will see by default on (say) Apple MacOS.  There
+    is a button to reset the whole REDUCE configuration to the
+    platform defaults.
     </p>
     <p>Changes made using this dialogue are saved when you click on
     the <em>Save</em> button, in which case the new configuration is
     used within Run-REDUCE-FX and saved as preferences.  Clicking on
     the <em>Cancel</em> button causes all changes made since the
     dialogue opened to be forgotten.
+    </p>
+    <p>Note that all field values are stripped of leading and trailing
+    space before they are used or saved, and empty fields are not
+    saved at all.  Where appropriate, text fields have a button beside
+    them labelled "...".  This button displays a directory or file
+    chooser that can be used to set the field (which can then be
+    edited further).  The initial directory used by the directory or
+    file chooser is the platform default.
     </p>
     <p>Clicking on the <em>Delete Selected Command</em> button deletes
     the configuration for the selected REDUCE command.  If you delete
@@ -492,36 +501,50 @@
     probably use a different root directory.
     </p>
     <p>The <em>Load Packages...</em> facility in the <em>File</em>
-    menu requires a standard REDUCE packages directory, which
-    should <strong>exist in the directory</strong> specified by
-    the <em>Packages Root Directory</em> field.  The value of
-    the <em>Packages Root Directory</em> field is only used
-    by <em>Load Packages...</em>. If this directory does not exist or
-    is mis-configured then <em>Load Packages...</em> will pop up a
-    warning and closing it will automatically pop up the <em>Configure
-    REDUCE...</em> dialogue to allow you to correct the problem.
+    menu requires a standard REDUCE packages directory, which should
+    be specified as the value of the <em>REDUCE Packages
+    Directory</em> field.  This directory should contain directories
+    named <em>alg</em>, <em>algint</em>, <em>arith</em>, etc.  This
+    field is only used by <em>Load Packages...</em>.  If this
+    directory does not exist or is mis-configured then <em>Load
+    Packages...</em> will pop up a warning and closing it will
+    automatically pop up the <em>Configure REDUCE...</em> dialogue to
+    allow you to correct the problem.
     </p>
     <p>The <em>Help</em> menu items that display REDUCE documentation
-    require the common root segment of the directories containing the
-    distributed documentation files to be specified as the value of
-    the <em>Documentation Root Dir</em> field.  To check that this is
-    specified correctly, note that on Microsoft Windows this should
-    contain two folders named <em>lib</em> and <em>doc</em>, which
-    ultimately contain the documentation files, whereas on other
-    platforms it should contain the documentation files such
-    as <em>manual.html</em> directly.
+    require directories containing the distributed documentation files
+    to be specified as the values of the <em>REDUCE Manual
+    Directory</em> and <em>REDUCE Primers Directory</em> fields.
+    These fields are named after the directories in the REDUCE
+    repository and the same split is used by the standard Windows
+    installation folders although on a standard Linux installation the
+    two directories are the same.  The <em>REDUCE Manual
+    Directory</em> should contain the files <em>manual.html</em>
+    and <em>manual.pdf</em> and the <em>REDUCE Primers Directory</em>
+    should contain the
+    files <em>insidereduce.pdf</em>, <em>primer.pdf</em>
+    and <em>sl.pdf</em>, where on Linux the filename extension
+    is <em>.pdf.gz</em> instead of just <em>.pdf</em>.
     </p>
-    <p>The two directories described above relate to the portable
-    REDUCE source code and are independent of particular REDUCE
+    <p>The <em>Initial I/O Directory</em> field allows you to
+      configure the initial directory used by all the file choosers
+      available from the <em>File</em> menu.  (However, note that this
+      is only the initial directory because you can change the
+      directory when you use a file chooser and the file choosers
+      remember and share the last directory used.)  By default, the
+      initial I/O directory is your home directory, but you can change
+      it to anything you want.  The button beside this field labelled
+      "..." does not pop up a directory chooser directly, but instead
+      pops up a context menu with items labelled <em>Home
+      Directory</em>, <em>Current Directory</em> and <em>Another
+      Directory</em>, which respectively set the <em>Initial I/O
+      Directory</em> field to your home directory, the current
+      directory of Run-REDUCE-FX, or a directory you choose using the
+      directory chooser that pops up.
+    </p>
+    <p>The directories described above relate to the portable REDUCE
+    source code and are independent of particular REDUCE
     implementations, so they are fixed for all REDUCE commands.
-    </p>
-    <p>All field values are stripped of leading and trailing space
-    before they are used or saved, and empty fields are not saved at
-    all.  Where appropriate, text fields have a button beside them
-    labelled "...".  This button displays a directory or file chooser
-    that can be used to set the field (which can then be edited
-    further). The initial directory used by the directory or file
-    chooser is the appropriate platform default.
     </p>
 
     <h2 id="ViewMenu">The View Menu</h2>
