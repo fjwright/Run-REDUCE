@@ -4,10 +4,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -16,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import static java.lang.System.getProperty;
 
 /**
  * Take a local copy of the data in the REDUCE configuration object, let the user edit it,
@@ -244,11 +245,29 @@ public class REDUCEConfigDialog {
                 primersDirTextField);
     }
 
+    private final static ContextMenu initialIODirContextMenu = new ContextMenu();
+
+    {
+        MenuItem menuItem = new MenuItem("Home Directory");
+        initialIODirContextMenu.getItems().add(menuItem);
+        menuItem.setOnAction(e ->
+                initialIODirTextField.setText(getProperty("user.home")));
+        menuItem = new MenuItem("Current Directory");
+        initialIODirContextMenu.getItems().add(menuItem);
+        menuItem.setOnAction(e ->
+                initialIODirTextField.setText(getProperty("user.dir")));
+        menuItem = new MenuItem("Another Directory");
+        initialIODirContextMenu.getItems().add(menuItem);
+        menuItem.setOnAction(e -> {
+            dcButtonAction("Initial I/O Directory",
+                    RunREDUCE.reduceConfigurationDefault.initialIODir,
+                    initialIODirTextField);
+        });
+    }
+
     @FXML
-    private void defaultIODirDCButtonAction() {
-        dcButtonAction("Initial I/O Directory",
-                RunREDUCE.reduceConfigurationDefault.initialIODir,
-                initialIODirTextField);
+    private void initialIODirDCButtonAction() {
+        initialIODirContextMenu.show(initialIODirTextField, Side.BOTTOM, 0, 0);
     }
 
     @FXML

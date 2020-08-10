@@ -84,7 +84,7 @@
                 <Tooltip text="The initial directory for the file choosers used by the File menu."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#defaultIODirDCButtonAction" text="..." GridPane.columnIndex="2"
+        <Button mnemonicParsing="false" onAction="#initialIODirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="5"/>
     </GridPane>
 

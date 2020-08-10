@@ -69,7 +69,6 @@ public class RunREDUCEFrame {
     @FXML
     private Menu helpMenu;
 
-    private static final File USER_HOME_DIR = new File(getProperty("user.home"));
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesDir);
 
     private static final FileChooser fileChooser = new FileChooser();
@@ -96,8 +95,6 @@ public class RunREDUCEFrame {
          * File menu *
          * ********* */
 
-        // Default initial directory on Windows 10 is "This PC", so...
-//        fileChooser.setInitialDirectory(USER_HOME_DIR);
         fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.initialIODir));
 
         /* *********** *
@@ -212,9 +209,10 @@ public class RunREDUCEFrame {
     @FXML
     private void inputPackageFileMenuItemAction() {
         fileChooser.setTitle("Input from Package Files...");
+        File oldInitialDirectory = fileChooser.getInitialDirectory();
         fileChooser.setInitialDirectory(PACKAGES_DIR);
         inputFile();
-        fileChooser.setInitialDirectory(USER_HOME_DIR);
+        fileChooser.setInitialDirectory(oldInitialDirectory);
     }
 
     private void inputFile() {
@@ -319,8 +317,8 @@ public class RunREDUCEFrame {
     }
 
     private void saveLog(boolean append) {
-        fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         fileChooser.setInitialFileName("session.log");
+        fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file;
         if (append) {
             fileChooser.setTitle("Append Session Log...");
