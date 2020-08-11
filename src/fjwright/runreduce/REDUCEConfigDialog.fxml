@@ -27,8 +27,8 @@
 
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity" prefWidth="200.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="400.0"/>
+            <ColumnConstraints minWidth="-Infinity"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity"/>
             <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
@@ -128,8 +128,8 @@
     <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0"
               GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity" prefWidth="200.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0"/>
+            <ColumnConstraints minWidth="-Infinity"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
             <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
