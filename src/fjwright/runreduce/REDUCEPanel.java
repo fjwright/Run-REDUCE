@@ -76,6 +76,8 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
 
+    private final List<String> stealthInputList = new ArrayList<>();
+
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
         fxmlLoader.setRoot(this);
@@ -180,8 +182,6 @@ public class REDUCEPanel extends BorderPane {
         } else
             // Reset enabled status of controls:
             reduceStopped();
-
-        if (runningREDUCE && RRPreferences.typesetIOState) setTypesetIO(true);
     }
 
     void clearDisplay() {
@@ -210,15 +210,21 @@ public class REDUCEPanel extends BorderPane {
      * Control use of typeset I/O *provided* REDUCE is running.
      */
     void setTypesetIO(boolean enabled) {
-        if (enabled) {
-            if (fmprintLoaded) {
-                sendStringToREDUCEAndEcho("on fancy;\n");
+        // FixMe Stealth the REDUCE input later.
+        if (runningREDUCE) {
+            if (enabled) {
+                if (fmprintLoaded) {
+                    sendStringToREDUCEAndEcho("on fancy;\n");
+                } else {
+                    sendStringToREDUCEAndEcho("load_package fmprint;\n");
+                    fmprintLoaded = true;
+                }
             } else {
-                sendStringToREDUCENoEcho("load_package fmprint;\n"); // FixMe Need to suppress prompt and fix input numbering
-                fmprintLoaded = true;
+                sendStringToREDUCEAndEcho("off fancy;\n");
             }
         } else {
-            sendStringToREDUCEAndEcho("off fancy;\n");
+            stealthInputList.add("load_package fmprint;\n");
+            fmprintLoaded = true;
         }
     }
 
@@ -371,6 +377,8 @@ public class REDUCEPanel extends BorderPane {
         // Special support for Redfront I/O colouring:
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         beforeFirstPrompt = true;
+
+        if (RRPreferences.typesetIOState) setTypesetIO(true);
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -546,6 +554,20 @@ public class REDUCEPanel extends BorderPane {
         span.setClassName("prompt");
         span.setTextContent(text);
         inputPre.appendChild(span);
+
+        if (beforeFirstPrompt) {
+            // Move up later, i.e. move to top of method
+            if (!stealthInputList.isEmpty()) {
+                // FixMe Do not display prompt or this input!!!
+                for (var input : stealthInputList) {
+                    // Essentially sendStringToREDUCEAndEcho(String text):
+                    inputPre.appendChild(doc.createTextNode(input)); // TEMPORARY!
+                    sendStringToREDUCENoEcho(input);
+                }
+                stealthInputList.clear();
+            }
+            beforeFirstPrompt = false;
+        }
     }
 
     private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
@@ -575,7 +597,7 @@ public class REDUCEPanel extends BorderPane {
                 // Text ends with the first prompt...
 //                outputHeaderText(text.substring(0, promptIndex));
 //                promptText(promptString, null);
-                beforeFirstPrompt = false;
+//                beforeFirstPrompt = false;
             } else {
                 // Before the first prompt...
                 outputHeaderText(text);
@@ -705,7 +727,6 @@ public class REDUCEPanel extends BorderPane {
     private boolean shutLastMenuItemDisabled;
     private boolean loadPackagesMenuItemDisabled;
     private boolean stopREDUCEMenuItemDisabled;
-    private boolean typesetIOCheckBoxDisabled;
     private boolean runREDUCESubmenuDisabled;
     private boolean templatesMenuDisabled;
     private boolean functionsMenuDisabled;
@@ -735,7 +756,6 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
-        FRAME.typesetIOCheckBox.setDisable(typesetIOCheckBoxDisabled = !starting);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled = !starting);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled = !starting);
         // Items to disable/enable when REDUCE starts/stops running:
@@ -760,7 +780,6 @@ public class REDUCEPanel extends BorderPane {
         FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
-        FRAME.typesetIOCheckBox.setDisable(typesetIOCheckBoxDisabled);
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled);
