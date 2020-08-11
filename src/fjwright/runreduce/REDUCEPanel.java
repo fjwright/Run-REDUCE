@@ -106,7 +106,6 @@ public class REDUCEPanel extends BorderPane {
 //                "  <span class=\"katex-version rule\">KaTeX stylesheet version: </span>\n" +
 //                "</span>" +
                 "</body></html>");
-
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -158,7 +157,7 @@ public class REDUCEPanel extends BorderPane {
 
         fontSizeStyle = (HTMLElement) doc.createElement("style");
         fontSizeStyle.appendChild(doc.createTextNode(
-                String.format("body{font-size:%d}", RRPreferences.fontSize)));
+                String.format("body{font-size:%dpx}", RRPreferences.fontSize)));
         head.appendChild(fontSizeStyle);
 
         promptWeightStyle = (HTMLElement) doc.createElement("style");
@@ -192,7 +191,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void updateFontSize(int newFontSize) {
-        fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%d}", newFontSize));
+        fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", newFontSize));
     }
 
     void setBoldPrompts(boolean enabled) {
@@ -215,20 +214,6 @@ public class REDUCEPanel extends BorderPane {
             if (fmprintLoaded) {
                 sendStringToREDUCEAndEcho("on fancy;\n");
             } else {
-                // Load KaTeX, temporarily from the web:
-//                HTMLElement elem = (HTMLElement) doc.createElement("link");
-//                elem.setAttribute("rel", "stylesheet");
-//                elem.setAttribute("href", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css");
-//                elem.setAttribute("crossorigin", "anonymous");
-//                head.appendChild(elem); // This seems to work
-//                elem = (HTMLElement) doc.createElement("script");
-//                elem.setAttribute("src", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js");
-//                elem.setAttribute("crossorigin", "anonymous");
-//                body.appendChild(elem);
-//                elem = (HTMLElement) doc.createElement("script");
-//                elem.setAttribute("src", "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js");
-//                elem.setAttribute("crossorigin", "anonymous");
-//                body.appendChild(elem);
                 sendStringToREDUCENoEcho("load_package fmprint;\n"); // FixMe Need to suppress prompt and fix input numbering
                 fmprintLoaded = true;
             }

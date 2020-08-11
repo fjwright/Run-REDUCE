@@ -95,8 +95,11 @@ Open the *Synaptic Package Manager* via *Show Applications*, search
 for `jdk`, mark `openjdk-11-jre` for installation and accept its
 dependencies.  Then search for `jfx`, mark `openjfx` for installation
 and accept its dependencies (but you can deselect `openjfx-source`).
-Then click *Apply*.  Make a note of the full pathname of the lib
-directory.
+Then click *Apply*.  Make a note of the full pathname of the JavaFX
+lib directory, which is probably `/usr/share/openjfx/lib`.  As a
+check, search for `jfx` again and ensure that the latest versions of
+the packages `libopenjfx-java`, `libopenjfx-jni` and `openjfx` are
+installed.
 
 
 ## Run Run-REDUCE-FX using a Batch File on...

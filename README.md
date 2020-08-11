@@ -101,19 +101,20 @@ top-level directory.
 * Turning I/O colouring on and off now works retrospectively (as far
   as possible).
 
-### Updates since last release
+### Version 1.7
 
-* V1.61. Add experimental Typeset I/O option to the View menu to use fmprint and KaTeX.
-* Update the documentation to try to make it easier to access the latest jar
-  and configure REDUCE.
-* Hide the Typeset I/O option, which is not yet usable.
-* V1.62 Redesign the REDUCE Configuration dialogue:
-  - Improve the layout.
+* Add experimental Typeset I/O option, currently hidden, to the View
+  menu to use fmprint and KaTeX, which does not yet work reliably.
+* Update the documentation to try to make it easier to access the
+  latest jar.
+* Redesign the REDUCE Configuration dialogue:
   - Replace Packages Root Directory with REDUCE Packages Directory.
   - Split Documentation Root Dir into REDUCE Manual Directory and
     REDUCE Primers Directory.
-  - **The above two changes are backwards incompatible!**
+  - **The above two changes are not backwards compatible!**
   - Add Initial I/O Directory, which defaults to the user's home
     directory, as before.
-  - Add a ContextMenu to implement key choices for initialIODir: Home
-    Directory; Current Directory; Another Directory.
+  - Add a ContextMenu to implement key choices for Initial I/O
+    Directory: Home Directory; Current Directory; Another Directory.
+
+### Updates since last release

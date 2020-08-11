@@ -1,6 +1,7 @@
 package fjwright.runreduce;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -280,6 +281,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         prefs.put(MANUAL_DIR, manualDir);
         prefs.put(PRIMERS_DIR, primersDir);
         prefs.put(INITIAL_IO_DIR, initialIODir);
+        RunREDUCEFrame.fileChooser.setInitialDirectory(new File(initialIODir));
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
         try {
             prefs.node(REDUCE_VERSIONS).removeNode();

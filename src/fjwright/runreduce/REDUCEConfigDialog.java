@@ -245,7 +245,8 @@ public class REDUCEConfigDialog {
                 primersDirTextField);
     }
 
-    private final static ContextMenu initialIODirContextMenu = new ContextMenu();
+    // Doesn't work correctly if static!
+    private final ContextMenu initialIODirContextMenu = new ContextMenu();
 
     {
         MenuItem menuItem = new MenuItem("Home Directory");
@@ -258,11 +259,10 @@ public class REDUCEConfigDialog {
                 initialIODirTextField.setText(getProperty("user.dir")));
         menuItem = new MenuItem("Another Directory");
         initialIODirContextMenu.getItems().add(menuItem);
-        menuItem.setOnAction(e -> {
-            dcButtonAction("Initial I/O Directory",
-                    RunREDUCE.reduceConfigurationDefault.initialIODir,
-                    initialIODirTextField);
-        });
+        menuItem.setOnAction(e ->
+                dcButtonAction("Initial I/O Directory",
+                        RunREDUCE.reduceConfigurationDefault.initialIODir,
+                        initialIODirTextField));
     }
 
     @FXML

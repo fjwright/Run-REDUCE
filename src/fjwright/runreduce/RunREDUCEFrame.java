@@ -71,7 +71,7 @@ public class RunREDUCEFrame {
 
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesDir);
 
-    private static final FileChooser fileChooser = new FileChooser();
+    static final FileChooser fileChooser = new FileChooser();
     private static final FileChooser.ExtensionFilter INPUT_FILE_FILTER =
             new FileChooser.ExtensionFilter("REDUCE Input Files (*.red, *.tst)", "*.red", "*.tst");
     private static final FileChooser.ExtensionFilter LOG_FILE_FILTER =
@@ -612,7 +612,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.62, August 2020\n" +
+                "Version 1.7, August 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
