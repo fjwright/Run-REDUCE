@@ -45,7 +45,7 @@ public class REDUCEPanel extends BorderPane {
 
     private final WebEngine webEngine;
     private HTMLDocument doc;
-    private HTMLElement html, head, inputPre, mathOutputElement;
+    private HTMLElement html, head, inputPre;
     HTMLElement body;
 
     /*
@@ -505,23 +505,32 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private boolean inMathOutput = false;
+    private final StringBuilder mathOutputStringBuilder = new StringBuilder();
+    private static final Pattern newlinePattern = Pattern.compile("\\n");
 
     private void outputTypesetText(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (0x10) before and ^Q (0x11) after
         // (always at the start/finish of a the end).
-        int start = 0, finish;
-        while (start < text.length())
+        int textLength = text.length(), start = 0, finish;
+        while (start < textLength)
             if (inMathOutput) { // in maths; look for end of maths, ^Q:
                 if ((finish = text.indexOf('\u0011', start)) != -1) { // ^Q found
-                    // Finish current maths element:
-                    mathOutputElement.appendChild(doc.createTextNode(text.substring(start, finish) + "$$"));
-                    mathOutputElement.normalize();
+                    // Finish current maths output:
+                    mathOutputStringBuilder.append(text, start, finish).append("\\]");
+                    HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
                     if (cssClass != null) mathOutputElement.setClassName(cssClass);
+                    mathOutputElement.appendChild(doc.createTextNode(
+                            // By default, fmprint breaks lines at 80 characters,
+                            // and the resulting newlines break KaTeX rendering, so...
+                            newlinePattern.matcher(mathOutputStringBuilder).replaceAll("")));
                     body.appendChild(mathOutputElement);
-                    start = finish + 1; // skip ^Q
+                    mathOutputStringBuilder.setLength(0);
                     inMathOutput = false;
+                    // Skip ^Q and following white space:
+                    for (start = finish + 1; start < textLength; start++)
+                        if (!Character.isWhitespace(text.charAt(start))) break;
                 } else { // ^Q not found so all maths
-                    mathOutputElement.appendChild(doc.createTextNode(text));
+                    mathOutputStringBuilder.append(text, start, textLength);
                     return;
                 }
             } else { // Not in maths so create a non-maths element:
@@ -530,9 +539,8 @@ public class REDUCEPanel extends BorderPane {
                     // Output current non-maths element:
                     if (start < finish) outputPlainText(text.substring(start, finish), cssClass);
                     start = finish + 1; // skip ^P
-                    // Start new maths element:
-                    mathOutputElement = (HTMLElement) doc.createElement("div");
-                    mathOutputElement.setTextContent("$$");
+                    // Start new maths output:
+                    mathOutputStringBuilder.append("\\[");
                     inMathOutput = true;
                 } else { // ^P not found so all non-maths:
                     outputPlainText(text.substring(start), cssClass);
