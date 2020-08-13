@@ -209,7 +209,7 @@ public class REDUCEPanel extends BorderPane {
     /**
      * Control use of typeset I/O *provided* REDUCE is running.
      */
-    void setTypesetIO(boolean enabled) {
+    void setTypesetMaths(boolean enabled) {
         // FixMe Stealth the REDUCE input later.
         if (runningREDUCE) {
             if (enabled) {
@@ -327,7 +327,7 @@ public class REDUCEPanel extends BorderPane {
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollWebViewToBottom(boolean output) {
-        if (output && RRPreferences.typesetIOState)
+        if (output && RRPreferences.typesetMathsState)
             webEngine.executeScript("renderMathInElement(document.body);");
         webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)}, 200);");
     }
@@ -378,7 +378,7 @@ public class REDUCEPanel extends BorderPane {
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         beforeFirstPrompt = true;
 
-        if (RRPreferences.typesetIOState) setTypesetIO(true);
+        if (RRPreferences.typesetMathsState) setTypesetMaths(true);
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -493,7 +493,7 @@ public class REDUCEPanel extends BorderPane {
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (RRPreferences.typesetIOState) outputTypesetText(text, cssClass);
+        if (RRPreferences.typesetMathsState) outputTypesetText(text, cssClass);
         else outputPlainText(text, cssClass);
     }
 
@@ -506,10 +506,12 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean inMathOutput = false;
     private final StringBuilder mathOutputStringBuilder = new StringBuilder();
+    // FixMe Make the math output replacements table driven.
     private static final Pattern newlinePattern = Pattern.compile("\\n");
+    private static final Pattern partialPattern = Pattern.compile("\\\\symb\\{182\\}");
 
     private void outputTypesetText(String text, String cssClass) {
-        // fmprint delimits LaTeX output with ^P (0x10) before and ^Q (0x11) after
+        // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
         // (always at the start/finish of a the end).
         int textLength = text.length(), start = 0, finish;
         while (start < textLength)
@@ -519,10 +521,13 @@ public class REDUCEPanel extends BorderPane {
                     mathOutputStringBuilder.append(text, start, finish).append("\\]");
                     HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
                     if (cssClass != null) mathOutputElement.setClassName(cssClass);
-                    mathOutputElement.appendChild(doc.createTextNode(
-                            // By default, fmprint breaks lines at 80 characters,
-                            // and the resulting newlines break KaTeX rendering, so...
-                            newlinePattern.matcher(mathOutputStringBuilder).replaceAll("")));
+                    // By default, fmprint breaks lines at 80 characters,
+                    // and the resulting newlines break KaTeX rendering, so...
+                    String s = newlinePattern.matcher(mathOutputStringBuilder).replaceAll("");
+                    // fmprint output a non-standard macro \symb, so...
+                    // \symb{182} -> \partial
+                    s = partialPattern.matcher(s).replaceAll("\\\\partial");
+                    mathOutputElement.appendChild(doc.createTextNode(s));
                     body.appendChild(mathOutputElement);
                     mathOutputStringBuilder.setLength(0);
                     inMathOutput = false;

@@ -60,8 +60,8 @@
                                    onAction="#redfrontColouredIORadioButtonAction" text="Redfront"
                                    toggleGroup="$colouredIOButtonGroup"/>
                 </Menu>
-                <CheckMenuItem fx:id="typesetIOCheckBox" mnemonicParsing="false" onAction="#typesetIOCheckBoxAction"
-                               text="Typeset I/O"/>
+                <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false" onAction="#typesetMathsCheckBoxAction"
+                               text="Typeset Maths"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false"
                                onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">

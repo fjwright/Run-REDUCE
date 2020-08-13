@@ -55,7 +55,7 @@ public class RunREDUCEFrame {
     @FXML
     private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
     @FXML
-    CheckMenuItem typesetIOCheckBox;
+    CheckMenuItem typesetMathsCheckBox;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
@@ -124,7 +124,7 @@ public class RunREDUCEFrame {
                 redfrontColouredIORadioButton.setSelected(true);
         }
 
-        typesetIOCheckBox.setSelected(RRPreferences.typesetIOState);
+        typesetMathsCheckBox.setSelected(RRPreferences.typesetMathsState);
 
         singlePaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SINGLE);
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
@@ -448,8 +448,8 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void typesetIOCheckBoxAction() {
-        RRPreferences.save(RRPreferences.TYPESETIO, typesetIOCheckBox.isSelected());
+    private void typesetMathsCheckBoxAction() {
+        RRPreferences.save(RRPreferences.TYPESET_MATHS, typesetMathsCheckBox.isSelected());
     }
 
     @FXML

@@ -29,7 +29,7 @@ class RRPreferences {
     static final String BOLDPROMPTS = "boldPrompts";
     static final String COLOUREDIO = "colouredIO";
     static final String DISPLAYPANE = "displayPane";
-    static final String TYPESETIO = "typesetIO";
+    static final String TYPESET_MATHS = "typesetMaths";
 
     enum ColouredIO {NONE, MODAL, REDFRONT}
 
@@ -47,7 +47,7 @@ class RRPreferences {
     static DisplayPane displayPane =
             DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
     static ColouredIO colouredIOState = colouredIOIntent;
-    static boolean typesetIOState = prefs.getBoolean(TYPESETIO, false);
+    static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, false);
 
     static void save(String key, Object value) {
         switch (key) {
@@ -68,9 +68,9 @@ class RRPreferences {
                     colouredIOState = colouredIOIntent;
                 RunREDUCE.reducePanel.setColouredIO(colouredIOIntent != ColouredIO.NONE);
                 break;
-            case TYPESETIO:
-                prefs.putBoolean(TYPESETIO, typesetIOState = (boolean) value);
-                RunREDUCE.reducePanel.setTypesetIO(typesetIOState);
+            case TYPESET_MATHS:
+                prefs.putBoolean(TYPESET_MATHS, typesetMathsState = (boolean) value);
+                RunREDUCE.reducePanel.setTypesetMaths(typesetMathsState);
                 break;
             case DISPLAYPANE:
                 prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());
