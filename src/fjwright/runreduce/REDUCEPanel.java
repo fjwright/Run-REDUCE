@@ -508,7 +508,9 @@ public class REDUCEPanel extends BorderPane {
     private final StringBuilder mathOutputStringBuilder = new StringBuilder();
     // FixMe Make the math output replacements table driven.
     private static final Pattern newlinePattern = Pattern.compile("\\n");
-    private static final Pattern partialPattern = Pattern.compile("\\\\symb\\{182\\}");
+    private static final Pattern partialPattern = Pattern.compile("\\\\symb\\{182}");
+    private static final Pattern bigDelimiterPattern = Pattern.compile("\\\\[bB]ig+([lr])");
+    private int leftMinusRightCount; // # \left - # \right
 
     private void outputTypesetText(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
@@ -518,16 +520,41 @@ public class REDUCEPanel extends BorderPane {
             if (inMathOutput) { // in maths; look for end of maths, ^Q:
                 if ((finish = text.indexOf('\u0011', start)) != -1) { // ^Q found
                     // Finish current maths output:
-                    mathOutputStringBuilder.append(text, start, finish).append("\\]");
-                    HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
-                    if (cssClass != null) mathOutputElement.setClassName(cssClass);
+                    mathOutputStringBuilder.append(text, start, finish);
                     // By default, fmprint breaks lines at 80 characters,
                     // and the resulting newlines break KaTeX rendering, so...
-                    String s = newlinePattern.matcher(mathOutputStringBuilder).replaceAll("");
-                    // fmprint output a non-standard macro \symb, so...
+                    String mathOutputString = newlinePattern.matcher(mathOutputStringBuilder).replaceAll("");
+                    // fmprint outputs a non-standard macro \symb, so...
                     // \symb{182} -> \partial
-                    s = partialPattern.matcher(s).replaceAll("\\\\partial");
-                    mathOutputElement.appendChild(doc.createTextNode(s));
+                    mathOutputString = partialPattern.matcher(mathOutputString).replaceAll("\\\\partial");
+                    // fmprint outputs TeX macros \bigl, \Bigl, \biggl, \Biggl, etc, so...
+                    // \bigl etc -> \left, \bigr etc -> \right
+                    leftMinusRightCount = 0;
+                    mathOutputString = bigDelimiterPattern.matcher(mathOutputString).replaceAll(matchResult -> {
+                        switch (matchResult.group(1)) {
+                            case "l":
+                                leftMinusRightCount++;
+                                return "\\\\left";
+                            case "r":
+                                leftMinusRightCount--;
+                                return "\\\\right";
+                        }
+                        return null;
+                    });
+                    if (leftMinusRightCount != 0) {
+                        StringBuilder stringBuilder = new StringBuilder(mathOutputString);
+                        if (leftMinusRightCount > 0) {
+                            // Close unmatched \left delimiters on the right:
+                            stringBuilder.append("\\right.".repeat(leftMinusRightCount));
+                        } else {
+                            // Close unmatched \right delimiters on the left:
+                            stringBuilder.insert(0, "\\left.".repeat(-leftMinusRightCount));
+                        }
+                        mathOutputString = stringBuilder.toString();
+                    }
+                    HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
+                    if (cssClass != null) mathOutputElement.setClassName(cssClass);
+                    mathOutputElement.appendChild(doc.createTextNode("\\[" + mathOutputString + "\\]"));
                     body.appendChild(mathOutputElement);
                     mathOutputStringBuilder.setLength(0);
                     inMathOutput = false;
@@ -545,7 +572,6 @@ public class REDUCEPanel extends BorderPane {
                     if (start < finish) outputPlainText(text.substring(start, finish), cssClass);
                     start = finish + 1; // skip ^P
                     // Start new maths output:
-                    mathOutputStringBuilder.append("\\[");
                     inMathOutput = true;
                 } else { // ^P not found so all non-maths:
                     outputPlainText(text.substring(start), cssClass);
