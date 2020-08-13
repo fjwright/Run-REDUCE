@@ -505,12 +505,51 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private boolean inMathOutput = false;
-    private final StringBuilder mathOutputStringBuilder = new StringBuilder();
+    private final StringBuilder mathOutputSB = new StringBuilder();
     // FixMe Make the math output replacements table driven.
-    private static final Pattern newlinePattern = Pattern.compile("\\n");
-    private static final Pattern partialPattern = Pattern.compile("\\\\symb\\{182}");
     private static final Pattern bigDelimiterPattern = Pattern.compile("\\\\[bB]ig+([lr])");
-    private int leftMinusRightCount; // # \left - # \right
+
+    private String reprocessedMathOutputString() {
+        // By default, fmprint breaks lines at 80 characters,
+        // and the resulting newlines break KaTeX rendering, so remove them:
+        for (int i = mathOutputSB.length() - 1; i > 0; i--)
+            if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
+        // fmprint outputs a non-standard macro, so \symb{182} -> \partial:
+        int start = 0;
+        String searchString = "\\symb{182}", replaceString = "\\partial";
+        while ((start = mathOutputSB.indexOf(searchString, start)) != -1) {
+            mathOutputSB.replace(start, start + searchString.length(), replaceString);
+            start += replaceString.length();
+        }
+        // fmprint outputs TeX macros \bigl, \Bigl, \biggl, \Biggl, etc, so...
+        // \bigl etc -> \left, \bigr etc -> \right
+        int leftMinusRightCount = 0; // # \left - # \right
+        start = 0;
+        Matcher matcher = bigDelimiterPattern.matcher(mathOutputSB);
+        while (matcher.find(start)) {
+            switch (matcher.group(1)) {
+                case "l":
+                    mathOutputSB.replace(matcher.start(), matcher.end(), "\\left");
+                    leftMinusRightCount++;
+                    start += 6;
+                    break;
+                case "r":
+                    mathOutputSB.replace(matcher.start(), matcher.end(), "\\right");
+                    leftMinusRightCount--;
+                    start += 7;
+                    break;
+            }
+        }
+        if (leftMinusRightCount != 0)
+            if (leftMinusRightCount > 0) {
+                // Close unmatched \left delimiters on the right:
+                mathOutputSB.append("\\right.".repeat(leftMinusRightCount));
+            } else {
+                // Close unmatched \right delimiters on the left:
+                mathOutputSB.insert(0, "\\left.".repeat(-leftMinusRightCount));
+            }
+        return mathOutputSB.insert(0, "\\[").append("\\]").toString();
+    }
 
     private void outputTypesetText(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
@@ -520,49 +559,18 @@ public class REDUCEPanel extends BorderPane {
             if (inMathOutput) { // in maths; look for end of maths, ^Q:
                 if ((finish = text.indexOf('\u0011', start)) != -1) { // ^Q found
                     // Finish current maths output:
-                    mathOutputStringBuilder.append(text, start, finish);
-                    // By default, fmprint breaks lines at 80 characters,
-                    // and the resulting newlines break KaTeX rendering, so...
-                    String mathOutputString = newlinePattern.matcher(mathOutputStringBuilder).replaceAll("");
-                    // fmprint outputs a non-standard macro \symb, so...
-                    // \symb{182} -> \partial
-                    mathOutputString = partialPattern.matcher(mathOutputString).replaceAll("\\\\partial");
-                    // fmprint outputs TeX macros \bigl, \Bigl, \biggl, \Biggl, etc, so...
-                    // \bigl etc -> \left, \bigr etc -> \right
-                    leftMinusRightCount = 0;
-                    mathOutputString = bigDelimiterPattern.matcher(mathOutputString).replaceAll(matchResult -> {
-                        switch (matchResult.group(1)) {
-                            case "l":
-                                leftMinusRightCount++;
-                                return "\\\\left";
-                            case "r":
-                                leftMinusRightCount--;
-                                return "\\\\right";
-                        }
-                        return null;
-                    });
-                    if (leftMinusRightCount != 0) {
-                        StringBuilder stringBuilder = new StringBuilder(mathOutputString);
-                        if (leftMinusRightCount > 0) {
-                            // Close unmatched \left delimiters on the right:
-                            stringBuilder.append("\\right.".repeat(leftMinusRightCount));
-                        } else {
-                            // Close unmatched \right delimiters on the left:
-                            stringBuilder.insert(0, "\\left.".repeat(-leftMinusRightCount));
-                        }
-                        mathOutputString = stringBuilder.toString();
-                    }
+                    mathOutputSB.append(text, start, finish);
                     HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
                     if (cssClass != null) mathOutputElement.setClassName(cssClass);
-                    mathOutputElement.appendChild(doc.createTextNode("\\[" + mathOutputString + "\\]"));
+                    mathOutputElement.appendChild(doc.createTextNode(reprocessedMathOutputString()));
                     body.appendChild(mathOutputElement);
-                    mathOutputStringBuilder.setLength(0);
+                    mathOutputSB.setLength(0);
                     inMathOutput = false;
                     // Skip ^Q and following white space:
                     for (start = finish + 1; start < textLength; start++)
                         if (!Character.isWhitespace(text.charAt(start))) break;
                 } else { // ^Q not found so all maths
-                    mathOutputStringBuilder.append(text, start, textLength);
+                    mathOutputSB.append(text, start, textLength);
                     return;
                 }
             } else { // Not in maths so create a non-maths element:
