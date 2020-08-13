@@ -97,6 +97,15 @@ public class RunREDUCE extends Application {
         hostServices = getHostServices();
     }
 
+    static void hideInputEditor(boolean hide) {
+        if (hide) {
+            runREDUCEFrame.frame.setCenter(reducePanel.ioDisplayPane);
+        } else {
+            reducePanel.splitPane.getItems().add(0, reducePanel.ioDisplayPane);
+            runREDUCEFrame.frame.setCenter(reducePanel);
+        }
+    }
+
     static void useSplitPane(boolean enable) {
         if (enable) {
             REDUCEPanel reducePanel2 = new REDUCEPanel();

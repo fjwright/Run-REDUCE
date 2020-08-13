@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
  */
 public class REDUCEPanel extends BorderPane {
     @FXML
+    BorderPane ioDisplayPane;
+    @FXML
     SplitPane splitPane; // Accessed in RunREDUCE.java
     @FXML
     private Label outputLabel;
@@ -39,9 +41,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     Button sendButton; // Accessed in RunREDUCEFrame.java
     @FXML
-    private Button earlierButton;
-    @FXML
-    private Button laterButton;
+    private Button earlierButton, laterButton;
 
     private final WebEngine webEngine;
     private HTMLDocument doc;

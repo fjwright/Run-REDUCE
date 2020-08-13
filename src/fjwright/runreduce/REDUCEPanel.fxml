@@ -14,7 +14,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
     <!--            fx:controller="fjwright.runreduce.REDUCEPanel">-->
     <center>
         <SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
-            <BorderPane>
+            <BorderPane fx:id="ioDisplayPane">
                 <top>
                     <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
                 </top>

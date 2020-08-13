@@ -62,6 +62,8 @@ public class RunREDUCEFrame {
     private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
+    @FXML
+    CheckMenuItem hideInputEditorCheckBox;
     // Templates and Functions menus:
     @FXML
     Menu templatesMenu, functionsMenu;
@@ -130,6 +132,8 @@ public class RunREDUCEFrame {
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
         tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
         addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
+
+        hideInputEditorCheckBox.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.SINGLE);
 
         /* ********* *
          * Help menu *
@@ -485,6 +489,11 @@ public class RunREDUCEFrame {
     @FXML
     private void addTabMenuItemAction() {
         RunREDUCE.addTab();
+    }
+
+    @FXML
+    private void hideInputEditorCheckBoxAction() {
+        RunREDUCE.hideInputEditor(hideInputEditorCheckBox.isSelected());
     }
 
     /* ************** *

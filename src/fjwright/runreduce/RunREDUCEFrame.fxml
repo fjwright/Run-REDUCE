@@ -60,7 +60,8 @@
                                    onAction="#redfrontColouredIORadioButtonAction" text="Redfront"
                                    toggleGroup="$colouredIOButtonGroup"/>
                 </Menu>
-                <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false" onAction="#typesetMathsCheckBoxAction"
+                <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false"
+                               onAction="#typesetMathsCheckBoxAction"
                                text="Typeset Maths"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false"
@@ -75,9 +76,11 @@
                 <RadioMenuItem fx:id="tabbedPaneRadioButton" mnemonicParsing="false"
                                onAction="#tabbedPaneRadioButtonAction" text="Tabbed Pane Display"
                                toggleGroup="$displayPaneButtonGroup"/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction"
                           text="Add Another Tab"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <CheckMenuItem fx:id="hideInputEditorCheckBox" mnemonicParsing="false"
+                               onAction="#hideInputEditorCheckBoxAction" text="Hide Input Editor"/>
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..."/>

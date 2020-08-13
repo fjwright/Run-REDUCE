@@ -118,3 +118,7 @@ top-level directory.
     Directory: Home Directory; Current Directory; Another Directory.
 
 ### Updates since last release
+
+* Re-enable Typeset I/O option, renamed to Typeset Maths, and make it work better.
+* Add experimental Hide Input Editor option to the View menu,
+  available only in Single Pane Display mode.
