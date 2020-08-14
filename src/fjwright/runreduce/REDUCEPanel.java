@@ -76,6 +76,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
 
+    private boolean fmprintLoaded;
     private final List<String> stealthInputList = new ArrayList<>();
 
     REDUCEPanel() {
@@ -93,12 +94,17 @@ public class REDUCEPanel extends BorderPane {
 
         // See https://katex.org/docs/browser.html
         // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
+        // See https://github.com/KaTeX/KaTeX/issues/1775 for a discussion about rules disappearing.
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/auto-render.min.js") + "'></script>" +
                 "<style>pre{margin:0}</style>" +
                 "</head><body>" +
+//                "<div id='test'></div>" +
+//                "<script>katex.render('\\\\Biggl\\\\{\\\\frac{\\\\partial\\\\,f(x)}{\\\\partial\\\\,x}\\\\Biggr)^2', " +
+//                "document.getElementById('test'), " +
+//                "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});</script>" +
 //                "<style>\n" +
 //                "  .katex-version {display: none;}\n" +
 //                "  .katex-version::after {content:\"0.10.2 or earlier\";}\n" +
@@ -203,8 +209,6 @@ public class REDUCEPanel extends BorderPane {
         if (enabled) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
     }
-
-    private boolean fmprintLoaded;
 
     /**
      * Control use of typeset I/O *provided* REDUCE is running.
@@ -377,6 +381,7 @@ public class REDUCEPanel extends BorderPane {
         // Special support for Redfront I/O colouring:
         RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
         beforeFirstPrompt = true;
+        fmprintLoaded = false;
 
         if (RRPreferences.typesetMathsState) setTypesetMaths(true);
 
@@ -506,9 +511,8 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean inMathOutput = false;
     private final StringBuilder mathOutputSB = new StringBuilder();
-    // FixMe Make the math output replacements table driven.
-    private static final Pattern bigDelimiterPattern = Pattern.compile("\\\\[bB]ig+([lr])");
 
+    // FixMe Make the math output replacements table driven.
     private String reprocessedMathOutputString() {
         // By default, fmprint breaks lines at 80 characters,
         // and the resulting newlines break KaTeX rendering, so remove them:
@@ -521,33 +525,6 @@ public class REDUCEPanel extends BorderPane {
             mathOutputSB.replace(start, start + searchString.length(), replaceString);
             start += replaceString.length();
         }
-        // fmprint outputs TeX macros \bigl, \Bigl, \biggl, \Biggl, etc, so...
-        // \bigl etc -> \left, \bigr etc -> \right
-        int leftMinusRightCount = 0; // # \left - # \right
-        start = 0;
-        Matcher matcher = bigDelimiterPattern.matcher(mathOutputSB);
-        while (matcher.find(start)) {
-            switch (matcher.group(1)) {
-                case "l":
-                    mathOutputSB.replace(matcher.start(), matcher.end(), "\\left");
-                    leftMinusRightCount++;
-                    start += 6;
-                    break;
-                case "r":
-                    mathOutputSB.replace(matcher.start(), matcher.end(), "\\right");
-                    leftMinusRightCount--;
-                    start += 7;
-                    break;
-            }
-        }
-        if (leftMinusRightCount != 0)
-            if (leftMinusRightCount > 0) {
-                // Close unmatched \left delimiters on the right:
-                mathOutputSB.append("\\right.".repeat(leftMinusRightCount));
-            } else {
-                // Close unmatched \right delimiters on the left:
-                mathOutputSB.insert(0, "\\left.".repeat(-leftMinusRightCount));
-            }
         return mathOutputSB.insert(0, "\\[").append("\\]").toString();
     }
 
