@@ -330,9 +330,7 @@ public class REDUCEPanel extends BorderPane {
      * A sufficient delay seems necessary for the input to be rendered!
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
-    private void scrollWebViewToBottom(boolean output) {
-        if (output && RRPreferences.typesetMathsState)
-            webEngine.executeScript("renderMathInElement(document.body);");
+    private void scrollWebViewToBottom(boolean output) { // FixMe Redundant paramemter!
         webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)}, 200);");
     }
 
@@ -525,8 +523,10 @@ public class REDUCEPanel extends BorderPane {
             mathOutputSB.replace(start, start + searchString.length(), replaceString);
             start += replaceString.length();
         }
-        return mathOutputSB.insert(0, "\\[").append("\\]").toString();
+        return mathOutputSB.toString();
     }
+
+    private int divIndex;
 
     private void outputTypesetText(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
@@ -539,8 +539,15 @@ public class REDUCEPanel extends BorderPane {
                     mathOutputSB.append(text, start, finish);
                     HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
                     if (cssClass != null) mathOutputElement.setClassName(cssClass);
-                    mathOutputElement.appendChild(doc.createTextNode(reprocessedMathOutputString()));
                     body.appendChild(mathOutputElement);
+
+                    // Call katex.render with a TeX expression and a DOM element to render into, e.g.
+                    // katex.render("c = \\pm\\sqrt{a^2 + b^2}", element, {throwOnError: false});
+                    webEngine.executeScript(
+                            "katex.render(String.raw`" + reprocessedMathOutputString() + "`, " +
+                                    "document.getElementsByTagName('div')[" + divIndex++ + "], " +
+                                    "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});");
+
                     mathOutputSB.setLength(0);
                     inMathOutput = false;
                     // Skip ^Q and following white space:
