@@ -40,6 +40,7 @@
       <li><a href="#PopupKeyboard">The Pop-up Keyboard</a></li>
       <li><a href="#FileMenu">The File Menu</a></li>
       <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
+      <li><a href="#Configure">Configure REDUCE...</a></li>
       <li><a href="#ViewMenu">The View Menu</a></li>
       <li><a href="#TemplatesMenu">The Templates Menu</a></li>
       <li><a href="#FunctionsMenu">The Functions Menu</a></li>
@@ -284,7 +285,7 @@
     character, although again you will not see the cursor move.  (If
     you don't delete it then it could cause confusion.)
     </p>
-    
+
     <h2 id="FileMenu">The File Menu</h2>
 
     <p>Some items in this menu pop up a dialogue that allows you to
@@ -526,21 +527,23 @@
     and <em>sl.pdf</em>, where on Linux the filename extension
     is <em>.pdf.gz</em> instead of just <em>.pdf</em>.
     </p>
-    <p>The <em>Initial I/O Directory</em> field allows you to
-      configure the initial directory used by all the file choosers
-      available from the <em>File</em> menu.  (However, note that this
-      is only the initial directory because you can change the
-      directory when you use a file chooser and the file choosers
-      remember and share the last directory used.)  By default, the
-      initial I/O directory is your home directory, but you can change
-      it to anything you want.  The button beside this field labelled
-      "..." does not pop up a directory chooser directly, but instead
-      pops up a context menu with items labelled <em>Home
-      Directory</em>, <em>Current Directory</em> and <em>Another
-      Directory</em>, which respectively set the <em>Initial I/O
-      Directory</em> field to your home directory, the current
-      directory of Run-REDUCE-FX, or a directory you choose using the
-      directory chooser that pops up.
+    <p>The <em>REDUCE Working Directory</em> field allows you to
+      configure the initial working directory used by REDUCE and the
+      initial directory used by all the file choosers available from
+      the <em>File</em> menu.  (However, note that this is only the
+      initial directory because you can change the directory when you
+      use a file chooser and the file choosers remember and share the
+      last directory used.  But this does not change REDUCE's working
+      directory!)  By default, the <em>REDUCE Working Directory</em>
+      is your home directory, but you can change it to anything you
+      want.  The button beside this field labelled "..." does not pop
+      up a directory chooser directly, but instead pops up a context
+      menu with items labelled <em>Your Home
+      Directory</em>, <em>Run-REDUCE-FX Directory</em> and <em>Choose
+      Any Directory</em>, which respectively set the <em>REDUCE
+      Working Directory</em> field to your home directory, the
+      directory containing <em>Run-REDUCE-FX.jar</em>, or any
+      directory you choose using the directory chooser that pops up.
     </p>
     <p>The directories described above relate to the portable REDUCE
     source code and are independent of particular REDUCE

@@ -97,7 +97,7 @@ public class RunREDUCEFrame {
          * File menu *
          * ********* */
 
-        fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.initialIODir));
+        fileChooser.setInitialDirectory(new File(RunREDUCE.reduceConfiguration.workingDir));
 
         /* *********** *
          * REDUCE menu *
@@ -621,7 +621,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.71, August 2020\n" +
+                "Version 1.72, August 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);

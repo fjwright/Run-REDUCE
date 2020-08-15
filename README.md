@@ -119,6 +119,10 @@ top-level directory.
 
 ### Updates since last release
 
-* Re-enable Typeset I/O option, renamed to Typeset Maths, and make it work better.
+* V1.71 Re-enable Typeset I/O option, renamed to Typeset Maths, and make it
+  work better but big delimiters are not rendered correctly.
 * Add experimental Hide Input Editor option to the View menu,
   available only in Single Pane Display mode.
+* V1.72 Rename Initial I/O Directory to REDUCE Working Directory.  This now
+  sets the initial directory for both REDUCE and the file selectors
+  and defaults to the user's home directory.

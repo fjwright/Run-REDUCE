@@ -25,7 +25,7 @@ import static java.lang.System.getProperty;
 public class REDUCEConfigDialog {
     @FXML
     private TextField reduceRootDirTextField, packagesDirTextField,
-            manualDirTextField, primersDirTextField, initialIODirTextField;
+            manualDirTextField, primersDirTextField, workingDirTextField;
     @FXML
     private ListView<String> listView;
     @FXML
@@ -48,7 +48,7 @@ public class REDUCEConfigDialog {
         packagesDirTextField.setText(reduceConfiguration.packagesDir);
         manualDirTextField.setText(reduceConfiguration.manualDir);
         primersDirTextField.setText(reduceConfiguration.primersDir);
-        initialIODirTextField.setText(reduceConfiguration.initialIODir);
+        workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
         showREDUCECommand(reduceCommandList.get(0));
         setListViewItems();
@@ -134,7 +134,7 @@ public class REDUCEConfigDialog {
                 packagesDirTextField.getText(),
                 manualDirTextField.getText(),
                 primersDirTextField.getText(),
-                initialIODirTextField.getText()};
+                workingDirTextField.getText()};
         for (String dir : dirs)
             if (!new File(dir).canRead()) {
                 RunREDUCE.errorMessageDialog("Invalid Directory",
@@ -145,7 +145,7 @@ public class REDUCEConfigDialog {
         RunREDUCE.reduceConfiguration.packagesDir = dirs[1];
         RunREDUCE.reduceConfiguration.manualDir = dirs[2];
         RunREDUCE.reduceConfiguration.primersDir = dirs[3];
-        RunREDUCE.reduceConfiguration.initialIODir = dirs[4];
+        RunREDUCE.reduceConfiguration.workingDir = dirs[4];
         saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
         RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
         RunREDUCE.reduceConfiguration.save();
@@ -246,28 +246,28 @@ public class REDUCEConfigDialog {
     }
 
     // Doesn't work correctly if static!
-    private final ContextMenu initialIODirContextMenu = new ContextMenu();
+    private final ContextMenu workingDirContextMenu = new ContextMenu();
 
     {
-        MenuItem menuItem = new MenuItem("Home Directory");
-        initialIODirContextMenu.getItems().add(menuItem);
+        MenuItem menuItem = new MenuItem("Your Home Directory");
+        workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
-                initialIODirTextField.setText(getProperty("user.home")));
-        menuItem = new MenuItem("Current Directory");
-        initialIODirContextMenu.getItems().add(menuItem);
+                workingDirTextField.setText(getProperty("user.home")));
+        menuItem = new MenuItem("Run-REDUCE-FX Directory");
+        workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
-                initialIODirTextField.setText(getProperty("user.dir")));
-        menuItem = new MenuItem("Another Directory");
-        initialIODirContextMenu.getItems().add(menuItem);
+                workingDirTextField.setText(getProperty("user.dir")));
+        menuItem = new MenuItem("Choose Any Directory");
+        workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
-                dcButtonAction("Initial I/O Directory",
-                        RunREDUCE.reduceConfigurationDefault.initialIODir,
-                        initialIODirTextField));
+                dcButtonAction("REDUCE Working Directory",
+                        RunREDUCE.reduceConfigurationDefault.workingDir,
+                        workingDirTextField));
     }
 
     @FXML
-    private void initialIODirDCButtonAction() {
-        initialIODirContextMenu.show(initialIODirTextField, Side.BOTTOM, 0, 0);
+    private void workingDirDCButtonAction() {
+        workingDirContextMenu.show(workingDirTextField, Side.BOTTOM, 0, 0);
     }
 
     @FXML

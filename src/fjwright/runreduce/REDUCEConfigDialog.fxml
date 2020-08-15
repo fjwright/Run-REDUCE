@@ -78,13 +78,13 @@
         </TextField>
         <Button mnemonicParsing="false" onAction="#primersDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="4"/>
-        <Label text="Initial I/O Directory" GridPane.rowIndex="5"/>
-        <TextField fx:id="initialIODirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <Label text="REDUCE Working Directory" GridPane.rowIndex="5"/>
+        <TextField fx:id="workingDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
-                <Tooltip text="The initial directory for the file choosers used by the File menu."/>
+                <Tooltip text="The initial working directory for REDUCE and the file choosers used by the File menu."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#initialIODirDCButtonAction" text="..." GridPane.columnIndex="2"
+        <Button mnemonicParsing="false" onAction="#workingDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="5"/>
     </GridPane>
 

@@ -389,6 +389,7 @@ public class REDUCEPanel extends BorderPane {
         if (command == null) return;
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
+            pb.directory(new File(RunREDUCE.reduceConfiguration.workingDir));
             pb.redirectErrorStream(true);
             // pb.redirectInput(ProcessBuilder.Redirect.INHERIT); // Works!
             Process p = pb.start();
