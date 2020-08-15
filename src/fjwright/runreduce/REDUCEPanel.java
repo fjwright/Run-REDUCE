@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLElement;
 
@@ -47,6 +48,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLDocument doc;
     private HTMLElement html, head, inputPre;
     HTMLElement body;
+    private JSObject katex;
 
     /*
      * The <body> content should look like repeats of this structure:
@@ -98,7 +100,6 @@ public class REDUCEPanel extends BorderPane {
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
-                "<script src='" + REDUCEPanel.class.getResource("katex/auto-render.min.js") + "'></script>" +
                 "<style>pre{margin:0}</style>" +
                 "</head><body>" +
 //                "<div id='test'></div>" +
@@ -153,6 +154,7 @@ public class REDUCEPanel extends BorderPane {
         html = (HTMLElement) doc.getDocumentElement();
         head = (HTMLElement) html.getElementsByTagName("head").item(0);
         body = doc.getBody();
+        katex = (JSObject) webEngine.executeScript("katex");
 
         // Create default style elements:
 
@@ -526,7 +528,16 @@ public class REDUCEPanel extends BorderPane {
         return mathOutputSB.toString();
     }
 
-    private int divIndex;
+    /**
+     * This class represents the options passed to katex.render.
+     * It *must* be entirely public and *must* be instantiated.
+     */
+    public static class KaTeXOptions {
+        public static final boolean throwOnError = false;
+        public static final boolean displayMode = true;
+        public static final double minRuleThickness = 0.1;
+        public static final String output = "html";
+    }
 
     private void outputTypesetText(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
@@ -540,14 +551,13 @@ public class REDUCEPanel extends BorderPane {
                     HTMLElement mathOutputElement = (HTMLElement) doc.createElement("div");
                     if (cssClass != null) mathOutputElement.setClassName(cssClass);
                     body.appendChild(mathOutputElement);
-
                     // Call katex.render with a TeX expression and a DOM element to render into, e.g.
                     // katex.render("c = \\pm\\sqrt{a^2 + b^2}", element, {throwOnError: false});
-                    webEngine.executeScript(
-                            "katex.render(String.raw`" + reprocessedMathOutputString() + "`, " +
-                                    "document.getElementsByTagName('div')[" + divIndex++ + "], " +
-                                    "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});");
-
+//                    webEngine.executeScript(
+//                            "katex.render(String.raw`" + reprocessedMathOutputString() + "`, " +
+//                                    "document.getElementsByTagName('div')[" + divIndex++ + "], " +
+//                                    "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});");
+                    katex.call("render", reprocessedMathOutputString(), mathOutputElement, new KaTeXOptions());
                     mathOutputSB.setLength(0);
                     inMathOutput = false;
                     // Skip ^Q and following white space:
