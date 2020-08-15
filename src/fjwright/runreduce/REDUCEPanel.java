@@ -78,7 +78,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
 
-    private boolean fmprintLoaded;
+    private boolean fmprintLoaded, hideNextOutput;
     private final List<String> stealthInputList = new ArrayList<>();
 
     REDUCEPanel() {
@@ -213,23 +213,33 @@ public class REDUCEPanel extends BorderPane {
     }
 
     /**
+     * Send input to REDUCE but hide any evidence from the I/O display.
+     */
+    private void stealthInput(String input) {
+        // Should probably also reset crbuf!* and inputbuflis!*;
+        // see the bottom of packages/redfront/redfront.red.
+        hideNextOutput = true;
+        sendStringToREDUCENoEcho(
+                String.format("symbolic<<%s;statcounter:=statcounter-1;>>$\n", input));
+    }
+
+    /**
      * Control use of typeset I/O *provided* REDUCE is running.
      */
     void setTypesetMaths(boolean enabled) {
-        // FixMe Stealth the REDUCE input later.
         if (runningREDUCE) {
             if (enabled) {
                 if (fmprintLoaded) {
-                    sendStringToREDUCEAndEcho("on fancy;\n");
+                    stealthInput("on fancy");
                 } else {
-                    sendStringToREDUCEAndEcho("load_package fmprint;\n");
+                    stealthInput("load_package fmprint");
                     fmprintLoaded = true;
                 }
             } else {
-                sendStringToREDUCEAndEcho("off fancy;\n");
+                stealthInput("off fancy");
             }
         } else {
-            stealthInputList.add("load_package fmprint;\n");
+            stealthInputList.add("load_package fmprint");
             fmprintLoaded = true;
         }
     }
@@ -586,7 +596,7 @@ public class REDUCEPanel extends BorderPane {
     /**
      * Append prompt text to the WebView control with the specified CSS class.
      */
-    private void promptText(String text, String cssClass) {
+    private void outputPromptText(String text, String cssClass) {
         // REDUCE prompt + input elements should look like this:
         // <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
         inputPre = (HTMLElement) doc.createElement("pre");
@@ -598,14 +608,8 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
 
         if (beforeFirstPrompt) {
-            // Move up later, i.e. move to top of method
             if (!stealthInputList.isEmpty()) {
-                // FixMe Do not display prompt or this input!!!
-                for (var input : stealthInputList) {
-                    // Essentially sendStringToREDUCEAndEcho(String text):
-                    inputPre.appendChild(doc.createTextNode(input)); // TEMPORARY!
-                    sendStringToREDUCENoEcho(input);
-                }
+                for (var input : stealthInputList) stealthInput(input);
                 stealthInputList.clear();
             }
             beforeFirstPrompt = false;
@@ -619,6 +623,11 @@ public class REDUCEPanel extends BorderPane {
      * a batch of output from the REDUCEOutputThread for display.
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
+        // This test could probably be earlier in REDUCEOutputThread.call().
+        if (hideNextOutput) {
+            hideNextOutput = false;
+            return;
+        }
         String text = textAtomicReferenceString.get();
         int promptIndex; // possible start index of a prompt
         String promptString = null;
@@ -653,7 +662,7 @@ public class REDUCEPanel extends BorderPane {
                 inputCSSClass = null;
                 if (promptFound) {
                     outputText(text.substring(0, promptIndex), null);
-                    promptText(promptString, null);
+                    outputPromptText(promptString, null);
                 } else
                     outputText(text, null);
                 break;
@@ -674,7 +683,7 @@ public class REDUCEPanel extends BorderPane {
                             outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                             break;
                     }
-                    promptText(promptString, inputCSSClass);
+                    outputPromptText(promptString, inputCSSClass);
                 } else
                     outputText(text, outputCSSClass);
                 break; // end of case RunREDUCEPrefs.MODAL
@@ -752,7 +761,7 @@ public class REDUCEPanel extends BorderPane {
                 outputText(text.substring(start, promptStartMarker), outputCSSClass);
             String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
             questionPrompt = promptString.equals("?");
-            promptText(promptString, ALGEBRAIC_INPUT_CSS_CLASS);
+            outputPromptText(promptString, ALGEBRAIC_INPUT_CSS_CLASS);
         } else
             outputText(text.substring(start), outputCSSClass);
     }
