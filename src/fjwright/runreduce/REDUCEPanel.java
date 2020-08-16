@@ -81,6 +81,20 @@ public class REDUCEPanel extends BorderPane {
     private boolean fmprintLoaded, hideNextOutput;
     private final List<String> stealthInputList = new ArrayList<>();
 
+    /*
+    * JavaScript debugging support. See
+    * https://stackoverflow.com/questions/28687640/javafx-8-webengine-how-to-get-console-log-from-javascript-to-system-out-in-ja
+    */
+    public static class JavaBridge {
+        public void log(String text) {
+            System.err.println(text);
+        }
+    }
+
+    // Maintain a strong reference to prevent garbage collection:
+    // https://bugs.openjdk.java.net/browse/JDK-8154127
+    private final JavaBridge bridge = new JavaBridge();
+
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
         fxmlLoader.setRoot(this);
@@ -118,6 +132,18 @@ public class REDUCEPanel extends BorderPane {
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
+                        // Begin debugging support
+                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        window.setMember("java", bridge);
+                        webEngine.executeScript("console.log = function(message)\n" +
+                                "{\n" +
+                                "    'JS LOG: ' + java.log(message);\n" +
+                                "};");
+                        webEngine.executeScript("console.warn = function(message)\n" +
+                                "{\n" +
+                                "    'JS WARN: ' + java.log(message);\n" +
+                                "};");
+                        // End debugging support
                         outputWebViewAvailable();
                     }
                 });
@@ -546,8 +572,11 @@ public class REDUCEPanel extends BorderPane {
     public static class KaTeXOptions {
         public static final boolean throwOnError = false;
         public static final boolean displayMode = true;
-        public static final double minRuleThickness = 0.1;
-        public static final String output = "html";
+        public static final double minRuleThickness = 0.1; // Unnecessary for MathML output
+        //        public static final String output = "html"; // No TeX or MathML annotation
+//        public static final String output = "mathml";
+        // MathML output gives better big delims but needs more space between terms
+        // and more vertical space between math output regions.
     }
 
     private void outputTypesetText(String text, String cssClass) {
