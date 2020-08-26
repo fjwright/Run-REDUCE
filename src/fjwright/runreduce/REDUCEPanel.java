@@ -82,18 +82,18 @@ public class REDUCEPanel extends BorderPane {
     private final List<String> stealthInputList = new ArrayList<>();
 
     /*
-    * JavaScript debugging support. See
-    * https://stackoverflow.com/questions/28687640/javafx-8-webengine-how-to-get-console-log-from-javascript-to-system-out-in-ja
-    */
-    public static class JavaBridge {
-        public void log(String text) {
-            System.err.println(text);
+     * JavaScript debugging support. See
+     * https://stackoverflow.com/questions/28687640/javafx-8-webengine-how-to-get-console-log-from-javascript-to-system-out-in-ja
+     */
+    public static class JSBridge {
+        public void log(String message) {
+            System.err.println(message);
         }
     }
 
     // Maintain a strong reference to prevent garbage collection:
     // https://bugs.openjdk.java.net/browse/JDK-8154127
-    private final JavaBridge bridge = new JavaBridge();
+    private final JSBridge bridge = new JSBridge();
 
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -115,11 +115,12 @@ public class REDUCEPanel extends BorderPane {
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
                 "<style>pre{margin:0}</style>" +
+//                "<style>.delimsizing.size4{font-size:200%}</style>" +
                 "</head><body>" +
-//                "<div id='test'></div>" +
-//                "<script>katex.render('\\\\Biggl\\\\{\\\\frac{\\\\partial\\\\,f(x)}{\\\\partial\\\\,x}\\\\Biggr)^2', " +
-//                "document.getElementById('test'), " +
-//                "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});</script>" +
+                "<p id='test'></p>" +
+                "<script>katex.render('\\\\Biggl(\\\\frac{\\\\partial\\\\,f(x)}{\\\\partial\\\\,x}\\\\Biggr)^2', " +
+                "document.getElementById('test'), " +
+                "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});</script>" +
 //                "<style>\n" +
 //                "  .katex-version {display: none;}\n" +
 //                "  .katex-version::after {content:\"0.10.2 or earlier\";}\n" +
@@ -134,15 +135,12 @@ public class REDUCEPanel extends BorderPane {
                     if (newState == State.SUCCEEDED) {
                         // Begin debugging support
                         JSObject window = (JSObject) webEngine.executeScript("window");
-                        window.setMember("java", bridge);
-                        webEngine.executeScript("console.log = function(message)\n" +
-                                "{\n" +
-                                "    'JS LOG: ' + java.log(message);\n" +
-                                "};");
-                        webEngine.executeScript("console.warn = function(message)\n" +
-                                "{\n" +
-                                "    'JS WARN: ' + java.log(message);\n" +
-                                "};");
+                        window.setMember("bridge", bridge);
+                        webEngine.executeScript(
+                                "console.error=function(message){bridge.log('JS ERROR: '+message)};" +
+                                "console.info=function(message){bridge.log('JS INFO: '+message)};" +
+                                "console.log=function(message){bridge.log('JS LOG: '+message)};" +
+                                "console.warn=function(message){bridge.log('JS WARN: '+message)}");
                         // End debugging support
                         outputWebViewAvailable();
                     }
@@ -191,6 +189,7 @@ public class REDUCEPanel extends BorderPane {
                 String.format("pre{font-family:'%s','Courier New',Courier,monospace}", RunREDUCE.reduceFontFamilyName)));
         head.appendChild(fontFamilyStyle);
 
+        // Default font size is 16px.
         fontSizeStyle = (HTMLElement) doc.createElement("style");
         fontSizeStyle.appendChild(doc.createTextNode(
                 String.format("body{font-size:%dpx}", RRPreferences.fontSize)));
@@ -216,6 +215,18 @@ public class REDUCEPanel extends BorderPane {
         } else
             // Reset enabled status of controls:
             reduceStopped();
+
+        // DEBUGGING...
+//        webEngine.executeScript("console.log('Body font size: ' + " +
+//                "getComputedStyle(document.body, null).getPropertyValue('font-size'))");
+        webEngine.executeScript("console.log('<p> font size: ' + " +
+                "getComputedStyle(document.getElementsByTagName('p')[0], null).getPropertyValue('font-size'));" +
+                "console.log('<p> font family: ' + " +
+                "getComputedStyle(document.getElementsByTagName('p')[0], null).getPropertyValue('font-family'));" +
+                "console.log('( font size: ' + " +
+                "getComputedStyle(document.getElementsByClassName('size4')[0], null).getPropertyValue('font-size'));" +
+                "console.log('( font family: ' + " +
+                "getComputedStyle(document.getElementsByClassName('size4')[0], null).getPropertyValue('font-family'));");
     }
 
     void clearDisplay() {
@@ -368,7 +379,7 @@ public class REDUCEPanel extends BorderPane {
      * A sufficient delay seems necessary for the input to be rendered!
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
-    private void scrollWebViewToBottom(boolean output) { // FixMe Redundant paramemter!
+    private void scrollWebViewToBottom(boolean output) { // FixMe Redundant parameter!
         webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)}, 200);");
     }
 
