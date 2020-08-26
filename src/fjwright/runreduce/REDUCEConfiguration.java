@@ -46,7 +46,6 @@ class RRPreferences {
             ColouredIO.valueOf(prefs.get(COLOUREDIO, ColouredIO.NONE.toString()));
     static DisplayPane displayPane =
             DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
-    static ColouredIO colouredIOState = colouredIOIntent;
     static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, false);
 
     static void save(String key, Object value) {
@@ -63,10 +62,8 @@ class RRPreferences {
                 break;
             case COLOUREDIO:
                 prefs.put(COLOUREDIO, (colouredIOIntent = (ColouredIO) value).toString());
-                // Update colouredIOState immediately unless switching to or from REDFRONT:
-                if (colouredIOIntent != ColouredIO.REDFRONT && colouredIOState != ColouredIO.REDFRONT)
-                    colouredIOState = colouredIOIntent;
                 RunREDUCE.reducePanel.setColouredIO(colouredIOIntent != ColouredIO.NONE);
+                RunREDUCE.runREDUCEFrame.setSelectedColouredIORadioButton(colouredIOIntent);
                 break;
             case TYPESET_MATHS:
                 prefs.putBoolean(TYPESET_MATHS, typesetMathsState = (boolean) value);

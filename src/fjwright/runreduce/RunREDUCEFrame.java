@@ -51,11 +51,9 @@ public class RunREDUCEFrame {
     private Menu autoRunREDUCESubmenu;
     // View menu:
     @FXML
-    private CheckMenuItem boldPromptsCheckBox;
+    CheckMenuItem boldPromptsCheckBox, typesetMathsCheckBox;
     @FXML
     private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
-    @FXML
-    CheckMenuItem typesetMathsCheckBox;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
@@ -114,17 +112,7 @@ public class RunREDUCEFrame {
 
         boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
 
-        switch (RRPreferences.colouredIOIntent) {
-            case NONE:
-            default:
-                noColouredIORadioButton.setSelected(true);
-                break;
-            case MODAL:
-                modeColouredIORadioButton.setSelected(true);
-                break;
-            case REDFRONT:
-                redfrontColouredIORadioButton.setSelected(true);
-        }
+        setSelectedColouredIORadioButton(RRPreferences.colouredIOIntent);
 
         typesetMathsCheckBox.setSelected(RRPreferences.typesetMathsState);
 
@@ -621,7 +609,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.72, August 2020\n" +
+                "Version 1.73, August 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
@@ -652,5 +640,19 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
+    }
+
+    void setSelectedColouredIORadioButton(RRPreferences.ColouredIO colouredIOIntent) {
+        switch (colouredIOIntent) {
+            case NONE:
+            default:
+                noColouredIORadioButton.setSelected(true);
+                break;
+            case MODAL:
+                modeColouredIORadioButton.setSelected(true);
+                break;
+            case REDFRONT:
+                redfrontColouredIORadioButton.setSelected(true);
+        }
     }
 }

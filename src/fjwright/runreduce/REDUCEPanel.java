@@ -44,6 +44,9 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Button earlierButton, laterButton;
 
+    private boolean boldPromptsState, typesetMathsState;
+    private RRPreferences.ColouredIO colouredIOState, colouredIOIntent;
+
     private final WebEngine webEngine;
     private HTMLDocument doc;
     private HTMLElement html, head, inputPre;
@@ -90,6 +93,10 @@ public class REDUCEPanel extends BorderPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+
+        typesetMathsState = RRPreferences.typesetMathsState;
+        colouredIOIntent = RRPreferences.colouredIOIntent;
+        boldPromptsState = RRPreferences.boldPromptsState;
 
         outputWebView.setContextMenuEnabled(false);
         webEngine = outputWebView.getEngine();
@@ -172,13 +179,13 @@ public class REDUCEPanel extends BorderPane {
 
         promptWeightStyle = (HTMLElement) doc.createElement("style");
         promptWeightStyle.appendChild(doc.createTextNode(".prompt{font-weight:bold}"));
-        if (RRPreferences.boldPromptsState) head.appendChild(promptWeightStyle);
+        if (boldPromptsState) head.appendChild(promptWeightStyle);
 
         colorStyle = (HTMLElement) doc.createElement("style");
         colorStyle.appendChild(doc.createTextNode(
                 ".algebraic-output{color:blue}.symbolic-output{color:#800080}" +
                         ".algebraic-input{color:red}.symbolic-input{color:#800000}"));
-        if (RRPreferences.colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
+        if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
@@ -205,11 +212,16 @@ public class REDUCEPanel extends BorderPane {
     void setBoldPrompts(boolean enabled) {
         if (enabled) head.appendChild(promptWeightStyle);
         else head.removeChild(promptWeightStyle);
+        boldPromptsState = enabled;
     }
 
     void setColouredIO(boolean enabled) {
         if (enabled) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
+        colouredIOIntent = RRPreferences.colouredIOIntent;
+        // Update colouredIOState immediately unless switching to or from REDFRONT:
+        if (colouredIOIntent != RRPreferences.ColouredIO.REDFRONT && colouredIOState != RRPreferences.ColouredIO.REDFRONT)
+            colouredIOState = colouredIOIntent;
     }
 
     /**
@@ -242,6 +254,7 @@ public class REDUCEPanel extends BorderPane {
             stealthInputList.add("load_package fmprint");
             fmprintLoaded = true;
         }
+        typesetMathsState = enabled;
     }
 
     // User input processing **********************************************************************
@@ -389,11 +402,11 @@ public class REDUCEPanel extends BorderPane {
     void run(REDUCECommand reduceCommand) {
         outputCSSClass = null; // for initial header
         // Special support for Redfront I/O colouring:
-        RRPreferences.colouredIOState = RRPreferences.colouredIOIntent;
+        colouredIOState = colouredIOIntent;
         beforeFirstPrompt = true;
         fmprintLoaded = false;
 
-        if (RRPreferences.typesetMathsState) setTypesetMaths(true);
+        if (typesetMathsState) setTypesetMaths(true);
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -429,7 +442,7 @@ public class REDUCEPanel extends BorderPane {
         runningREDUCE = true;
 
         // Special support for Redfront I/O colouring:
-        if (RRPreferences.colouredIOState == RRPreferences.ColouredIO.REDFRONT)
+        if (colouredIOState == RRPreferences.ColouredIO.REDFRONT)
             sendStringToREDUCENoEcho("load_package redfront;\n");
 
         // Return the focus to the input text area:
@@ -509,7 +522,7 @@ public class REDUCEPanel extends BorderPane {
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (RRPreferences.typesetMathsState) outputTypesetText(text, cssClass);
+        if (typesetMathsState) outputTypesetText(text, cssClass);
         else outputPlainText(text, cssClass);
     }
 
@@ -656,7 +669,7 @@ public class REDUCEPanel extends BorderPane {
             }
         }
 
-        switch (RRPreferences.colouredIOState) {
+        switch (colouredIOState) {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
                 inputCSSClass = null;
@@ -739,7 +752,7 @@ public class REDUCEPanel extends BorderPane {
                     }
                 }
                 break; // end of case RunREDUCEPrefs.REDFRONT
-        } // end of switch (RunREDUCEPrefs.colouredIOState)
+        } // end of switch (colouredIOState)
 
         scrollWebViewToBottom(true);
     }
@@ -822,6 +835,7 @@ public class REDUCEPanel extends BorderPane {
      * Update the disabled status of the menus.
      */
     void updateMenus() {
+        // File menu items:
         FRAME.inputFileMenuItem.setDisable(inputFileMenuItemDisabled);
         FRAME.inputPackageFileMenuItem.setDisable(inputPackageFileMenuItemDisabled);
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled);
@@ -830,8 +844,14 @@ public class REDUCEPanel extends BorderPane {
         FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled);
         FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
+        // REDUCE menu items:
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
+        // View menu items:
+        FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
+        FRAME.setSelectedColouredIORadioButton(colouredIOIntent);
+        FRAME.typesetMathsCheckBox.setSelected(typesetMathsState);
+        // Templates and Functions menus:
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled);
     }
