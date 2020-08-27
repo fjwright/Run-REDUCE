@@ -44,6 +44,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Button earlierButton, laterButton;
 
+    int fontSize;
     private boolean boldPromptsState, typesetMathsState;
     private RRPreferences.ColouredIO colouredIOState, colouredIOIntent;
 
@@ -94,9 +95,10 @@ public class REDUCEPanel extends BorderPane {
             throw new RuntimeException(exception);
         }
 
-        typesetMathsState = RRPreferences.typesetMathsState;
-        colouredIOIntent = RRPreferences.colouredIOIntent;
+        fontSize = RRPreferences.fontSize;
         boldPromptsState = RRPreferences.boldPromptsState;
+        colouredIOIntent = RRPreferences.colouredIOIntent;
+        typesetMathsState = RRPreferences.typesetMathsState;
 
         outputWebView.setContextMenuEnabled(false);
         webEngine = outputWebView.getEngine();
@@ -131,7 +133,7 @@ public class REDUCEPanel extends BorderPane {
         webEngine.setOnError(System.err::println);
 
         // Note that a font name containing spaces needs quoting in CSS!
-        inputTextArea.setStyle("-fx-font:" + RRPreferences.fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
+        inputTextArea.setStyle("-fx-font:" + fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
     }
 
     // WebView control ****************************************************************************
@@ -174,7 +176,7 @@ public class REDUCEPanel extends BorderPane {
 
         fontSizeStyle = (HTMLElement) doc.createElement("style");
         fontSizeStyle.appendChild(doc.createTextNode(
-                String.format("body{font-size:%dpx}", RRPreferences.fontSize)));
+                String.format("body{font-size:%dpx}", fontSize)));
         head.appendChild(fontSizeStyle);
 
         promptWeightStyle = (HTMLElement) doc.createElement("style");
@@ -206,6 +208,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void updateFontSize(int newFontSize) {
+        fontSize = newFontSize;
         fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", newFontSize));
     }
 
