@@ -121,6 +121,7 @@ public class RunREDUCE extends Application {
             // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
         }
+        reducePanel.activeLabel.setVisible(enable);
     }
 
     private static void useSplitPaneMouseClicked(MouseEvent event) {

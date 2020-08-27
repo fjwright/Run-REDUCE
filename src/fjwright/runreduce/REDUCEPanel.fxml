@@ -9,37 +9,41 @@
 Error messages that no controller is specified do not stop compilation.
 Use XML character entity references for control characters in strings, e.g. &#10; for LF. -->
 
-<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <!--<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"-->
     <!--            fx:controller="fjwright.runreduce.REDUCEPanel">-->
     <center>
         <SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
             <BorderPane fx:id="ioDisplayPane">
                 <top>
-                    <Label fx:id="outputLabel" text="Input/Output Display" BorderPane.alignment="CENTER_LEFT" />
+                    <HBox BorderPane.alignment="CENTER_LEFT">
+                        <Label fx:id="outputLabel" text="Input/Output Display"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="activeLabel" text="●" textFill="green" visible="false"/>
+                    </HBox>
                 </top>
                 <center>
                     <BorderPane style="-fx-border-color: darkgrey;">
                         <center>
-                            <WebView fx:id="outputWebView" prefHeight="-1.0" prefWidth="-1.0" />
+                            <WebView fx:id="outputWebView" prefHeight="-1.0" prefWidth="-1.0"/>
                         </center>
                     </BorderPane>
                 </center>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
             <BorderPane>
                 <top>
-                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT" />
+                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT"/>
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-                        <TextArea fx:id="inputTextArea" disable="true" onKeyPressed="#inputTextAreaOnKeyPressed" />
+                        <TextArea fx:id="inputTextArea" disable="true" onKeyPressed="#inputTextAreaOnKeyPressed"/>
                     </ScrollPane>
                 </center>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
         </SplitPane>
@@ -47,27 +51,32 @@ Use XML character entity references for control characters in strings, e.g. &#10
     <bottom>
         <HBox alignment="CENTER">
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
                 <tooltip>
-                    <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
+                    <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
                 </tooltip>
             </Button>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0" text="Send Input">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                    onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0"
+                    text="Send Input">
                 <tooltip>
-                    <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
+                    <Tooltip
+                            text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
                 </tooltip>
             </Button>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
                 <tooltip>
-                    <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
+                    <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
                 </tooltip>
             </Button>
-            <Region HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </bottom>
     <!--</BorderPane>-->

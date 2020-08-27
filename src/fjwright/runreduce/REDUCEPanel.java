@@ -32,11 +32,11 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     SplitPane splitPane; // Accessed in RunREDUCE.java
     @FXML
-    private Label outputLabel;
+    private Label outputLabel, inputLabel;
+    @FXML
+    Label activeLabel;
     @FXML
     WebView outputWebView; // Accessed in RunREDUCEFrame.java
-    @FXML
-    private Label inputLabel;
     @FXML
     public TextArea inputTextArea; // Accessed in RunREDUCE & templates
     @FXML
@@ -383,13 +383,15 @@ public class REDUCEPanel extends BorderPane {
     void setSelected(boolean selected) {
         if (selected) {
 //            outputTextFlow.setStyle("-fx-control-inner-background: white;");
-//            inputTextArea.setStyle("-fx-control-inner-background: white;");
+//            outputWebView.setDisable(false); // Not useful
+            activeLabel.setVisible(true);
             inputTextArea.setDisable(!runningREDUCE);
             outputLabel.setDisable(false);
             inputLabel.setDisable(false);
         } else {
 //            outputTextFlow.setStyle("-fx-control-inner-background: #F8F8F8;");
-//            inputTextArea.setStyle("-fx-control-inner-background: #F8F8F8;");
+//            outputWebView.setDisable(true); // Not useful
+            activeLabel.setVisible(false);
             inputTextArea.setDisable(true);
             outputLabel.setDisable(true);
             inputLabel.setDisable(true);
