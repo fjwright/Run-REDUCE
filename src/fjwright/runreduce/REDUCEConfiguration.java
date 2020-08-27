@@ -42,7 +42,7 @@ class RRPreferences {
     // Minimum value of 5 matches minimum value set for font size SpinnerModel.
     static String autoRunVersion = prefs.get(AUTORUNVERSION, NONE);
     static boolean boldPromptsState = prefs.getBoolean(BOLDPROMPTS, false);
-    static ColouredIO colouredIOIntent =
+    static ColouredIO colouredIOState =
             ColouredIO.valueOf(prefs.get(COLOUREDIO, ColouredIO.NONE.toString()));
     static DisplayPane displayPane =
             DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
@@ -61,9 +61,8 @@ class RRPreferences {
                 RunREDUCE.reducePanel.setBoldPrompts(boldPromptsState);
                 break;
             case COLOUREDIO:
-                prefs.put(COLOUREDIO, (colouredIOIntent = (ColouredIO) value).toString());
-                RunREDUCE.reducePanel.setColouredIO(colouredIOIntent != ColouredIO.NONE);
-                RunREDUCE.runREDUCEFrame.setSelectedColouredIORadioButton(colouredIOIntent);
+                prefs.put(COLOUREDIO, (colouredIOState = (ColouredIO) value).toString());
+                RunREDUCE.reducePanel.setColouredIO();
                 break;
             case TYPESET_MATHS:
                 prefs.putBoolean(TYPESET_MATHS, typesetMathsState = (boolean) value);

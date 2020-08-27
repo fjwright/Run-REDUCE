@@ -112,7 +112,7 @@ public class RunREDUCEFrame {
 
         boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
 
-        setSelectedColouredIORadioButton(RRPreferences.colouredIOIntent);
+        setSelectedColouredIORadioButton(RRPreferences.colouredIOState);
 
         typesetMathsCheckBox.setSelected(RRPreferences.typesetMathsState);
 
@@ -642,8 +642,8 @@ public class RunREDUCEFrame {
         stage.showAndWait();
     }
 
-    void setSelectedColouredIORadioButton(RRPreferences.ColouredIO colouredIOIntent) {
-        switch (colouredIOIntent) {
+    void setSelectedColouredIORadioButton(RRPreferences.ColouredIO colouredIOState) {
+        switch (colouredIOState) {
             case NONE:
             default:
                 noColouredIORadioButton.setSelected(true);

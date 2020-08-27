@@ -46,7 +46,7 @@ public class REDUCEPanel extends BorderPane {
 
     int fontSize;
     private boolean boldPromptsState, typesetMathsState;
-    private RRPreferences.ColouredIO colouredIOState, colouredIOIntent;
+    private RRPreferences.ColouredIO colouredIOState;
 
     private final WebEngine webEngine;
     private HTMLDocument doc;
@@ -83,7 +83,6 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement colorStyle;
 
     private boolean fmprintLoaded, hideNextOutput;
-    private final List<String> stealthInputList = new ArrayList<>();
 
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
@@ -97,7 +96,7 @@ public class REDUCEPanel extends BorderPane {
 
         fontSize = RRPreferences.fontSize;
         boldPromptsState = RRPreferences.boldPromptsState;
-        colouredIOIntent = RRPreferences.colouredIOIntent;
+        colouredIOState = RRPreferences.colouredIOState;
         typesetMathsState = RRPreferences.typesetMathsState;
 
         outputWebView.setContextMenuEnabled(false);
@@ -110,20 +109,7 @@ public class REDUCEPanel extends BorderPane {
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
                 "<style>pre{margin:0}</style>" +
-                "</head><body>" +
-//                "<div id='test'></div>" +
-//                "<script>katex.render('\\\\Biggl\\\\{\\\\frac{\\\\partial\\\\,f(x)}{\\\\partial\\\\,x}\\\\Biggr)^2', " +
-//                "document.getElementById('test'), " +
-//                "{throwOnError: false, displayMode: true, minRuleThickness: 0.1, output: 'html'});</script>" +
-//                "<style>\n" +
-//                "  .katex-version {display: none;}\n" +
-//                "  .katex-version::after {content:\"0.10.2 or earlier\";}\n" +
-//                "</style>\n" +
-//                "<span class=\"katex\">\n" +
-//                "  <span class=\"katex-mathml\">The KaTeX stylesheet is not loaded!</span>\n" +
-//                "  <span class=\"katex-version rule\">KaTeX stylesheet version: </span>\n" +
-//                "</span>" +
-                "</body></html>");
+                "</head><body></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
@@ -212,30 +198,30 @@ public class REDUCEPanel extends BorderPane {
         fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", newFontSize));
     }
 
+    /**
+     * Called in RRPreferences.save (only) to control bold prompts.
+     */
     void setBoldPrompts(boolean enabled) {
         if (enabled) head.appendChild(promptWeightStyle);
         else head.removeChild(promptWeightStyle);
         boldPromptsState = enabled;
     }
 
-    void setColouredIO(boolean enabled) {
-        if (enabled) head.appendChild(colorStyle);
-        else head.removeChild(colorStyle);
-        colouredIOIntent = RRPreferences.colouredIOIntent;
-        // Update colouredIOState immediately unless switching to or from REDFRONT:
-        if (colouredIOIntent != RRPreferences.ColouredIO.REDFRONT && colouredIOState != RRPreferences.ColouredIO.REDFRONT)
-            colouredIOState = colouredIOIntent;
-    }
+    private boolean redfrontLoaded;
 
     /**
-     * Send input to REDUCE but hide any evidence from the I/O display.
+     * Called in RRPreferences.save (only) to control coloured I/O.
      */
-    private void stealthInput(String input) {
-        // Should probably also reset crbuf!* and inputbuflis!*;
-        // see the bottom of packages/redfront/redfront.red.
-        hideNextOutput = true;
-        sendStringToREDUCENoEcho(
-                String.format("symbolic<<%s;statcounter:=statcounter-1;>>$\n", input));
+    void setColouredIO() {
+        colouredIOState = RRPreferences.colouredIOState;
+        if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
+        else head.removeChild(colorStyle);
+        if (colouredIOState == RRPreferences.ColouredIO.REDFRONT && runningREDUCE && !redfrontLoaded) {
+//            hideNextOutput = true;
+//            sendStringToREDUCENoEcho("load_package redfront$\n");
+            sendStringToREDUCEAndEcho("load_package redfront$\n");
+            redfrontLoaded = true;
+        }
     }
 
     /**
@@ -253,11 +239,19 @@ public class REDUCEPanel extends BorderPane {
             } else {
                 stealthInput("off fancy");
             }
-        } else {
-            stealthInputList.add("load_package fmprint");
-            fmprintLoaded = true;
         }
         typesetMathsState = enabled;
+    }
+
+    /**
+     * Send input to REDUCE but hide any evidence from the I/O display.
+     */
+    private void stealthInput(String input) {
+        // Should probably also reset crbuf!* and inputbuflis!*;
+        // see the bottom of packages/redfront/redfront.red.
+        hideNextOutput = true;
+        sendStringToREDUCENoEcho(
+                String.format("symbolic<<%s;statcounter:=statcounter-1;>>$\n", input));
     }
 
     // User input processing **********************************************************************
@@ -406,10 +400,9 @@ public class REDUCEPanel extends BorderPane {
      */
     void run(REDUCECommand reduceCommand) {
         outputCSSClass = null; // for initial header
-        // Special support for Redfront I/O colouring:
-        colouredIOState = colouredIOIntent;
         beforeFirstPrompt = true;
         fmprintLoaded = false;
+        redfrontLoaded = false;
 
         if (typesetMathsState) setTypesetMaths(true);
 
@@ -445,10 +438,6 @@ public class REDUCEPanel extends BorderPane {
             RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
 
         runningREDUCE = true;
-
-        // Special support for Redfront I/O colouring:
-        if (colouredIOState == RRPreferences.ColouredIO.REDFRONT)
-            sendStringToREDUCENoEcho("load_package redfront;\n");
 
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -626,9 +615,15 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
 
         if (beforeFirstPrompt) {
-            if (!stealthInputList.isEmpty()) {
-                for (var input : stealthInputList) stealthInput(input);
-                stealthInputList.clear();
+            if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+//                hideNextOutput = true;
+//                sendStringToREDUCENoEcho(loadRedfront);
+                sendStringToREDUCEAndEcho("load_package redfront$\n");
+                redfrontLoaded = true;
+            }
+            if (typesetMathsState) {
+                stealthInput("load_package fmprint");
+                fmprintLoaded = true;
             }
             beforeFirstPrompt = false;
         }
@@ -762,15 +757,16 @@ public class REDUCEPanel extends BorderPane {
         scrollWebViewToBottom(true);
     }
 
-    private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
+//    private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
 
     private void processPromptMarkers(String text, int start) {
         // Delete the very first prompt. (This code may not be reliable!)
-        Matcher matcher;
-        if (beforeFirstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
-            beforeFirstPrompt = false;
-            text = matcher.replaceFirst("");
-        }
+        // FixMe This is no longer appropriate!
+//        Matcher matcher;
+//        if (beforeFirstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
+//            beforeFirstPrompt = false;
+//            text = matcher.replaceFirst("");
+//        }
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
@@ -854,7 +850,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
         // View menu items:
         FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
-        FRAME.setSelectedColouredIORadioButton(colouredIOIntent);
+        FRAME.setSelectedColouredIORadioButton(colouredIOState);
         FRAME.typesetMathsCheckBox.setSelected(typesetMathsState);
         // Templates and Functions menus:
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
