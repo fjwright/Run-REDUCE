@@ -380,9 +380,10 @@ public class RunREDUCEFrame {
                     RRPreferences.save(RRPreferences.AUTORUNVERSION, version);
                     if (!RunREDUCE.reducePanel.runningREDUCE) {
                         for (REDUCECommand cmd1 : RunREDUCE.reduceConfiguration.reduceCommandList) {
-                            if (version.equals(cmd1.name))
+                            if (version.equals(cmd1.name)) {
                                 RunREDUCE.reducePanel.run(cmd1);
-                            break;
+                                break;
+                            }
                         }
                     }
                 }
