@@ -114,14 +114,18 @@ public class RunREDUCE extends Application {
             runREDUCEFrame.frame.setCenter(splitPane);
             reducePanel.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
             reducePanel2.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel2.setSelected(false);
+            reducePanel.setSelected(false); // old panel
+            reducePanel = reducePanel2; // new panel
+            reducePanel.setSelected(true);
+            reducePanel.updateMenus();
+            reducePanel.inputTextArea.requestFocus();
         } else { // Revert to single pane.
             splitPane = null; // release resources
             reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
             // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
+            reducePanel.activeLabel.setVisible(false);
         }
-        reducePanel.activeLabel.setVisible(enable);
     }
 
     private static void useSplitPaneMouseClicked(MouseEvent event) {
