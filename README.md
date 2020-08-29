@@ -126,9 +126,14 @@ top-level directory.
 * V1.72 Rename Initial I/O Directory to REDUCE Working Directory.
   This now sets the initial directory for both REDUCE and the file
   selectors and defaults to the user's home directory.
-* V1.73 Make all view options apply to each REDUCE panel
-  independently, initialised from the last selected (and saved)
-  values.
-* Add a green dot at the top right of the selected REDUCEPanel in
-  split-pane mode to show more clearly which panel is selected.
+* V1.73 Make view options apply to each REDUCE panel independently,
+  initialised from the last selected (and saved) values.
+* When split-pane view is enabled, always select the new panel as
+  active, and add a green dot at the top right of the selected
+  REDUCEPanel to show more clearly which panel is selected.
 * Make redfront View option take effect after the next prompt.
+* BEWARE that use of redfront and fmprint currently conflict, so don't
+  use redfront mode with typeset maths (because one or the other will
+  not work).
+* Fix auto-run menu code not starting PSL REDUCE immediately if REDUCE
+  was not running.

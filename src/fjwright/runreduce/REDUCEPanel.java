@@ -217,11 +217,13 @@ public class REDUCEPanel extends BorderPane {
         if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
         if (colouredIOState == RRPreferences.ColouredIO.REDFRONT && runningREDUCE && !redfrontLoaded) {
+            // Hide the interaction with REDUCE:
             hideNextOutput = true;
             sendStringToREDUCENoEcho(
-                    // Should probably also reset crbuf!* and inputbuflis!*;
-                    // see the bottom of packages/redfront/redfront.red.
-                    "symbolic begin scalar s:=statcounter;load_package redfront;statcounter:=s-1;end$\n");
+                    // See the bottom of packages/redfront/redfront.red.
+                    // Done this way because CSL does not allow statcounter to be rebound!
+                    "symbolic begin scalar c:=crbuf!*,i:=inputbuflis!*,s:=statcounter;" +
+                            "load_package redfront;crbuf!*:=cdr c;inputbuflis!*:=cdr i;statcounter:=s-1;end$\n");
             redfrontLoaded = true;
         }
     }
@@ -249,11 +251,12 @@ public class REDUCEPanel extends BorderPane {
      * Send input to REDUCE but hide any evidence from the I/O display.
      */
     private void stealthInput(String input) {
-        // Should probably also reset crbuf!* and inputbuflis!*;
-        // see the bottom of packages/redfront/redfront.red.
+        // Hide the interaction with REDUCE:
+        // See the bottom of packages/redfront/redfront.red.
         hideNextOutput = true;
         sendStringToREDUCENoEcho(
-                String.format("symbolic<<%s;statcounter:=statcounter-1;>>$\n", input));
+                String.format("symbolic<<%s;crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
+                        "statcounter:=statcounter-1;>>$\n", input));
     }
 
     // User input processing **********************************************************************
@@ -354,8 +357,8 @@ public class REDUCEPanel extends BorderPane {
      * A sufficient delay seems necessary for the input to be rendered!
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
-    private void scrollWebViewToBottom(boolean output) { // FixMe Redundant paramemter!
-        webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)}, 200);");
+    private void scrollWebViewToBottom() {
+        webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)},200);");
     }
 
     /*
@@ -365,7 +368,7 @@ public class REDUCEPanel extends BorderPane {
     void sendStringToREDUCEAndEcho(String text) {
         inputPre.appendChild(doc.createTextNode(text));
         // Make sure the new input text is visible:
-        scrollWebViewToBottom(false);
+        scrollWebViewToBottom();
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -615,7 +618,7 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    private static final Pattern promptPattern = Pattern.compile("(?:\u0001?\\d+([:*]) \u0002?)|\\?");
+    private static final Pattern promptPattern = Pattern.compile("(?:\u0001?(\\d+([:*]) )\u0002?)|\\?");
     // Allow ^A prompt ^B in case redfront mode turned on then off.
 
     /**
@@ -638,9 +641,10 @@ public class REDUCEPanel extends BorderPane {
         // Split off the final line, which should consist of the next input prompt:
         promptIndex = text.lastIndexOf("\n") + 1;
         if (promptIndex < text.length() &&
-                (promptMatcher = promptPattern.matcher(promptString = text.substring(promptIndex))).matches()) {
+                (promptMatcher = promptPattern.matcher(text.substring(promptIndex))).matches()) {
             promptFound = true;
-            questionPrompt = promptMatcher.group(1) == null;
+            promptString = promptMatcher.group(1); // exclude ^A/^B
+            questionPrompt = promptMatcher.group(2) == null;
         }
         if (beforeFirstPrompt) {
             // Do things relating to the first prompt here...
@@ -661,7 +665,8 @@ public class REDUCEPanel extends BorderPane {
                     }
                     if (typesetMathsState) {
                         sendStringToREDUCENoEcho(
-                                "symbolic<<load_package fmprint;statcounter:=statcounter-1;>>$\n");
+                                "symbolic<<load_package fmprint;crbuf!*:=nil;" +
+                                        "inputbuflis!*:=nil;statcounter:=0;>>$\n");
                         fmprintLoaded = true;
                     }
                     return;
@@ -689,7 +694,7 @@ public class REDUCEPanel extends BorderPane {
                     if (0 < promptIndex)
                         outputText(text.substring(0, promptIndex), outputCSSClass);
                     // Only colour output *after* initial REDUCE header.
-                    if (!questionPrompt) switch (promptMatcher.group(1)) {
+                    if (!questionPrompt) switch (promptMatcher.group(2)) {
                         case "*":
                             inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                             outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
@@ -758,19 +763,10 @@ public class REDUCEPanel extends BorderPane {
                 break; // end of case RunREDUCEPrefs.REDFRONT
         } // end of switch (colouredIOState)
 
-        scrollWebViewToBottom(true);
+        scrollWebViewToBottom();
     }
 
-//    private static final Pattern PATTERN = Pattern.compile("\n1:"); // works better than "\n1: "
-
     private void processPromptMarkers(String text, int start) {
-        // Delete the very first prompt. (This code may not be reliable!)
-        // FixMe This is no longer appropriate!
-//        Matcher matcher;
-//        if (beforeFirstPrompt && (matcher = PATTERN.matcher(text)).find(start)) {
-//            beforeFirstPrompt = false;
-//            text = matcher.replaceFirst("");
-//        }
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
