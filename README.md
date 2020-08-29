@@ -119,10 +119,16 @@ top-level directory.
 
 ### Updates since last release
 
-* V1.71 Re-enable Typeset I/O option, renamed to Typeset Maths, and make it
-  work better but big delimiters are not rendered correctly.
+* V1.71 Re-enable Typeset I/O option, renamed to Typeset Maths, and
+  make it work better but big delimiters are not rendered correctly.
 * Add experimental Hide Input Editor option to the View menu,
   available only in Single Pane Display mode.
-* V1.72 Rename Initial I/O Directory to REDUCE Working Directory.  This now
-  sets the initial directory for both REDUCE and the file selectors
-  and defaults to the user's home directory.
+* V1.72 Rename Initial I/O Directory to REDUCE Working Directory.
+  This now sets the initial directory for both REDUCE and the file
+  selectors and defaults to the user's home directory.
+* V1.73 Make all view options apply to each REDUCE panel
+  independently, initialised from the last selected (and saved)
+  values.
+* Add a green dot at the top right of the selected REDUCEPanel in
+  split-pane mode to show more clearly which panel is selected.
+* Make redfront View option take effect after the next prompt.

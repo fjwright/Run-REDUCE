@@ -202,9 +202,9 @@ public class REDUCEPanel extends BorderPane {
      * Called in RRPreferences.save (only) to control bold prompts.
      */
     void setBoldPrompts(boolean enabled) {
+        boldPromptsState = enabled;
         if (enabled) head.appendChild(promptWeightStyle);
         else head.removeChild(promptWeightStyle);
-        boldPromptsState = enabled;
     }
 
     private boolean redfrontLoaded;
@@ -217,17 +217,20 @@ public class REDUCEPanel extends BorderPane {
         if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
         if (colouredIOState == RRPreferences.ColouredIO.REDFRONT && runningREDUCE && !redfrontLoaded) {
-//            hideNextOutput = true;
-//            sendStringToREDUCENoEcho("load_package redfront$\n");
-            sendStringToREDUCEAndEcho("load_package redfront$\n");
+            hideNextOutput = true;
+            sendStringToREDUCENoEcho(
+                    // Should probably also reset crbuf!* and inputbuflis!*;
+                    // see the bottom of packages/redfront/redfront.red.
+                    "symbolic begin scalar s:=statcounter;load_package redfront;statcounter:=s-1;end$\n");
             redfrontLoaded = true;
         }
     }
 
     /**
-     * Control use of typeset I/O *provided* REDUCE is running.
+     * Called in RRPreferences.save (only) to control typeset I/O.
      */
     void setTypesetMaths(boolean enabled) {
+        typesetMathsState = enabled;
         if (runningREDUCE) {
             if (enabled) {
                 if (fmprintLoaded) {
@@ -240,7 +243,6 @@ public class REDUCEPanel extends BorderPane {
                 stealthInput("off fancy");
             }
         }
-        typesetMathsState = enabled;
     }
 
     /**
@@ -403,8 +405,6 @@ public class REDUCEPanel extends BorderPane {
         beforeFirstPrompt = true;
         fmprintLoaded = false;
         redfrontLoaded = false;
-
-        if (typesetMathsState) setTypesetMaths(true);
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -613,23 +613,10 @@ public class REDUCEPanel extends BorderPane {
         span.setClassName("prompt");
         span.setTextContent(text);
         inputPre.appendChild(span);
-
-        if (beforeFirstPrompt) {
-            if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
-//                hideNextOutput = true;
-//                sendStringToREDUCENoEcho(loadRedfront);
-                sendStringToREDUCEAndEcho("load_package redfront$\n");
-                redfrontLoaded = true;
-            }
-            if (typesetMathsState) {
-                stealthInput("load_package fmprint");
-                fmprintLoaded = true;
-            }
-            beforeFirstPrompt = false;
-        }
     }
 
-    private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|\\?");
+    private static final Pattern promptPattern = Pattern.compile("(?:\u0001?\\d+([:*]) \u0002?)|\\?");
+    // Allow ^A prompt ^B in case redfront mode turned on then off.
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -659,9 +646,26 @@ public class REDUCEPanel extends BorderPane {
             // Do things relating to the first prompt here...
             if (promptFound) {
                 // Text ends with the first prompt...
-//                outputHeaderText(text.substring(0, promptIndex));
-//                promptText(promptString, null);
-//                beforeFirstPrompt = false;
+                beforeFirstPrompt = false;
+                if (colouredIOState != RRPreferences.ColouredIO.REDFRONT && !typesetMathsState) {
+                    if (colouredIOState == RRPreferences.ColouredIO.NONE) {
+                        outputHeaderText(text.substring(0, promptIndex));
+                        outputPromptText(promptString, null);
+                        return;
+                    } // else MODAL so fall through to the general case code
+                } else {
+                    outputHeaderText(text.substring(0, promptIndex - 1)); // without trailing newline
+                    if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+                        sendStringToREDUCENoEcho("load_package redfront$\n");
+                        redfrontLoaded = true;
+                    }
+                    if (typesetMathsState) {
+                        sendStringToREDUCENoEcho(
+                                "symbolic<<load_package fmprint;statcounter:=statcounter-1;>>$\n");
+                        fmprintLoaded = true;
+                    }
+                    return;
+                }
             } else {
                 // Before the first prompt...
                 outputHeaderText(text);
