@@ -11,21 +11,22 @@ package fjwright.runreduce;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 /**
  * This is the main class that sets up and runs the application.
@@ -88,7 +89,7 @@ public class RunREDUCE extends Application {
                 runREDUCEFrame.frame.setCenter(reducePanel);
                 break;
             case SPLIT:
-                useSplitPane(true);
+                useSplitPane(true, true);
                 break;
             case TABBED:
                 useTabPane(true);
@@ -106,7 +107,82 @@ public class RunREDUCE extends Application {
         }
     }
 
-    static void useSplitPane(boolean enable) {
+    static void reducePanelRadioMenuItemGroupChangeListener
+            (ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
+        // both: Show Display and Editor Panes
+        // displayOnly: Show I/O Display Pane only
+        // maxDisplay: Maximize I/O Display Pane
+//        System.err.println(oldToggle.getUserData() + " -> " + newToggle.getUserData());
+        switch (RRPreferences.displayPane) {
+            case SINGLE: // OK
+                switch ((String) newToggle.getUserData()) {
+                    case "both":
+                    default:
+                        reducePanel.splitPane.getItems().add(0, reducePanel.ioDisplayPane);
+                        runREDUCEFrame.frame.setCenter(reducePanel);
+                        return;
+                    case "displayOnly":
+                    case "maxDisplay":
+                        runREDUCEFrame.frame.setCenter(reducePanel.ioDisplayPane);
+                        return;
+                }
+
+            case SPLIT:
+                List list = splitPane.getItems();
+                switch ((String) newToggle.getUserData()) {
+                    case "both":
+                    default:
+                        switch ((String) oldToggle.getUserData()) {
+                            case "displayOnly":
+                                list.set(list.indexOf(reducePanel.ioDisplayPane), reducePanel);
+                                break;
+                            case "maxDisplay":
+                                runREDUCEFrame.frame.setCenter(splitPane);
+                                break;
+                        }
+                        reducePanel.splitPane.getItems().add(0, reducePanel.ioDisplayPane);
+                        return;
+                    case "displayOnly": // OK
+                        list.set(list.indexOf(reducePanel), reducePanel.ioDisplayPane);
+                        return;
+                    case "maxDisplay": // OK
+                        runREDUCEFrame.frame.setCenter(reducePanel.ioDisplayPane);
+                        return;
+                }
+
+            case TABBED:
+                return;
+        }
+
+        Parent parent = reducePanel.getParent();
+        switch ((String) newToggle.getUserData()) {
+            case "both":
+            default:
+                reducePanel.splitPane.getItems().add(0, reducePanel.ioDisplayPane);
+                if (parent == null) {
+                    runREDUCEFrame.frame.setCenter(reducePanel);
+                } else if (parent instanceof BorderPane) {
+                    ((BorderPane) parent).setCenter(reducePanel);
+                } else if (parent.getParent() instanceof SplitPane) {
+                    List list = ((SplitPane) parent.getParent()).getItems();
+                    list.set(list.indexOf(reducePanel), reducePanel);
+                } // also need to handle TabPane
+                break;
+            case "displayOnly":
+                if (parent instanceof BorderPane) {
+                    ((BorderPane) parent).setCenter(reducePanel.ioDisplayPane);
+                } else if (parent.getParent() instanceof SplitPane) {
+                    List list = ((SplitPane) parent.getParent()).getItems();
+                    list.set(list.indexOf(reducePanel), reducePanel.ioDisplayPane);
+                } // also need to handle TabPane
+                break;
+            case "maxDisplay":
+                runREDUCEFrame.frame.setCenter(reducePanel.ioDisplayPane);
+                break;
+        }
+    }
+
+    static void useSplitPane(boolean enable, boolean startup) {
         if (enable) {
             REDUCEPanel reducePanel2 = new REDUCEPanel();
             splitPane = new SplitPane(reducePanel, reducePanel2);
@@ -114,11 +190,15 @@ public class RunREDUCE extends Application {
             runREDUCEFrame.frame.setCenter(splitPane);
             reducePanel.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
             reducePanel2.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel.setSelected(false); // old panel
-            reducePanel = reducePanel2; // new panel
-            reducePanel.setSelected(true);
-            reducePanel.updateMenus();
-            reducePanel.inputTextArea.requestFocus();
+            if (startup)
+                reducePanel.setSelected(true);
+            else {
+                reducePanel.setSelected(false); // old panel
+                reducePanel = reducePanel2; // new panel
+                reducePanel.setSelected(true);
+                reducePanel.updateMenus();
+                reducePanel.inputTextArea.requestFocus();
+            }
         } else { // Revert to single pane.
             splitPane = null; // release resources
             reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);

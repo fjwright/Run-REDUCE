@@ -70,7 +70,6 @@ class RRPreferences {
                 break;
             case DISPLAYPANE:
                 prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());
-                RunREDUCE.runREDUCEFrame.hideInputEditorCheckBox.setDisable(displayPane != DisplayPane.SINGLE);
                 break;
             default:
                 System.err.println("Attempt to save unexpected preference key: " + key);

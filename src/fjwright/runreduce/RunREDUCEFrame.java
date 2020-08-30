@@ -61,7 +61,7 @@ public class RunREDUCEFrame {
     @FXML
     MenuItem addTabMenuItem;
     @FXML
-    CheckMenuItem hideInputEditorCheckBox;
+    ToggleGroup reducePanelRadioMenuItemGroup;
     // Templates and Functions menus:
     @FXML
     Menu templatesMenu, functionsMenu;
@@ -121,7 +121,8 @@ public class RunREDUCEFrame {
         tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
         addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
 
-        hideInputEditorCheckBox.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.SINGLE);
+        reducePanelRadioMenuItemGroup.selectedToggleProperty().addListener
+                (RunREDUCE::reducePanelRadioMenuItemGroupChangeListener);
 
         /* ********* *
          * Help menu *
@@ -451,7 +452,7 @@ public class RunREDUCEFrame {
             case SINGLE:
                 return;
             case SPLIT:
-                RunREDUCE.useSplitPane(false);
+                RunREDUCE.useSplitPane(false, false);
                 break;
             case TABBED:
                 RunREDUCE.useTabPane(false);
@@ -464,12 +465,12 @@ public class RunREDUCEFrame {
     private void splitPaneRadioButtonAction() {
         if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabPane(false);
         RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SPLIT);
-        RunREDUCE.useSplitPane(true);
+        RunREDUCE.useSplitPane(true, false);
     }
 
     @FXML
     private void tabbedPaneRadioButtonAction() {
-        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false);
+        if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false, false);
         RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
         RunREDUCE.useTabPane(true);
         addTabMenuItem.setDisable(false);
@@ -478,11 +479,6 @@ public class RunREDUCEFrame {
     @FXML
     private void addTabMenuItemAction() {
         RunREDUCE.addTab();
-    }
-
-    @FXML
-    private void hideInputEditorCheckBoxAction() {
-        RunREDUCE.hideInputEditor(hideInputEditorCheckBox.isSelected());
     }
 
     /* ************** *
@@ -610,7 +606,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.73, August 2020\n" +
+                "Version 1.74, August 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);

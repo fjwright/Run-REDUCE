@@ -61,8 +61,7 @@
                                    toggleGroup="$colouredIOButtonGroup"/>
                 </Menu>
                 <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false"
-                               onAction="#typesetMathsCheckBoxAction"
-                               text="Typeset Maths"/>
+                               onAction="#typesetMathsCheckBoxAction" text="Typeset Maths"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false"
                                onAction="#singlePaneRadioButtonAction" selected="true" text="Single Pane Display">
@@ -79,8 +78,18 @@
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction"
                           text="Add Another Tab"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <CheckMenuItem fx:id="hideInputEditorCheckBox" mnemonicParsing="false"
-                               onAction="#hideInputEditorCheckBoxAction" text="Hide Input Editor"/>
+                <Menu mnemonicParsing="false" text="REDUCE Panel">
+                    <RadioMenuItem mnemonicParsing="false" selected="true" text="Show Display and Editor Panes"
+                                   userData="both">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="reducePanelRadioMenuItemGroup"/>
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" text="Show I/O Display Pane only"
+                                   toggleGroup="$reducePanelRadioMenuItemGroup" userData="displayOnly"/>
+                    <RadioMenuItem mnemonicParsing="false" text="Maximize I/O Display Pane"
+                                   toggleGroup="$reducePanelRadioMenuItemGroup" userData="maxDisplay"/>
+                </Menu>
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..."/>

@@ -137,3 +137,11 @@ top-level directory.
   not work).
 * Fix auto-run menu code not starting PSL REDUCE immediately if REDUCE
   was not running.
+* Add a tooltip to the green dot at the top right of the selected
+  REDUCEPanel.
+* V1.74 On startup in split pane mode, select the left panel (by not
+  running some of the code added in v1.73).
+* Replace the Hide Input Editor CheckBox View menu item with a REDUCE
+  Panel submenu of RadioMenuItems to support maximizing the I/O
+  display either within its panel or within the window.  This code is
+  not yet complete or correct!
