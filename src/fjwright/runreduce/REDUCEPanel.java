@@ -1,6 +1,7 @@
 package fjwright.runreduce;
 
 import javafx.application.Platform;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Label outputLabel, inputLabel;
     @FXML
-    private CheckBox hideEditorCheckBox;
+    private ToggleButton hideEditorToggleButton;
     @FXML
     Label activeLabel;
     @FXML
@@ -49,6 +50,7 @@ public class REDUCEPanel extends BorderPane {
     int fontSize;
     private boolean boldPromptsState, typesetMathsState;
     private RRPreferences.ColouredIO colouredIOState;
+    private double[] dividerPositions;
 
     private final WebEngine webEngine;
     private HTMLDocument doc;
@@ -122,6 +124,17 @@ public class REDUCEPanel extends BorderPane {
 
         // Note that a font name containing spaces needs quoting in CSS!
         inputTextArea.setStyle("-fx-font:" + fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
+
+        hideEditorToggleButton.selectedProperty().addListener(hide -> {
+            if (((ObservableBooleanValue) hide).getValue()) {
+                dividerPositions = splitPane.getDividerPositions();
+                this.setCenter(ioDisplayPane);
+            } else {
+                splitPane.getItems().set(0, ioDisplayPane);
+                splitPane.setDividerPositions(dividerPositions);
+                this.setCenter(splitPane);
+            }
+        });
     }
 
     // WebView control ****************************************************************************
@@ -262,20 +275,6 @@ public class REDUCEPanel extends BorderPane {
     }
 
     // User input processing **********************************************************************
-
-    private double[] dividerPositions;
-
-    @FXML
-    private void hideEditorAction() {
-        if (hideEditorCheckBox.isSelected()) {
-            dividerPositions = splitPane.getDividerPositions();
-            this.setCenter(ioDisplayPane);
-        } else {
-            splitPane.getItems().set(0, ioDisplayPane);
-            splitPane.setDividerPositions(dividerPositions);
-            this.setCenter(splitPane);
-        }
-    }
 
     @FXML
     private void sendButtonClicked(MouseEvent mouseEvent) {

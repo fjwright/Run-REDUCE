@@ -142,5 +142,5 @@ top-level directory.
 * V1.74 On startup in split pane mode, select the left panel (by not
   running some of the code added in v1.73).
 * Replace the Hide Input Editor CheckBox View menu item with a Hide
-  Editor CheckBox on each REDUCEPanel to support maximizing the I/O
-  display within its panel.  This code is not yet finished!
+  Editor ToggleButton on each REDUCEPanel that maximizes the I/O
+  display within its panel.

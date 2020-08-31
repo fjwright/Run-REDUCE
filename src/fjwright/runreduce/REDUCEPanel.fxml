@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.scene.web.*?>
 
 <!-- Do not include the controller when compiling this file!
 Error messages that no controller is specified do not stop compilation.
@@ -19,23 +19,27 @@ Use XML character entity references for control characters in strings, e.g. &#10
                     <HBox BorderPane.alignment="CENTER_LEFT">
                         <Label fx:id="outputLabel" text="Input/Output Display"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <CheckBox fx:id="hideEditorCheckBox" mnemonicParsing="false" onAction="#hideEditorAction"
-                                  text="Hide Editor">
-                            <padding>
-                                <Insets right="10.0"/>
-                            </padding>
-                        </CheckBox>
                         <Label fx:id="activeLabel" text="●" textFill="green" visible="false">
                             <tooltip>
                                 <Tooltip text="This REDUCE panel is active."/>
                             </tooltip>
+                            <HBox.margin>
+                                <Insets right="10.0"/>
+                            </HBox.margin>
                         </Label>
+                        <ToggleButton fx:id="hideEditorToggleButton" mnemonicParsing="false" style="-fx-padding: 1 3;"
+                                      text="Hide Editor"/>
+                        <padding>
+                            <Insets bottom="1.0"/>
+                        </padding>
                     </HBox>
                 </top>
                 <center>
                     <BorderPane style="-fx-border-color: darkgrey;">
                         <center>
-                            <WebView fx:id="outputWebView" prefHeight="-1.0" prefWidth="-1.0"/>
+                            <!-- Need a nonzero minimum size to avoid exception when minimized! -->
+                            <WebView fx:id="outputWebView" minHeight="10.0" minWidth="10.0" prefHeight="-1.0"
+                                     prefWidth="-1.0"/>
                         </center>
                     </BorderPane>
                 </center>
@@ -45,7 +49,11 @@ Use XML character entity references for control characters in strings, e.g. &#10
             </BorderPane>
             <BorderPane>
                 <top>
-                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT"/>
+                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT">
+                        <padding>
+                            <Insets bottom="2.0"/>
+                        </padding>
+                    </Label>
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
