@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -26,6 +27,12 @@ Use XML character entity references for control characters in strings, e.g. &#10
                     <HBox BorderPane.alignment="CENTER_LEFT">
                         <Label fx:id="outputLabel" text="Input/Output Display"/>
                         <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="hideEditorCheckBox" mnemonicParsing="false" onAction="#hideEditorAction"
+                                  text="Hide Editor">
+                            <padding>
+                                <Insets right="10.0"/>
+                            </padding>
+                        </CheckBox>
                         <Label fx:id="activeLabel" text="●" textFill="green" visible="false">
                             <tooltip>
                                 <Tooltip text="This REDUCE panel is active."/>

@@ -34,6 +34,8 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Label outputLabel, inputLabel;
     @FXML
+    private CheckBox hideEditorCheckBox;
+    @FXML
     Label activeLabel;
     @FXML
     WebView outputWebView; // Accessed in RunREDUCEFrame.java
@@ -260,6 +262,16 @@ public class REDUCEPanel extends BorderPane {
     }
 
     // User input processing **********************************************************************
+
+    @FXML
+    private void hideEditorAction() {
+        if (hideEditorCheckBox.isSelected()) {
+            this.setCenter(ioDisplayPane);
+        } else {
+            splitPane.getItems().set(0, ioDisplayPane);
+            this.setCenter(splitPane);
+        }
+    }
 
     @FXML
     private void sendButtonClicked(MouseEvent mouseEvent) {

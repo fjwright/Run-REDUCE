@@ -60,8 +60,6 @@ public class RunREDUCEFrame {
     private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
-    @FXML
-    ToggleGroup reducePanelRadioMenuItemGroup;
     // Templates and Functions menus:
     @FXML
     Menu templatesMenu, functionsMenu;
@@ -120,9 +118,6 @@ public class RunREDUCEFrame {
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
         tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
         addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
-
-        reducePanelRadioMenuItemGroup.selectedToggleProperty().addListener
-                (RunREDUCE::reducePanelRadioMenuItemGroupChangeListener);
 
         /* ********* *
          * Help menu *
