@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.web.WebView?>
 
 <!-- Do not include the controller when compiling this file!
@@ -60,42 +52,43 @@ Use XML character entity references for control characters in strings, e.g. &#10
                         <TextArea fx:id="inputTextArea" disable="true" onKeyPressed="#inputTextAreaOnKeyPressed"/>
                     </ScrollPane>
                 </center>
+                <bottom>
+                    <HBox BorderPane.alignment="CENTER">
+                        <padding>
+                            <Insets left="10.0" right="10.0" top="10.0"/>
+                        </padding>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
+                            <tooltip>
+                                <Tooltip
+                                        text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
+                            </tooltip>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0"
+                                text="Send Input">
+                            <tooltip>
+                                <Tooltip
+                                        text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
+                            </tooltip>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
+                            <tooltip>
+                                <Tooltip
+                                        text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
+                            </tooltip>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </bottom>
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
         </SplitPane>
     </center>
-    <bottom>
-        <HBox alignment="CENTER">
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </padding>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
-                <tooltip>
-                    <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
-                </tooltip>
-            </Button>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
-                    onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0"
-                    text="Send Input">
-                <tooltip>
-                    <Tooltip
-                            text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
-                </tooltip>
-            </Button>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
-                <tooltip>
-                    <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
-                </tooltip>
-            </Button>
-            <Region HBox.hgrow="ALWAYS"/>
-        </HBox>
-    </bottom>
-    <!--</BorderPane>-->
 </fx:root>

@@ -263,12 +263,16 @@ public class REDUCEPanel extends BorderPane {
 
     // User input processing **********************************************************************
 
+    private double[] dividerPositions;
+
     @FXML
     private void hideEditorAction() {
         if (hideEditorCheckBox.isSelected()) {
+            dividerPositions = splitPane.getDividerPositions();
             this.setCenter(ioDisplayPane);
         } else {
             splitPane.getItems().set(0, ioDisplayPane);
+            splitPane.setDividerPositions(dividerPositions);
             this.setCenter(splitPane);
         }
     }
