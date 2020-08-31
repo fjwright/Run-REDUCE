@@ -72,57 +72,62 @@
     <h2 id="MainWindow">The Main Window</h2>
 
     <p>The main window consists of one or more REDUCE panels that can
-    each run an independent invocation of REDUCE. There are three
+    each run an independent invocation of REDUCE.  There are three
     options: a single REDUCE panel (the default); a split pane
     containing two REDUCE panels side-by-side that are both visible; a
     tabbed pane containing one or more REDUCE panels, of which only
-    the selected panel is visible. The choice of display pane
+    the selected panel is visible.  The choice of display pane
     arrangement is controlled by options in
-    the <a href="#ViewMenu">View menu</a>. You can switch dynamically
+    the <a href="#ViewMenu">View menu</a>.  You can switch dynamically
     among the three options, in which case the currently selected
     REDUCE panel (only) and the REDUCE invocation running in it (if
     any) is preserved and carried to the new display pane arrangement,
-    but any other REDUCE invocations are discarded. With a split or
+    but any other REDUCE invocations are discarded.  With a split or
     tabbed pane, the active REDUCE panel can be selected by clicking
-    on the desired panel in a split pane or tab on a tabbed pane. The
-    non-selected panel in a split pane is greyed out. All controls and
-    the <em>File</em> and <em>REDUCE</em> menus apply to the currently
-    selected REDUCE panel, whereas the <em>View</em> menu applies to
-    all REDUCE panels.
+    on the desired panel in a split pane or tab on a tabbed pane.  The
+    non-selected panel in a split pane is greyed out and the selected
+    panel displays a green dot near the top right-hand corner,
+    immediately to the left of the <em>Hide Editor</em> toggle button.
+    All controls apply (primarily) to the currently selected REDUCE
+    panel.
     </p>
     <p>Tabs are initially labelled <em>Tab 1</em>, <em>Tab 2</em>,
     etc., and a new tab is labelled <em>Tab n</em> if it is
-    the <em>n<sup>th</sup></em> tab to be added. (Removing tabs does
+    the <em>n<sup>th</sup></em> tab to be added.  (Removing tabs does
     not affect the numbering.) However, when REDUCE is run in a tab,
     the tab label changes to the name of the REDUCE command being run,
     and remains so until a different REDUCE command is run in that
     tab.
     </p>
     <h3>REDUCE Panels</h3>
-    <p>A REDUCE panel consists of two panes one above the other. The
-    top pane displays all the REDUCE input and output in the current
-    session. It is read-only. The bottom pane is an input editor that
-    supports all the standard keyboard and mouse-based editing
-    facilities normally provided by your platform. It is disabled
-    unless REDUCE is running in this panel. Both panes display
-    vertical and horizontal scroll bars when necessary. Text does not
-    wrap. The horizontal divider separating the two panes can be
-    dragged up and down.
+    <p>A REDUCE panel normally consists of two panes one above the
+    other.  The top pane displays all the REDUCE input and output in
+    the current session.  It is read-only.  The bottom pane is an
+    input editor that supports all the standard keyboard and
+    mouse-based editing facilities normally provided by your platform.
+    It is disabled unless REDUCE is running in this panel.  Both panes
+    display vertical and horizontal scroll bars when necessary.  Text
+    does not wrap.  The horizontal divider separating the two panes
+    can be dragged up and down.
+    </p>
+    <p>There is a toggle button in the top right-hand corner of each
+    REDUCE panel, which when clicked hides the input editor.  This is
+    useful for viewing long runs of output.  Clicking the button again
+    shows the input editor.
     </p>
     <p>The name of the currently running (or last run) REDUCE command
-    is appended to the label of the REDUCE input/output display
-    pane. (You can edit the command names in
-    the <a href="#Configure">REDUCE configuration dialogue</a>.)
+    is appended to the label of the REDUCE input/output display pane.
+    (You can edit the command names in the <a href="#Configure">REDUCE
+    configuration dialogue</a>.)
     </p>
     <p>You type (or paste) REDUCE input into the input editor pane,
     edit it as necessary, and then click on the <em>Send Input</em>
     button, which sends the input to REDUCE and echos it in the top
-    pane. This clears the input editor, but you can scroll through the
-    previous input (entered via the input editor) using
-    the <em>Earlier Input</em> and <em>Later Input</em>
-    buttons. Scrolling to input later than the last previous input
-    clears the input editor pane back to its state before you started
-    scrolling.
+    pane.  This clears the input editor, but you can scroll through
+    the previous input (entered via the input editor) using
+    the <em>Earlier Input</em> and <em>Later Input</em> buttons.
+    Scrolling to input later than the last previous input clears the
+    input editor pane back to its state before you started scrolling.
     </p>
     <p>When keyboard focus is in the input editor pane, the following
     keyboard shortcuts are active:
@@ -552,12 +557,16 @@
 
     <h2 id="ViewMenu">The View Menu</h2>
 
-    <p>The <em>View</em> menu provides the following items:</p>
+    <p>Run-REDUCE-FX remembers the options you select using
+    the <em>View</em> menu and uses them the next time you start
+    Run-REDUCE-FX.  The first four options (above the separator) apply
+    to each REDUCE panel independently and Run-REDUCE-FX uses the last
+    set values initially when you create a new REDUCE panel.
+    The <em>View</em> menu provides the following items:</p>
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
-    Editor</em> panes.  Run-REDUCE-FX remembers the selected size and
-    uses it the next time you start Run-REDUCE-FX.
+    Editor</em> panes.
     </p>
     <h3>Bold Prompts</h3>
     <p>Selecting this item causes Run-REDUCE-FX to embolden the
@@ -580,15 +589,26 @@
     input are red, algebraic-mode output is blue, and echoed file
     input and symbolic-mode output are not coloured.
     </p>
-    <p>Note that turning <em>Redfront</em> colouring on does not take
-    effect until REDUCE is (re-)started, and turning <em>Modal</em>
-    colouring on does not fully take effect until the next input
-    prompt.  Turning I/O colouring off (by selecting <em>None</em>)
-    takes effect immediately and turning it back on mid-session turns
-    any previous I/O colouring back on, but any I/O produced while I/O
-    colouring was turned off will not be coloured.  (This is because
-    the required markup is only generated when I/O colouring is turned
-    on, which requires marginally more resources.)
+    <p>Note that turning I/O colouring on does not fully take effect
+    until the next input prompt.  Turning I/O colouring off (by
+    selecting <em>None</em>) takes effect immediately and turning it
+    back on mid-session turns any previous I/O colouring back on, but
+    any I/O produced while I/O colouring was turned off will not be
+    coloured.  (This is because the required markup is only generated
+    when I/O colouring is turned on to conserve resources.)
+    </p>
+    <h3>Typeset Maths</h3>
+    <p>Selecting this item causes Run-REDUCE-FX to display
+      algebraic-mode mathematical output more-or-less as it would be
+      typeset and centred horizontally.  <strong>WARNINGS:</strong>
+      Typeset Maths is currently experimental.  It interacts badly
+      with redfront I/O colouring, so don't try to use the two
+      together: one will effectively cancel the other.  Big delimiters
+      are not handled correctly: they or their components are too
+      small.  Some special symbols are output as \symb{<em>n</em>},
+      where <em>n</em> is some number, and when this happens the
+      output appears as uninterpreted LaTeX.  <em>Save Session
+      Log...</em> will not handle typeset maths well.
     </p>
     <h3>Single Pane Display</h3>
     <p>Selecting this causes Run-REDUCE-FX to display the selected
