@@ -15,6 +15,16 @@ Use XML character entity references for control characters in strings, e.g. &#10
     <center>
         <SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER">
             <BorderPane fx:id="ioDisplayPane">
+                <!-- center before top to avoid Hide Editor button having initial focus. -->
+                <center>
+                    <BorderPane style="-fx-border-color: darkgrey;">
+                        <center>
+                            <!-- Need a nonzero minimum size to avoid exception when minimized! -->
+                            <WebView fx:id="outputWebView" minHeight="10.0" minWidth="10.0" prefHeight="-1.0"
+                                     prefWidth="-1.0"/>
+                        </center>
+                    </BorderPane>
+                </center>
                 <top>
                     <HBox BorderPane.alignment="CENTER_LEFT">
                         <Label fx:id="outputLabel" text="Input/Output Display"/>
@@ -34,15 +44,6 @@ Use XML character entity references for control characters in strings, e.g. &#10
                         </padding>
                     </HBox>
                 </top>
-                <center>
-                    <BorderPane style="-fx-border-color: darkgrey;">
-                        <center>
-                            <!-- Need a nonzero minimum size to avoid exception when minimized! -->
-                            <WebView fx:id="outputWebView" minHeight="10.0" minWidth="10.0" prefHeight="-1.0"
-                                     prefWidth="-1.0"/>
-                        </center>
-                    </BorderPane>
-                </center>
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>

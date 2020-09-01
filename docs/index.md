@@ -48,7 +48,6 @@ that it currently provides:
 * Easy access to the Run-REDUCE-FX User Guide, the standard
   documentation distributed with REDUCE as HTML or PDF files, the
   REDUCE Web Site and the SourceForge Project Site.
+* Experimental typeset-style display of mathematics.
 
-I hope to implement typeset-style display of mathematics soon.
-
-Francis Wright, August 2020
+Francis Wright, September 2020

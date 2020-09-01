@@ -2,13 +2,12 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, August 2020
+### Francis Wright, September 2020
 
 Run-REDUCE-FX is a re-implementation of
 [Run-REDUCE](https://fjwright.github.io/Run-REDUCE/) using JavaFX
-instead of Swing.  It does **not** (yet) provide typeset-quality
-display of mathematical notation.  The latest version of Run-REDUCE-FX
-requires Java 11 or later plus JavaFX 11 or later.
+instead of Swing.  The latest version of Run-REDUCE-FX requires Java
+11 or later plus JavaFX 11 or later.
 
 For further general background information please see the
 [Run-REDUCE-FX web page](https://fjwright.github.io/Run-REDUCE-FX/).
@@ -117,30 +116,21 @@ top-level directory.
   - Add a ContextMenu to implement key choices for Initial I/O
     Directory: Home Directory; Current Directory; Another Directory.
 
-### Updates since last release
+### Version 1.8
 
-* V1.71 Re-enable Typeset I/O option, renamed to Typeset Maths, and
-  make it work better but big delimiters are not rendered correctly.
-* Add experimental Hide Input Editor option to the View menu,
-  available only in Single Pane Display mode.
-* V1.72 Rename Initial I/O Directory to REDUCE Working Directory.
-  This now sets the initial directory for both REDUCE and the file
-  selectors and defaults to the user's home directory.
-* V1.73 Make view options apply to each REDUCE panel independently,
-  initialised from the last selected (and saved) values.
-* When split-pane view is enabled, always select the new panel as
-  active, and add a green dot at the top right of the selected
-  REDUCEPanel to show more clearly which panel is selected.
-* Make redfront View option take effect after the next prompt.
-* BEWARE that use of redfront and fmprint currently conflict, so don't
-  use redfront mode with typeset maths (because one or the other will
-  not work).
-* Fix auto-run menu code not starting PSL REDUCE immediately if REDUCE
-  was not running.
-* Add a tooltip to the green dot at the top right of the selected
-  REDUCEPanel.
-* V1.74 On startup in split pane mode, select the left panel (by not
-  running some of the code added in v1.73).
-* Replace the Hide Input Editor CheckBox View menu item with a Hide
-  Editor ToggleButton on each REDUCEPanel that maximizes the I/O
-  display within its panel.
+* The Typeset Maths View menu option enables typeset-style display of
+  algebraic-mode output.  But beware that this is currently
+  experimental and has a number of limitations.
+* Rename Initial I/O Directory to REDUCE Working Directory in the
+  REDUCE Configuration dialogue.  This now sets the initial directory
+  for both REDUCE and the file selectors and defaults to the user's
+  home directory.
+* View options apply to each REDUCE panel independently, initialised
+  from the last selected (and saved) values, and the redfront View
+  option takes effect after the next prompt.
+* A toggle button on each REDUCE panel hides the input editor.
+* When split-pane view is enabled after startup, the new panel is
+  active and a green dot at the top right shows which panel is
+  selected.
+
+### Updates since last release
