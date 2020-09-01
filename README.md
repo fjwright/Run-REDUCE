@@ -134,3 +134,5 @@ top-level directory.
   selected.
 
 ### Updates since last release
+
+* V1.81 Fix code to detect question prompts.

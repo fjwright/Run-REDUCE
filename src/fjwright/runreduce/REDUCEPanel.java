@@ -633,7 +633,7 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    private static final Pattern promptPattern = Pattern.compile("(?:\u0001?(\\d+([:*]) )\u0002?)|\\?");
+    private static final Pattern promptPattern = Pattern.compile("\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
     // Allow ^A prompt ^B in case redfront mode turned on then off.
 
     /**
@@ -782,6 +782,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private void processPromptMarkers(String text, int start) {
+        // FixMe Merge this more with the prompt handling code at the start of processOutput().
         // Look for prompt markers:
         int promptStartMarker = text.indexOf("\u0001", start);
         int promptEndMarker = text.indexOf("\u0002", start);
@@ -789,7 +790,6 @@ public class REDUCEPanel extends BorderPane {
             if (start < promptStartMarker)
                 outputText(text.substring(start, promptStartMarker), outputCSSClass);
             String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
-            questionPrompt = promptString.equals("?");
             outputPromptText(promptString, ALGEBRAIC_INPUT_CSS_CLASS);
         } else
             outputText(text.substring(start), outputCSSClass);
