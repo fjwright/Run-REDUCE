@@ -1,6 +1,6 @@
 # Run-REDUCE-FX Install and Run Guide
 
-### Francis Wright, August 2020
+### Francis Wright, September 2020
 
 Run-REDUCE-FX is an open-source JavaFX GUI to run the REDUCE Computer
 Algebra System.  REDUCE must be obtained from
@@ -11,10 +11,11 @@ configuration, at least on Microsoft Windows and Ubuntu.  With
 [suitable
 configuration](https://fjwright.github.io/Run-REDUCE-FX/UserGuide.html#Configure)
 it **should** run on any platform that supports JavaFX 11 or later,
-but I can only test on Windows 10 and 64-bit Ubuntu 18.
+but I can only test on Windows 10 and Ubuntu.
 
 You need to have a Java Runtime Environment (JRE) and JavaFX libraries
-installed, both version 11 or later; see below for details.
+installed, both version 11 or later (preferably the latest release);
+see below for details.
 
 You also need to download the file
 [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar)
@@ -48,7 +49,7 @@ There are many ways to run JavaFX applications.  Here are some
 specific recommendations that I have tested.
 
 
-## Install OpenJDK JRE 11 plus OpenJFX 11...
+## Install OpenJDK JRE ...
 
 ### From the Web
 
@@ -57,32 +58,16 @@ a package manager as I describe below.
 
 Visit [AdoptOpenJDK](https://adoptopenjdk.net/), click on the *Other
 platforms* button (immediately below the *Latest release* button) and
-check that OpenJDK 11 (LTS) is selected.  (The default JVM, HotSpot,
-should be fine.)  Select your Operating System and Architecture or
-just scroll down to find your platform.  On the right, choose a JRE
+select *OpenJDK nn (Latest)* with the highest number *nn* (or you can
+currently use Java 11 if you prefer).  The default JVM, HotSpot,
+should be fine.  Select your Operating System and Architecture or just
+scroll down to find your platform.  On the right, choose a JRE
 distribution (a JDK distribution will also work, but is much bigger
 and irrelevant unless you do Java development), download and install
 it.  (On Windows, I recommend the *.msi* file.)  The default
 installation settings are fine although you can remove the *Associate
 .jar* option unless you want it for running other Java applications
 (but keep the *Add to PATH* option).
-
-Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
-*Download* button.  For 64-bit platforms, scroll down, download the
-appropriate *JavaFX 11 SDK* file (not the *jmods* file) and save it.
-Move it somewhere appropriate and unzip it.  (On Windows, I use the
-same installation folder as the JRE, so that I end up with the folder
-*Program Files\AdoptOpenJDK\javafx-sdk-11.0.2*.)  Make a note of the
-full pathname of the *lib* sub-directory or keep it open, since you
-need its location to set up the `PATH_TO_FX` environment variable.
-
-Beware that the JavaFX 11 releases are all for 64-bit architectures.
-For 32-bit Windows, scroll down further and use the JavaFX 14 Windows
-x86 SDK distribution.  This is claimed to run with JRE 11, and indeed
-32-bit JRE 11 and 32-bit JavaFX 14 seem to run well together on my
-32-bit Windows computer.  Note also that the latest release of REDUCE
-that fully supports 32-bit Windows in version 5286 released on 1 March
-2020; later releases do not install correctly.
 
 ### Using a Package Manager
 
@@ -91,15 +76,29 @@ other versions of Debian Linux, on which Ubuntu is based, and to a
 lesser extent to other flavours of Linux and other platforms, such as
 macOS.
 
-Open the *Synaptic Package Manager* via *Show Applications*, search
-for `jdk`, mark `openjdk-11-jre` for installation and accept its
-dependencies.  Then search for `jfx`, mark `openjfx` for installation
-and accept its dependencies (but you can deselect `openjfx-source`).
-Then click *Apply*.  Make a note of the full pathname of the JavaFX
-lib directory, which is probably `/usr/share/openjfx/lib`.  As a
-check, search for `jfx` again and ensure that the latest versions of
-the packages `libopenjfx-java`, `libopenjfx-jni` and `openjfx` are
-installed.
+Open the *Synaptic Package Manager* via *Show Applications*.  (If it
+is not there, open *Help*, click on *Install applications* under
+*Install & remove software*, click on *Synaptic* and then click on the
+*install* link.)  Search for `openjdk`, find the version of
+*openjdk-nn-jre* with the highest number *nn* (or you can currently
+use *openjdk-11-jre* if you prefer), mark it for installation and
+accept its dependencies.
+
+
+## Install OpenJFX ...
+
+This is my recommendation for all platforms because the versions
+available for some recent versions of Linux via package managers are
+broken!
+
+Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
+*Download* button.  Scroll down to *Latest Release* (or you can
+currently use JavaFX 11 if you prefer), download the appropriate
+*JavaFX SDK* file (not the *jmods* file) and save it.  Move it
+somewhere appropriate (anywhere should work) and unzip it.  Make a
+note of the full pathname of the *lib* sub-directory or copy it, since
+you need it to set up the `PATH_TO_FX` environment variable; see
+below.
 
 
 ## Run Run-REDUCE-FX using a Batch File on...
@@ -130,17 +129,16 @@ Command Prompt window.)
 
 ### Linux
 
-To create the environment variable, open your *Home* directory in
-*Files*, open your *.profile* file in a text editor, and add the line
+To create the environment variable, open the file *~/.profile* file in
+a text editor and add the line
 
-    export PATH_TO_FX=/usr/share/openjfx/lib
+    export PATH_TO_FX=path-to-openjfx/lib
 
-where */usr/share/openjfx/lib* represents the full pathname of the
-JavaFX lib directory that you have just installed.  Log out and then
-log back in or, until you have done so, prefix the *Run-REDUCE-FX*
-command by
+where *path-to-openjfx* represents the full pathname of the JavaFX
+directory that you have just installed.  Log out and then log back in
+or, until you have done so, prefix the *Run-REDUCE-FX* command by
 
-    PATH_TO_FX=/usr/share/openjfx/lib
+    PATH_TO_FX=path-to-openjfx/lib
 
 followed by a space.
 
@@ -165,16 +163,17 @@ need to use a larger REDUCE I/O font size than I would expect.  (A
 font with the same numerical size appears smaller than in Run-REDUCE.)
 This may be because JavaFX font sizes don't reflect display scaling.
 
-On my Linux computer, which currently runs Ubuntu 18.04.4 LTS, by
-default a warning message appears and some dialogues jump when they
-first appear.  In order to avoid these problems, I have included the
-option
+On Ubuntu 18 and 20, by default, two warning message appears and on
+Ubuntu 18 some dialogues jump when they first appear.  The warning
+about *libcanberra-gtk-module* can be avoided by using *Synaptic* to
+install *libcanberra-gtk-module* (or you can just ignore it).  In
+order to avoid the other problems, I have included the option
 
     -Djdk.gtk.version=2
 
-in the *Run-REDUCE-FX* batch file.  This may not be necessary on all
-platforms and will, I hope, cease to be necessary at some future date,
-so you might like to experiment with removing it.
+in the *Run-REDUCE-FX* batch file.  This may not be necessary on other
+platforms and will, I hope, cease to be necessary at all at some
+future date, so you might like to experiment with removing it.
 
 I have been advised that on Kubuntu 18.04.4 it may be necessary to
 install the Gnome 2 theme Adwaita.  You may also find that the About

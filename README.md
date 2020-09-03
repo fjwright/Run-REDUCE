@@ -20,7 +20,7 @@ is also included in Run-REDUCE-FX and easily accessible via the Help
 menu).
 
 Run-REDUCE-FX should run on any platform that supports JavaFX 11 (or
-later), but I can only test it on Microsoft Windows and 64-bit Ubuntu.
+later), but I can only test it on Microsoft Windows and Ubuntu.
 (Whilst Java is portable, filesystem structures and installation
 conventions are not!)
 
@@ -32,6 +32,10 @@ mainly because it's the license used by REDUCE.
 This project is set up for development using [IntelliJ
 IDEA](https://www.jetbrains.com/idea/) with Run-REDUCE-FX as the
 top-level directory.
+
+Run-REDUCE-FX currently uses a bundled copy of
+[KaTeX](https://katex.org/) to render LaTeX output by the REDUCE
+*fmprint* package when the *Typeset Maths* option is selected.
 
 ## Release Notes
 
