@@ -24,7 +24,9 @@ your home directory or the directory in which you store your REDUCE
 projects.  You can then run Run-REDUCE-FX by executing the shell
 command
 
-    java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
+``` shell
+java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
+```
 
 in the directory containing the file, where *JavaFXlibrary* represents
 the full pathname of your JavaFX library.
@@ -39,7 +41,9 @@ batch files, download it (by clicking on the link) to the same
 directory to which you downloaded *Run-REDUCE-FX.jar*.  Then you can
 run Run-REDUCE-FX by executing the simpler shell command
 
-    Run-REDUCE-FX
+``` shell
+Run-REDUCE-FX
+```
 
 provided you set up the `PATH_TO_FX` environment variable, as I
 explain below.
@@ -153,13 +157,17 @@ To create the environment variable, open your profile (or shell
 configuration) file (e.g. *~/.profile* in Ubuntu or *~/.bash_profile*
 in Fedora) in a text editor and add the line
 
-    export PATH_TO_FX=path-to-openjfx/lib
+``` shell
+export PATH_TO_FX=path-to-openjfx/lib
+```
 
 where *path-to-openjfx* represents the full pathname of the JavaFX
 directory that you have just installed.  Log out and then log back in
 or, until you have done so, prefix the *Run-REDUCE-FX* command by
 
-    PATH_TO_FX=path-to-openjfx/lib
+``` shell
+PATH_TO_FX=path-to-openjfx/lib
+```
 
 followed by a space.
 
@@ -169,7 +177,9 @@ open *Files* and navigate to the directory to which you downloaded
 in Terminal*.  You can now run Run-REDUCE-FX as described above by
 executing the shell command
 
-    . Run-REDUCE-FX
+``` shell
+. Run-REDUCE-FX
+```
 
 (Note that the above command has the form dot space filename, where
 dot is a short name for the *source* command.  If you set the file
@@ -190,7 +200,9 @@ about *libcanberra-gtk-module* can be avoided by using *Synaptic* to
 install *libcanberra-gtk-module* (or you can just ignore it).  In
 order to avoid the other problems, I have included the option
 
-    -Djdk.gtk.version=2
+``` shell
+-Djdk.gtk.version=2
+```
 
 in the *Run-REDUCE-FX* batch file.  This may not be necessary on all
 platforms and will, I hope, cease to be necessary at all at some

@@ -45,7 +45,7 @@ class RRPreferences {
     static ColouredIO colouredIOState =
             ColouredIO.valueOf(prefs.get(COLOUREDIO, ColouredIO.NONE.toString()));
     static DisplayPane displayPane =
-            DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SPLIT.toString()));
+            DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SINGLE.toString()));
     static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, false);
 
     static void save(String key, Object value) {
