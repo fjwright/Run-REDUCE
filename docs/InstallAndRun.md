@@ -7,11 +7,11 @@ Algebra System.  REDUCE must be obtained from
 [SourceForge](https://sourceforge.net/projects/reduce-algebra/) and
 installed separately.  Run-REDUCE-FX should find a standard REDUCE
 installation automatically and not **require** any initial
-configuration, at least on Microsoft Windows and Ubuntu.  With
+configuration, at least on Microsoft Windows and Linux.  With
 [suitable
 configuration](https://fjwright.github.io/Run-REDUCE-FX/UserGuide.html#Configure)
 it **should** run on any platform that supports JavaFX 11 or later,
-but I can only test on Windows 10 and Ubuntu.
+but I can only test on 64-bit Windows 10, Ubuntu 18/20 and Fedora 32.
 
 You need to have a Java Runtime Environment (JRE) and JavaFX libraries
 installed, both version 11 or later (preferably the latest release);
@@ -21,8 +21,8 @@ You also need to download the file
 [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar)
 (by clicking on the link) and save it somewhere convenient, such as
 your home directory or the directory in which you store your REDUCE
-projects.  You can then run Run-REDUCE-FX as an executable file by
-executing the shell command
+projects.  You can then run Run-REDUCE-FX by executing the shell
+command
 
     java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
 
@@ -34,11 +34,10 @@ it easier to run Run-REDUCE-FX.  The file
 [Run-REDUCE-FX.bat](https://github.com/fjwright/Run-REDUCE-FX/releases/download/v1.6/Run-REDUCE-FX.bat)
 is for use on Microsoft Windows and the file
 [Run-REDUCE-FX](https://github.com/fjwright/Run-REDUCE-FX/releases/download/v1.6/Run-REDUCE-FX)
-(no extension) is for use on non-Windows platforms that provide the
-*bash* shell (although I have only tested it on Ubuntu).  If you want
-to use one of these batch files, download it (by clicking on the link)
-to the same directory to which you downloaded *Run-REDUCE-FX.jar*.
-Then you can run Run-REDUCE-FX by executing the simpler shell command
+(no extension) is for use on Linux.  If you want to use one of these
+batch files, download it (by clicking on the link) to the same
+directory to which you downloaded *Run-REDUCE-FX.jar*.  Then you can
+run Run-REDUCE-FX by executing the simpler shell command
 
     Run-REDUCE-FX
 
@@ -69,12 +68,10 @@ installation settings are fine although you can remove the *Associate
 .jar* option unless you want it for running other Java applications
 (but keep the *Add to PATH* option).
 
-### Using a Package Manager
+### Using a Package Manager on Ubuntu
 
-The following details apply to Ubuntu.  They probably also apply to
-other versions of Debian Linux, on which Ubuntu is based, and to a
-lesser extent to other flavours of Linux and other platforms, such as
-macOS.
+The following details probably apply to all versions of Debian Linux,
+on which Ubuntu is based.
 
 Open the *Synaptic Package Manager* via *Show Applications*.  (If it
 is not there, open *Help*, click on *Install applications* under
@@ -85,11 +82,34 @@ use *openjdk-11-jre* if you prefer), mark it for installation and
 accept its dependencies.
 
 
+### Using a Package Manager on Fedora
+
+The following details probably apply to all versions of Red Hat Linux,
+on which Fedora is based.
+
+Fedora 32 has Java 8 installed by default but you can install and use
+the latest release of Java by executing the following commands
+in a terminal (assuming *x86_64* architecture):
+
+``` shell
+sudo dnf install java-latest-openjdk.x86_64
+sudo alternatives --config java
+```
+
+and select the new version.
+
+Alternatively, you might prefer to use *dnfdragora*, which is a
+graphical version of *dnf*.  (You may first need to install it, using
+either the *Software* app available in *Activities* or the *dnf*
+command).
+
+
 ## Install OpenJFX ...
 
-This is my recommendation for all platforms because the versions
-available for some recent versions of Linux via package managers are
-broken!
+This is my recommendation for all platforms because appropriate
+versions of OpenJFX for some recent versions of Linux via package
+managers are either broken (e.g. for Ubuntu 20.04) or unavailable
+(e.g. for Fedora 32)!
 
 Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
 *Download* button.  Scroll down to *Latest Release* (or you can
@@ -129,8 +149,9 @@ Command Prompt window.)
 
 ### Linux
 
-To create the environment variable, open the file *~/.profile* file in
-a text editor and add the line
+To create the environment variable, open your profile (or shell
+configuration) file (e.g. *~/.profile* in Ubuntu or *~/.bash_profile*
+in Fedora) in a text editor and add the line
 
     export PATH_TO_FX=path-to-openjfx/lib
 
@@ -171,7 +192,7 @@ order to avoid the other problems, I have included the option
 
     -Djdk.gtk.version=2
 
-in the *Run-REDUCE-FX* batch file.  This may not be necessary on other
+in the *Run-REDUCE-FX* batch file.  This may not be necessary on all
 platforms and will, I hope, cease to be necessary at all at some
 future date, so you might like to experiment with removing it.
 
