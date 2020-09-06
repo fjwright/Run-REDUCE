@@ -295,36 +295,47 @@ public class RunREDUCEFrame {
     // Save Session Log...
     @FXML
     private void saveLogMenuItemAction() {
-        saveLog(false);
+        saveLog(false, false);
     }
 
     // Append Session Log...
     @FXML
     private void appendLogMenuItemAction() {
-        saveLog(true);
+        saveLog(true, false);
     }
 
-    private void saveLog(boolean append) {
-        fileChooser.setInitialFileName("session.log");
+    // Save Raw Session Log...
+    @FXML
+    private void saveRawDisplayMenuItemAction() {
+        saveLog(false, true);
+    }
+
+    private void saveLog(boolean append, boolean raw) {
+        fileChooser.setInitialFileName(raw ? "raw-session.log" : "session.log");
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file;
         if (append) {
             fileChooser.setTitle("Append Session Log...");
             file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
         } else {
-            fileChooser.setTitle("Save Session Log...");
+            fileChooser.setTitle(raw ? "Save Raw Session Log..." : "Save Session Log...");
             file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         }
         if (file != null) {
             try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
-                /*
-                 * The <body> content should look like repeats of this structure:
-                 * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
-                 * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
-                 */
-                NodeList nodeList = RunREDUCE.reducePanel.body.getChildNodes();
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    out.write(nodeList.item(i).getTextContent());
+                if (raw) {
+                    out.write((String)
+                            RunREDUCE.reducePanel.webEngine.executeScript("document.documentElement.outerHTML"));
+                } else {
+                    /*
+                     * The <body> content should look like repeats of this structure:
+                     * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
+                     * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
+                     */
+                    NodeList nodeList = RunREDUCE.reducePanel.body.getChildNodes();
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        out.write(nodeList.item(i).getTextContent());
+                    }
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();

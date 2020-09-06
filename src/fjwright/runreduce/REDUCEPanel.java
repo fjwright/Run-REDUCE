@@ -52,7 +52,7 @@ public class REDUCEPanel extends BorderPane {
     private RRPreferences.ColouredIO colouredIOState;
     private double[] dividerPositions;
 
-    private final WebEngine webEngine;
+    final WebEngine webEngine;
     private HTMLDocument doc;
     private HTMLElement html, head, inputPre;
     HTMLElement body;
