@@ -13,7 +13,9 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.html.HTMLElement;
 
 import java.awt.Desktop; // only Desktop needed
 import java.io.*;
@@ -330,11 +332,20 @@ public class RunREDUCEFrame {
                     /*
                      * The <body> content should look like repeats of this structure:
                      * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
-                     * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
+                     * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset, or
+                     * <div class=outputCSSClass><span class="katex-display">KaTeX output</div> if typeset
                      */
                     NodeList nodeList = RunREDUCE.reducePanel.body.getChildNodes();
                     for (int i = 0; i < nodeList.getLength(); i++) {
-                        out.write(nodeList.item(i).getTextContent());
+                        HTMLElement el = (HTMLElement) nodeList.item(i);
+                        if (el.getTagName().equals("DIV")) {
+                            // <div> containing MathML with TeX annotation.
+                            out.write("\n");
+                            out.write(el.getElementsByTagName("annotation").item(0).getTextContent());
+                            out.write("\n\n");
+                        } else
+                            // Filter out ^A-^D in case redfront mode turned on then off.
+                            out.write(el.getTextContent().replaceAll("[\u0001-\u0004]", "")); // FixMe Use an explicit matcher.
                     }
                 }
             } catch (IOException ioe) {

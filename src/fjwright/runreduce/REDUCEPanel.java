@@ -572,7 +572,9 @@ public class REDUCEPanel extends BorderPane {
         public static final boolean throwOnError = false;
         public static final boolean displayMode = true;
         public static final double minRuleThickness = 0.1;
-        public static final String output = "html";
+//        public static final String output = "html";
+        // Default is output = htmlAndMathml: Outputs HTML for visual rendering and includes MathML for accessibility.
+        // The MathML includes the TeX input as annotation, which is what I currently output in the session log.
     }
 
     private void outputTypesetText(String text, String cssClass) {
