@@ -20,9 +20,9 @@ is also included in Run-REDUCE-FX and easily accessible via the Help
 menu).
 
 Run-REDUCE-FX should run on any platform that supports JavaFX 11 (or
-later), but I can only test it on Microsoft Windows and Ubuntu.
-(Whilst Java is portable, filesystem structures and installation
-conventions are not!)
+later), but I can only test it on Microsoft Windows and Linux.
+(Whilst Java is portable, filesystem structures, installation
+conventions and display systems are not!)
 
 REDUCE itself is an open source project available from
 [SourceForge](https://sourceforge.net/projects/reduce-algebra/).  I'm
@@ -140,7 +140,11 @@ Run-REDUCE-FX currently uses a bundled copy of
 ### Updates since last release
 
 * V1.81 Fix the code to detect question prompts.
-* Add a *Save Raw Session Log...* item to the File menu, which I will probably hide in release versions.
-* Fix the normal session log code to output the TeX markup used for typeset maths. 
+* Add a *Save Raw Session Log...* item to the File menu, which I will
+  probably hide in release versions.
+* Fix the normal session log code to output the TeX markup used for
+  typeset maths.
 * V1.82 Move *Load Packages...* to the *REDUCE* menu.
-* Add a *Print Session Log...* item to the File menu, which prints the I/O Display pane.
+* Add a *Print Session Log...* item to the File menu, which prints the
+  I/O Display pane.
+* Update docs.

@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # This batch file and Run-REDUCE-FX.jar must be in the same directory.
-# The Java 11 bin directory must be in PATH and the environment
-# variable PATH_TO_FX must be set to the JavaFX 11 lib directory.
+# The Java bin directory must be in PATH and the environment
+# variable PATH_TO_FX must be set to the JavaFX lib directory.
 # Then Run-REDUCE-FX.jar can be run from anywhere by running this batch file.
 # Any command-line arguments are passed on to Run-REDUCE-FX.jar.
 

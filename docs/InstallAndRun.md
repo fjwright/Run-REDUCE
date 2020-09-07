@@ -211,3 +211,14 @@ future date, so you might like to experiment with removing it.
 I have been advised that on Kubuntu 18.04.4 it may be necessary to
 install the Gnome 2 theme Adwaita.  You may also find that the About
 and error dialogue boxes are too small by default.
+
+If *Run-REDUCE-FX* misbehaves or crashes, try including the option
+
+``` shell
+-Dprism.order=sw
+```
+
+which tells Java to use software display rendering.  On Fedora, you
+may find that the *Gnome Classic* desktop environment works better
+than *Gnome*.  (One way to select your desktop environment is by using
+the settings icon on the login screen.)
