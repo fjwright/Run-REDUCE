@@ -140,5 +140,7 @@ Run-REDUCE-FX currently uses a bundled copy of
 ### Updates since last release
 
 * V1.81 Fix the code to detect question prompts.
-* Add a *Save Raw Session Log...* item to File menu, which I will probably hide in release versions.
+* Add a *Save Raw Session Log...* item to the File menu, which I will probably hide in release versions.
 * Fix the normal session log code to output the TeX markup used for typeset maths. 
+* V1.82 Move *Load Packages...* to the *REDUCE* menu.
+* Add a *Print Session Log...* item to the File menu, which prints the I/O Display pane.

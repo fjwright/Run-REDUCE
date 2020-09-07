@@ -26,8 +26,7 @@
                 <MenuItem fx:id="shutLastMenuItem" disable="true" mnemonicParsing="false"
                           onAction="#shutLastMenuItemAction" text="Shut Last Output File"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem fx:id="loadPackagesMenuItem" disable="true" mnemonicParsing="false"
-                          onAction="#loadPackagesMenuItemAction" text="Load Packages..."/>
+                <MenuItem mnemonicParsing="false" onAction="#printLogMenuItemAction" text="Print Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#saveLogMenuItemAction" text="Save Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#appendLogMenuItemAction" text="Append Session Log..."/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
@@ -38,6 +37,8 @@
             <Menu mnemonicParsing="false" text="REDUCE">
                 <Menu fx:id="runREDUCESubmenu" mnemonicParsing="false" text="Run REDUCE..."/>
                 <Menu fx:id="autoRunREDUCESubmenu" mnemonicParsing="false" text="Auto-run REDUCE..."/>
+                <MenuItem fx:id="loadPackagesMenuItem" disable="true" mnemonicParsing="false"
+                          onAction="#loadPackagesMenuItemAction" text="Load Packages..."/>
                 <MenuItem fx:id="stopREDUCEMenuItem" disable="true" mnemonicParsing="false"
                           onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE"/>
                 <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction"

@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,7 +14,6 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLElement;
 
@@ -292,6 +292,22 @@ public class RunREDUCEFrame {
         }
         // Select packages to load:
         showDialogAndWait("Load Packages...", "LoadPackagesDialog.fxml");
+    }
+
+    // Print Session Log...
+    @FXML
+    private void printLogMenuItemAction() {
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+        if (printerJob.showPrintDialog(frame.getScene().getWindow())) {
+            RunREDUCE.reducePanel.webEngine.print(printerJob);
+            if (printerJob.endJob()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText("Print Session Log...");
+                alert.setContentText("Session log sent to printer.");
+                alert.showAndWait();
+            } else
+                RunREDUCE.errorMessageDialog("Print Session Log...", "Request failed!");
+        }
     }
 
     // Save Session Log...
@@ -623,7 +639,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.81, September 2020\n" +
+                "Version 1.82, September 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
