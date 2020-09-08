@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.web.WebView?>
 
 <!-- Do not include the controller when compiling this file!
 Error messages that no controller is specified do not stop compilation.
@@ -50,11 +58,19 @@ Use XML character entity references for control characters in strings, e.g. &#10
             </BorderPane>
             <BorderPane>
                 <top>
-                    <Label fx:id="inputLabel" text="Input Editor" BorderPane.alignment="CENTER_LEFT">
+                    <HBox BorderPane.alignment="CENTER_LEFT">
+                        <Label fx:id="inputLabel" text="Input Editor"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Control+Click for the Pop-Up Keyboard">
+                            <tooltip>
+                                <Tooltip
+                                        text="Hold down the Control key and click you primary mouse button&#10;or click your middle (tertiary) mouse button on the text area&#10;to access special symbols etc. using the pop-up keyboard."/>
+                            </tooltip>
+                        </Label>
                         <padding>
                             <Insets bottom="2.0"/>
                         </padding>
-                    </Label>
+                    </HBox>
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">

@@ -153,3 +153,5 @@ Run-REDUCE-FX currently uses a bundled copy of
   Change use of \u200B, the zero-width space, to \u200C, the zero-width non-joiner,
   which does not appear as a space in a TextArea.
   Only decode pop-up keyboard characters inserted in templates when they are evaluated, not when they are edited.
+* Add a label "Control+Click for the Pop-Up Keyboard" with a tooltip to the top of the input editor
+  and the bottom of each template dialogue.

@@ -1,4 +1,4 @@
-package fjwright.runreduce.templates;
+package fjwright.runreduce;
 
 import javafx.beans.binding.When;
 import javafx.beans.value.ObservableBooleanValue;

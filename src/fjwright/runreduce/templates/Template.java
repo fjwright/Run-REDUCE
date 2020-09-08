@@ -1,5 +1,6 @@
 package fjwright.runreduce.templates;
 
+import fjwright.runreduce.PopupKeyboard;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -60,8 +63,15 @@ public abstract class Template {
         // Add the button bar to the bottom of the dialogue box:
         var hBox = new HBox();
         templateRoot.getChildren().add(hBox);
-        hBox.setAlignment(Pos.CENTER_RIGHT);
         hBox.setSpacing(20);
+        var label = new Label("Control+Click for the Pop-Up Keyboard");
+        label.setTooltip(new Tooltip("Hold down the Control key and click you primary mouse button" +
+                "\nor click your middle (tertiary) mouse button on any text field" +
+                "\nto access special symbols etc. using the pop-up keyboard."));
+        hBox.getChildren().add(label);
+        var spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        hBox.getChildren().add(spacer);
         var button = new Button("Edit");
         hBox.getChildren().add(button);
         button.setOnAction(this::editButtonAction);

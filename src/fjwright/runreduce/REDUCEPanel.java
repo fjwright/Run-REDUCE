@@ -1,6 +1,5 @@
 package fjwright.runreduce;
 
-import fjwright.runreduce.templates.PopupKeyboard;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.concurrent.Task;
