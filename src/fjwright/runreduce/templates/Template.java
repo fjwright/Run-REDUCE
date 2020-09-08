@@ -74,8 +74,8 @@ public abstract class Template {
         hBox.getChildren().add(button);
         button.setOnAction(this::closeButtonAction);
 
-        // Register the pop-up handler on the template:
-        templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKeyboard);
+        // Register the pop-up keyboard filter on the template:
+        templateRoot.addEventFilter(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKbdOnTemplate);
     }
 
 // Check field entries dynamically ================================================================

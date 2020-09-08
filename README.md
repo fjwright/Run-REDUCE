@@ -148,3 +148,4 @@ Run-REDUCE-FX currently uses a bundled copy of
 * Add a *Print Session Log...* item to the File menu, which prints the
   I/O Display pane.
 * Update docs.
+* V1.83 Support the pop-up keyboard on the input editor.

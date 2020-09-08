@@ -25,14 +25,27 @@ import java.util.Map;
  * providing special symbols, Greek letters, some elementary functions and predicates, and
  * all trigonometric (except atan2) and hyperbolic functions, using either radians or degrees.
  */
-class PopupKeyboard {
+public class PopupKeyboard {
     private static Node target;
     private final static Popup popup = new Popup();
 
     /**
-     * This method is registered as an event filter on the root node by the Template class.
+     * This method is registered as an event handler on the input editor.
      */
-    static void showPopupKeyboard(MouseEvent mouseEvent) {
+    public static void showPopupKbdOnInputEditor(MouseEvent mouseEvent) {
+        if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
+                (mouseEvent.getButton() == MouseButton.MIDDLE)) {
+            target = (Node) mouseEvent.getSource();
+            popup.show(target.getScene().getWindow(),
+                    mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            shiftButton.setSelected(mouseEvent.isShiftDown());
+        }
+    }
+
+    /**
+     * This method is registered as an event filter on the root node of a Template.
+     */
+    public static void showPopupKbdOnTemplate(MouseEvent mouseEvent) {
         if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
                 (mouseEvent.getButton() == MouseButton.MIDDLE)) {
             // A TextField contains content that contains a caret, so...
@@ -335,13 +348,13 @@ class PopupKeyboard {
             if (indices.length == 2) text = constants[indices[0]][indices[1]];
             else text = greekLetters[indices[0]][indices[1]][indices[2]];
         }
-        // Overwrite selected text in target TextField or
+        // Overwrite selected text in target TextInputControl or
         // insert text at caret if no text is selected:
-        final TextField textField = (TextField) target;
-        if (textField.getSelectedText().isEmpty())
-            textField.insertText(textField.getCaretPosition(), text);
+        final TextInputControl textInput = (TextInputControl) target;
+        if (textInput.getSelectedText().isEmpty())
+            textInput.insertText(textInput.getCaretPosition(), text);
         else
-            textField.replaceSelection(text);
+            textInput.replaceSelection(text);
         popup.hide();
     }
 
@@ -363,15 +376,15 @@ class PopupKeyboard {
                     text = "factorial";
                     break;
             }
-        // Wrap selected text in target TextField or
+        // Wrap selected text in target TextInputControl or
         // insert text at caret if no text is selected:
-        final TextField textField = (TextField) target;
-        if (textField.getSelectedText().isEmpty())
-            textField.insertText(textField.getCaretPosition(), text);
+        final TextInputControl textInput = (TextInputControl) target;
+        if (textInput.getSelectedText().isEmpty())
+            textInput.insertText(textInput.getCaretPosition(), text);
         else {
-            final IndexRange selection = textField.getSelection();
-            textField.insertText(selection.getStart(), text + "(");
-            textField.insertText(selection.getEnd() + text.length() + 1, ")");
+            final IndexRange selection = textInput.getSelection();
+            textInput.insertText(selection.getStart(), text + "(");
+            textInput.insertText(selection.getEnd() + text.length() + 1, ")");
         }
         popup.hide();
     }
@@ -404,7 +417,7 @@ class PopupKeyboard {
         map.put('√', "sqrt");
     }
 
-    static String decode(final String text) {
+    public static String decode(final String text) {
         final StringBuilder builder = new StringBuilder();
         boolean found = false;
         for (int i = 0; i < text.length(); i++) {

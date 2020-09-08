@@ -1,5 +1,6 @@
 package fjwright.runreduce;
 
+import fjwright.runreduce.templates.PopupKeyboard;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.concurrent.Task;
@@ -124,6 +125,8 @@ public class REDUCEPanel extends BorderPane {
 
         // Note that a font name containing spaces needs quoting in CSS!
         inputTextArea.setStyle("-fx-font:" + fontSize + " '" + RunREDUCE.reduceFontFamilyName + "'");
+        // Register the pop-up keyboard handler on the input editor:
+        inputTextArea.addEventHandler(MouseEvent.MOUSE_CLICKED, PopupKeyboard::showPopupKbdOnInputEditor);
 
         hideEditorToggleButton.selectedProperty().addListener(hide -> {
             if (((ObservableBooleanValue) hide).getValue()) {
@@ -291,6 +294,7 @@ public class REDUCEPanel extends BorderPane {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
             inputList.add(text);
+            text = PopupKeyboard.decode(text);
             sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             inputTextArea.clear();
             inputListIndex = inputList.size();
