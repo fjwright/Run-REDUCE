@@ -36,9 +36,7 @@ public class PopupKeyboard {
         if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
                 (mouseEvent.getButton() == MouseButton.MIDDLE)) {
             target = (Node) mouseEvent.getSource();
-            popup.show(target.getScene().getWindow(),
-                    mouseEvent.getScreenX(), mouseEvent.getScreenY());
-            shiftButton.setSelected(mouseEvent.isShiftDown());
+            showPopupKbd(mouseEvent);
         }
     }
 
@@ -52,9 +50,7 @@ public class PopupKeyboard {
             target = (Node) mouseEvent.getTarget();
             while (target != null) {
                 if (target instanceof TextField) {
-                    popup.show(((Node) mouseEvent.getSource()).getScene().getWindow(),
-                            mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                    shiftButton.setSelected(mouseEvent.isShiftDown());
+                    showPopupKbd(mouseEvent);
                     break;
                 }
                 target = target.getParent();
@@ -62,13 +58,21 @@ public class PopupKeyboard {
         }
     }
 
+    public static void showPopupKbd(MouseEvent mouseEvent) {
+        popup.show(target.getScene().getWindow(),
+                mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        shiftButton.setSelected(mouseEvent.isShiftDown());
+        englishButton.setSelected(false);
+        degreesButton.setSelected(false);
+    }
+
 // Upper keyboard data: constants and Greek letters ===============================================
 
     // Array [0][...] is unshifted; [1][...] is shifted.
-    // '\u200B' is a zero-width space used to distinguish characters to be decoded on input to REDUCE.
+    // '\u200C' is the zero-width non-joiner character used here to indicate characters to be decoded on input to REDUCE.
     private static final String[][] constants = {
-            {"\u200B∞", "\u200Bπ"},
-            {"\u200Bγ", "\u200Bφ"}};
+            {"\u200C∞", "\u200Cπ"},
+            {"\u200Cγ", "\u200Cφ"}};
     private static final String[][] constantTooltips = {
             {"Infinity: bigger than any real or natural number",
                     "Pi: Archimedes' circle constant = 3.14159..."},
@@ -370,7 +374,7 @@ public class PopupKeyboard {
         } else
             switch (text) {
                 case "√‾":
-                    text = "\u200B√ ";
+                    text = "\u200C√ ";
                     break;
                 case "!":
                     text = "factorial";
@@ -422,7 +426,7 @@ public class PopupKeyboard {
         boolean found = false;
         for (int i = 0; i < text.length(); i++) {
             char a = text.charAt(i);
-            if (a == '\u200B') {
+            if (a == '\u200C') {
                 found = true;
                 a = text.charAt(++i);
                 String b = map.get(a);

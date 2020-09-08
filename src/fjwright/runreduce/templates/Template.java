@@ -182,9 +182,9 @@ public abstract class Template {
      * This method processes the result returned by each specific template class to decode any
      * symbolic constants and precede and follow the result with any required switch settings.
      */
-    private String processResult() throws EmptyFieldException {
+    private String processResult(boolean decode) throws EmptyFieldException {
         // result() must be called early because it sets the switch lists.
-        String decodedResult = PopupKeyboard.decode(result());
+        String decodedResult = decode ? PopupKeyboard.decode(result()) : result();
         String switchOnOffString = null, switchOffOnString = null;
         if (!switchOnOffList.isEmpty()) {
             switchOnOffString = String.join(", ", switchOnOffList);
@@ -217,7 +217,8 @@ public abstract class Template {
         // Insert in input editor if valid:
         try {
             final TextArea textArea = RunREDUCE.reducePanel.inputTextArea;
-            textArea.insertText(textArea.getCaretPosition(), processResult());
+            // Pop-up keyboard input will be decoded later before sending to REDUCE:
+            textArea.insertText(textArea.getCaretPosition(), processResult(false));
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
@@ -230,7 +231,8 @@ public abstract class Template {
         getTextCheckNonEmpty = true;
         // Send to REDUCE if valid:
         try {
-            RunREDUCE.reducePanel.sendInteractiveInputToREDUCE(processResult(), true);
+            // Decode pop-up keyboard input before sending to REDUCE:
+            RunREDUCE.reducePanel.sendInteractiveInputToREDUCE(processResult(true), true);
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {
