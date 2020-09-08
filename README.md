@@ -149,9 +149,12 @@ Run-REDUCE-FX currently uses a bundled copy of
   I/O Display pane.
 * Update docs.
 * V1.83 Support the pop-up keyboard on the input editor.
-* Reset the English and Degrees buttons for each new invocation of the pop-up keyboard.
-  Change use of \u200B, the zero-width space, to \u200C, the zero-width non-joiner,
-  which does not appear as a space in a TextArea.
-  Only decode pop-up keyboard characters inserted in templates when they are evaluated, not when they are edited.
-* Add a label "Control+Click for the Pop-Up Keyboard" with a tooltip to the top of the input editor
-  and the bottom of each template dialogue.
+* Reset the English and Degrees buttons for each new invocation of the
+  pop-up keyboard.  Change use of \u200B, the zero-width space, to
+  \u200C, the zero-width non-joiner, which does not appear as a space
+  in a TextArea.  Only decode pop-up keyboard characters inserted in
+  templates when they are evaluated, not when they are edited.
+* Add a label "Control+Click for the Pop-Up Keyboard" with a tooltip
+  to the top of the input editor and the bottom of each template
+  dialogue.
+* Update User Guide.
