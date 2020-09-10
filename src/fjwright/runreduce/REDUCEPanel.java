@@ -18,7 +18,9 @@ import org.w3c.dom.html.HTMLElement;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -550,21 +552,27 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean inMathOutput = false;
     private final StringBuilder mathOutputSB = new StringBuilder();
+    // fmprint outputs a non-standard macro, so \symb{182} -> \partial, etc:
+    private static final Pattern PATTERN = Pattern.compile("\\\\symb\\{(\\d+)}");
+    private static final Map<String, String> MAP = new HashMap<>();
 
-    // FixMe Make the math output replacements table driven.
+    {
+        MAP.put("32", " ");
+        MAP.put("124", "|");
+        MAP.put("182", "\\\\partial");
+        MAP.put("198", "\\\\emptyset");
+        MAP.put("216", "\\\\neg");
+    }
+
     private String reprocessedMathOutputString() {
         // By default, fmprint breaks lines at 80 characters,
         // and the resulting newlines break KaTeX rendering, so remove them:
         for (int i = mathOutputSB.length() - 1; i > 0; i--)
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
-        // fmprint outputs a non-standard macro, so \symb{182} -> \partial:
-        int start = 0;
-        String searchString = "\\symb{182}", replaceString = "\\partial";
-        while ((start = mathOutputSB.indexOf(searchString, start)) != -1) {
-            mathOutputSB.replace(start, start + searchString.length(), replaceString);
-            start += replaceString.length();
-        }
-        return mathOutputSB.toString();
+        return PATTERN.matcher(mathOutputSB).replaceAll(matchResult -> {
+            String result = MAP.get(matchResult.group(1));
+            return result != null ? result : "$0"; // the matched string
+        });
     }
 
     /**

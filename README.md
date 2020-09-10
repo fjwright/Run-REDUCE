@@ -158,3 +158,5 @@ Run-REDUCE-FX currently uses a bundled copy of
   to the top of the input editor and the bottom of each template
   dialogue.
 * Update User Guide.
+* V1.84 Add table-based rewriting of \symb{n} and handle all (four)
+  cases that I have noticed in fmprint.red.
