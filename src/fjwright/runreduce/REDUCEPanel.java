@@ -58,7 +58,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLDocument doc;
     private HTMLElement html, head, inputPre;
     HTMLElement body;
-    private JSObject katex;
+    private JSObject katex, katexMacros;
 
     /*
      * The <body> content should look like repeats of this structure:
@@ -169,6 +169,7 @@ public class REDUCEPanel extends BorderPane {
         head = (HTMLElement) html.getElementsByTagName("head").item(0);
         body = doc.getBody();
         katex = (JSObject) webEngine.executeScript("katex");
+        katexMacros = (JSObject) webEngine.executeScript("var katexMacros={'\\\\Int': '\\\\int'};katexMacros;");
 
         // Create default style elements:
 
@@ -579,13 +580,18 @@ public class REDUCEPanel extends BorderPane {
      * This class represents the options passed to katex.render.
      * It *must* be entirely public and *must* be instantiated.
      */
-    public static class KaTeXOptions {
-        public static final boolean throwOnError = false;
-        public static final boolean displayMode = true;
-        public static final double minRuleThickness = 0.1;
-//        public static final String output = "html";
+    public class KaTeXOptions {
+        public final boolean throwOnError = false;
+        public final boolean displayMode = true;
+        public final double minRuleThickness = 0.1;
+        //        public static final String output = "html";
         // Default is output = htmlAndMathml: Outputs HTML for visual rendering and includes MathML for accessibility.
         // The MathML includes the TeX input as annotation, which is what I currently output in the session log.
+        public JSObject macros;
+
+        KaTeXOptions() {
+            macros = katexMacros; // a JS object constructed in outputWebViewAvailable()
+        }
     }
 
     private void outputTypesetText(String text, String cssClass) {

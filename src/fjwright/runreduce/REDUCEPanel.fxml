@@ -64,7 +64,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                         <Label text="Control+Click for the Pop-Up Keyboard">
                             <tooltip>
                                 <Tooltip
-                                        text="Hold down the Control key and click you primary mouse button&#10;or click your middle (tertiary) mouse button on the text area&#10;to access special symbols etc. using the pop-up keyboard."/>
+                                        text="Hold down the Control key and click your primary mouse button&#10;or click your middle (tertiary) mouse button on the text area&#10;to access special symbols etc. using the pop-up keyboard."/>
                             </tooltip>
                         </Label>
                         <padding>

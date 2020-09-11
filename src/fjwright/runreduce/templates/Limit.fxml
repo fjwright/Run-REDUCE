@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Limit">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.Limit">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Text fontSmoothingType="LCD" text="Only limits of (mostly) continuous functions are supported, not sequences. All fields are required. The variable must be an identifier. &#10;Click the superscript box immediately after the limit point to cycle through the directions, from: right/above, left/below, both sides." textAlignment="CENTER" wrappingWidth="460.0" />
+    <Text fontSmoothingType="LCD" text="Only limits of (mostly) continuous functions are supported, not sequences. All fields are required. The variable must be an identifier. &#10;Click the superscript box immediately after the limit point to cycle through the directions, from: right/above, left/below, both sides." textAlignment="CENTER" wrappingWidth="560.0" />
     <HBox alignment="CENTER">
         <Label text="REDUCE Manual: " />
         <Hyperlink onAction="#redManHyperlinkOnAction" text="LIMITS Package" userData="LIMITS: A package for ﬁnding limits">

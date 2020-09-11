@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <?import java.lang.Double?>
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" stylesheets="@templates.css"
       xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.Integral">
     <padding>
@@ -15,7 +15,7 @@
     <VBox>
         <fx:define>
             <!-- This prevents use of SceneBuilder! -->
-            <Double fx:id="textWrappingWidth" fx:value="460.0"/>
+            <Double fx:id="textWrappingWidth" fx:value="560.0"/>
         </fx:define>
         <Text fontSmoothingType="LCD"
               text="The integrand and at least one integration variable are required. Enter additional integration variables to create a double or triple integral and display additional ∫ symbols. ∫ and d symbol pairs nest and their colours show how they match."

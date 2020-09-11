@@ -160,3 +160,5 @@ Run-REDUCE-FX currently uses a bundled copy of
 * Update User Guide.
 * V1.84 Add table-based rewriting of \symb{n} and handle all (four)
   cases that I have noticed in fmprint.red.
+* V1.85 Map \Int to \int and fix some other bugs found when testing on
+  Linux.

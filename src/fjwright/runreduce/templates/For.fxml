@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.For">
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" stylesheets="@templates.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.templates.For">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Text fontSmoothingType="LCD" text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." textAlignment="CENTER" wrappingWidth="460.0" />
+    <Text fontSmoothingType="LCD" text="A 'var' entry must be an identifier. &#10;For iteration over a numerical range, the 'number' entries must *evaluate* to numbers. &#10;For iteration over a list, the 'list' entry must *evaluate* to a list; the 'on' option is allowed only in symbolic mode and makes the 'for variable' evaluate to successive 'cdr's of the list." textAlignment="CENTER" wrappingWidth="560.0" />
     <HBox alignment="CENTER">
         <Label text="REDUCE Manual: " />
         <Hyperlink onAction="#redManHyperlinkOnAction" text="FOR Statements" userData="FOR Statements">
@@ -120,5 +112,8 @@
                 <Insets top="5.0" />
             </padding>
         </HBox>
+      <VBox.margin>
+         <Insets left="50.0" right="50.0" />
+      </VBox.margin>
     </VBox>
 </VBox>

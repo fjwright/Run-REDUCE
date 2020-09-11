@@ -29,8 +29,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#printLogMenuItemAction" text="Print Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#saveLogMenuItemAction" text="Save Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#appendLogMenuItemAction" text="Append Session Log..."/>
-                <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem mnemonicParsing="false" onAction="#saveRawDisplayMenuItemAction" text="Save Raw Session Log..."/>
+<!--                <MenuItem mnemonicParsing="false" onAction="#saveRawDisplayMenuItemAction" text="Save Raw Session Log..."/>-->
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit"/>
             </Menu>

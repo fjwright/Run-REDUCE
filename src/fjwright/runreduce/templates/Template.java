@@ -65,7 +65,7 @@ public abstract class Template {
         templateRoot.getChildren().add(hBox);
         hBox.setSpacing(20);
         var label = new Label("Control+Click for the Pop-Up Keyboard");
-        label.setTooltip(new Tooltip("Hold down the Control key and click you primary mouse button" +
+        label.setTooltip(new Tooltip("Hold down the Control key and click your primary mouse button" +
                 "\nor click your middle (tertiary) mouse button on any text field" +
                 "\nto access special symbols etc. using the pop-up keyboard."));
         hBox.getChildren().add(label);

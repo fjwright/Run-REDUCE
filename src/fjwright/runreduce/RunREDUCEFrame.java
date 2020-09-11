@@ -298,16 +298,21 @@ public class RunREDUCEFrame {
     @FXML
     private void printLogMenuItemAction() {
         PrinterJob printerJob = PrinterJob.createPrinterJob();
-        if (printerJob.showPrintDialog(frame.getScene().getWindow())) {
-            RunREDUCE.reducePanel.webEngine.print(printerJob);
-            if (printerJob.endJob()) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setHeaderText("Print Session Log...");
-                alert.setContentText("Session log sent to printer.");
-                alert.showAndWait();
-            } else
-                RunREDUCE.errorMessageDialog("Print Session Log...", "Request failed!");
-        }
+        if (printerJob != null) {
+            if (printerJob.showPrintDialog(frame.getScene().getWindow())) {
+                RunREDUCE.reducePanel.webEngine.print(printerJob);
+                if (printerJob.endJob()) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText("Print Session Log...");
+                    alert.setContentText("Session log sent to printer.");
+                    alert.showAndWait();
+                } else
+                    RunREDUCE.errorMessageDialog("Print Session Log...",
+                            "Cannot send session log to printer!");
+            }
+        } else
+            RunREDUCE.errorMessageDialog("Print Session Log...",
+                    "Cannot create printer job. Check that you have a printer installed!");
     }
 
     // Save Session Log...
@@ -639,7 +644,7 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 1.84, September 2020\n" +
+                "Version 1.85, September 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);

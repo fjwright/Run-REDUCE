@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import java.lang.Double?>
-<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="500.0" spacing="20.0" stylesheets="@templates.css"
+<VBox fx:id="templateRoot" alignment="CENTER" prefWidth="600.0" spacing="20.0" stylesheets="@templates.css"
       xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fjwright.runreduce.templates.Solve">
     <padding>
@@ -24,7 +24,7 @@
     <VBox>
         <fx:define>
             <!-- This prevents use of SceneBuilder! -->
-            <Double fx:id="textWrappingWidth" fx:value="460.0"/>
+            <Double fx:id="textWrappingWidth" fx:value="560.0"/>
         </fx:define>
         <Text fontSmoothingType="LCD" text="At least one equation or expression is required." textAlignment="CENTER"
               wrappingWidth="$textWrappingWidth"/>
