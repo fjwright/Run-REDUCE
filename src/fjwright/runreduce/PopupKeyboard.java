@@ -373,19 +373,23 @@ public class PopupKeyboard {
             // FixMe but can't do that from this static context!
         } else
             switch (text) {
+                case "ln":
+                    text = "log";
+                    break;
                 case "√‾":
-                    text = "\u200C√ ";
+                    text = "\u200C√";
                     break;
                 case "!":
                     text = "factorial";
                     break;
             }
-        // Wrap selected text in target TextInputControl or
-        // insert text at caret if no text is selected:
+        // Wrap selected text in target TextInputControl or insert text
+        // followed by () at caret and backup if no text is selected:
         final TextInputControl textInput = (TextInputControl) target;
-        if (textInput.getSelectedText().isEmpty())
-            textInput.insertText(textInput.getCaretPosition(), text);
-        else {
+        if (textInput.getSelectedText().isEmpty()) {
+            textInput.insertText(textInput.getCaretPosition(), text + "()");
+            textInput.backward();
+        } else {
             final IndexRange selection = textInput.getSelection();
             textInput.insertText(selection.getStart(), text + "(");
             textInput.insertText(selection.getEnd() + text.length() + 1, ")");
