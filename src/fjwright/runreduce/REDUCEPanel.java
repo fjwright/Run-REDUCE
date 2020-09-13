@@ -128,7 +128,7 @@ public class REDUCEPanel extends BorderPane {
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
-                "<style>pre{margin:0}</style>" +
+                "<style>pre{margin:0}div{margin-top:-1em;margin-bottom:2em}</style>" +
                 "</head><body></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -192,7 +192,8 @@ public class REDUCEPanel extends BorderPane {
         head = (HTMLElement) html.getElementsByTagName("head").item(0);
         body = doc.getBody();
         katex = (JSObject) webEngine.executeScript("katex");
-        katexMacros = (JSObject) webEngine.executeScript("var katexMacros={'\\\\Int': '\\\\int'};katexMacros;");
+        katexMacros = (JSObject) webEngine.executeScript(
+                "var katexMacros={'\\\\Int':'\\\\int','\\\\>':''};katexMacros;");
 
         // Create default style elements:
 
