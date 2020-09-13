@@ -90,6 +90,20 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean fmprintLoaded, hideNextOutput;
 
+    /*
+     * JavaScript debugging support. See
+     * https://stackoverflow.com/questions/28687640/javafx-8-webengine-how-to-get-console-log-from-javascript-to-system-out-in-ja
+     */
+    public static class JSBridge {
+        public void log(String message) {
+            System.err.println(message);
+        }
+    }
+
+    // Maintain a strong reference to prevent garbage collection:
+    // https://bugs.openjdk.java.net/browse/JDK-8154127
+    private final JSBridge bridge = new JSBridge();
+
     REDUCEPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("REDUCEPanel.fxml"));
         fxmlLoader.setRoot(this);
@@ -119,6 +133,15 @@ public class REDUCEPanel extends BorderPane {
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
+                        // Begin debugging support
+                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        window.setMember("bridge", bridge);
+                        webEngine.executeScript(
+                                "console.error=function(message){bridge.log('JS ERROR: '+message)};" +
+                                "console.info=function(message){bridge.log('JS INFO: '+message)};" +
+                                "console.log=function(message){bridge.log('JS LOG: '+message)};" +
+                                "console.warn=function(message){bridge.log('JS WARN: '+message)}");
+                        // End debugging support
                         outputWebViewAvailable();
                     }
                 });
@@ -205,6 +228,10 @@ public class REDUCEPanel extends BorderPane {
         } else
             // Reset enabled status of controls:
             reduceStopped();
+
+        // DEBUGGING...
+//        webEngine.executeScript("console.log('Body font size: ' + " +
+//                "getComputedStyle(document.body, null).getPropertyValue('font-size'))");
     }
 
     void clearDisplay() {
@@ -878,10 +905,10 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputHereMenuItem.setDisable(outputHereMenuItemDisabled);
         FRAME.shutFileMenuItem.setDisable(shutFileMenuItemDisabled);
         FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
-        FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         // REDUCE menu items:
-        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
+        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         // View menu items:
         FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
         FRAME.setSelectedColouredIORadioButton(colouredIOState);
