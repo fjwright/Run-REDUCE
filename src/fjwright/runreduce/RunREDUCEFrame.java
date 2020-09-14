@@ -68,6 +68,11 @@ public class RunREDUCEFrame {
     // Help menu:
     @FXML
     private Menu helpMenu;
+    // Debugging Menu:
+    @FXML
+    private Menu debuggingMenu;
+    @FXML
+    CheckMenuItem showTeXMarkupCheckMenuItem;
 
     private static final File PACKAGES_DIR = new File(RunREDUCE.reduceConfiguration.packagesDir);
 
@@ -161,6 +166,12 @@ public class RunREDUCEFrame {
                         new File(dir, manual[2])));
             }
         }
+
+        /* ************** *
+         * Debugging menu *
+         * ************** */
+
+        debuggingMenu.setVisible(RunREDUCE.debugMenu);
     }
 
     /*
@@ -325,12 +336,6 @@ public class RunREDUCEFrame {
     @FXML
     private void appendLogMenuItemAction() {
         saveLog(true, false);
-    }
-
-    // Save Raw Session Log...
-    @FXML
-    private void saveRawDisplayMenuItemAction() {
-        saveLog(false, true);
     }
 
     private void saveLog(boolean append, boolean raw) {
@@ -644,13 +649,23 @@ public class RunREDUCEFrame {
     @FXML
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 2.0, September 2020\n" +
+                "Version 2.1, September 2020\n" +
                         "\u00A9 2020 Francis Wright");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(RunREDUCE.primaryStage);
         alert.setTitle("About Run-REDUCE-FX");
         alert.setHeaderText("Run REDUCE in a JavaFX GUI");
         alert.showAndWait();
+    }
+
+    /* ************** *
+     * Debugging menu *
+     * ************** */
+
+    // Save Raw Session Log...
+    @FXML
+    private void saveRawDisplayMenuItemAction() {
+        saveLog(false, true);
     }
 
     /* *************** *

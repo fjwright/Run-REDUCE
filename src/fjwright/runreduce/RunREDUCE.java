@@ -27,6 +27,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 /**
  * This is the main class that sets up and runs the application.
  */
@@ -197,9 +199,11 @@ public class RunREDUCE extends Application {
 
     // Run-time argument processing ***************************************************************
 
-    static boolean debugPlatform, debugOutput;
+    static boolean debugPlatform, debugOutput, debugMenu;
     private static final String debugPlatformArg = "-debugPlatform";
     private static final String debugOutputArg = "-debugOutput";
+    private static final String debugMenuArg = "-debugMenu";
+    private static final String[] debugArgs = {debugPlatformArg, debugOutputArg, debugMenuArg};
 
     public static void main(String[] args) {
         for (String arg : args) {
@@ -210,9 +214,12 @@ public class RunREDUCE extends Application {
                 case debugOutputArg:
                     debugOutput = true;
                     break;
+                case debugMenuArg:
+                    debugMenu = true;
+                    break;
                 default:
-                    System.err.format("Unrecognised argument: %s.\nAllowed arguments are: %s and %s.",
-                            arg, debugPlatformArg, debugOutputArg);
+                    System.err.format("Unrecognised argument: %s.\nAllowed arguments are: %s.",
+                            arg, Arrays.toString(debugArgs));
             }
         }
 

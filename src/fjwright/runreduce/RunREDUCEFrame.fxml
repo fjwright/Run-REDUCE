@@ -29,7 +29,6 @@
                 <MenuItem mnemonicParsing="false" onAction="#printLogMenuItemAction" text="Print Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#saveLogMenuItemAction" text="Save Session Log..."/>
                 <MenuItem mnemonicParsing="false" onAction="#appendLogMenuItemAction" text="Append Session Log..."/>
-<!--                <MenuItem mnemonicParsing="false" onAction="#saveRawDisplayMenuItemAction" text="Save Raw Session Log..."/>-->
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#exitMenuItemAction" text="Exit"/>
             </Menu>
@@ -113,6 +112,11 @@
                           text="SourceForge Project Site"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE-FX"/>
+            </Menu>
+            <Menu fx:id="debuggingMenu" mnemonicParsing="false" text="Debugging" visible="false">
+                <MenuItem mnemonicParsing="false" onAction="#saveRawDisplayMenuItemAction"
+                          text="Save Raw Session Log..."/>
+                <CheckMenuItem fx:id="showTeXMarkupCheckMenuItem" mnemonicParsing="false" text="Show TeX Markup"/>
             </Menu>
         </MenuBar>
     </top>

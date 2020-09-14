@@ -568,8 +568,12 @@ public class REDUCEPanel extends BorderPane {
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (typesetMathsState) outputTypesetText(text, cssClass);
-        else outputPlainText(text, cssClass);
+        if (typesetMathsState) {
+            if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected()) {
+                outputPlainText(text, cssClass);
+            }
+            outputTypesetText(text, cssClass);
+        } else outputPlainText(text, cssClass);
     }
 
     private void outputPlainText(String text, String cssClass) {
