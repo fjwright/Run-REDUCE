@@ -1,13 +1,12 @@
 ### Key links: [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar) | [Install and Run](InstallAndRun.md) | [User Guide](UserGuide.html)
 
-Note that Run-REDUCE-FX now requires the javafx.web module &ndash; see the [Install and Run Guide](InstallAndRun.md).
-
 Run-REDUCE-FX is a Graphical User Interface for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
-System that should provide a fairly consistent user experience across
-all platforms.  It is implemented in JavaFX and the executable
-application takes the form of the JAR file *Run-REDUCE-FX.jar*.  Click
-on the link above to download the latest release.
+System that should provide a consistent user experience across all
+implementations of REDUCE and all platforms.  It is implemented in
+JavaFX and the executable application takes the form of the JAR file
+[Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE-FX/releases/latest/download/Run-REDUCE-FX.jar).
+Click on the link here or above to download the latest release.
 
 ![Run-REDUCE-FX screen shot](Run-REDUCE-FX.png "Run-REDUCE-FX screen shot")
 
@@ -31,23 +30,24 @@ that it currently provides:
   distributions.
 * A REDUCE input/output display pane that scrolls in both directions
   as necessary.  Its contents can be saved to a file and/or erased.
+* Optional typeset-style display of mathematical output.
 * A multi-line input editing pane that also scrolls in both directions
   as necessary.  Previous input is remembered and can be scrolled
-  through, edited and re-input.  A final terminator can be added
+  through, edited and re-input.  A final terminator is normally added
   automatically if appropriate when input is sent to REDUCE.
-* Split or tabbed panes running independent REDUCE processes.
+* Optional split or tabbed panes running independent REDUCE processes.
 * Menu items to handle REDUCE file input/output and load standard
   REDUCE packages, similar to the facilities provided by the CSL
   REDUCE GUI.
-* Menu options to make the REDUCE input prompt bold and to colour the
-  input/output display based on the input mode or redfront.
+* Optional bold prompts and coloured input/output text based on the
+  input mode (algebraic or symbolic) or using redfront.
 * Templates to construct structured expressions and statements.
 * A popup keyboard to access symbolic constants, Greek letters and
   elementary functions.
-* Dialogues to access functions using conventional notation.
+* Dialogues to access standard mathematical functions using
+  conventional notation.
 * Easy access to the Run-REDUCE-FX User Guide, the standard
   documentation distributed with REDUCE as HTML or PDF files, the
   REDUCE Web Site and the SourceForge Project Site.
-* Experimental typeset-style display of mathematics.
 
 Francis Wright, September 2020
