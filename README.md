@@ -157,3 +157,9 @@ Run-REDUCE-FX currently uses a bundled copy of
   keyboard, rewrite ln to log and remove the space after sqrt.
 
 ### Updates since last release
+
+* v2.01 Add -debugMenu program parameter to enable a Debugging menu.
+  Improve handling of program parameters.
+  Move "Save Raw Session Log..." menu item from File menu to new Debugging menu
+  and add new "Show TeX Markup" menu item to optionally display TeX markup before typeset output.
+* v2.02 Improve handling of \symb{n} and include 34 -> \forall and 36 -> \exists.

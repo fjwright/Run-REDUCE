@@ -138,9 +138,9 @@ public class REDUCEPanel extends BorderPane {
                         window.setMember("bridge", bridge);
                         webEngine.executeScript(
                                 "console.error=function(message){bridge.log('JS ERROR: '+message)};" +
-                                "console.info=function(message){bridge.log('JS INFO: '+message)};" +
-                                "console.log=function(message){bridge.log('JS LOG: '+message)};" +
-                                "console.warn=function(message){bridge.log('JS WARN: '+message)}");
+                                        "console.info=function(message){bridge.log('JS INFO: '+message)};" +
+                                        "console.log=function(message){bridge.log('JS LOG: '+message)};" +
+                                        "console.warn=function(message){bridge.log('JS WARN: '+message)}");
                         // End debugging support
                         outputWebViewAvailable();
                     }
@@ -590,11 +590,13 @@ public class REDUCEPanel extends BorderPane {
     private static final Map<String, String> MAP = new HashMap<>();
 
     {
-        MAP.put("32", " ");
+        MAP.put("32", "\\\\ ");
+        MAP.put("34", "\\\\forall "); // redlog
+        MAP.put("36", "\\\\exists "); // redlog
         MAP.put("124", "|");
-        MAP.put("182", "\\\\partial");
-        MAP.put("198", "\\\\emptyset");
-        MAP.put("216", "\\\\neg");
+        MAP.put("182", "\\\\partial ");
+        MAP.put("198", "\\\\emptyset "); // redlog
+        MAP.put("216", "\\\\neg ");
     }
 
     private String reprocessedMathOutputString() {
@@ -604,7 +606,7 @@ public class REDUCEPanel extends BorderPane {
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
         return PATTERN.matcher(mathOutputSB).replaceAll(matchResult -> {
             String result = MAP.get(matchResult.group(1));
-            return result != null ? result : "$0"; // the matched string
+            return result != null ? result : "\\\\symb\\\\{" + matchResult.group(1) + "\\\\}";
         });
     }
 
