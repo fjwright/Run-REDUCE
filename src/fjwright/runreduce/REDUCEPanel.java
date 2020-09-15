@@ -593,10 +593,15 @@ public class REDUCEPanel extends BorderPane {
         MAP.put("32", "\\\\ ");
         MAP.put("34", "\\\\forall "); // redlog
         MAP.put("36", "\\\\exists "); // redlog
+        MAP.put("38", "\\\\&"); // redlog/ibalp/ibalp.red
         MAP.put("124", "|");
         MAP.put("182", "\\\\partial ");
         MAP.put("198", "\\\\emptyset "); // redlog
         MAP.put("216", "\\\\neg ");
+        MAP.put("217", "\\\\wedge "); // excalc/wedge.red
+        MAP.put("219", "\\\\,\\\\longleftrightarrow\\\\,"); // redlog/rl/rlprint.red
+        MAP.put("220", "\\\\,\\\\longleftarrow\\\\,"); // redlog/rl/rlprint.red
+        MAP.put("222", "\\\\,\\\\longrightarrow\\\\,"); // redlog/rl/rlprint.red
     }
 
     private String reprocessedMathOutputString() {
