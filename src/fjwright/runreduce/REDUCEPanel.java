@@ -192,8 +192,8 @@ public class REDUCEPanel extends BorderPane {
         head = (HTMLElement) html.getElementsByTagName("head").item(0);
         body = doc.getBody();
         katex = (JSObject) webEngine.executeScript("katex");
-        katexMacros = (JSObject) webEngine.executeScript(
-                "var katexMacros={'\\\\Int':'\\\\int','\\\\>':''};katexMacros;");
+//        katexMacros = (JSObject) webEngine.executeScript(
+//                "var katexMacros={'\\\\Int':'\\\\int','\\\\>':''};katexMacros;");
 
         // Create default style elements:
 
@@ -588,24 +588,25 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean inMathOutput = false;
     private final StringBuilder mathOutputSB = new StringBuilder();
+    private static final Pattern LR_PATTERN = Pattern.compile("\\\\(left|right)");
     // fmprint outputs a non-standard macro, so \symb{182} -> \partial, etc:
     // This mapping corresponds to the Microsoft Windows Symbol font.
-    private static final Pattern PATTERN = Pattern.compile("\\\\symb\\{(\\d+)}");
-    private static final Map<String, String> MAP = new HashMap<>();
+    private static final Pattern SYMB_PATTERN = Pattern.compile("\\\\symb\\{(\\d+)}");
+    private static final Map<String, String> SYMB_MAP = new HashMap<>();
 
-    {
-        MAP.put("32", "\\\\ ");
-        MAP.put("34", "\\\\forall "); // redlog/rl/rlprint.red
-        MAP.put("36", "\\\\exists "); // redlog/rl/rlprint.red
-        MAP.put("38", "\\\\&"); // redlog/ibalp/ibalp.red
-        MAP.put("124", "|");
-        MAP.put("182", "\\\\partial ");
-        MAP.put("198", "\\\\emptyset "); // redlog
-        MAP.put("216", "\\\\neg ");
-        MAP.put("217", "\\\\wedge "); // excalc/wedge.red
-        MAP.put("219", "\\\\,\\\\longleftrightarrow\\\\,"); // redlog/rl/rlprint.red
-        MAP.put("220", "\\\\,\\\\longleftarrow\\\\,"); // redlog/rl/rlprint.red
-        MAP.put("222", "\\\\,\\\\longrightarrow\\\\,"); // redlog/rl/rlprint.red
+    static {
+//        SYMB_MAP.put("32", "\\\\ ");
+        SYMB_MAP.put("34", "\\\\forall "); // redlog/rl/rlprint.red
+        SYMB_MAP.put("36", "\\\\exists "); // redlog/rl/rlprint.red
+        SYMB_MAP.put("38", "\\\\&"); // redlog/ibalp/ibalp.red
+//        SYMB_MAP.put("124", "|");
+//        SYMB_MAP.put("182", "\\\\partial ");
+        SYMB_MAP.put("198", "\\\\emptyset "); // redlog
+//        SYMB_MAP.put("216", "\\\\neg ");
+        SYMB_MAP.put("217", "\\\\wedge "); // excalc/wedge.red
+        SYMB_MAP.put("219", "\\\\,\\\\longleftrightarrow\\\\,"); // redlog/rl/rlprint.red
+        SYMB_MAP.put("220", "\\\\,\\\\longleftarrow\\\\,"); // redlog/rl/rlprint.red
+        SYMB_MAP.put("222", "\\\\,\\\\longrightarrow\\\\,"); // redlog/rl/rlprint.red
     }
 
     private String reprocessedMathOutputString() {
@@ -613,8 +614,28 @@ public class REDUCEPanel extends BorderPane {
         // and the resulting newlines break KaTeX rendering, so remove them:
         for (int i = mathOutputSB.length() - 1; i > 0; i--)
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
-        return PATTERN.matcher(mathOutputSB).replaceAll(matchResult -> {
-            String result = MAP.get(matchResult.group(1));
+
+        // Ensure \left and \right control words match:
+        int start = 0, leftMinusRightCount = 0;
+        Matcher matcher = LR_PATTERN.matcher(mathOutputSB);
+        while (matcher.find(start)) {
+            switch (matcher.group(1)) {
+                case "left":
+                    leftMinusRightCount++;
+                    break;
+                case "right":
+                    leftMinusRightCount--;
+                    break;
+            }
+            start = matcher.end();
+        }
+        if (leftMinusRightCount > 0)
+            mathOutputSB.append("\\right.".repeat(leftMinusRightCount));
+        else if (leftMinusRightCount < 0)
+            mathOutputSB.insert(0, "\\left.".repeat(-leftMinusRightCount));
+
+        return SYMB_PATTERN.matcher(mathOutputSB).replaceAll(matchResult -> {
+            String result = SYMB_MAP.get(matchResult.group(1));
             return result != null ? result : "\\\\symb\\\\{" + matchResult.group(1) + "\\\\}";
         });
     }
@@ -630,11 +651,11 @@ public class REDUCEPanel extends BorderPane {
         //        public static final String output = "html";
         // Default is output = htmlAndMathml: Outputs HTML for visual rendering and includes MathML for accessibility.
         // The MathML includes the TeX input as annotation, which is what I currently output in the session log.
-        public JSObject macros;
-
-        KaTeXOptions() {
-            macros = katexMacros; // a JS object constructed in outputWebViewAvailable()
-        }
+//        public JSObject macros;
+//
+//        KaTeXOptions() {
+//            macros = katexMacros; // a JS object constructed in outputWebViewAvailable()
+//        }
     }
 
     private void outputTypesetText(String text, String cssClass) {
@@ -720,7 +741,8 @@ public class REDUCEPanel extends BorderPane {
         }
 
         if (hideNextOutputAndPrompt) {
-            /*if (promptFound)*/ hideNextOutputAndPrompt = false;
+            /*if (promptFound)*/
+            hideNextOutputAndPrompt = false;
             return;
         }
 
