@@ -88,7 +88,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
 
-    private boolean fmprintLoaded, hideNextOutput;
+    private boolean fmprintLoaded, hideNextOutputAndPrompt, hideNextOutputShowPrompt;
 
     /*
      * JavaScript debugging support. See
@@ -266,7 +266,7 @@ public class REDUCEPanel extends BorderPane {
         else head.removeChild(colorStyle);
         if (colouredIOState == RRPreferences.ColouredIO.REDFRONT && runningREDUCE && !redfrontLoaded) {
             // Hide the interaction with REDUCE:
-            hideNextOutput = true;
+            hideNextOutputAndPrompt = true;
             sendStringToREDUCENoEcho(
                     // See the bottom of packages/redfront/redfront.red.
                     // Done this way because CSL does not allow statcounter to be rebound!
@@ -286,7 +286,10 @@ public class REDUCEPanel extends BorderPane {
                 if (fmprintLoaded) {
                     stealthInput("on fancy");
                 } else {
-                    stealthInput("load_package fmprint");
+//                    stealthInput("load_package fmprint");
+                    stealthInput("out\"nul\";in\"" +
+                            new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
+                            "\"$out t");
                     fmprintLoaded = true;
                 }
             } else {
@@ -301,7 +304,7 @@ public class REDUCEPanel extends BorderPane {
     private void stealthInput(String input) {
         // Hide the interaction with REDUCE:
         // See the bottom of packages/redfront/redfront.red.
-        hideNextOutput = true;
+        hideNextOutputAndPrompt = true;
         sendStringToREDUCENoEcho(
                 String.format("symbolic<<%s;crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
                         "statcounter:=statcounter-1;>>$\n", input));
@@ -586,13 +589,14 @@ public class REDUCEPanel extends BorderPane {
     private boolean inMathOutput = false;
     private final StringBuilder mathOutputSB = new StringBuilder();
     // fmprint outputs a non-standard macro, so \symb{182} -> \partial, etc:
+    // This mapping corresponds to the Microsoft Windows Symbol font.
     private static final Pattern PATTERN = Pattern.compile("\\\\symb\\{(\\d+)}");
     private static final Map<String, String> MAP = new HashMap<>();
 
     {
         MAP.put("32", "\\\\ ");
-        MAP.put("34", "\\\\forall "); // redlog
-        MAP.put("36", "\\\\exists "); // redlog
+        MAP.put("34", "\\\\forall "); // redlog/rl/rlprint.red
+        MAP.put("36", "\\\\exists "); // redlog/rl/rlprint.red
         MAP.put("38", "\\\\&"); // redlog/ibalp/ibalp.red
         MAP.put("124", "|");
         MAP.put("182", "\\\\partial ");
@@ -699,11 +703,6 @@ public class REDUCEPanel extends BorderPane {
      * a batch of output from the REDUCEOutputThread for display.
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
-        // This test could probably be earlier in REDUCEOutputThread.call().
-        if (hideNextOutput) {
-            hideNextOutput = false;
-            return;
-        }
         String text = textAtomicReferenceString.get();
         int promptIndex; // possible start index of a prompt
         String promptString = null;
@@ -719,6 +718,20 @@ public class REDUCEPanel extends BorderPane {
             promptString = promptMatcher.group(1); // exclude ^A/^B
             questionPrompt = promptMatcher.group(2) == null;
         }
+
+        if (hideNextOutputAndPrompt) {
+            /*if (promptFound)*/ hideNextOutputAndPrompt = false;
+            return;
+        }
+
+        if (hideNextOutputShowPrompt) {
+            if (promptFound) {
+                text = text.substring(promptIndex - 1);
+                promptIndex = 1;
+                hideNextOutputShowPrompt = false;
+            } else return;
+        }
+
         if (beforeFirstPrompt) {
             // Do things relating to the first prompt here...
             if (promptFound) {
@@ -738,9 +751,15 @@ public class REDUCEPanel extends BorderPane {
                     }
                     if (typesetMathsState) {
                         sendStringToREDUCENoEcho(
-                                "symbolic<<load_package fmprint;crbuf!*:=nil;" +
+                                "symbolic<<" +
+//                                        "load_package fmprint" +
+                                        "out\"nul\";in\"" +
+                                        new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
+                                        "\"$out t" +
+                                        ";crbuf!*:=nil;" +
                                         "inputbuflis!*:=nil;statcounter:=0;>>$\n");
                         fmprintLoaded = true;
+                        hideNextOutputShowPrompt = true;
                     }
                     return;
                 }

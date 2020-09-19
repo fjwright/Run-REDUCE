@@ -303,6 +303,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
  * The list excludes preloaded packages and is sorted alphabetically.
  */
 class REDUCEPackageList extends ArrayList<String> {
+    // FixMe Remove fmprint and tmprint?
 
     REDUCEPackageList() {
         Path packagesDirPath = Paths.get(RunREDUCE.reduceConfiguration.packagesDir);
