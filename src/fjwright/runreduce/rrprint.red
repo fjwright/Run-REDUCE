@@ -685,37 +685,46 @@ for each x in '(
 symbolic procedure fancy!-prin2!*(u,n);
    if atom u and eqcar(explode2 u,'!\) then <<
       n := (idp u and get(u, 'texcharwidth)) or
-           (stringp u and get(intern u, 'texcharwidth));
+         (stringp u and get(intern u, 'texcharwidth));
       if n then fancy!-pos!* := fancy!-pos!* + n;
       if fancy!-pos!* > 2*(linelength nil + 1) then overflowed!* := t;
       fancy!-line!* := u . fancy!-line!* >>
-   else if numberp u and not testing!-width!* then fancy!-prin2number u
-     else
-  (begin scalar str,id; integer l;
-    str := stringp u; id := idp u and not digit u; long!*:=nil;
-     u:= if atom u then <<
-             if !*fancy!-lower then explode2lc u
-             else explode2 u >>
-        else {u};
-    if cdr u then long!*:=t;
-    if car u = '!\ then long!*:=nil;
-    l := if numberp n then n else 2*length u;
-    if id and not numberp n then
-       u:=fancy!-lower!-digits(fancy!-esc u);
-    if long!* then
-       %% fancy!-line!* := '!{ . '!m . '!r . '!h . '!t . '!a . '!m . '!\ . fancy!-line!*;
-       fancy!-line!* := '!\mathrm!{ . fancy!-line!*;
-    for each x in u do
-    <<if str and (x='!    or x='!_)
-         then fancy!-line!* := '!\ . fancy!-line!*;
-      fancy!-line!* :=
-        (if id and !*fancy!-lower
-          then red!-char!-downcase x else x) . fancy!-line!*;
-    >>;
-    if long!* then fancy!-line!* := '!} . fancy!-line!*;
-    fancy!-pos!* := fancy!-pos!* + l;
-    if fancy!-pos!* > 2 * (linelength nil +1 ) then overflowed!*:=t;
-  end) where !*lower = !*lower;
+   else if numberp u then
+      if testing!-width!* then <<
+         %FJW This is a version of the block below specialised for numbers
+         %FJW and intended to avoid specifying the font style.
+         u := explode u;
+         for each x in u do fancy!-line!* := x . fancy!-line!*;
+         fancy!-pos!* := fancy!-pos!* + if numberp n then n else 2*length u;
+         if fancy!-pos!* > 2*(linelength nil + 1) then overflowed!* := t;
+      >>
+      else fancy!-prin2number u
+   else
+   (begin scalar str,id; integer l;
+      str := stringp u; id := idp u and not digit u; long!*:=nil;
+      u:= if atom u then <<
+         if !*fancy!-lower then explode2lc u
+         else explode2 u >>
+      else {u};
+      if cdr u then long!*:=t;            %FJW identifier longer than 1 character
+      if car u = '!\ then long!*:=nil;
+      l := if numberp n then n else 2*length u;
+      if id and not numberp n then
+         u:=fancy!-lower!-digits(fancy!-esc u);
+      if long!* then
+         %% fancy!-line!* := '!{ . '!m . '!r . '!h . '!t . '!a . '!m . '!\ . fancy!-line!*;
+         fancy!-line!* := '!\mathit!{ . fancy!-line!*; %FJW '!\mathrm!{ . fancy!-line!*;
+      for each x in u do
+      <<if str and (x='!    or x='!_)
+      then fancy!-line!* := '!\ . fancy!-line!*;
+         fancy!-line!* :=
+            (if id and !*fancy!-lower
+            then red!-char!-downcase x else x) . fancy!-line!*;
+      >>;
+      if long!* then fancy!-line!* := '!} . fancy!-line!*;
+      fancy!-pos!* := fancy!-pos!* + l;
+      if fancy!-pos!* > 2 * (linelength nil +1 ) then overflowed!*:=t;
+   end) where !*lower = !*lower;
 
 symbolic procedure fancy!-last!-symbol();
    if fancy!-line!* then car fancy!-line!*;

@@ -289,7 +289,7 @@ public class REDUCEPanel extends BorderPane {
 //                    stealthInput("load_package fmprint");
                     stealthInput("out\"nul\";in\"" +
                             new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
-                            "\"$out t");
+                            "\";shut\"nul\"");
                     fmprintLoaded = true;
                 }
             } else {
@@ -306,8 +306,8 @@ public class REDUCEPanel extends BorderPane {
         // See the bottom of packages/redfront/redfront.red.
         hideNextOutputAndPrompt = true;
         sendStringToREDUCENoEcho(
-                String.format("symbolic<<%s;crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
-                        "statcounter:=statcounter-1;>>$\n", input));
+                String.format("symbolic begin scalar !*msg,!*redefmsg;%s;crbuf!*:=cdr crbuf!*;" +
+                        "inputbuflis!*:=cdr inputbuflis!*;statcounter:=statcounter-1;end$\n", input));
     }
 
     // User input processing **********************************************************************
@@ -718,6 +718,7 @@ public class REDUCEPanel extends BorderPane {
 
     private static final Pattern promptPattern = Pattern.compile("\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
     // Allow ^A prompt ^B in case redfront mode turned on then off.
+    String previousPromptString;
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -728,26 +729,28 @@ public class REDUCEPanel extends BorderPane {
         int promptIndex; // possible start index of a prompt
         String promptString = null;
         Matcher promptMatcher = null;
-        boolean promptFound = false;
         // If text ends with a prompt then promptMatcher.matches() is true.
         // Set promptString and set questionPrompt to true/false to indicate a question prompt.
         // Split off the final line, which should consist of the next input prompt:
         promptIndex = text.lastIndexOf("\n") + 1;
         if (promptIndex < text.length() &&
                 (promptMatcher = promptPattern.matcher(text.substring(promptIndex))).matches()) {
-            promptFound = true;
             promptString = promptMatcher.group(1); // exclude ^A/^B
             questionPrompt = promptMatcher.group(2) == null;
         }
 
         if (hideNextOutputAndPrompt) {
-            /*if (promptFound)*/
-            hideNextOutputAndPrompt = false;
-            return;
+            // Hide output up to and including the next prompt:
+            if (promptString != null) {
+                if (promptString.equals(previousPromptString)) return;
+                hideNextOutputAndPrompt = false;
+            }
         }
+        previousPromptString = promptString;
 
         if (hideNextOutputShowPrompt) {
-            if (promptFound) {
+            // Hide output up to but excluding the next prompt:
+            if (promptString != null) {
                 text = text.substring(promptIndex - 1);
                 promptIndex = 1;
                 hideNextOutputShowPrompt = false;
@@ -756,7 +759,7 @@ public class REDUCEPanel extends BorderPane {
 
         if (beforeFirstPrompt) {
             // Do things relating to the first prompt here...
-            if (promptFound) {
+            if (promptString != null) {
                 // Text ends with the first prompt...
                 beforeFirstPrompt = false;
                 if (colouredIOState != RRPreferences.ColouredIO.REDFRONT && !typesetMathsState) {
@@ -796,7 +799,7 @@ public class REDUCEPanel extends BorderPane {
             case NONE:
             default: // no IO display colouring, but maybe prompt processing
                 inputCSSClass = null;
-                if (promptFound) {
+                if (promptString != null) {
                     outputText(text.substring(0, promptIndex), null);
                     outputPromptText(promptString, null);
                 } else
@@ -804,7 +807,7 @@ public class REDUCEPanel extends BorderPane {
                 break;
 
             case MODAL: // mode coloured IO display processing
-                if (promptFound) {
+                if (promptString != null) {
                     if (0 < promptIndex)
                         outputText(text.substring(0, promptIndex), outputCSSClass);
                     // Only colour output *after* initial REDUCE header.
