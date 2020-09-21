@@ -112,7 +112,7 @@ fluid  '(
 global '(!*eraise initl!* nat!*!* spare!* ofl!*);
 
 %
-% The interaction between the code here and avariety of other Reduce flags
+% The interaction between the code here and a variety of other REDUCE flags
 % that set output options is possibly delicate and probably often broken.
 % As well as "list" the code here needs review with regard to options
 % such as "fort" for generating other formats of output.
@@ -120,7 +120,7 @@ global '(!*eraise initl!* nat!*!* spare!* ofl!*);
 
 switch list,ratpri,revpri,nosplit;
 
-% Temp experiment while investigating a possible for for an interaction with
+% Temp experiment while investigating a possible fix for an interaction with
 % "on list". Well in fact "on/off acn" can provide a general guard for
 % some incremental changes being made here.   But evenually this switch
 % will be retired.                 ACN March 2011
@@ -160,7 +160,6 @@ put('fancy,'simpfg,
   '((t (fmp!-switch t))
     (nil (fmp!-switch nil)) ));
 
-
 symbolic procedure fmp!-switch mode;
       if mode then
         <<if outputhandler!* neq 'fancy!-output then
@@ -168,16 +167,16 @@ symbolic procedure fmp!-switch mode;
                 outputhandler!* . outputhandler!-stack!*;
            outputhandler!* := 'fancy!-output;
           >>;
-          !*fancy := t
+          % !*fancy := t %FJW Handled by switch module
         >>
       else
         <<if outputhandler!* = 'fancy!-output then
           <<outputhandler!* := car outputhandler!-stack!*;
             outputhandler!-stack!* := cdr outputhandler!-stack!*;
-            !*fancy := nil
+            % !*fancy := nil %FJW Handled by switch module
           >>
 	  else
-          << !*fancy := nil;
+          << % !*fancy := nil; %FJW Handled by switch module
              rederr "FANCY is not current output handler" >>
 % ACN feels that raising an error on an attempt to switch off an option
 % in the case that the option is already disabled is a bit harsh.
@@ -804,7 +803,7 @@ symbolic procedure fancy!-terpri!*();
      if fancy!-line!* then
          fancy!-page!* := fancy!-line!* . fancy!-page!*;
      fancy!-pos!* :=tablevel!* * 10;
-     fancy!-texpos := tablevel!* * 30000; % Roughtly 1 cm
+     fancy!-texpos := tablevel!* * 30000; % Roughly 1 cm
      fancy!-line!*:= {'tab . tablevel!*};
      overflowed!* := nil
    >>;
@@ -1251,6 +1250,8 @@ fancy!-level
 
 put('times,'fancy!-prtch,"\,");
 % Was \*, TeX discretionary times, but not defined in LaTeX and not supported by KaTeX.
+
+put('setq, 'fancy!-prtch, "\coloneqq "); %FJW otherwise uses prtch prop !:!=
 
 symbolic procedure fancy!-oprin op;
  fancy!-level
@@ -1951,7 +1952,7 @@ symbolic procedure fancy!-dn!:prin u;
 
 put ('!:dn!:, 'fancy!-prifn, 'fancy!-dn!:prin);
 
-fmp!-switch t;
+on fancy; %FJW fmp!-switch t;
 
 endmodule;
 
