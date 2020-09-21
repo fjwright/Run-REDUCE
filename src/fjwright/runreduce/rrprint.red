@@ -79,7 +79,7 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 %  fancy!-prtch            string for infix printing of an operator
 %
 %  fancy!-special!-symbol  print expression for a non-indexed item
-%                          string with TeX expression "\alpha" or
+%                          string with TeX expression "\alpha " or
 %                          number referring to ASCII symbol code
 %
 %  fancy!-infix!-symbol    special symbol for infix operators
@@ -1248,8 +1248,9 @@ fancy!-level
    goto loop;
   end;
 
-put('times,'fancy!-prtch,"\,");
-% Was \*, TeX discretionary times, but not defined in LaTeX and not supported by KaTeX.
+put('times, 'fancy!-prtch, "\*");
+%FJW TeX discretionary times (\*) is not defined in LaTeX and not
+%FJW supported by KaTeX, so I handle it in Run-REDUCE.
 
 put('setq, 'fancy!-prtch, "\coloneqq "); %FJW otherwise uses prtch prop !:!=
 
@@ -1274,53 +1275,53 @@ symbolic procedure fancy!-oprin op;
     if overflowed!* then return 'failed
    end;
 
-put('alpha,'fancy!-special!-symbol,"\alpha");
-put('beta,'fancy!-special!-symbol,"\beta");
-put('gamma,'fancy!-special!-symbol,"\Gamma");
-put('delta,'fancy!-special!-symbol,"\delta");
-put('epsilon,'fancy!-special!-symbol,"\varepsilon");
-put('zeta,'fancy!-special!-symbol,"\zeta");
-put('eta,'fancy!-special!-symbol,"\eta");
-put('theta,'fancy!-special!-symbol,"\theta");
-put('iota,'fancy!-special!-symbol,"\iota");
-put('kappa,'fancy!-special!-symbol,"\varkappa");
-put('lambda,'fancy!-special!-symbol,"\lambda");
-put('mu,'fancy!-special!-symbol,"\mu");
-put('nu,'fancy!-special!-symbol,"\nu");
-put('xi,'fancy!-special!-symbol,"\xi");
-put('pi,'fancy!-special!-symbol,"\pi");
-put('rho,'fancy!-special!-symbol,"\rho");
-put('sigma,'fancy!-special!-symbol,"\sigma");
-put('tau,'fancy!-special!-symbol,"\tau");
-put('upsilon,'fancy!-special!-symbol,"\upsilon");
-put('phi,'fancy!-special!-symbol,"\phi");
-put('chi,'fancy!-special!-symbol,"\chi");
-put('psi,'fancy!-special!-symbol,"\psi");
-put('omega,'fancy!-special!-symbol,"\omega");
+put('alpha,'fancy!-special!-symbol,"\alpha ");
+put('beta,'fancy!-special!-symbol,"\beta ");
+put('gamma,'fancy!-special!-symbol,"\Gamma ");
+put('delta,'fancy!-special!-symbol,"\delta ");
+put('epsilon,'fancy!-special!-symbol,"\varepsilon ");
+put('zeta,'fancy!-special!-symbol,"\zeta ");
+put('eta,'fancy!-special!-symbol,"\eta ");
+put('theta,'fancy!-special!-symbol,"\theta ");
+put('iota,'fancy!-special!-symbol,"\iota ");
+put('kappa,'fancy!-special!-symbol,"\varkappa ");
+put('lambda,'fancy!-special!-symbol,"\lambda ");
+put('mu,'fancy!-special!-symbol,"\mu ");
+put('nu,'fancy!-special!-symbol,"\nu ");
+put('xi,'fancy!-special!-symbol,"\xi ");
+put('pi,'fancy!-special!-symbol,"\pi ");
+put('rho,'fancy!-special!-symbol,"\rho ");
+put('sigma,'fancy!-special!-symbol,"\sigma ");
+put('tau,'fancy!-special!-symbol,"\tau ");
+put('upsilon,'fancy!-special!-symbol,"\upsilon ");
+put('phi,'fancy!-special!-symbol,"\phi ");
+put('chi,'fancy!-special!-symbol,"\chi ");
+put('psi,'fancy!-special!-symbol,"\psi ");
+put('omega,'fancy!-special!-symbol,"\omega ");
 
-put('#alpha;,'fancy!-special!-symbol,"\alpha");
-put('#beta;,'fancy!-special!-symbol,"\beta");
-put('#gamma;,'fancy!-special!-symbol,"\Gamma");
-put('#delta;,'fancy!-special!-symbol,"\delta");
-put('#epsilon;,'fancy!-special!-symbol,"\varepsilon");
-put('#zeta;,'fancy!-special!-symbol,"\zeta");
-put('#eta;,'fancy!-special!-symbol,"\eta");
-put('#theta;,'fancy!-special!-symbol,"\theta");
-put('#iota;,'fancy!-special!-symbol,"\iota");
-put('#kappa;,'fancy!-special!-symbol,"\varkappa");
-put('#lambda;,'fancy!-special!-symbol,"\lambda");
-put('#mu;,'fancy!-special!-symbol,"\mu");
-put('#nu;,'fancy!-special!-symbol,"\nu");
-put('#xi;,'fancy!-special!-symbol,"\xi");
-put('#pi;,'fancy!-special!-symbol,"\pi");
-put('#rho;,'fancy!-special!-symbol,"\rho");
-put('#sigma;,'fancy!-special!-symbol,"\sigma");
-put('#tau;,'fancy!-special!-symbol,"\tau");
-put('#upsilon;,'fancy!-special!-symbol,"\upsilon");
-put('#phi;,'fancy!-special!-symbol,"\phi");
-put('#chi;,'fancy!-special!-symbol,"\chi");
-put('#psi;,'fancy!-special!-symbol,"\psi");
-put('#omega;,'fancy!-special!-symbol,"\omega");
+put('#alpha;,'fancy!-special!-symbol,"\alpha ");
+put('#beta;,'fancy!-special!-symbol,"\beta ");
+put('#gamma;,'fancy!-special!-symbol,"\Gamma ");
+put('#delta;,'fancy!-special!-symbol,"\delta ");
+put('#epsilon;,'fancy!-special!-symbol,"\varepsilon ");
+put('#zeta;,'fancy!-special!-symbol,"\zeta ");
+put('#eta;,'fancy!-special!-symbol,"\eta ");
+put('#theta;,'fancy!-special!-symbol,"\theta ");
+put('#iota;,'fancy!-special!-symbol,"\iota ");
+put('#kappa;,'fancy!-special!-symbol,"\varkappa ");
+put('#lambda;,'fancy!-special!-symbol,"\lambda ");
+put('#mu;,'fancy!-special!-symbol,"\mu ");
+put('#nu;,'fancy!-special!-symbol,"\nu ");
+put('#xi;,'fancy!-special!-symbol,"\xi ");
+put('#pi;,'fancy!-special!-symbol,"\pi ");
+put('#rho;,'fancy!-special!-symbol,"\rho ");
+put('#sigma;,'fancy!-special!-symbol,"\sigma ");
+put('#tau;,'fancy!-special!-symbol,"\tau ");
+put('#upsilon;,'fancy!-special!-symbol,"\upsilon ");
+put('#phi;,'fancy!-special!-symbol,"\phi ");
+put('#chi;,'fancy!-special!-symbol,"\chi ");
+put('#psi;,'fancy!-special!-symbol,"\psi ");
+put('#omega;,'fancy!-special!-symbol,"\omega ");
 
 #if (memq 'csl lispsystem!*)
 
@@ -1331,7 +1332,7 @@ deflist('(
      (!Alpha "\mathit{A}") (!Beta "\mathit{B}") (!Chi "\Chi ")
      (!Delta "\Delta ") (!Epsilon "\mathit{E}") (!Phi "\Phi ")
      (!Gamma "\Gamma ") (!Eta "\mathit{H}") (!Iota "\mathit{I}")
-     (!vartheta "\vartheta") (!Kappa "\Kappa ") (!Lambda "\Lambda ")
+     (!vartheta "\vartheta ") (!Kappa "\Kappa ") (!Lambda "\Lambda ")
      (!Mu "\mathit{M}") (!Nu "\mathit{N}") (!O "\mathit{O}")
      (!Pi "\Pi ") (!Theta "\Theta ") (!Rho "\mathit{R}")
      (!Sigma "\Sigma ") (!Tau "\Tau ") (!Upsilon "\Upsilon ")
@@ -1344,7 +1345,7 @@ deflist('(
      (!#alpha; "\mathit{A}") (!#beta; "\mathit{B}") (!#chi; "\Chi ")
      (!#delta; "\Delta ") (!#epsilon; "\mathit{E}") (!#phi; "\Phi ")
      (!#gamma; "\Gamma ") (!#eta; "\mathit{H}") (!#iota; "\mathit{I}")
-     (!vartheta "\vartheta") (!#kappa; "\Kappa ") (!#lambda; "\Lambda ")
+     (!vartheta "\vartheta ") (!#kappa; "\Kappa ") (!#lambda; "\Lambda ")
      (!#mu; "\mathit{M}") (!#nu; "\mathit{N}") (!O "\mathit{O}")
      (!#pi; "\Pi ") (!#theta; "\Theta ") (!#rho; "\mathit{R}")
      (!#sigma; "\Sigma ") (!#tau; "\Tau ") (!#upsilon; "\Upsilon ")
@@ -1777,7 +1778,7 @@ symbolic procedure fancy!-limpri(u,p);
      fancy!-prin2!*('!_,0);
      fancy!-prin2!*('!{,0);
      fancy!-maprint(var,0);
-     fancy!-prin2!*("\rightarrow",0);
+     fancy!-prin2!*("\rightarrow ",0);
      fancy!-prin2!*('! ,0); % make sure there is space before the following symbol
      fancy!-maprint(lo,0) where !*list=nil;
      fancy!-prin2!*('!},0);
@@ -2160,144 +2161,144 @@ put('min,'fancy!-prifn,'fancy!-min);
 symbolic procedure fancy!-sin(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\sin",0);
+   fancy!-prin2!*("\sin ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-cos(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\cos",0);
+   fancy!-prin2!*("\cos ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-tan(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\tan",0);
+   fancy!-prin2!*("\tan ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-cot(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\cot",0);
+   fancy!-prin2!*("\cot ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-sec(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\sec",0);
+   fancy!-prin2!*("\sec ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-csc(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\csc",0);
+   fancy!-prin2!*("\csc ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-asin(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\arcsin",0);
+   fancy!-prin2!*("\arcsin ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-acos(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\arccos",0);
+   fancy!-prin2!*("\arccos ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-atan(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\arctan",0);
+   fancy!-prin2!*("\arctan ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-sinh(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\sinh",0);
+   fancy!-prin2!*("\sinh ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-cosh(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\cosh",0);
+   fancy!-prin2!*("\cosh ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-tanh(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\tanh",0);
+   fancy!-prin2!*("\tanh ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-coth(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\coth",0);
+   fancy!-prin2!*("\coth ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-exp(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\exp",0);
+   fancy!-prin2!*("\exp ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-log(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\log",0);
+   fancy!-prin2!*("\log ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-ln(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\ln",0);
+   fancy!-prin2!*("\ln ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-max(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\max",0);
+   fancy!-prin2!*("\max ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-min(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\min",0);
+   fancy!-prin2!*("\min ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-repart(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\Re",0);
+   fancy!-prin2!*("\Re ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
 symbolic procedure fancy!-impart(u);
  fancy!-level
   begin
-   fancy!-prin2!*("\Im",0);
+   fancy!-prin2!*("\Im ",0);
    return fancy!-print!-function!-arguments cdr u;
   end;
 
-put('Euler_gamma,'fancy!-special!-symbol,"\gamma");
+put('Euler_gamma,'fancy!-special!-symbol,"\gamma ");
 
 put('BesselI,'fancy!-prifn,'fancy!-bessel);
 put('BesselJ,'fancy!-prifn,'fancy!-bessel);

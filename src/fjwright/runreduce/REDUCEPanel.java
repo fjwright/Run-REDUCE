@@ -587,7 +587,8 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private boolean inMathOutput = false;
-    private final StringBuilder mathOutputSB = new StringBuilder();
+    private StringBuilder mathOutputSB = new StringBuilder();
+    private static final Pattern TIMES_PATTERN = Pattern.compile("\\\\\\*");
     private static final Pattern LR_PATTERN = Pattern.compile("\\\\(left|right)");
     // fmprint outputs a non-standard macro, so \symb{182} -> \partial, etc:
     // This mapping corresponds to the Microsoft Windows Symbol font.
@@ -615,9 +616,18 @@ public class REDUCEPanel extends BorderPane {
         for (int i = mathOutputSB.length() - 1; i > 0; i--)
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
 
+        // Trailing discretionary times (\*) -> \times, otherwise delete:
+        if (mathOutputSB.substring(mathOutputSB.length() - 2).equals("\\*"))
+            mathOutputSB.replace(mathOutputSB.length() - 2, mathOutputSB.length(), "\\times");
+        Matcher matcher = TIMES_PATTERN.matcher(mathOutputSB);
+        StringBuilder sb = new StringBuilder();
+        while (matcher.find()) matcher.appendReplacement(sb, "");
+        matcher.appendTail(sb);
+        mathOutputSB = sb;
+
         // Ensure \left and \right control words match:
         int start = 0, leftMinusRightCount = 0;
-        Matcher matcher = LR_PATTERN.matcher(mathOutputSB);
+        matcher = LR_PATTERN.matcher(mathOutputSB);
         while (matcher.find(start)) {
             switch (matcher.group(1)) {
                 case "left":
