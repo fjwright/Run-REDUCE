@@ -47,19 +47,6 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 % SOFTWARE.
 % ----------------------------------------------------------------------
 
-% Revision 1.8  2004/11/18 20:44:16  seidl
-% Further changes by ACN to help with CSL-based systems:
-% (*) use of \mathit{A} for \Alpha and related changes to avoid direct
-% reference to character codes
-% (*) added texsymbol(), texbox(), texfbox() and texstring() formatting
-% at least for the benefit of those debugging.
-% (*) new fluids !*standard!-output!* !*math!-output!* !*spool!-output!*
-% (*) changes to fancy!-output
-% (*) splitted fancy!-flush between csl and psl
-% (*) changes to fancy!-binomial
-
-% ----------------------------------------------------------------------
-
 % Switches:
 %
 %  on fancy                enable algebraic output processing
@@ -231,6 +218,7 @@ symbolic procedure raw!-print!-string s;
 #endif
 
 symbolic procedure fancy!-out!-item(it);
+   % Called by fancy!-flush only.
   if atom it then prin2 it else
   if eqcar(it,'ascii) then writechar(cadr it) else
   if eqcar(it,'tab) then
@@ -268,14 +256,6 @@ symbolic procedure set!-fancymode bool;
       sumlevel!* := tablevel!* := 1;
    >>;
 
-#if (memq 'csl lispsystem!*)
-fluid '(!*standard!-output!* !*math!-output!* !*spool!-output!*);
-#endif
-
-fluid '(most_recent_fancy !*display!-for!-copy);
-
-!*display!-for!-copy := nil;
-
 symbolic procedure fancy!-output(mode,l);
 % Interface routine.
 %
@@ -287,84 +267,20 @@ symbolic procedure fancy!-output(mode,l);
 % printed expression (in non-fancy mode) buffered up the terpri!* to flush it
 % may need special care. But if that is what it is about I would suggest that
 % treatment be applied in fmp!-switch not here...
-
+%
    if ofl!* or (mode='maprin and posn!*>2) or not !*nat then <<
 % not terminal handler or current output line non-empty.
       if mode = 'maprin then maprin l
       else terpri!*(l) >> where outputhandler!* = nil
       else
-% I want to do some more magic for CSL here. In CSL the system can be launched
-% or run-time configured so that a transcript of screen output goes to a
-% file, the "log file". In the CSL sources the handle for this file is known
-% as "spool_file". It does not look sensible to me that TeX-ified maths
-% should go there even if that is what best goes to the screen. Thus I think I
-% want fancy mode in CSL with a spool_file enabled to do something rather like
-%
-%    wrs math-output-destination;
-%    fancy!-maprin0 expression;
-%    wrs spool_file;
-%    maprin0 expression;
-%    wrs undivided standard output;
-%
-% Rather than using "wrs" here I will re-bind the CSL variable
-% *standard-output*. This achieves a similar effect but guarantees that
-% the regular situation is restored if there is ANY sort of exit from the
-% maths display code - eg a user-generated interrupt. It I had used wrs then
-% I could perhaps have restored things using errorset, but this feels easier.
-% Also this little section of code is pretty CSL-specific since it is
-% working with the CSL-embedded display code, so I do not feel bad about
-% going beyond Standard Lisp.
-%
-% A further wrinkle on this wants to be that garbage collector and diagnostic
-% output always goes to the undivided standard output in the normal way, and
-% this output to the "math-output" stream can never be interrupted by any
-% such. If a section of maths display is not completed then the maths output
-% will find that it has a fancy_header but no fancy_trailer, and any request
-% for user input or any error exit will force terminate it leaving a visibly
-% incomplete fragment (which the display code can detect and ignore).
-%
-% Note that the risk of error or garbage collection during maths display is
-% not actually terribly high since  all that is done between the generation
-% of header & trailer is a load of calls to fancy!-out!-item, ie ready
-% prepared sequences of items get printed. Also the normal maprin just buffers
-% things up and only displays them when terpri!* is called. So I can afford to
-% use both fancy!-maprin0 and maprin and then fuss about destinations a bit
-% more at terpri!* time.  In this regard observe that because I have got here
-% I know I on in "on nat" mode. In that case setting pline!* to nil has the
-% effect of discarding any built-up layout.
    <<set!-fancymode t;
-      if mode = 'maprin then <<
-#if (memq 'csl lispsystem!*)
-% math!-display 1 will not do anything, but returns true if a spool_file
-% is active.
-         if getd 'math!-display and
-            math!-display 0 and
-            math!-display 1 then <<
-            maprin l where outputhandler!* = nil >>;
-         most_recent_fancy := l . most_recent_fancy;
-#endif
-         fancy!-maprin0 l >>
+      if mode = 'maprin then
+         fancy!-maprin0 l
       else if mode = 'assgnpri then <<
-#if (memq 'csl lispsystem!*)
-% math!-display 1 will not do anything, but returns true if a spool_file
-% is active.
-         if getd 'math!-display and
-            math!-display 0 and
-            math!-display 1 then <<
-            assgnpri(car l,cadr l,caddr l) where outputhandler!* = nil >>;
-         most_recent_fancy := car l . most_recent_fancy;
-#endif
          fancy!-assgnpri l;
          fancy!-flush() >>
-      else <<
-#if (memq 'csl lispsystem!*)
-         if getd 'math!-display and
-            math!-display 0 and
-            math!-display 1 then <<
-            terpri!* l where outputhandler!* = nil,
-                             !*standard!-output!* = !*spool!-output!* >>;
-#endif
-         fancy!-flush() >> >>;
+      else
+         fancy!-flush() >>;
 
 % fancy!-assgnpri checks whether a special printing function is defined
 % and calls it
@@ -375,7 +291,6 @@ symbolic procedure fancy!-assgnpri u;
      return if y then apply1(y,u) else fancy!-maprin0 car u
   end;
 
-
 symbolic procedure fancy!-out!-header();
    <<
       if posn()>0 then terpri();
@@ -385,75 +300,25 @@ symbolic procedure fancy!-out!-header();
 symbolic procedure fancy!-out!-trailer();
    prin2 fancy!-switch!-off!*;
 
-#if (memq 'csl lispsystem!*)
-
 symbolic procedure fancy!-flush();
-  begin
-    fancy!-terpri!*();
-    if getd 'math!-display and math!-display 0 then <<
-      math!-display 2; % clear out any previous junk
-% I will send a flat (if "off nat") version of the output to my GUI handler
-% with a view that that can be used if the user selects the displayed
-% output and goes COPY.
-% I will only activate this when 'showmath1 is in lispsystem!* since I will
-% use that at the CSL end to indicate that I am ready to accept and process it.
-      if memq('showmath1, lispsystem!*) and most_recent_fancy then <<
-% This puts a simple flat version of the output into the GUI's buffers
-         tyo 14; % U+000E is SO (Shift Out) and historically changed font
-                 % ofr colour.
-         most_recent_fancy := reverse most_recent_fancy;
-         while most_recent_fancy do <<
-            (maprin car most_recent_fancy) where outputhandler!* = nil,
-                                                 !*nat = nil;
-            most_recent_fancy := cdr most_recent_fancy >>;
-         terpri!* nil where outputhandler!* = nil;
-% There will be a character U+000F after the flat version
-% of stuff and before the TeX version. Note that this is SI (Shift In)
-% which historically moved back to default font or colour.
-         tyo 15 >>;
+   %FJW Modified to avoid leading spaces and precede a leading + or -
+   % on a follow-on line with an invisible term using an empty text
+   % box (see the LaTeX book, page 48, but KaTeX does not support \mbox).
+   begin scalar not_first_line;
+      fancy!-terpri!*();
       for each line in reverse fancy!-page!* do
-        if line and not eqcar(car line,'tab) then <<
-          if 'wx memq lispsystem!* then fancy!-out!-item "\[";
-          for each it in reverse line do fancy!-out!-item it;
-          if 'wx memq lispsystem!* then fancy!-out!-item "\]";
-          terpri() >>;
-      math!-display 3 >> where !*standard!-output!*=!*math!-output!*
-    else for each line in reverse fancy!-page!* do
-      if line and not eqcar(car line,'tab) then <<
-         fancy!-out!-header();
-% If somehow "on fancy" is true but I am not talking to the GUI then the
-% expectation will be that I am talking to TeXmacs. In that case I do
-% not want tro confuse things with the "flat" output, but for debuggability
-% I will arrange that if a user goes "lisp (!*display!-for!-copy := t);
-% the the extra stuff will be shown.
-         if !*display!-for!-copy and most_recent_fancy then <<
-            most_recent_fancy := reverse most_recent_fancy;
-            while most_recent_fancy do <<
-               (maprin car most_recent_fancy) where outputhandler!* = nil,
-                                                    !*nat = nil;
-               most_recent_fancy := cdr most_recent_fancy >>;
-            terpri!* nil where outputhandler!* = nil;
-            prin2 "::||::" >>;
-         most_recent_fancy := nil;
-         for each it in reverse line do fancy!-out!-item it;
-         fancy!-out!-trailer() >>;
-    set!-fancymode nil
-  end;
-
-#else
-
-symbolic procedure fancy!-flush();
-    << fancy!-terpri!*();
-        for each line in reverse fancy!-page!* do
-        if line and not eqcar(car line,'tab) then
-        <<fancy!-out!-header();
-          for each it in reverse line do fancy!-out!-item it;
-          fancy!-out!-trailer();
-        >>;
-        set!-fancymode nil;
-      >> where !*lower=nil;
-
-#endif
+         if line and not eqcar(car line,'tab) then <<
+            fancy!-out!-header();
+            % for each it in reverse line do fancy!-out!-item it;
+            line := reverse line;
+            while eqcar(car line, 'tab) do line := cdr line;
+            if not_first_line and car line memq '(!+ !-) then fancy!-out!-item "\mathrm{}";
+            for each it in line do fancy!-out!-item it;
+            fancy!-out!-trailer();
+            not_first_line := t
+         >>;
+      set!-fancymode nil;
+   end where !*lower = nil;
 
 %---------------- primitives -----------------------------------
 
