@@ -1,7 +1,7 @@
 module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 
-% This file is "tmprint.red" with minor modifications by Francis Wright.
-% It outputs algebraic-mode mathematics using LaTeX markup.
+% This file is a version of "tmprint.red" modified by Francis Wright.
+% It outputs algebraic-mode mathematics using LaTeX-like markup.
 
 % I (FJW) think the history of this file is as follows, but please see
 % "fmprint.red" and "tmprint.red" for further details.  It began life
@@ -20,8 +20,6 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 
 % Francis Wright, September 2020
 
-% ----------------------------------------------------------------------
-% $Id: tmprint.red 5279 2020-02-19 18:30:03Z eschruefer $
 % ----------------------------------------------------------------------
 % Copyright (c) 1993-1994, 1999, 2003-2005 A. Dolzmann, T. Hearn, A.
 % Grozin, H. Melenk, W. Neun, A. Norman, A. Seidl, and T. Sturm
@@ -73,7 +71,6 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 %
 %  fancy!-symbol!-length   the number of horizontal units needed for
 %                          the symbol.  A standard character has 2 units.
-
 
 create!-package('(rrprint),nil);
 
@@ -1464,7 +1461,7 @@ symbolic procedure fancy!-print!-format1(u,p,a);
 
 %-----------------------------------------------------------
 %
-%   some operator specific print functions
+%   some operator-specific print functions
 %
 %-----------------------------------------------------------
 
@@ -2000,168 +1997,71 @@ put('taylor!*,'fancy!-reform,'taylor!*print1);
 
 endmodule;
 
-module fancy_specfn;
+module fancy_transc_fns;
 
-put('sin,'fancy!-prifn,'fancy!-sin);
-put('cos,'fancy!-prifn,'fancy!-cos);
-put('tan,'fancy!-prifn,'fancy!-tan);
-put('cot,'fancy!-prifn,'fancy!-cot);
-put('sec,'fancy!-prifn,'fancy!-sec);
-put('csc,'fancy!-prifn,'fancy!-csc);
+put('sin,'fancy!-prifn,'fancy!-transc!-fn);
+put('cos,'fancy!-prifn,'fancy!-transc!-fn);
+put('tan,'fancy!-prifn,'fancy!-transc!-fn);
+put('cot,'fancy!-prifn,'fancy!-transc!-fn);
+put('sec,'fancy!-prifn,'fancy!-transc!-fn);
+put('csc,'fancy!-prifn,'fancy!-transc!-fn);
 put('asin,'fancy!-prifn,'fancy!-asin);
 put('acos,'fancy!-prifn,'fancy!-acos);
 put('atan,'fancy!-prifn,'fancy!-atan);
-put('sinh,'fancy!-prifn,'fancy!-sinh);
-put('cosh,'fancy!-prifn,'fancy!-cosh);
-put('tanh,'fancy!-prifn,'fancy!-tanh);
-put('coth,'fancy!-prifn,'fancy!-coth);
-put('exp,'fancy!-prifn,'fancy!-exp);
-put('log,'fancy!-prifn,'fancy!-log);
-put('ln,'fancy!-prifn,'fancy!-ln);
-put('max,'fancy!-prifn,'fancy!-max);
-put('min,'fancy!-prifn,'fancy!-min);
+put('sinh,'fancy!-prifn,'fancy!-transc!-fn);
+put('cosh,'fancy!-prifn,'fancy!-transc!-fn);
+put('tanh,'fancy!-prifn,'fancy!-transc!-fn);
+put('coth,'fancy!-prifn,'fancy!-transc!-fn);
+put('exp,'fancy!-prifn,'fancy!-transc!-fn);
+put('log,'fancy!-prifn,'fancy!-transc!-fn);
+put('ln,'fancy!-prifn,'fancy!-transc!-fn);
+put('max,'fancy!-prifn,'fancy!-transc!-fn);
+put('min,'fancy!-prifn,'fancy!-transc!-fn);
 %put('repart,'fancy!-prifn,'fancy!-repart);
 %put('impart,'fancy!-prifn,'fancy!-impart);
 
-symbolic procedure fancy!-sin(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\sin ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-cos(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\cos ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-tan(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\tan ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-cot(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\cot ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-sec(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\sec ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-csc(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\csc ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+symbolic procedure fancy!-transc!-fn(u);
+   % u = (function arg1 arg2 ...)
+   fancy!-level
+   begin scalar fn := compress('!" . '!\ . reverse('!" . reverse explode car u));
+      fancy!-prin2!*(fn, 0);
+      return fancy!-print!-function!-arguments cdr u;
+   end;
 
 symbolic procedure fancy!-asin(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\arcsin ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+   fancy!-level
+   <<
+      fancy!-prin2!*("\arcsin",0);
+      fancy!-print!-function!-arguments cdr u
+   >>;
 
 symbolic procedure fancy!-acos(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\arccos ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+   fancy!-level
+   <<
+      fancy!-prin2!*("\arccos",0);
+      fancy!-print!-function!-arguments cdr u
+   >>;
 
 symbolic procedure fancy!-atan(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\arctan ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-sinh(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\sinh ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-cosh(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\cosh ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-tanh(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\tanh ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-coth(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\coth ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-exp(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\exp ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-log(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\log ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-ln(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\ln ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-max(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\max ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
-
-symbolic procedure fancy!-min(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\min ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+   fancy!-level
+   <<
+      fancy!-prin2!*("\arctan",0);
+      fancy!-print!-function!-arguments cdr u
+   >>;
 
 symbolic procedure fancy!-repart(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\Re ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+   fancy!-level
+   <<
+      fancy!-prin2!*("\Re",0);
+      fancy!-print!-function!-arguments cdr u
+   >>;
 
 symbolic procedure fancy!-impart(u);
- fancy!-level
-  begin
-   fancy!-prin2!*("\Im ",0);
-   return fancy!-print!-function!-arguments cdr u;
-  end;
+   fancy!-level
+   <<
+      fancy!-prin2!*("\Im",0);
+      fancy!-print!-function!-arguments cdr u
+   >>;
 
 put('Euler_gamma,'fancy!-special!-symbol,"\gamma ");
 
