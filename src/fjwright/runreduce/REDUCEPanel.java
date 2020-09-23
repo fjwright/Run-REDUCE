@@ -128,7 +128,7 @@ public class REDUCEPanel extends BorderPane {
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
-                "<style>pre{margin:0}div{margin-top:-1em;margin-bottom:2em}</style>" +
+                "<style>pre{margin:0}</style>" +
                 "</head><body></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
@@ -140,7 +140,7 @@ public class REDUCEPanel extends BorderPane {
                                 "console.error=function(message){bridge.log('JS ERROR: '+message)};" +
                                         "console.info=function(message){bridge.log('JS INFO: '+message)};" +
                                         "console.log=function(message){bridge.log('JS LOG: '+message)};" +
-                                        "console.warn=function(message){bridge.log('JS WARN: '+message)}");
+                                        "console.warn=function(message){bridge.log('JS WARN: '+message)};");
                         // End debugging support
                         outputWebViewAvailable();
                     }
@@ -311,8 +311,8 @@ public class REDUCEPanel extends BorderPane {
         // See the bottom of packages/redfront/redfront.red.
         hideNextOutputAndPrompt = true;
         sendStringToREDUCENoEcho(
-                String.format("symbolic begin scalar !*msg,!*redefmsg;%s;crbuf!*:=cdr crbuf!*;" +
-                        "inputbuflis!*:=cdr inputbuflis!*;statcounter:=statcounter-1;end$\n", input));
+                String.format("symbolic <<%s;crbuf!*:=cdr crbuf!*;" +
+                        "inputbuflis!*:=cdr inputbuflis!*;statcounter:=statcounter-1;>>$\n", input));
     }
 
     // User input processing **********************************************************************
@@ -731,9 +731,8 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    // Leading control then newlines is crucial to detecting the prompt following stealth input!
     // Allow ^A prompt ^B in case redfront mode turned on then off.
-    private static final Pattern promptPattern = Pattern.compile("\\p{Cntrl}\n\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
+    private static final Pattern promptPattern = Pattern.compile("\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -745,10 +744,13 @@ public class REDUCEPanel extends BorderPane {
         String promptString = null;
         Matcher promptMatcher = null;
         // If text ends with a prompt then promptMatcher.matches() is true.
-        promptIndex = text.lastIndexOf("\n") - 1;
-        if (promptIndex >= 0 && promptIndex < text.length() &&
-                (promptMatcher = promptPattern.matcher(text.substring(promptIndex))).matches()) {
-            promptIndex += 2; // actual start index of the prompt line found
+        // Beginning of string then newline is crucial to detecting the prompt following subsequent stealth input!
+        // Leading control then newline is crucial to detecting the prompt following initial stealth input!
+        promptIndex = text.lastIndexOf("\n");
+        if ((promptIndex == 0 || (promptIndex > 0 && Character.isISOControl(text.charAt(promptIndex - 1)))) &&
+                promptIndex < text.length() &&
+                (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
+            // Now promptIndex = actual start index of the prompt line.
             promptString = promptMatcher.group(1); // exclude ^A/^B
             questionPrompt = promptMatcher.group(2) == null;
         }
@@ -759,9 +761,9 @@ public class REDUCEPanel extends BorderPane {
             return;
         }
         if (hideNextOutputShowPrompt) {
-            // Hide output up to but excluding the next prompt:
+            // Hide output up to but excluding the newline before the next prompt:
             if (promptString != null) {
-                text = text.substring(Math.max(0, promptIndex - 1));
+                text = text.substring(promptIndex - 1);
                 promptIndex = 1;
                 hideNextOutputShowPrompt = false;
             } else return;
@@ -816,8 +818,7 @@ public class REDUCEPanel extends BorderPane {
 
             case MODAL: // mode coloured IO display processing
                 if (promptString != null) {
-                    if (0 < promptIndex)
-                        outputText(text.substring(0, promptIndex), outputCSSClass);
+                    outputText(text.substring(0, promptIndex), outputCSSClass);
                     // Only colour output *after* initial REDUCE header.
                     if (!questionPrompt) switch (promptMatcher.group(2)) {
                         case "*":
