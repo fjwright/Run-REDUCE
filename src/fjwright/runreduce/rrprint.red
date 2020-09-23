@@ -304,7 +304,7 @@ symbolic procedure fancy!-flush();
    %FJW Modified to avoid leading spaces and precede a leading + or -
    % on a follow-on line with an invisible term using an empty text
    % box (see the LaTeX book, page 48, but KaTeX does not support \mbox).
-   begin scalar not_first_line;
+   (begin scalar not_first_line;
       fancy!-terpri!*();
       for each line in reverse fancy!-page!* do
          if line and not eqcar(car line,'tab) then <<
@@ -318,7 +318,7 @@ symbolic procedure fancy!-flush();
             not_first_line := t
          >>;
       set!-fancymode nil;
-   end where !*lower = nil;
+   end) where !*lower = nil;
 
 %---------------- primitives -----------------------------------
 

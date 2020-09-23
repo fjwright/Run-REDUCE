@@ -287,9 +287,14 @@ public class REDUCEPanel extends BorderPane {
                     stealthInput("on fancy");
                 } else {
 //                    stealthInput("load_package fmprint");
-                    stealthInput("out\"nul\";in\"" +
-                            new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
-                            "\";shut\"nul\"");
+                    hideNextOutputAndPrompt = true;
+                    sendStringToREDUCENoEcho(
+                            "symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                                    "out nul;in\"" +
+                                    new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
+                                    "\";shut nul;" +
+                                    "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
+                                    "statcounter:=statcounter-1;end$\n");
                     fmprintLoaded = true;
                 }
             } else {
@@ -466,7 +471,7 @@ public class REDUCEPanel extends BorderPane {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new File(RunREDUCE.reduceConfiguration.workingDir));
-            pb.redirectErrorStream(true);
+            // pb.redirectErrorStream(true);
             // pb.redirectInput(ProcessBuilder.Redirect.INHERIT); // Works!
             Process p = pb.start();
 
@@ -726,9 +731,9 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    private static final Pattern promptPattern = Pattern.compile("\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
+    // Leading control then newlines is crucial to detecting the prompt following stealth input!
     // Allow ^A prompt ^B in case redfront mode turned on then off.
-    String previousPromptString;
+    private static final Pattern promptPattern = Pattern.compile("\\p{Cntrl}\n\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -736,32 +741,27 @@ public class REDUCEPanel extends BorderPane {
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
         String text = textAtomicReferenceString.get();
-        int promptIndex; // possible start index of a prompt
+        int promptIndex; // possible start index of 2 leading newlines followed by a prompt line
         String promptString = null;
         Matcher promptMatcher = null;
         // If text ends with a prompt then promptMatcher.matches() is true.
-        // Set promptString and set questionPrompt to true/false to indicate a question prompt.
-        // Split off the final line, which should consist of the next input prompt:
-        promptIndex = text.lastIndexOf("\n") + 1;
-        if (promptIndex < text.length() &&
+        promptIndex = text.lastIndexOf("\n") - 1;
+        if (promptIndex >= 0 && promptIndex < text.length() &&
                 (promptMatcher = promptPattern.matcher(text.substring(promptIndex))).matches()) {
+            promptIndex += 2; // actual start index of the prompt line found
             promptString = promptMatcher.group(1); // exclude ^A/^B
             questionPrompt = promptMatcher.group(2) == null;
         }
-
+        // Handle stealth input:
         if (hideNextOutputAndPrompt) {
             // Hide output up to and including the next prompt:
-            if (promptString != null) {
-                if (promptString.equals(previousPromptString)) return;
-                hideNextOutputAndPrompt = false;
-            }
+            if (promptString != null) hideNextOutputAndPrompt = false;
+            return;
         }
-        previousPromptString = promptString;
-
         if (hideNextOutputShowPrompt) {
             // Hide output up to but excluding the next prompt:
             if (promptString != null) {
-                text = text.substring(promptIndex - 1);
+                text = text.substring(Math.max(0, promptIndex - 1));
                 promptIndex = 1;
                 hideNextOutputShowPrompt = false;
             } else return;
@@ -785,16 +785,14 @@ public class REDUCEPanel extends BorderPane {
                         redfrontLoaded = true;
                     }
                     if (typesetMathsState) {
-                        sendStringToREDUCENoEcho(
-                                "symbolic<<" +
-//                                        "load_package fmprint" +
-                                        "out\"nul\";in\"" +
-                                        new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
-                                        "\"$out t" +
-                                        ";crbuf!*:=nil;" +
-                                        "inputbuflis!*:=nil;statcounter:=0;>>$\n");
-                        fmprintLoaded = true;
                         hideNextOutputShowPrompt = true;
+                        sendStringToREDUCENoEcho(
+                                "symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                                        "out nul;in\"" +
+                                        new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
+                                        "\";shut nul;" +
+                                        "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
+                        fmprintLoaded = true;
                     }
                     return;
                 }
