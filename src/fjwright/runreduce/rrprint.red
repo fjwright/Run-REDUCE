@@ -168,49 +168,11 @@ symbolic procedure fmp!-switch mode;
 
 fluid '(lispsystem!*);
 
-% The next two functions provide abstraction for conversion between
-% strings and lists of character objects.
-
 #if (memq 'csl lispsystem!*)
-
-% Under CSL the eventual state will be that IF output is going directly
-% to a window that can support maths display then I will send stuff there
-% so it gets displayed using the CSL embedded code. If on the other hand
-% output is going to a pipe or a file or basically anything other than
-% directly to the screen I will issue the codes that texmacs likes to see.
-%
-
-% Convert a string into a list of character objects.
-inline procedure string!-to!-list a;
-    explode2 a;
-
-% Print a string without ANY conversion or adjustment, so if the string
-% has control characters etc in it they get transmitted unchanged. Well
-% let me express some reservations about what might happen if the string
-% contains tabs and newlines - the lower level system IO code might
-% interpret same...
-inline procedure raw!-print!-string s;
-    prin2 s;
 
 % Print the character whose code is n.
 inline procedure writechar n;
     tyo n;    % Like "prin2 int2id n"
-
-% Convert a symbol or string to characters but ensure that all
-% output characters are folded to lower case.
-% CSL already has explode2lc;
-
-#else
-
-% inline procedure string!-to!-list a;
-%    string2list a;
-
-symbolic procedure raw!-print!-string s;
-   prin2 s;
-
-% writechar already exists in PSL.
-
-% explode2lc already defned in support/psl.red
 
 #endif
 
