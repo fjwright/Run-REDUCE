@@ -580,7 +580,7 @@ public class REDUCEPanel extends BorderPane {
             if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected()) {
                 outputPlainText(text, cssClass);
             }
-            outputTypesetText(text, cssClass);
+            outputTypesetMaths(text, cssClass);
         } else outputPlainText(text, cssClass);
     }
 
@@ -673,7 +673,7 @@ public class REDUCEPanel extends BorderPane {
 //        }
     }
 
-    private void outputTypesetText(String text, String cssClass) {
+    private void outputTypesetMaths(String text, String cssClass) {
         // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
         // (always at the start/finish of a the end).
         int textLength = text.length(), start = 0, finish;
@@ -740,19 +740,20 @@ public class REDUCEPanel extends BorderPane {
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
         String text = textAtomicReferenceString.get();
-        int promptIndex; // possible start index of 2 leading newlines followed by a prompt line
+        int promptIndex; // possible start index of newline followed by a prompt line
         String promptString = null;
         Matcher promptMatcher = null;
         // If text ends with a prompt then promptMatcher.matches() is true.
-        // Beginning of string then newline is crucial to detecting the prompt following subsequent stealth input!
-        // Leading control then newline is crucial to detecting the prompt following initial stealth input!
+        // Beginning of string then newline is crucial to detecting the prompt following subsequent stealth input.
+        // Leading control (newline or ) then newline is crucial to detecting the prompt following initial stealth input.
+        // But a question prompt may not be preceded by a newline.
         promptIndex = text.lastIndexOf("\n");
-        if ((promptIndex == 0 || (promptIndex > 0 && Character.isISOControl(text.charAt(promptIndex - 1)))) &&
-                promptIndex < text.length() &&
+        if ((promptIndex <= 0 || (promptIndex > 0 && Character.isISOControl(text.charAt(promptIndex - 1)))) &&
+//                promptIndex < text.length() && // Dont' see how this could be false!
                 (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
             // Now promptIndex = actual start index of the prompt line.
-            promptString = promptMatcher.group(1); // exclude ^A/^B
             questionPrompt = promptMatcher.group(2) == null;
+            if (promptIndex > 0 || questionPrompt) promptString = promptMatcher.group(1); // exclude ^A/^B
         }
         // Handle stealth input:
         if (hideNextOutputAndPrompt) {
