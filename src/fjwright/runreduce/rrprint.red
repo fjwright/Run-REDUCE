@@ -292,7 +292,7 @@ symbolic procedure fancy!-special!-symbol(u,n);
 symbolic procedure fancy!-prin2 u;
     fancy!-prin2!*(u,nil);
 
-% fancy-prin2!* maintains a variable fancy!-pos!* which is compared
+% fancy!-prin2!* maintains a variable fancy!-pos!* which is compared
 % against (multiples of) linelength. This is not incremented when a
 % TeX keyword is inserted. That is probably reasonable for some
 % words such as "\mathrm", but seems odd for "\alpha".
@@ -316,7 +316,7 @@ symbolic procedure fancy!-prin2 u;
 % Then I would want to re-work fancy!-prin2 to provide at least a rough
 % estimate of the width of each character based on expecting the width of
 % an average letter or digit to be around 6.25pts. Well it will be rather
-% nicer if even these crude estimates are make in units of millipoints, since
+% nicer if even these crude estimates are made in units of millipoints, since
 % otherwise I will have enough issues of rounding to corrupt even rather
 % coarse calculations.
 
@@ -364,7 +364,7 @@ flag('(texwidth), 'opfn);
 % with a 12-point basic size. This only gives a rather small change
 % but it may be useful in terms of control over readibility.
 
-tex!-pointsize := 10;
+tex!-pointsize := 12;                   %FJW Was 10
 
 
 symbolic procedure texpointsize n;
@@ -384,7 +384,7 @@ flag('(texpointsize), 'opfn);
 
 % Widths here are given in millipoints, and I include (at present)
 % four key mathematical fonts, all at nominal size 10pt. Since I am
-% only using this to give me and ESTIMATE of the width of the TeX
+% only using this to give me an ESTIMATE of the width of the TeX
 % output so I have a reasonable idea of where to split lines I will
 % assume that other sizes can have their metrics deduced by scaling.
 % But when I do a bit of research I find different sizes quoted even
@@ -498,12 +498,12 @@ for each x in '(
 put('!\not, 'texcharwidth, 0);
 
 for each x in '(
-    !\sin       !\cos       !\tan        !\cot
-    !\sec       !\csc       !\arcsin     !\arccos
-    !\arctan    !\sinh      !\cosh       !\tanh
-    !\coth      !\exp       !\log        !\ln
-    !\max       !\min       !\re         !\im) do
-  put(x, 'texcharwidth, sub1 length explode2 x);
+   !\sin     !\cos     !\tan     !\cot     !\sec     !\csc
+   !\arcsin  !\arccos  !\arctan  !\arccot  !\arcsec  !\arccsc
+   !\sinh    !\cosh    !\tanh    !\coth    !\sech    !\csch
+   !\arcsinh !\arccosh !\arctanh !\arccoth !\arcsech !\arccsch
+   !\exp     !\log     !\ln      !\max     !\min    %!\re      !\im
+   ) do put(x, 'texcharwidth, sub1 length explode2 x);
 
 symbolic procedure fancy!-prin2!*(u,n);
    if atom u and eqcar(explode2 u,'!\) then <<
@@ -611,8 +611,6 @@ symbolic procedure fancy!-lower!-digits1(u,s);
     if w then goto loop;
     return r;
   end;
-
-
 
 
 symbolic procedure fancy!-lower!-digitstrail(u,s);
@@ -1967,13 +1965,30 @@ put('tan,'fancy!-prifn,'fancy!-transc!-fn);
 put('cot,'fancy!-prifn,'fancy!-transc!-fn);
 put('sec,'fancy!-prifn,'fancy!-transc!-fn);
 put('csc,'fancy!-prifn,'fancy!-transc!-fn);
-put('asin,'fancy!-prifn,'fancy!-asin);
-put('acos,'fancy!-prifn,'fancy!-acos);
-put('atan,'fancy!-prifn,'fancy!-atan);
+
+put('asin,'fancy!-prifn,'fancy!-arc!-transc!-fn);
+put('acos,'fancy!-prifn,'fancy!-arc!-transc!-fn);
+put('atan,'fancy!-prifn,'fancy!-arc!-transc!-fn);
+% Not defined in LaTeX:
+put('acot,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('asec,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('acsc,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+
 put('sinh,'fancy!-prifn,'fancy!-transc!-fn);
 put('cosh,'fancy!-prifn,'fancy!-transc!-fn);
 put('tanh,'fancy!-prifn,'fancy!-transc!-fn);
 put('coth,'fancy!-prifn,'fancy!-transc!-fn);
+put('sech,'fancy!-prifn,'fancy!-transc!-fn);
+put('csch,'fancy!-prifn,'fancy!-transc!-fn);
+
+% Not defined in LaTeX:
+put('asinh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('acosh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('atanh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('acoth,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('asech,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('acsch,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+
 put('exp,'fancy!-prifn,'fancy!-transc!-fn);
 put('log,'fancy!-prifn,'fancy!-transc!-fn);
 put('ln,'fancy!-prifn,'fancy!-transc!-fn);
@@ -1983,47 +1998,54 @@ put('min,'fancy!-prifn,'fancy!-transc!-fn);
 %put('impart,'fancy!-prifn,'fancy!-impart);
 
 symbolic procedure fancy!-transc!-fn(u);
+   % Typeset an elementary transcendental function defined in LaTeX
    % u = (function arg1 arg2 ...)
    fancy!-level
-   begin scalar fn := compress('!" . '!\ . reverse('!" . reverse explode car u));
+   begin scalar fn := % compress('!" . '!\ . reverse('!" . reverse explode car u));
+      string!-concat("\", id2string car u);
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
 
-symbolic procedure fancy!-asin(u);
-   fancy!-level
-   <<
-      fancy!-prin2!*("\arcsin",0);
-      fancy!-print!-function!-arguments cdr u
-   >>;
+% Following the NIST Digital Library of Mathematical Functions,
+% http://dlmf.nist.gov/, the inverse of the trigonometric or
+% hyperbolic function fn is named arcfn and is written in normal
+% (roman) font style.
 
-symbolic procedure fancy!-acos(u);
+symbolic procedure fancy!-arc!-transc!-fn(u);
+   % Typeset an inverse elementary transcendental function defined in LaTeX
+   % u = (function arg1 arg2 ...)
    fancy!-level
-   <<
-      fancy!-prin2!*("\arccos",0);
-      fancy!-print!-function!-arguments cdr u
-   >>;
+   begin scalar fn := % compress('!" . '!\ . 'a . 'r. 'c. reverse('!" . reverse cdr explode car u));
+      id2string car u;
+      fn := string!-concat("\arc", substring(fn, 1, string!-length fn));
+      fancy!-prin2!*(fn, 0);
+      return fancy!-print!-function!-arguments cdr u;
+   end;
 
-symbolic procedure fancy!-atan(u);
+symbolic procedure fancy!-arc!-transc!-fn!-nonstd(u);
+   % Typeset an inverse elementary transcendental function not defined in LaTeX
+   % u = (function arg1 arg2 ...)
    fancy!-level
-   <<
-      fancy!-prin2!*("\arctan",0);
-      fancy!-print!-function!-arguments cdr u
-   >>;
+   begin scalar fn := id2string car u;
+      fn := string!-concat("\mathrm{arc", substring(fn, 1, string!-length fn), "}");
+      fancy!-prin2!*(fn, 0);
+      return fancy!-print!-function!-arguments cdr u;
+   end;
 
-symbolic procedure fancy!-repart(u);
-   fancy!-level
-   <<
-      fancy!-prin2!*("\Re",0);
-      fancy!-print!-function!-arguments cdr u
-   >>;
+% symbolic procedure fancy!-repart(u);
+%    fancy!-level
+%    <<
+%       fancy!-prin2!*("\Re",0);
+%       fancy!-print!-function!-arguments cdr u
+%    >>;
 
-symbolic procedure fancy!-impart(u);
-   fancy!-level
-   <<
-      fancy!-prin2!*("\Im",0);
-      fancy!-print!-function!-arguments cdr u
-   >>;
+% symbolic procedure fancy!-impart(u);
+%    fancy!-level
+%    <<
+%       fancy!-prin2!*("\Im",0);
+%       fancy!-print!-function!-arguments cdr u
+%    >>;
 
 put('Euler_gamma,'fancy!-special!-symbol,"\gamma ");
 
