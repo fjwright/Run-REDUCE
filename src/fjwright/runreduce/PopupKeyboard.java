@@ -425,20 +425,50 @@ public class PopupKeyboard {
         map.put('√', "sqrt");
     }
 
+    static boolean decodeNeeded;
+
     public static String decode(final String text) {
         final StringBuilder builder = new StringBuilder();
-        boolean found = false;
+        decodeNeeded = false;
         for (int i = 0; i < text.length(); i++) {
             char a = text.charAt(i);
             if (a == '\u200C') {
-                found = true;
+                decodeNeeded = true;
                 a = text.charAt(++i);
                 String b = map.get(a);
-                // In case the symbolic constant is deleted but the marker is left!
-                builder.append(b == null ? a : b);
+                if (b == null) {
+                    // In case the symbolic constant is deleted but the marker is left!
+                    builder.append(greekToLaTeX(a));
+                } else
+                    builder.append(b);
             } else
-                builder.append(a);
+                builder.append(greekToLaTeX(a));
         }
-        return found ? builder.toString() : text;
+        return decodeNeeded ? builder.toString() : text;
+    }
+
+    /**
+     * Convert a Unicode character to a string.
+     * If the character is a Greek letter then return its LaTeX name.
+     * FixMe This is necessary only when using PSL, but do it also for CSL for now!
+     */
+    private static String greekToLaTeX(char c) {
+        // 0391 Α GREEK CAPITAL LETTER ALPHA .. 03A9 Ω GREEK CAPITAL LETTER OMEGA
+        // 03B1 α GREEK SMALL LETTER ALPHA .. 03C9 ω GREEK SMALL LETTER OMEGA
+        boolean upperCase;
+        if ('\u0391' <= c && c <= '\u03A9') {
+            upperCase = true;
+            decodeNeeded = true;
+        } else if ('\u03B1' <= c && c <= '\u03C9') {
+            upperCase = false;
+            decodeNeeded = true;
+        } else return Character.toString(c);
+        String name = Character.getName(c);
+        name = name.substring(name.lastIndexOf(' ') + 1);
+        if (upperCase) { // Upper case:
+            return Character.toString(name.charAt(0))
+                    .concat(name.substring(1).toLowerCase());
+        } else // Lower case:
+            return name.toLowerCase();
     }
 }
