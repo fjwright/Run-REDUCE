@@ -364,7 +364,7 @@ flag('(texwidth), 'opfn);
 % with a 12-point basic size. This only gives a rather small change
 % but it may be useful in terms of control over readibility.
 
-tex!-pointsize := 12;                   %FJW Was 10
+tex!-pointsize := 12;   %FJW Was 10, but not actually used anywhere!!!
 
 
 symbolic procedure texpointsize n;
@@ -1099,7 +1099,7 @@ symbolic procedure fancy!-oprin op;
 
 put('alpha,'fancy!-special!-symbol,"\alpha ");
 put('beta,'fancy!-special!-symbol,"\beta ");
-put('gamma,'fancy!-special!-symbol,"\Gamma ");
+put('gamma,'fancy!-special!-symbol,"\gamma ");
 put('delta,'fancy!-special!-symbol,"\delta ");
 put('epsilon,'fancy!-special!-symbol,"\varepsilon ");
 put('zeta,'fancy!-special!-symbol,"\zeta ");
@@ -1959,6 +1959,8 @@ endmodule;
 
 module fancy_transc_fns;
 
+% Elementary transcendental functions
+
 put('sin,'fancy!-prifn,'fancy!-transc!-fn);
 put('cos,'fancy!-prifn,'fancy!-transc!-fn);
 put('tan,'fancy!-prifn,'fancy!-transc!-fn);
@@ -2047,18 +2049,69 @@ symbolic procedure fancy!-arc!-transc!-fn!-nonstd(u);
 %       fancy!-print!-function!-arguments cdr u
 %    >>;
 
-put('Euler_gamma,'fancy!-special!-symbol,"\gamma ");
+% Gamma, Beta and Related Functions
 
-put('BesselI,'fancy!-prifn,'fancy!-bessel);
-put('BesselJ,'fancy!-prifn,'fancy!-bessel);
-put('BesselY,'fancy!-prifn,'fancy!-bessel);
-put('BesselK,'fancy!-prifn,'fancy!-bessel);
+put('Euler_gamma, 'fancy!-special!-symbol, "\gamma ");
+put('Gamma, 'fancy!-functionsymbol, "\Gamma ");
+put('polygamma, 'fancy!-prifn, 'fancy!-polygamma);
+
+symbolic procedure fancy!-polygamma(u);
+   % u = (polygamma n z) -> \psi^{(n)}(z)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator "\psi";
+      fancy!-prin2!*('!^, 0);  fancy!-prin2!*('!{, 0);
+      w := fancy!-in!-brackets({'fancy!-maprin0, mkquote cadr u}, '!(, '!));
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!}, 0);
+      return fancy!-in!-brackets({'fancy!-maprin0, mkquote caddr u}, '!(, '!));
+   end;
+
+put('iGamma, 'fancy!-functionsymbol, '!P); % P(a,z)
+put('iBeta, 'fancy!-prifn, 'fancy!-iBeta); % I_{x}(a,b)
+put('iBeta, 'fancy!-functionsymbol, '!I);
+
+symbolic procedure fancy!-iBeta(u);
+   % u = (iBeta a b x) -> I_{x}(a,b)
+   fancy!-indexed!-fn({car u, cadddr u, cadr u, caddr u});
+
+put('dilog, 'fancy!-functionsymbol, "\mathrm{Li}_2"); % roman Li_2(z)
+put('Pochhammer, 'fancy!-prifn, 'fancy!-Pochhammer); % (a)_{n}
+
+symbolic procedure fancy!-Pochhammer(u);
+   % u = (Pochhammer a n) -> (a)_{n}
+   fancy!-level
+   begin scalar w;
+      w := fancy!-in!-brackets({'fancy!-maprin0, mkquote cadr u}, '!(, '!));
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!_, 0);  fancy!-prin2!*('!{, 0);
+      fancy!-maprin0 caddr u;
+      fancy!-prin2!*('!}, 0);
+   end;
+
+% Integral Functions
+
+put('ei, 'fancy!-functionsymbol, "\mathrm{Ei}");
+put('si, 'fancy!-functionsymbol, "\mathrm{Si}");
+put('ci, 'fancy!-functionsymbol, "\mathrm{Ci}");
+put('shi, 'fancy!-functionsymbol, "\mathrm{Shi}");
+put('chi, 'fancy!-functionsymbol, "\mathrm{Chi}");
+put('erf, 'fancy!-functionsymbol, "\mathrm{erf}");
+put('fresnel_s, 'fancy!-functionsymbol, "\mathrm{S}");
+put('fresnel_c, 'fancy!-functionsymbol, "\mathrm{C}");
+
+% Airy, Bessel and Related Functions
+
+put('BesselI,'fancy!-prifn,'fancy!-indexed!-fn);
+put('BesselJ,'fancy!-prifn,'fancy!-indexed!-fn);
+put('BesselY,'fancy!-prifn,'fancy!-indexed!-fn);
+put('BesselK,'fancy!-prifn,'fancy!-indexed!-fn);
 put('BesselI,'fancy!-functionsymbol,'(ascii 73));
 put('BesselJ,'fancy!-functionsymbol,'(ascii 74));
 put('BesselY,'fancy!-functionsymbol,'(ascii 89));
 put('BesselK,'fancy!-functionsymbol,'(ascii 75));
 
-symbolic procedure fancy!-bessel(u);
+symbolic procedure fancy!-indexed!-fn(u);
  fancy!-level
   begin scalar w;
    fancy!-prefix!-operator car u;
@@ -2067,11 +2120,11 @@ symbolic procedure fancy!-bessel(u);
    return fancy!-print!-function!-arguments cddr u;
   end;
 
-put('polylog,'fancy!-prifn,'fancy!-bessel);
+put('polylog,'fancy!-prifn,'fancy!-indexed!-fn);
 put('polylog,'fancy!-functionsymbol,'!L!i);
 
-put('ChebyshevU,'fancy!-prifn,'fancy!-bessel);
-put('ChebyshevT,'fancy!-prifn,'fancy!-bessel);
+put('ChebyshevU,'fancy!-prifn,'fancy!-indexed!-fn);
+put('ChebyshevT,'fancy!-prifn,'fancy!-indexed!-fn);
 put('ChebyshevU,'fancy!-functionsymbol,'(ascii 85));
 put('ChebyshevT,'fancy!-functionsymbol,'(ascii 84));
 
@@ -2144,7 +2197,7 @@ symbolic procedure fancy!-meijerg u;
 
 % meijerg({{},1},{{0}},x);
 
-% Now a few things that can be useful for testing this code...
+%ACN Now a few things that can be useful for testing this code...
 
 symbolic <<
 % Arrange that if this file is loaded twice you do not get silly messages
