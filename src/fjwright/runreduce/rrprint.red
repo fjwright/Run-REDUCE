@@ -21,6 +21,8 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 % Francis Wright, September 2020
 
 % ----------------------------------------------------------------------
+% $Id: tmprint.red 5408 2020-09-25 12:22:46Z eschruefer $
+% ----------------------------------------------------------------------
 % Copyright (c) 1993-1994, 1999, 2003-2005 A. Dolzmann, T. Hearn, A.
 % Grozin, H. Melenk, W. Neun, A. Norman, A. Seidl, and T. Sturm
 %
@@ -1626,7 +1628,7 @@ put('!*sq,'fancy!-reform,'fancy!-sqreform);
 
 symbolic procedure fancy!-sqreform u;
    << u := cadr u;
-      if !*pri or wtl!* then prepsq!* sqhorner!* u
+      if !*pri or wtl!* then prepreform prepsq!* sqhorner!* u
        else if denr u = 1 then fancy!-sfreform numr u
        else {'quotient,fancy!-sfreform numr u,fancy!-sfreform denr u} >>;
 
@@ -2068,6 +2070,7 @@ symbolic procedure fancy!-polygamma(u);
    end;
 
 put('iGamma, 'fancy!-functionsymbol, '!P); % P(a,z)
+
 put('iBeta, 'fancy!-prifn, 'fancy!-iBeta); % I_{x}(a,b)
 put('iBeta, 'fancy!-functionsymbol, '!I);
 
@@ -2076,6 +2079,7 @@ symbolic procedure fancy!-iBeta(u);
    fancy!-indexed!-fn({car u, cadddr u, cadr u, caddr u});
 
 put('dilog, 'fancy!-functionsymbol, "\mathrm{Li}_2"); % roman Li_2(z)
+
 put('Pochhammer, 'fancy!-prifn, 'fancy!-Pochhammer); % (a)_{n}
 
 symbolic procedure fancy!-Pochhammer(u);
