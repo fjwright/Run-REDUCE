@@ -2093,6 +2093,16 @@ symbolic procedure fancy!-Pochhammer(u);
       fancy!-prin2!*('!}, 0);
    end;
 
+symbolic procedure fancy!-indexed!-fn(u);
+   % Was called fancy!-bessel, but it's more generally useful!
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator car u;
+      w:=fancy!-print!-one!-index cadr u;
+      if testing!-width!* and w eq 'failed then return w;
+      return fancy!-print!-function!-arguments cddr u;
+   end;
+
 % Integral Functions
 
 put('ei, 'fancy!-functionsymbol, "\mathrm{Ei}");
@@ -2106,6 +2116,11 @@ put('fresnel_c, 'fancy!-functionsymbol, "\mathrm{C}");
 
 % Airy, Bessel and Related Functions
 
+put('Airy_Ai, 'fancy!-functionsymbol, "\mathrm{Ai}");
+put('Airy_Bi, 'fancy!-functionsymbol, "\mathrm{Bi}");
+put('Airy_AiPrime, 'fancy!-functionsymbol, "\mathrm{Ai}'");
+put('Airy_BiPrime, 'fancy!-functionsymbol, "\mathrm{Bi}'");
+
 put('BesselI,'fancy!-prifn,'fancy!-indexed!-fn);
 put('BesselJ,'fancy!-prifn,'fancy!-indexed!-fn);
 put('BesselY,'fancy!-prifn,'fancy!-indexed!-fn);
@@ -2115,14 +2130,23 @@ put('BesselJ,'fancy!-functionsymbol,'(ascii 74));
 put('BesselY,'fancy!-functionsymbol,'(ascii 89));
 put('BesselK,'fancy!-functionsymbol,'(ascii 75));
 
-symbolic procedure fancy!-indexed!-fn(u);
- fancy!-level
-  begin scalar w;
-   fancy!-prefix!-operator car u;
-   w:=fancy!-print!-one!-index cadr u;
-   if testing!-width!* and w eq 'failed then return w;
-   return fancy!-print!-function!-arguments cddr u;
-  end;
+put('Hankel1, 'fancy!-prifn, 'fancy!-Hankel);
+put('Hankel2, 'fancy!-prifn, 'fancy!-Hankel);
+
+symbolic procedure fancy!-Hankel(u);
+   % u = (Hankel1/2 nu z)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator '!H;
+      w:=fancy!-print!-one!-index cadr u;
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!^, 0);
+      % There's probably a better way to write this:
+      fancy!-prin2!*('!{, 0);  fancy!-prin2!*('!(, 0);
+      fancy!-prin2!*(if car u eq 'Hankel1 then 1 else 2, 0);
+      fancy!-prin2!*('!), 0);  fancy!-prin2!*('!}, 0);
+      return fancy!-print!-function!-arguments cddr u;
+   end;
 
 put('polylog,'fancy!-prifn,'fancy!-indexed!-fn);
 put('polylog,'fancy!-functionsymbol,'!L!i);
