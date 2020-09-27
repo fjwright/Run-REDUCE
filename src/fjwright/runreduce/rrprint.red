@@ -1959,7 +1959,11 @@ put('taylor!*,'fancy!-reform,'taylor!*print1);
 
 endmodule;
 
+
 module fancy_transc_fns;
+
+% Display transcendental functions following the NIST Digital Library
+% of Mathematical Functions, http://dlmf.nist.gov/.
 
 % Elementary transcendental functions
 
@@ -1974,9 +1978,9 @@ put('asin,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 put('acos,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 put('atan,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 % Not defined in LaTeX:
-put('acot,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('asec,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('acsc,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('acot,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('asec,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('acsc,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 
 put('sinh,'fancy!-prifn,'fancy!-transc!-fn);
 put('cosh,'fancy!-prifn,'fancy!-transc!-fn);
@@ -1986,12 +1990,12 @@ put('sech,'fancy!-prifn,'fancy!-transc!-fn);
 put('csch,'fancy!-prifn,'fancy!-transc!-fn);
 
 % Not defined in LaTeX:
-put('asinh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('acosh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('atanh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('acoth,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('asech,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
-put('acsch,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonstd);
+put('asinh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('acosh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('atanh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('acoth,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('asech,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
+put('acsch,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 
 put('exp,'fancy!-prifn,'fancy!-transc!-fn);
 put('log,'fancy!-prifn,'fancy!-transc!-fn);
@@ -2003,7 +2007,7 @@ put('min,'fancy!-prifn,'fancy!-transc!-fn);
 
 symbolic procedure fancy!-transc!-fn(u);
    % Typeset an elementary transcendental function defined in LaTeX
-   % u = (function arg1 arg2 ...)
+   % u = (function arg)
    fancy!-level
    begin scalar fn := % compress('!" . '!\ . reverse('!" . reverse explode car u));
       string!-concat("\", id2string car u);
@@ -2011,14 +2015,12 @@ symbolic procedure fancy!-transc!-fn(u);
       return fancy!-print!-function!-arguments cdr u;
    end;
 
-% Following the NIST Digital Library of Mathematical Functions,
-% http://dlmf.nist.gov/, the inverse of the trigonometric or
-% hyperbolic function fn is named arcfn and is written in normal
-% (roman) font style.
+% The inverse of the trigonometric or hyperbolic function fn is named
+% arcfn and is written in normal (roman) font style.
 
 symbolic procedure fancy!-arc!-transc!-fn(u);
    % Typeset an inverse elementary transcendental function defined in LaTeX
-   % u = (function arg1 arg2 ...)
+   % u = (function arg)
    fancy!-level
    begin scalar fn := % compress('!" . '!\ . 'a . 'r. 'c. reverse('!" . reverse cdr explode car u));
       id2string car u;
@@ -2027,9 +2029,9 @@ symbolic procedure fancy!-arc!-transc!-fn(u);
       return fancy!-print!-function!-arguments cdr u;
    end;
 
-symbolic procedure fancy!-arc!-transc!-fn!-nonstd(u);
+symbolic procedure fancy!-arc!-transc!-fn!-nonLTX(u);
    % Typeset an inverse elementary transcendental function not defined in LaTeX
-   % u = (function arg1 arg2 ...)
+   % u = (function arg)
    fancy!-level
    begin scalar fn := id2string car u;
       fn := string!-concat("\mathrm{arc", substring(fn, 1, string!-length fn), "}");
@@ -2071,7 +2073,7 @@ symbolic procedure fancy!-polygamma(u);
 
 put('iGamma, 'fancy!-functionsymbol, '!P); % P(a,z)
 
-put('iBeta, 'fancy!-prifn, 'fancy!-iBeta); % I_{x}(a,b)
+put('iBeta, 'fancy!-prifn, 'fancy!-iBeta);
 put('iBeta, 'fancy!-functionsymbol, '!I);
 
 symbolic procedure fancy!-iBeta(u);
@@ -2130,8 +2132,8 @@ put('BesselJ,'fancy!-functionsymbol,'(ascii 74));
 put('BesselY,'fancy!-functionsymbol,'(ascii 89));
 put('BesselK,'fancy!-functionsymbol,'(ascii 75));
 
-put('Hankel1, 'fancy!-prifn, 'fancy!-Hankel);
-put('Hankel2, 'fancy!-prifn, 'fancy!-Hankel);
+put('Hankel1, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(1)}(z)
+put('Hankel2, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(2)}(z)
 
 symbolic procedure fancy!-Hankel(u);
    % u = (Hankel1/2 nu z)
@@ -2141,24 +2143,97 @@ symbolic procedure fancy!-Hankel(u);
       w:=fancy!-print!-one!-index cadr u;
       if testing!-width!* and w eq 'failed then return w;
       fancy!-prin2!*('!^, 0);
-      % There's probably a better way to write this:
       fancy!-prin2!*('!{, 0);  fancy!-prin2!*('!(, 0);
       fancy!-prin2!*(if car u eq 'Hankel1 then 1 else 2, 0);
       fancy!-prin2!*('!), 0);  fancy!-prin2!*('!}, 0);
       return fancy!-print!-function!-arguments cddr u;
    end;
 
+% Struve, Lommel, Kummer, Whittaker and Spherical Harmonic Functions
+
+put('StruveH, 'fancy!-prifn, 'fancy!-indexed!-fn); % bold H_{nu}(z)
+put('StruveH, 'fancy!-functionsymbol, "\mathbf{H}");
+put('StruveL, 'fancy!-prifn, 'fancy!-indexed!-fn); % bold L_{nu}(z)
+put('StruveL, 'fancy!-functionsymbol, "\mathbf{L}");
+
+put('Lommel1, 'fancy!-prifn, 'fancy!-Lommel); % s_{mu,nu}(z)
+put('Lommel2, 'fancy!-prifn, 'fancy!-Lommel); % S_{mu,nu}(z)
+
+symbolic procedure fancy!-Lommel(u);
+   % u = (Lommel1/2 mu nu z)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator(if car u eq 'Lommel1 then '!s else '!S);
+      w := fancy!-print!-indexlist1({cadr u, caddr u}, '!_, '!*comma!*);
+      if testing!-width!* and w eq 'failed then return w;
+      return fancy!-print!-function!-arguments cdddr u;
+   end;
+
+put('KummerM, 'fancy!-functionsymbol, '!M); % M(a, b, z)
+put('KummerU, 'fancy!-functionsymbol, '!U); % U(a, b, z)
+
+% Classical Orthogonal Polynomials
+
+put('JacobiP, 'fancy!-prifn,'fancy!-JacobiP); % P_n^{(alpha, beta)}(x)
+
+symbolic procedure fancy!-JacobiP(u);
+   % u = (JacobiP n alpha beta x)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator '!P;
+      w := fancy!-print!-one!-index cadr u;
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!^, 0);
+      fancy!-prin2!*('!{, 0);
+      w := fancy!-print!-function!-arguments {caddr u, cadddr u};
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!}, 0);
+      return fancy!-print!-function!-arguments cddddr u;
+   end;
+
+put('GegenbauerP, 'fancy!-prifn, 'fancy!-Gegenbauer!-style); % C_n^{(lamda)}(x)
+put('GegenbauerP, 'fancy!-functionsymbol, '!C);
+
+symbolic procedure fancy!-Gegenbauer!-style(u);
+   % u = (GegenbauerP n lamda x)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator car u;
+      w := fancy!-print!-one!-index cadr u;
+      if testing!-width!* and w eq 'failed then return w;
+      fancy!-prin2!*('!^, 0);
+      fancy!-prin2!*('!{, 0);  fancy!-prin2!*('!(, 0);
+      fancy!-maprint(caddr u, 0);
+      fancy!-prin2!*('!), 0);  fancy!-prin2!*('!}, 0);
+      return fancy!-print!-function!-arguments cdddr u;
+   end;
+
+put('ChebyshevT,'fancy!-prifn,'fancy!-indexed!-fn); % T_n(x)
+put('ChebyshevT,'fancy!-functionsymbol,'(ascii 84));
+put('ChebyshevU,'fancy!-prifn,'fancy!-indexed!-fn); % U_n(x)
+put('ChebyshevU,'fancy!-functionsymbol,'(ascii 85));
+
+put('LegendreP, 'fancy!-prifn, 'fancy!-Legendre!-style);
+put('LegendreP, 'fancy!-functionsymbol, '!P);
+
+symbolic procedure fancy!-Legendre!-style(u);
+   % u = (LegendreP n x) -> P_n(x)
+   % u = (LegendreP n m x) -> P_n^{(m)}(x)
+   if length u = 3 then fancy!-indexed!-fn(u)
+   else fancy!-Gegenbauer!-style(u);
+
+put('LaguerreP, 'fancy!-prifn, 'fancy!-Legendre!-style);
+put('LaguerreP, 'fancy!-functionsymbol, '!L);
+
+put('HermiteP, 'fancy!-prifn, 'fancy!-indexed!-fn); % H_n(x)
+put('HermiteP, 'fancy!-functionsymbol, '!H);
+
+% Other Special Functions
+
 put('polylog,'fancy!-prifn,'fancy!-indexed!-fn);
 put('polylog,'fancy!-functionsymbol,'!L!i);
 
-put('ChebyshevU,'fancy!-prifn,'fancy!-indexed!-fn);
-put('ChebyshevT,'fancy!-prifn,'fancy!-indexed!-fn);
-put('ChebyshevU,'fancy!-functionsymbol,'(ascii 85));
-put('ChebyshevT,'fancy!-functionsymbol,'(ascii 84));
-
-% Hypergeometric functions.
-
-put('empty!*,'fancy!-special!-symbol,32);  % no longer used?
+% Hypergeometric Functions
 
 put('hypergeometric,'fancy!-prifn,'fancy!-hypergeometric);
 
@@ -2168,7 +2243,6 @@ symbolic procedure fancy!-hypergeometric u;
    a1 :=cdr cadr u;
    a2 := cdr caddr u;
    a3 := cadddr u;
-   %fancy!-special!-symbol(get('empty!*,'fancy!-special!-symbol),nil);
    fancy!-prin2!*("{}",0);
    w:=fancy!-print!-one!-index length a1;
    if testing!-width!* and w eq 'failed then return w;

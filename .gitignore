@@ -1,4 +1,4 @@
 /Run-REDUCE-FX.iml
-/.idea
-/mods
-/out
+/.idea/
+/out/
+/test/
