@@ -81,9 +81,13 @@ public class PopupKeyboard {
     private static final String[][] constantNames =
             {{"infinity", "pi"}, {"euler_gamma", "golden_ratio"}};
 
-    private static final String[][][] greekLetters = new String[2][2][12];
-    //  Α α, Β β, Γ γ, Δ δ, Ε ε, Ζ ζ, Η η, Θ θ, Ι ι, Κ κ, Λ λ, Μ μ,
+    // Greek letters represented using Unicode.
+    // Array [0][...] is lower case, [1][...] is upper case, in the following order:
+    //  Α α, Β β, Γ γ, Δ δ, Ε ε, Ζ ζ, Η η, Θ θ, Ι ι, Κ κ, Λ λ, Μ μ
     //  Ν ν, Ξ ξ, Ο ο, Π π, Ρ ρ, Σ ς/σ, Τ τ, Υ υ, Φ φ, Χ χ, Ψ ψ, Ω ω
+    private static final String[][][] greekLetters = new String[2][2][12];
+    // TeX names for Greek letters. Note that the Unicode names are in
+    // upper case and the name for Λ/λ is "LAMDA", with no 'B'!
     private static final String[][][] greekLetterNames = new String[2][2][12];
 
     static { // Initialise greekLetters and greekLetterNames:
@@ -92,14 +96,19 @@ public class PopupKeyboard {
             for (int i = 0; i < greekLetters[0].length; i++)
                 for (int j = 0; j < greekLetters[0][i].length; j++) {
                     greekLetters[s][i][j] = String.valueOf(gl);
-                    String name = Character.getName(gl++);
+                    String name = Character.getName(gl);
                     name = name.substring(name.lastIndexOf(' ') + 1);
-                    if (s == 0) name = name.toLowerCase();
-                    else name = Character.toString(name.charAt(0))
-                            .concat(name.substring(1).toLowerCase());
+                    if (s == 0) { // lower case
+                        if (gl == 'λ') name = "lambda";
+                        else name = name.toLowerCase();
+                    } else { // upper case
+                        if (gl == 'Λ') name = "Lambda";
+                        else name = Character.toString(name.charAt(0))
+                                .concat(name.substring(1).toLowerCase());
+                    }
                     greekLetterNames[s][i][j] = name;
                     // Skip ς and empty UC ς code point:
-                    if (gl == '\u03C2' || gl == '\u03A2') gl++;
+                    if (++gl == '\u03C2' || gl == '\u03A2') gl++;
                 }
             gl = '\u0391'; // Α
         }
