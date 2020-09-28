@@ -1099,97 +1099,63 @@ symbolic procedure fancy!-oprin op;
     if overflowed!* then return 'failed
    end;
 
-put('alpha,'fancy!-special!-symbol,"\alpha ");
-put('beta,'fancy!-special!-symbol,"\beta ");
-put('gamma,'fancy!-special!-symbol,"\gamma ");
-put('delta,'fancy!-special!-symbol,"\delta ");
-put('epsilon,'fancy!-special!-symbol,"\varepsilon ");
-put('zeta,'fancy!-special!-symbol,"\zeta ");
-put('eta,'fancy!-special!-symbol,"\eta ");
-put('theta,'fancy!-special!-symbol,"\theta ");
-put('iota,'fancy!-special!-symbol,"\iota ");
-put('kappa,'fancy!-special!-symbol,"\varkappa ");
-put('lambda,'fancy!-special!-symbol,"\lambda ");
-put('mu,'fancy!-special!-symbol,"\mu ");
-put('nu,'fancy!-special!-symbol,"\nu ");
-put('xi,'fancy!-special!-symbol,"\xi ");
-put('pi,'fancy!-special!-symbol,"\pi ");
-put('rho,'fancy!-special!-symbol,"\rho ");
-put('sigma,'fancy!-special!-symbol,"\sigma ");
-put('tau,'fancy!-special!-symbol,"\tau ");
-put('upsilon,'fancy!-special!-symbol,"\upsilon ");
-put('phi,'fancy!-special!-symbol,"\phi ");
-put('chi,'fancy!-special!-symbol,"\chi ");
-put('psi,'fancy!-special!-symbol,"\psi ");
-put('omega,'fancy!-special!-symbol,"\omega ");
-
-put('#alpha;,'fancy!-special!-symbol,"\alpha ");
-put('#beta;,'fancy!-special!-symbol,"\beta ");
-put('#gamma;,'fancy!-special!-symbol,"\Gamma ");
-put('#delta;,'fancy!-special!-symbol,"\delta ");
-put('#epsilon;,'fancy!-special!-symbol,"\varepsilon ");
-put('#zeta;,'fancy!-special!-symbol,"\zeta ");
-put('#eta;,'fancy!-special!-symbol,"\eta ");
-put('#theta;,'fancy!-special!-symbol,"\theta ");
-put('#iota;,'fancy!-special!-symbol,"\iota ");
-put('#kappa;,'fancy!-special!-symbol,"\varkappa ");
-put('#lambda;,'fancy!-special!-symbol,"\lambda ");
-put('#mu;,'fancy!-special!-symbol,"\mu ");
-put('#nu;,'fancy!-special!-symbol,"\nu ");
-put('#xi;,'fancy!-special!-symbol,"\xi ");
-put('#pi;,'fancy!-special!-symbol,"\pi ");
-put('#rho;,'fancy!-special!-symbol,"\rho ");
-put('#sigma;,'fancy!-special!-symbol,"\sigma ");
-put('#tau;,'fancy!-special!-symbol,"\tau ");
-put('#upsilon;,'fancy!-special!-symbol,"\upsilon ");
-put('#phi;,'fancy!-special!-symbol,"\phi ");
-put('#chi;,'fancy!-special!-symbol,"\chi ");
-put('#psi;,'fancy!-special!-symbol,"\psi ");
-put('#omega;,'fancy!-special!-symbol,"\omega ");
-
-#if (memq 'csl lispsystem!*)
+%FJW The next two lists are based on https://katex.org/docs/supported.html#letters-and-unicode:
+deflist('(
+   (!Alpha "\Alpha ") (!Beta "\Beta ") (!Gamma "\Gamma ") (!Delta "\Delta ")
+   (!Epsilon "\Epsilon ") (!Zeta "\Zeta ") (!Eta "\Eta ") (!Theta "\Theta ")
+   (!Iota "\Iota ") (!Kappa "\Kappa ") (!Lambda "\Lambda ") (!Mu "\Mu ")
+   (!Nu "\Nu ") (!Xi "\Xi ") (!Omicron "\Omicron ") (!Pi "\Pi ")
+   (!Rho "\Rho ") (!Sigma "\Sigma ") (!Tau "\Tau ") (!Upsilon "\Upsilon ")
+   (!Phi "\Phi ") (!Chi "\Chi ") (!Psi "\Psi ") (!Omega "\Omega ")
+      ),'fancy!-special!-symbol);
 
 deflist('(
-% Many of these are just the same glyphs as ordinary upper case letters,
-% and so for compatibility with external viewers I map those ones onto
-% letters with the "\mathit" qualifier to force the font.
-     (!Alpha "\mathit{A}") (!Beta "\mathit{B}") (!Chi "\Chi ")
-     (!Delta "\Delta ") (!Epsilon "\mathit{E}") (!Phi "\Phi ")
-     (!Gamma "\Gamma ") (!Eta "\mathit{H}") (!Iota "\mathit{I}")
-     (!vartheta "\vartheta ") (!Kappa "\Kappa ") (!Lambda "\Lambda ")
-     (!Mu "\mathit{M}") (!Nu "\mathit{N}") (!O "\mathit{O}")
-     (!Pi "\Pi ") (!Theta "\Theta ") (!Rho "\mathit{R}")
-     (!Sigma "\Sigma ") (!Tau "\Tau ") (!Upsilon "\Upsilon ")
-     (!Omega "\Omega ") (!Xi "\Xi ") (!Psi "\Psi ")
-     (!Zeta "\mathit{Z}") (!varphi "\varphi ") (pound "\pound ")
-        ),'fancy!-special!-symbol);
+   (!alpha "\alpha ") (!beta "\beta ") (!gamma "\gamma ") (!delta "\delta ")
+   (!epsilon "\epsilon ") (!zeta "\zeta ") (!eta "\eta ") (!theta "\theta ")
+   (!iota "\iota ") (!kappa "\kappa ") (!lambda "\lambda ") (!mu "\mu ")
+   (!nu "\nu ") (!xi "\xi ") (!omicron "\omicron ") (!pi "\pi ")
+   (!rho "\rho ") (!sigma "\sigma ") (!tau "\tau ") (!upsilon "\upsilon ")
+   (!phi "\phi ") (!chi "\chi ") (!psi "\psi ") (!omega "\omega ")
+      ),'fancy!-special!-symbol);
 
-% Now for some Unicode versions!
-deflist('(
-     (!#alpha; "\mathit{A}") (!#beta; "\mathit{B}") (!#chi; "\Chi ")
-     (!#delta; "\Delta ") (!#epsilon; "\mathit{E}") (!#phi; "\Phi ")
-     (!#gamma; "\Gamma ") (!#eta; "\mathit{H}") (!#iota; "\mathit{I}")
-     (!vartheta "\vartheta ") (!#kappa; "\Kappa ") (!#lambda; "\Lambda ")
-     (!#mu; "\mathit{M}") (!#nu; "\mathit{N}") (!O "\mathit{O}")
-     (!#pi; "\Pi ") (!#theta; "\Theta ") (!#rho; "\mathit{R}")
-     (!#sigma; "\Sigma ") (!#tau; "\Tau ") (!#upsilon; "\Upsilon ")
-     (!#omega; "\Omega ") (!#xi; "\Xi ") (!#psi; "\Psi ")
-     (!#zeta; "\mathit{Z}") (!varphi "\varphi ") (!#pound; "\pound ")
-        ),'fancy!-special!-symbol);
+% put('#alpha;,'fancy!-special!-symbol,"\alpha ");
+% put('#beta;,'fancy!-special!-symbol,"\beta ");
+% put('#gamma;,'fancy!-special!-symbol,"\Gamma ");
+% put('#delta;,'fancy!-special!-symbol,"\delta ");
+% put('#epsilon;,'fancy!-special!-symbol,"\varepsilon ");
+% put('#zeta;,'fancy!-special!-symbol,"\zeta ");
+% put('#eta;,'fancy!-special!-symbol,"\eta ");
+% put('#theta;,'fancy!-special!-symbol,"\theta ");
+% put('#iota;,'fancy!-special!-symbol,"\iota ");
+% put('#kappa;,'fancy!-special!-symbol,"\varkappa ");
+% put('#lambda;,'fancy!-special!-symbol,"\lambda ");
+% put('#mu;,'fancy!-special!-symbol,"\mu ");
+% put('#nu;,'fancy!-special!-symbol,"\nu ");
+% put('#xi;,'fancy!-special!-symbol,"\xi ");
+% put('#pi;,'fancy!-special!-symbol,"\pi ");
+% put('#rho;,'fancy!-special!-symbol,"\rho ");
+% put('#sigma;,'fancy!-special!-symbol,"\sigma ");
+% put('#tau;,'fancy!-special!-symbol,"\tau ");
+% put('#upsilon;,'fancy!-special!-symbol,"\upsilon ");
+% put('#phi;,'fancy!-special!-symbol,"\phi ");
+% put('#chi;,'fancy!-special!-symbol,"\chi ");
+% put('#psi;,'fancy!-special!-symbol,"\psi ");
+% put('#omega;,'fancy!-special!-symbol,"\omega ");
 
-#else
-
-if 'a neq '!A then deflist('(
-    (!Alpha 65) (!Beta 66) (!Chi 67) (!Delta 68)
-    (!Epsilon 69)(!Phi 70) (!Gamma 71)(!Eta 72)
-    (!Iota 73) (!vartheta 74)(!Kappa 75)(!Lambda 76)
-    (!Mu 77)(!Nu 78)(!O 79)(!Pi 80)(!Theta 81)
-    (!Rho 82)(!Sigma 83)(!Tau 84)(!Upsilon 85)
-    (!Omega 87) (!Xi 88)(!Psi 89)(!Zeta 90)
-    (!varphi 106)
-       ),'fancy!-special!-symbol);
-
-#endif
+%FJW Shouldn't these be upper case, otherwise they overwrite the definitions above?
+%FJW Also, XML entity references have the form &Alpha; etc, not #Alpha;
+%FJW So commented out for now; I need to review the support for # in packages/rlisp/*.
+% deflist('(
+%      (!#alpha; "\mathit{A}") (!#beta; "\mathit{B}") (!#chi; "\Chi ")
+%      (!#delta; "\Delta ") (!#epsilon; "\mathit{E}") (!#phi; "\Phi ")
+%      (!#gamma; "\Gamma ") (!#eta; "\mathit{H}") (!#iota; "\mathit{I}")
+%      (!vartheta "\vartheta ") (!#kappa; "\Kappa ") (!#lambda; "\Lambda ")
+%      (!#mu; "\mathit{M}") (!#nu; "\mathit{N}") (!O "\mathit{O}")
+%      (!#pi; "\Pi ") (!#theta; "\Theta ") (!#rho; "\mathit{R}")
+%      (!#sigma; "\Sigma ") (!#tau; "\Tau ") (!#upsilon; "\Upsilon ")
+%      (!#omega; "\Omega ") (!#xi; "\Xi ") (!#psi; "\Psi ")
+%      (!#zeta; "\mathit{Z}") (!varphi "\varphi ") (!#pound; "\pound ")
+%         ),'fancy!-special!-symbol);
 
 put('infinity,'fancy!-special!-symbol,"\infty ");
 put('partial!-df,'fancy!-special!-symbol,"\partial ");
@@ -1209,7 +1175,6 @@ put('when,'fancy!-infix!-symbol,"|");
 put('!*wcomma!*,'fancy!-infix!-symbol,",\,");
 put('replaceby,'fancy!-infix!-symbol,"\Rightarrow ");
 %put('replaceby,'fancy!-symbol!-length,8);
-%put('gamma,'fancy!-functionsymbol,71);  % big Gamma
 put('!~,'fancy!-functionsymbol,"\forall ");     % forall
 %put('!~,'fancy!-symbol!-length,8);
 
@@ -1974,6 +1939,32 @@ put('cot,'fancy!-prifn,'fancy!-transc!-fn);
 put('sec,'fancy!-prifn,'fancy!-transc!-fn);
 put('csc,'fancy!-prifn,'fancy!-transc!-fn);
 
+put('sinh,'fancy!-prifn,'fancy!-transc!-fn);
+put('cosh,'fancy!-prifn,'fancy!-transc!-fn);
+put('tanh,'fancy!-prifn,'fancy!-transc!-fn);
+put('coth,'fancy!-prifn,'fancy!-transc!-fn);
+% Not defined in LaTeX:
+put('sech,'fancy!-prifn,'fancy!-transc!-fn!-nonLTX);
+put('csch,'fancy!-prifn,'fancy!-transc!-fn!-nonLTX);
+
+symbolic procedure fancy!-transc!-fn(u);
+   % Typeset an elementary transcendental function defined in LaTeX
+   % u = (function arg)
+   fancy!-level
+   begin scalar fn := string!-concat("\", id2string car u);
+      fancy!-prin2!*(fn, 0);
+      return fancy!-print!-function!-arguments cdr u;
+   end;
+
+symbolic procedure fancy!-transc!-fn!-nonLTX(u);
+   % Typeset an elementary transcendental function not defined in LaTeX
+   % u = (function arg)
+   fancy!-level
+   begin scalar fn := string!-concat("\mathrm{", id2string car u, "}");
+      fancy!-prin2!*(fn, 0);
+      return fancy!-print!-function!-arguments cdr u;
+   end;
+
 put('asin,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 put('acos,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 put('atan,'fancy!-prifn,'fancy!-arc!-transc!-fn);
@@ -1981,13 +1972,6 @@ put('atan,'fancy!-prifn,'fancy!-arc!-transc!-fn);
 put('acot,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 put('asec,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 put('acsc,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
-
-put('sinh,'fancy!-prifn,'fancy!-transc!-fn);
-put('cosh,'fancy!-prifn,'fancy!-transc!-fn);
-put('tanh,'fancy!-prifn,'fancy!-transc!-fn);
-put('coth,'fancy!-prifn,'fancy!-transc!-fn);
-put('sech,'fancy!-prifn,'fancy!-transc!-fn);
-put('csch,'fancy!-prifn,'fancy!-transc!-fn);
 
 % Not defined in LaTeX:
 put('asinh,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
@@ -1997,24 +1981,6 @@ put('acoth,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 put('asech,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 put('acsch,'fancy!-prifn,'fancy!-arc!-transc!-fn!-nonLTX);
 
-put('exp,'fancy!-prifn,'fancy!-transc!-fn);
-put('log,'fancy!-prifn,'fancy!-transc!-fn);
-put('ln,'fancy!-prifn,'fancy!-transc!-fn);
-put('max,'fancy!-prifn,'fancy!-transc!-fn);
-put('min,'fancy!-prifn,'fancy!-transc!-fn);
-%put('repart,'fancy!-prifn,'fancy!-repart);
-%put('impart,'fancy!-prifn,'fancy!-impart);
-
-symbolic procedure fancy!-transc!-fn(u);
-   % Typeset an elementary transcendental function defined in LaTeX
-   % u = (function arg)
-   fancy!-level
-   begin scalar fn := % compress('!" . '!\ . reverse('!" . reverse explode car u));
-      string!-concat("\", id2string car u);
-      fancy!-prin2!*(fn, 0);
-      return fancy!-print!-function!-arguments cdr u;
-   end;
-
 % The inverse of the trigonometric or hyperbolic function fn is named
 % arcfn and is written in normal (roman) font style.
 
@@ -2022,8 +1988,7 @@ symbolic procedure fancy!-arc!-transc!-fn(u);
    % Typeset an inverse elementary transcendental function defined in LaTeX
    % u = (function arg)
    fancy!-level
-   begin scalar fn := % compress('!" . '!\ . 'a . 'r. 'c. reverse('!" . reverse cdr explode car u));
-      id2string car u;
+   begin scalar fn := id2string car u;
       fn := string!-concat("\arc", substring(fn, 1, string!-length fn));
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
@@ -2038,6 +2003,14 @@ symbolic procedure fancy!-arc!-transc!-fn!-nonLTX(u);
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
+
+put('exp,'fancy!-prifn,'fancy!-transc!-fn);
+put('log,'fancy!-prifn,'fancy!-transc!-fn);
+put('ln,'fancy!-prifn,'fancy!-transc!-fn);
+put('max,'fancy!-prifn,'fancy!-transc!-fn);
+put('min,'fancy!-prifn,'fancy!-transc!-fn);
+%put('repart,'fancy!-prifn,'fancy!-repart);
+%put('impart,'fancy!-prifn,'fancy!-impart);
 
 % symbolic procedure fancy!-repart(u);
 %    fancy!-level

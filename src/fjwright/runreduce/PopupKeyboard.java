@@ -28,6 +28,7 @@ import java.util.Map;
 public class PopupKeyboard {
     private static Node target;
     private final static Popup popup = new Popup();
+    private static final Map<Character, String> decodeMap = new HashMap<>();
 
     /**
      * This method is registered as an event handler on the input editor.
@@ -69,17 +70,23 @@ public class PopupKeyboard {
 // Upper keyboard data: constants and Greek letters ===============================================
 
     // Array [0][...] is unshifted; [1][...] is shifted.
-    // '\u200C' is the zero-width non-joiner character used here to indicate characters to be decoded on input to REDUCE.
+    // '\u200C' is the zero-width non-joiner character used here to indicate special REDUCE symbolic constants.
     private static final String[][] constants = {
-            {"\u200C∞", "\u200Cπ"},
-            {"\u200Cγ", "\u200Cφ"}};
+            {"∞", "π"}, // handled by decodeMap
+            {"\u200Cγ", "\u200Cφ"}}; // handled in decode()
     private static final String[][] constantTooltips = {
-            {"Infinity: bigger than any real or natural number",
-                    "Pi: Archimedes' circle constant = 3.14159..."},
+            {"infinity: bigger than any real or natural number",
+                    "pi: Archimedes' circle constant = 3.14159..."},
             {"Euler_gamma: Euler's constant = 0.57722...",
-                    "Golden_ratio: (1+√5)/2 = 1.61803..."}};
+                    "golden_ratio: (1+√5)/2 = 1.61803..."}};
     private static final String[][] constantNames =
-            {{"infinity", "pi"}, {"euler_gamma", "golden_ratio"}};
+            {{"infinity", "pi"}, {"Euler_gamma", "golden_ratio"}};
+
+    static {
+        decodeMap.put('∞', constantNames[0][0]);
+        decodeMap.put('√', "sqrt");
+        decodeMap.put('²', "2"); // for Solid Harmonic Function default field value r²
+    }
 
     // Greek letters represented using Unicode.
     // Array [0][...] is lower case, [1][...] is upper case, in the following order:
@@ -107,6 +114,7 @@ public class PopupKeyboard {
                                 .concat(name.substring(1).toLowerCase());
                     }
                     greekLetterNames[s][i][j] = name;
+                    decodeMap.put(gl, s == 0 ? name : "!" + name);
                     // Skip ς and empty UC ς code point:
                     if (++gl == '\u03C2' || gl == '\u03A2') gl++;
                 }
@@ -386,7 +394,7 @@ public class PopupKeyboard {
                     text = "log";
                     break;
                 case "√‾":
-                    text = "\u200C√";
+                    text = "√";
                     break;
                 case "!":
                     text = "factorial";
@@ -424,60 +432,32 @@ public class PopupKeyboard {
 
 // Decoding special symbols to the names used in REDUCE ===========================================
 
-    static Map<Character, String> map = new HashMap<>();
-
-    static {
-        map.put('∞', "infinity");
-        map.put('π', "pi");
-        map.put('γ', "euler_gamma");
-        map.put('φ', "golden_ratio");
-        map.put('√', "sqrt");
-    }
-
-    static boolean decodeNeeded;
-
     public static String decode(final String text) {
         final StringBuilder builder = new StringBuilder();
-        decodeNeeded = false;
+        boolean decodeNeeded = false;
         for (int i = 0; i < text.length(); i++) {
             char a = text.charAt(i);
-            if (a == '\u200C') {
+            String b = decodeMap.get(a);
+            if (b != null) {
+                decodeNeeded = true;
+                builder.append(b);
+            } else if (a == '\u200C') {
                 decodeNeeded = true;
                 a = text.charAt(++i);
-                String b = map.get(a);
-                if (b == null) {
-                    // In case the symbolic constant is deleted but the marker is left!
-                    builder.append(greekToLaTeX(a));
-                } else
-                    builder.append(b);
+                switch (a) {
+                    case 'γ':
+                        builder.append(constantNames[1][0]);
+                        break;
+                    case 'φ':
+                        builder.append(constantNames[1][1]);
+                        break;
+                    default:
+                        // In case the symbolic constant is deleted but the marker is left!
+                        builder.append(a);
+                }
             } else
-                builder.append(greekToLaTeX(a));
+                builder.append(a);
         }
         return decodeNeeded ? builder.toString() : text;
-    }
-
-    /**
-     * Convert a Unicode character to a string.
-     * If the character is a Greek letter then return its LaTeX name.
-     * FixMe This is necessary only when using PSL, but do it also for CSL for now!
-     */
-    private static String greekToLaTeX(char c) {
-        // 0391 Α GREEK CAPITAL LETTER ALPHA .. 03A9 Ω GREEK CAPITAL LETTER OMEGA
-        // 03B1 α GREEK SMALL LETTER ALPHA .. 03C9 ω GREEK SMALL LETTER OMEGA
-        boolean upperCase;
-        if ('\u0391' <= c && c <= '\u03A9') {
-            upperCase = true;
-            decodeNeeded = true;
-        } else if ('\u03B1' <= c && c <= '\u03C9') {
-            upperCase = false;
-            decodeNeeded = true;
-        } else return Character.toString(c);
-        String name = Character.getName(c);
-        name = name.substring(name.lastIndexOf(' ') + 1);
-        if (upperCase) { // Upper case:
-            return Character.toString(name.charAt(0))
-                    .concat(name.substring(1).toLowerCase());
-        } else // Lower case:
-            return name.toLowerCase();
     }
 }

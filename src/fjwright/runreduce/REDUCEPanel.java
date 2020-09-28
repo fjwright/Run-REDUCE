@@ -622,8 +622,9 @@ public class REDUCEPanel extends BorderPane {
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
 
         // Trailing discretionary times (\*) -> \times, otherwise delete:
-        if (mathOutputSB.substring(mathOutputSB.length() - 2).equals("\\*"))
-            mathOutputSB.replace(mathOutputSB.length() - 2, mathOutputSB.length(), "\\times");
+        int len = mathOutputSB.length();
+        if (len >= 2 && mathOutputSB.substring(len - 2).equals("\\*"))
+            mathOutputSB.replace(len - 2, len, "\\times");
         Matcher matcher = TIMES_PATTERN.matcher(mathOutputSB);
         StringBuilder sb = new StringBuilder();
         while (matcher.find()) matcher.appendReplacement(sb, "");
