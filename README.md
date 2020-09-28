@@ -159,7 +159,39 @@ Run-REDUCE-FX currently uses a bundled copy of
 ### Updates since last release
 
 * v2.01 Add -debugMenu program parameter to enable a Debugging menu.
-  Improve handling of program parameters.
-  Move "Save Raw Session Log..." menu item from File menu to new Debugging menu
-  and add new "Show TeX Markup" menu item to optionally display TeX markup before typeset output.
-* v2.02 Improve handling of \symb{n} and include 34 -> \forall and 36 -> \exists.
+  Improve handling of program parameters.  Move "Save Raw Session
+  Log..." menu item from File menu to new Debugging menu and add new
+  "Show TeX Markup" menu item to optionally display TeX markup before
+  typeset output.
+* v2.02 Improve handling of \symb{n} and include 34 -> \forall and 36
+  -> \exists.
+* Replace loading the pre-compiled fmprint package with inputting the
+  new source file "rrprint.red" contained in the JAR file, which is
+  based on "tmprint.red".
+* Stop using katexMacros and some \symb mappings, which are no longer
+  required.  Match up \left and \right in REDUCEPanel.
+* Output identifiers in mathit instead of mathrm style.
+* Fix spacing of typeset maths assignment (:=).
+* Display a trailing multiplication sign in typeset maths but
+  otherwise ignore multiplications.  (This may be too drastic.)
+* Fix spacing of leading + or -.
+* Compile "rrprint.red" on input.
+* Rationalise typesetting of elementary transcendental functions.
+* v2.03 Support typesetting all trigonometric and hyperbolic functions
+  and their inverses.
+* Display the gamma function, but not the identifier gamma, using a
+  capital Gamma.  Add typeset maths support for polygamma, iGamma,
+  iBeta, dilog, Pochhammer and the Integral Functions.
+* Apply a fix by Eberhard Shruefer: Reform sq's in tmprint and fmprint
+  so that an order command has an effect, e.g. order x,t; f(x-t); now
+  prints as expected, namely f(x-t) rather than f(-t+x).
+* Decode all Greek letters from the pop-up keyboard and from templates
+  to LaTeX names.
+* Add typeset maths support for Airy and Hankel functions.
+* Add typeset maths support for Struve, Lommel, Kummer, Whittaker and
+  Spherical Harmonic Functions, and Classical Orthogonal Polynomials.
+* Correct Greek/Unicode spelling lamda/Lamda to TeX spelling
+  lambda/Lambda in pop-up keyboard.
+* Map Greek letter names to KaTeX control words and avoid Symbol font
+  code points; handle sech and csch, which are not defined in KaTeX.
+* Handle logb and log10.

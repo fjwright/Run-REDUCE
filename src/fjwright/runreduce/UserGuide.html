@@ -230,39 +230,26 @@
     upper-case Greek letters; the bottom half provides common
     predicates and inverse trigonometric and hyperbolic functions.
     </p>
-    <p>The symbolic constants in the top left column and the Greek
-    alphabet in the top right block look similar but are treated
-    slightly differently.  REDUCE only recognises symbolic constants
-    if their names are spelt out appropriately using ASCII characters,
-    so this is done automatically before sending them to REDUCE.
-    Currently, by default, the Greek letters in the top right block
-    are all sent to REDUCE with no processing, which is probably not
-    very useful, but see below for the use of the <em>English</em>
-    button!  CSL REDUCE treats them as letters with no predefined
-    meaning and outputs them as they are input, without case-folding,
-    but typeset maths output displays them as upper case.  PSL REDUCE
-    treats them as errors, so don't use them with PSL REDUCE.  Beware
-    that many upper-case Greek letters look like upper-case Roman
-    letters but are in fact distinct!
+    <p>All special symbols on the pop-up keyboard have their names
+    spelt out appropriately using ASCII characters automatically
+    before sending them to REDUCE.  The symbolic constants in the top
+    left column are given their REDUCE names and the Greek letters in
+    the top right block use the TeX naming convention.  Note that, by
+    default, special symbols are translated to REDUCE identifiers only
+    when they are sent to REDUCE, not when they are inserted into the
+    input editor.  The results should be accepted as identifiers and
+    typeset appropriately by all versions of REDUCE.
     </p>
     <p>If you hover your mouse pointer over a symbolic constant button
     then a tooltip pops up giving the REDUCE name of the constant and
     a brief description of it and/or its conventional name and
     approximate numerical value (if appropriate).  If you hover your
     mouse pointer over a Greek letter button then a tooltip pops up
-    giving its name spelt out in English, using the same
-    capitalisation convention as TeX.  (But note that the Greek
-    letters that look like Roman letters are not available as distinct
-    characters in TeX.)  If you click on the <em>English</em> button
-    in the top right corner of the pop-up keyboard or hold down
+    giving its TeX-style name.  If you click on the <em>English</em>
+    button in the top right corner of the pop-up keyboard or hold down
     the <em>Alt</em> key whilst clicking on any button on the top half
     of the pop-up keyboard then its name spelt-out using ASCII
     characters is output instead of the single non-ASCII character.
-    The result is accepted as an identifier and typeset as the
-    appropriate Greek letter by all versions of REDUCE.  It is also
-    useful, for example when using the REDUCE LaTeX formula interface
-    provided by the RLFI package.  For symbolic constants the REDUCE
-    names are output directly.
     </p>
     <p>If you hover your mouse pointer over a function key then a
     tooltip pops up giving its full name.  If you click on
@@ -279,14 +266,10 @@
     automate this, but for now you need to do it by hand.
     </p>
     <p>Note that some characters are available as both symbolic
-    constants and as Greek letters.  For example, &pi; as a symbolic
-    constant is always spelt out appropriately using ASCII characters
-    before sending it to REDUCE whereas &pi; as a Greek letter is not,
-    so that within REDUCE the two are completely unrelated and in CSL
-    REDUCE &pi; as a Greek letter can be used freely as an identifier
-    (or part of one).  In order to preserve the two meanings, the
-    symbolic constants are preceded by a Unicode zero-width non-joiner
-    (ZWNJ) character, which is removed automatically when the symbolic
+    constants and as Greek letters, but only &pi; means the same in
+    both cases.  In order to preserve the two meanings, the symbolic
+    constants maybe preceded by a Unicode zero-width non-joiner (ZWNJ)
+    character, which is removed automatically when the symbolic
     constant is sent to REDUCE.  The ZWNJ character is invisible but
     it is nevertheless there.  If you move the text cursor past a
     symbolic constant you will also need to move it past the ZWNJ

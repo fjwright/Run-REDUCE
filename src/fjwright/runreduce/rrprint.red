@@ -2004,8 +2004,19 @@ symbolic procedure fancy!-arc!-transc!-fn!-nonLTX(u);
       return fancy!-print!-function!-arguments cdr u;
    end;
 
-put('exp,'fancy!-prifn,'fancy!-transc!-fn);
-put('log,'fancy!-prifn,'fancy!-transc!-fn);
+put('exp, 'fancy!-prifn, 'fancy!-transc!-fn);
+put('log, 'fancy!-prifn, 'fancy!-transc!-fn);
+put('logb, 'fancy!-prifn, 'fancy!-logb);
+put('log10, 'fancy!-prifn, 'fancy!-log10);
+
+symbolic procedure fancy!-logb(u);
+   % u = (logb(x, b) -> \log_{b}(x)
+   fancy!-indexed!-fn {"\log", caddr u, cadr u};
+
+symbolic procedure fancy!-log10(u);
+   % u = (log10 x) -> \log_{10}(x)
+   fancy!-indexed!-fn {"\log", 10, cadr u};
+
 put('ln,'fancy!-prifn,'fancy!-transc!-fn);
 put('max,'fancy!-prifn,'fancy!-transc!-fn);
 put('min,'fancy!-prifn,'fancy!-transc!-fn);
