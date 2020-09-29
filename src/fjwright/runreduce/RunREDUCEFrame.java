@@ -203,7 +203,7 @@ public class RunREDUCEFrame {
     @FXML
     private void inputFileMenuItemAction() {
         fileChooser.setTitle("Input from Files...");
-        inputFile();
+        inputFile(true);
     }
 
     // Input from Package Files...
@@ -212,22 +212,23 @@ public class RunREDUCEFrame {
         fileChooser.setTitle("Input from Package Files...");
         File oldInitialDirectory = fileChooser.getInitialDirectory();
         fileChooser.setInitialDirectory(PACKAGES_DIR);
-        inputFile();
+        inputFile(false);
         fileChooser.setInitialDirectory(oldInitialDirectory);
     }
 
-    private void inputFile() {
+    private void inputFile(boolean saveDir) {
         fileChooser.getExtensionFilters().setAll(INPUT_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         List<File> fileList = fileChooser.showOpenMultipleDialog(RunREDUCE.primaryStage);
         if (fileList != null) {
             StringBuilder text = new StringBuilder("in \"");
             text.append(fileList.get(0).toString());
-            for (File file : fileList.subList(1, fileList.size())) {
+            for (File file : fileList/*.subList(1, fileList.size())*/) {
                 text.append("\", \"");
                 text.append(file.toString());
             }
             text.append(echoCheckMenuItem.isSelected() ? "\";\n" : "\"$\n");
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
+            if (saveDir) fileChooser.setInitialDirectory(fileList.get(0).getParentFile());
         }
     }
 
@@ -242,6 +243,7 @@ public class RunREDUCEFrame {
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
             RunREDUCE.reducePanel.outputFileList.add(file);
             RunREDUCE.reducePanel.outputFileDisableMenuItems(false);
+            fileChooser.setInitialDirectory(file.getParentFile());
         }
     }
 
@@ -377,6 +379,7 @@ public class RunREDUCEFrame {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
+            fileChooser.setInitialDirectory(file.getParentFile());
         }
     }
 
