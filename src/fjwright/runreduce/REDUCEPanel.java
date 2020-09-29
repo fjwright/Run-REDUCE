@@ -89,6 +89,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement colorStyle;
 
     private boolean fmprintLoaded, hideNextOutputAndPrompt, hideNextOutputShowPrompt;
+    private final String IN_RRPRINT;
 
     /*
      * JavaScript debugging support. See
@@ -162,6 +163,10 @@ public class REDUCEPanel extends BorderPane {
                 this.setCenter(splitPane);
             }
         });
+
+        IN_RRPRINT = String.format("out\"%s\";in\"%s\";shut\"%1$s\";",
+                REDUCEConfigurationType.windowsOS ? "nul" : "/dev/null",
+                new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString());
     }
 
     // WebView control ****************************************************************************
@@ -288,13 +293,10 @@ public class REDUCEPanel extends BorderPane {
                 } else {
 //                    stealthInput("load_package fmprint");
                     hideNextOutputAndPrompt = true;
-                    sendStringToREDUCENoEcho(
-                            "symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                    "out nul;in\"" +
-                                    new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
-                                    "\";shut nul;" +
-                                    "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
-                                    "statcounter:=statcounter-1;end$\n");
+                    sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                            IN_RRPRINT +
+                            "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
+                            "statcounter:=statcounter-1;end$\n");
                     fmprintLoaded = true;
                 }
             } else {
@@ -790,12 +792,9 @@ public class REDUCEPanel extends BorderPane {
                     }
                     if (typesetMathsState) {
                         hideNextOutputShowPrompt = true;
-                        sendStringToREDUCENoEcho(
-                                "symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                        "out nul;in\"" +
-                                        new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString() +
-                                        "\";shut nul;" +
-                                        "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
+                        sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                                IN_RRPRINT +
+                                "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
                         fmprintLoaded = true;
                     }
                     return;

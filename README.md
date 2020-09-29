@@ -195,3 +195,4 @@ Run-REDUCE-FX currently uses a bundled copy of
 * Map Greek letter names to KaTeX control words and avoid Symbol font
   code points; handle sech and csch, which are not defined in KaTeX.
 * Handle logb and log10.
+* v2.04 Fixes for CSL and Unix, although typeset output is not displayed on Ubuntu!

@@ -1951,7 +1951,7 @@ symbolic procedure fancy!-transc!-fn(u);
    % Typeset an elementary transcendental function defined in LaTeX
    % u = (function arg)
    fancy!-level
-   begin scalar fn := string!-concat("\", id2string car u);
+   begin scalar fn := concat2("\", id2string car u);
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
@@ -1960,7 +1960,7 @@ symbolic procedure fancy!-transc!-fn!-nonLTX(u);
    % Typeset an elementary transcendental function not defined in LaTeX
    % u = (function arg)
    fancy!-level
-   begin scalar fn := string!-concat("\mathrm{", id2string car u, "}");
+   begin scalar fn := concat2("\mathrm{", concat2(id2string car u, "}"));
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
@@ -1988,8 +1988,8 @@ symbolic procedure fancy!-arc!-transc!-fn(u);
    % Typeset an inverse elementary transcendental function defined in LaTeX
    % u = (function arg)
    fancy!-level
-   begin scalar fn := id2string car u;
-      fn := string!-concat("\arc", substring(fn, 1, string!-length fn));
+   begin scalar fn :=
+      concat2("\arc", compress('!" . append(cdr explode car u, '(!"))));
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
@@ -1998,8 +1998,8 @@ symbolic procedure fancy!-arc!-transc!-fn!-nonLTX(u);
    % Typeset an inverse elementary transcendental function not defined in LaTeX
    % u = (function arg)
    fancy!-level
-   begin scalar fn := id2string car u;
-      fn := string!-concat("\mathrm{arc", substring(fn, 1, string!-length fn), "}");
+   begin scalar fn :=
+      concat2("\mathrm{arc", compress('!" . append(cdr explode car u, '(!} !"))));
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
