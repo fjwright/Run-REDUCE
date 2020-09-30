@@ -1118,45 +1118,6 @@ deflist('(
    (!phi "\phi ") (!chi "\chi ") (!psi "\psi ") (!omega "\omega ")
       ),'fancy!-special!-symbol);
 
-% put('#alpha;,'fancy!-special!-symbol,"\alpha ");
-% put('#beta;,'fancy!-special!-symbol,"\beta ");
-% put('#gamma;,'fancy!-special!-symbol,"\Gamma ");
-% put('#delta;,'fancy!-special!-symbol,"\delta ");
-% put('#epsilon;,'fancy!-special!-symbol,"\varepsilon ");
-% put('#zeta;,'fancy!-special!-symbol,"\zeta ");
-% put('#eta;,'fancy!-special!-symbol,"\eta ");
-% put('#theta;,'fancy!-special!-symbol,"\theta ");
-% put('#iota;,'fancy!-special!-symbol,"\iota ");
-% put('#kappa;,'fancy!-special!-symbol,"\varkappa ");
-% put('#lambda;,'fancy!-special!-symbol,"\lambda ");
-% put('#mu;,'fancy!-special!-symbol,"\mu ");
-% put('#nu;,'fancy!-special!-symbol,"\nu ");
-% put('#xi;,'fancy!-special!-symbol,"\xi ");
-% put('#pi;,'fancy!-special!-symbol,"\pi ");
-% put('#rho;,'fancy!-special!-symbol,"\rho ");
-% put('#sigma;,'fancy!-special!-symbol,"\sigma ");
-% put('#tau;,'fancy!-special!-symbol,"\tau ");
-% put('#upsilon;,'fancy!-special!-symbol,"\upsilon ");
-% put('#phi;,'fancy!-special!-symbol,"\phi ");
-% put('#chi;,'fancy!-special!-symbol,"\chi ");
-% put('#psi;,'fancy!-special!-symbol,"\psi ");
-% put('#omega;,'fancy!-special!-symbol,"\omega ");
-
-%FJW Shouldn't these be upper case, otherwise they overwrite the definitions above?
-%FJW Also, XML entity references have the form &Alpha; etc, not #Alpha;
-%FJW So commented out for now; I need to review the support for # in packages/rlisp/*.
-% deflist('(
-%      (!#alpha; "\mathit{A}") (!#beta; "\mathit{B}") (!#chi; "\Chi ")
-%      (!#delta; "\Delta ") (!#epsilon; "\mathit{E}") (!#phi; "\Phi ")
-%      (!#gamma; "\Gamma ") (!#eta; "\mathit{H}") (!#iota; "\mathit{I}")
-%      (!vartheta "\vartheta ") (!#kappa; "\Kappa ") (!#lambda; "\Lambda ")
-%      (!#mu; "\mathit{M}") (!#nu; "\mathit{N}") (!O "\mathit{O}")
-%      (!#pi; "\Pi ") (!#theta; "\Theta ") (!#rho; "\mathit{R}")
-%      (!#sigma; "\Sigma ") (!#tau; "\Tau ") (!#upsilon; "\Upsilon ")
-%      (!#omega; "\Omega ") (!#xi; "\Xi ") (!#psi; "\Psi ")
-%      (!#zeta; "\mathit{Z}") (!varphi "\varphi ") (!#pound; "\pound ")
-%         ),'fancy!-special!-symbol);
-
 put('infinity,'fancy!-special!-symbol,"\infty ");
 put('partial!-df,'fancy!-special!-symbol,"\partial ");
 %put('partial!-df,'fancy!-symbol!-length,8);
@@ -1999,7 +1960,7 @@ symbolic procedure fancy!-arc!-transc!-fn!-nonLTX(u);
    % u = (function arg)
    fancy!-level
    begin scalar fn :=
-      concat2("\mathrm{arc", compress('!" . append(cdr explode car u, '(!} !"))));
+      concat2("\mathrm{arc", compress('!" . append(cdr explode car u, '(!} !")))); %"
       fancy!-prin2!*(fn, 0);
       return fancy!-print!-function!-arguments cdr u;
    end;
