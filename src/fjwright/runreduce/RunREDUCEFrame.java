@@ -221,8 +221,8 @@ public class RunREDUCEFrame {
         List<File> fileList = fileChooser.showOpenMultipleDialog(RunREDUCE.primaryStage);
         if (fileList != null) {
             StringBuilder text = new StringBuilder("in \"");
-            text.append(fileList.get(0).toString());
-            for (File file : fileList/*.subList(1, fileList.size())*/) {
+            text.append(fileList.get(0).toString()); // first file
+            for (File file : fileList.subList(1, fileList.size())) { // remaining files
                 text.append("\", \"");
                 text.append(file.toString());
             }
