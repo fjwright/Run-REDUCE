@@ -17,6 +17,8 @@ import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLElement;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.lang.System.getProperty;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /*
  * This class provides the panel that displays REDUCE input and output.
@@ -89,7 +94,6 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement colorStyle;
 
     private boolean fmprintLoaded, hideNextOutputAndPrompt, hideNextOutputShowPrompt;
-    private final String IN_RRPRINT;
 
     /*
      * JavaScript debugging support. See
@@ -163,10 +167,6 @@ public class REDUCEPanel extends BorderPane {
                 this.setCenter(splitPane);
             }
         });
-
-        IN_RRPRINT = String.format("out\"%s\";in\"%s\";shut\"%1$s\";",
-                REDUCEConfigurationType.windowsOS ? "nul" : "/dev/null",
-                new File(REDUCEPanel.class.getResource("rrprint.red").getFile()).toString());
     }
 
     // WebView control ****************************************************************************
@@ -294,7 +294,7 @@ public class REDUCEPanel extends BorderPane {
 //                    stealthInput("load_package fmprint");
                     hideNextOutputAndPrompt = true;
                     sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                            IN_RRPRINT +
+                            inputRRprint() +
                             "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
                             "statcounter:=statcounter-1;end$\n");
                     fmprintLoaded = true;
@@ -303,6 +303,38 @@ public class REDUCEPanel extends BorderPane {
                 stealthInput("off fancy");
             }
         }
+    }
+
+    private static String inputRRprint;
+
+    /**
+     * Return essentially the string
+     *   out "/dev/null"; in "../rrprint.red"; shut "/dev/null";
+     * in a way that works on Windows and non-Windows platforms.
+     * If running from a jar file then copy the resource to a real temporary file first.
+     */
+    private String inputRRprint() {
+        if (inputRRprint != null) return inputRRprint;
+        String rrprintFilename = "rrprint.red";
+        URL url = RunREDUCEFrame.class.getResource(rrprintFilename);
+        if (url == null) {
+            RunREDUCE.errorMessageDialog("Typeset Maths",
+                    "Resource file \"" + rrprintFilename + "\" could not be located.");
+        } else if (url.getProtocol().equals("file")) // Useful during development only!
+            rrprintFilename = new File(url.getFile()).toString(); // to avoid leading / on Windows
+        else { // Normal case: when running a jar file the protocol is jar.
+            File rrprintTmpFile = new File(getProperty("java.io.tmpdir"), rrprintFilename);
+            try (InputStream in = url.openStream()) {
+                Files.copy(in, rrprintTmpFile.toPath(), REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            rrprintFilename = rrprintTmpFile.getPath();
+        }
+        return inputRRprint =
+                String.format("out\"%s\";in\"%s\";shut\"%1$s\";",
+                        REDUCEConfigurationType.windowsOS ? "nul" : "/dev/null",
+                        rrprintFilename);
     }
 
     /**
@@ -751,7 +783,7 @@ public class REDUCEPanel extends BorderPane {
         // Leading control (newline or ) then newline is crucial to detecting the prompt following initial stealth input.
         // But a question prompt may not be preceded by a newline.
         promptIndex = text.lastIndexOf("\n");
-        if ((promptIndex <= 0 || (promptIndex > 0 && Character.isISOControl(text.charAt(promptIndex - 1)))) &&
+        if ((promptIndex <= 0 || Character.isISOControl(text.charAt(promptIndex - 1))) &&
 //                promptIndex < text.length() && // Dont' see how this could be false!
                 (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
             // Now promptIndex = actual start index of the prompt line.
@@ -793,7 +825,7 @@ public class REDUCEPanel extends BorderPane {
                     if (typesetMathsState) {
                         hideNextOutputShowPrompt = true;
                         sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                IN_RRPRINT +
+                                inputRRprint() +
                                 "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
                         fmprintLoaded = true;
                     }
