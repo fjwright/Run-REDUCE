@@ -1,4 +1,4 @@
-module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
+module rrprint; % Output interface for Run-REDUCE (a JavaFX GUI for REDUCE)
 
 % This file is a version of "tmprint.red" modified by Francis Wright.
 % It outputs algebraic-mode mathematics using LaTeX-like markup.
@@ -14,9 +14,9 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 % It was then developed into "tmprint.red" by Andrey Grozin and
 % several other authors (see below) to drive the TeXmacs GUI and
 % developed further by Arthur Norman to drive the CSL REDUCE GUI.  I
-% now propose to use it to drive my own GUI, so I will remove some of
-% the code specific to TeXmacs and CSL whilst aiming not to break the
-% LaTeX output!
+% now propose to use it to drive my own GUI, so I will remove the code
+% specific to TeXmacs and CSL whilst aiming not to break the LaTeX
+% output!
 
 % Francis Wright, September 2020
 
@@ -74,7 +74,7 @@ module rrprint; % Output module for Run-REDUCE (a JavaFX GUI for REDUCE)
 %  fancy!-symbol!-length   the number of horizontal units needed for
 %                          the symbol.  A standard character has 2 units.
 
-create!-package('(rrprint),nil);
+create!-package('(rrprint), nil);
 
 fluid  '(
          !*list
@@ -266,7 +266,7 @@ symbolic procedure fancy!-flush();
    % on a follow-on line with an invisible term using an empty text
    % box (see the LaTeX book, page 48, but KaTeX does not support \mbox).
    (begin scalar not_first_line;
-      fancy!-terpri!*();
+      fancy!-terpri!* t;
       for each line in reverse fancy!-page!* do
          if line and not eqcar(car line,'tab) then <<
             fancy!-out!-header();
@@ -565,7 +565,7 @@ symbolic procedure fancy!-prin2number1 u;
    ll := 2 * (linelength nil +1 );
    while u do
    <<c:=c+1;
-     if c>10 and fancy!-pos!* > ll then fancy!-terpri!*();
+     if c>10 and fancy!-pos!* > ll then fancy!-terpri!*(t);
      fancy!-prin2!*(car u,2); u:=cdr u;
    >>;
   end;
@@ -622,7 +622,7 @@ symbolic procedure fancy!-lower!-digitstrail(u,s);
    if s and not digit car u then nil
    else fancy!-lower!-digitstrail(cdr u,s);
 
-symbolic procedure fancy!-terpri!*();
+symbolic procedure fancy!-terpri!* u;
    <<
      if fancy!-line!* then
          fancy!-page!* := fancy!-line!* . fancy!-page!*;
@@ -1033,7 +1033,7 @@ symbolic procedure fancy!-inprint1(op,p,l);
      if op='plus and eqcar(v,'minus) then
        <<lop := 'minus; v:= cadr v; p:=get('minus,'infix)>>;
      if 'failed = fancy!-oprin lop then
-      <<fancy!-terpri!*(); fancy!-oprin lop>>;
+      <<fancy!-terpri!* nil; fancy!-oprin lop>>;
      fancy!-prinfit(negnumberchk v, p, nil)
    >>;
   end;
@@ -1093,7 +1093,7 @@ symbolic procedure fancy!-oprin op;
         and sumlevel!*=2
        then
         if testing!-width!* and not (!*acn and !*list) then return 'failed
-            else fancy!-terpri!*();
+            else fancy!-terpri!* t;
        fancy!-prin2!*(x,t);
     >>;
     if overflowed!* then return 'failed
@@ -1284,7 +1284,7 @@ symbolic procedure fancy!-prinfit(u, p, op);
      w:=if op then fancy!-oprin op;
        % if the operator causes the overflow, we break the line now.
      if w eq 'failed then
-     <<fancy!-terpri!*();
+     <<fancy!-terpri!* nil;
        if op then fancy!-oprin op;
        return fancy!-maprint(u, p);>>;
        % if at least half the line is still free and the
@@ -1297,7 +1297,7 @@ symbolic procedure fancy!-prinfit(u, p, op);
        % opening bracket at the beginning of a line.
      if fancy!-pos!* > linelength nil / 2 or
           not eqcar(fancy!-last!-symbol(),'bkt) then
-           fancy!-terpri!*();
+           fancy!-terpri!* nil;
      return fancy!-maprint(u, p);
    end;
 
@@ -1795,7 +1795,7 @@ symbolic procedure fancy!-matpri3(u,x);
       integer r,c;
       obrkp!* := nil;
       if null x then x:='mat;
-      fancy!-terpri!*;                  % missing ()!!!
+      % fancy!-terpri!*;                  % missing arg!!!
       for each row in u do
       <<r:=r+1; c:=0;
         for each elt in row do
@@ -1805,7 +1805,7 @@ symbolic procedure fancy!-matpri3(u,x);
               fancy!-print!-indexlist {r,c};
               fancy!-prin2!*(":=",t);
               fancy!-maprint(elt,0);
-              fancy!-terpri!*();
+              fancy!-terpri!* t;
            >>;
         >>;
       >>;
@@ -1835,7 +1835,7 @@ symbolic procedure fancy!-matpriflat1(op,p,l);
          fancy!-in!-brackets(
           {'fancy!-inprintlist,mkquote '!*wcomma!*,0,mkquote v},
             '!(,'!)) where testing!-width!*=t;
-       if w eq 'failed then fancy!-terpri!*();
+       if w eq 'failed then fancy!-terpri!* t;
        if not fst or w eq 'failed then
          fancy!-in!-brackets(
           {'fancy!-inprintlist,mkquote '!*wcomma!*,0,mkquote v},
@@ -1867,7 +1867,7 @@ symbolic procedure fancy!-matfit(u,p,op);
      begin scalar testing!-width!*;
        testing!-width!*:=t;
        if op then w:=fancy!-oprin op;
-       fancy!-terpri!*();
+       fancy!-terpri!* nil;
        if w neq 'failed then w := fancy!-matpri u;
      end;
      if w neq 'failed then return t;
@@ -1875,7 +1875,7 @@ symbolic procedure fancy!-matfit(u,p,op);
 
      ll:=linelength nil;
      if op then fancy!-oprin op;
-     if atom u or fancy!-pos!* > ll / 2 then fancy!-terpri!*();
+     if atom u or fancy!-pos!* > ll / 2 then fancy!-terpri!* nil;
      return fancy!-matpriflat(u);
    end;
 
@@ -1886,7 +1886,7 @@ put('taylor!*,'fancy!-reform,'taylor!*print1);
 endmodule;
 
 
-module fancy_transc_fns;
+module fancy_standard_functions;
 
 % Display transcendental functions following the NIST Digital Library
 % of Mathematical Functions, http://dlmf.nist.gov/.
@@ -1978,6 +1978,9 @@ symbolic procedure fancy!-log10(u);
    % u = (log10 x) -> \log_{10}(x)
    fancy!-indexed!-fn {"\log", 10, cadr u};
 
+symbolic inline procedure fancy!-indexed!-fn u;
+   fancy!-bessel u;
+
 put('ln,'fancy!-prifn,'fancy!-transc!-fn);
 put('max,'fancy!-prifn,'fancy!-transc!-fn);
 put('min,'fancy!-prifn,'fancy!-transc!-fn);
@@ -2040,16 +2043,6 @@ symbolic procedure fancy!-Pochhammer(u);
       fancy!-prin2!*('!}, 0);
    end;
 
-symbolic procedure fancy!-indexed!-fn(u);
-   % Was called fancy!-bessel, but it's more generally useful!
-   fancy!-level
-   begin scalar w;
-      fancy!-prefix!-operator car u;
-      w:=fancy!-print!-one!-index cadr u;
-      if testing!-width!* and w eq 'failed then return w;
-      return fancy!-print!-function!-arguments cddr u;
-   end;
-
 % Integral Functions
 
 put('ei, 'fancy!-functionsymbol, "\mathrm{Ei}");
@@ -2068,14 +2061,23 @@ put('Airy_Bi, 'fancy!-functionsymbol, "\mathrm{Bi}");
 put('Airy_AiPrime, 'fancy!-functionsymbol, "\mathrm{Ai}'");
 put('Airy_BiPrime, 'fancy!-functionsymbol, "\mathrm{Bi}'");
 
-put('BesselI,'fancy!-prifn,'fancy!-indexed!-fn);
-put('BesselJ,'fancy!-prifn,'fancy!-indexed!-fn);
-put('BesselY,'fancy!-prifn,'fancy!-indexed!-fn);
-put('BesselK,'fancy!-prifn,'fancy!-indexed!-fn);
+put('BesselI,'fancy!-prifn,'fancy!-bessel);
+put('BesselJ,'fancy!-prifn,'fancy!-bessel);
+put('BesselY,'fancy!-prifn,'fancy!-bessel);
+put('BesselK,'fancy!-prifn,'fancy!-bessel);
 put('BesselI,'fancy!-functionsymbol,'(ascii 73));
 put('BesselJ,'fancy!-functionsymbol,'(ascii 74));
 put('BesselY,'fancy!-functionsymbol,'(ascii 89));
 put('BesselK,'fancy!-functionsymbol,'(ascii 75));
+
+symbolic procedure fancy!-bessel(u);
+ fancy!-level
+  begin scalar w;
+   fancy!-prefix!-operator car u;
+   w:=fancy!-print!-one!-index cadr u;
+   if testing!-width!* and w eq 'failed then return w;
+   return fancy!-print!-function!-arguments cddr u;
+  end;
 
 put('Hankel1, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(1)}(z)
 put('Hankel2, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(2)}(z)
