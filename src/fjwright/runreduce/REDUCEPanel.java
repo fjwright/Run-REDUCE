@@ -655,13 +655,13 @@ public class REDUCEPanel extends BorderPane {
         for (int i = mathOutputSB.length() - 1; i > 0; i--)
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
 
-        // Trailing discretionary times (\*) -> \times, otherwise delete:
+        // Trailing discretionary times \* -> \times, otherwise \* -> \,:
         int len = mathOutputSB.length();
         if (len >= 2 && mathOutputSB.substring(len - 2).equals("\\*"))
             mathOutputSB.replace(len - 2, len, "\\times");
         Matcher matcher = TIMES_PATTERN.matcher(mathOutputSB);
         StringBuilder sb = new StringBuilder();
-        while (matcher.find()) matcher.appendReplacement(sb, "");
+        while (matcher.find()) matcher.appendReplacement(sb, "\\\\,");
         matcher.appendTail(sb);
         mathOutputSB = sb;
 

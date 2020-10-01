@@ -85,6 +85,8 @@ public class RunREDUCEFrame {
             new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
     private static final FileChooser.ExtensionFilter ALL_FILE_FILTER =
             new FileChooser.ExtensionFilter("All Files", "*.*");
+    private static final FileChooser.ExtensionFilter HTML_FILE_FILTER =
+            new FileChooser.ExtensionFilter("HTML Files (*.html)", "*.html");
 
     static List<String> packageList;
     static Desktop desktop;
@@ -341,14 +343,15 @@ public class RunREDUCEFrame {
     }
 
     private void saveLog(boolean append, boolean raw) {
-        fileChooser.setInitialFileName(raw ? "raw-session.log" : "session.log");
-        fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
+        fileChooser.setInitialFileName(raw ? "raw-session-log.html" : "session.log");
+        if (raw) fileChooser.getExtensionFilters().setAll(HTML_FILE_FILTER);
+        else fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file;
-        if (append) {
+        if (append && !raw) {
             fileChooser.setTitle("Append Session Log...");
             file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
         } else {
-            fileChooser.setTitle(raw ? "Save Raw Session Log..." : "Save Session Log...");
+            fileChooser.setTitle(raw ? "Save Raw Session Log as HTML..." : "Save Session Log...");
             file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
         }
         if (file != null) {
