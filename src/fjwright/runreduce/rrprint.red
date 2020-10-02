@@ -576,15 +576,19 @@ symbolic procedure fancy!-esc u;
       where w = car u . fancy!-esc cdr u;
 
 symbolic procedure fancy!-lower!-digits u;
-    (if null m then u else if m = 'all or
-        fancy!-lower!-digitstrail(u,nil) then
-           fancy!-lower!-digits1(u,nil)
-     else u
-     ) where m=fancy!-mode 'fancy_lower_digits;
+   % Typeset digits in an identifier as subscripts if
+   % fancy_lower_digits = all or fancy_lower_digits = t
+   % and the digits are all at the end.
+   (if null m then u else if m = 'all or
+      fancy!-lower!-digitstrail(u,nil) then
+         fancy!-lower!-digits1(u,nil)
+   else u
+      ) where m=fancy!-mode 'fancy_lower_digits;
 
 symbolic procedure fancy!-lower!-digits1(u,s);
-  begin scalar c,q,r,w,x;
- loop:
+   % Call as fancy!-lower!-digits1(u,nil).
+   begin scalar c,q,r,w,x;
+ loop: % through characters in list w
     if u then <<c:=car u; u:=cdr u>> else c:=nil;
     if null s then
       if not digit c and c then w:=c.w else
@@ -614,8 +618,11 @@ symbolic procedure fancy!-lower!-digits1(u,s);
     return r;
   end;
 
-
 symbolic procedure fancy!-lower!-digitstrail(u,s);
+   % Call as fancy!-lower!-digitstrail(u,nil).
+   % u is a list of characters, i.e. single character identifiers.
+   % Return t if the first digit is followed only by digits, nil otherwise.
+   % s := t when the first digit is found.
    if null u then s else
    if not s and digit car u then
           fancy!-lower!-digitstrail(cdr u,t) else
@@ -663,6 +670,8 @@ symbolic procedure fancy!-end(r,s);
      r>>;
 
 symbolic procedure fancy!-mode u;
+   % Get the value of the shared variable fancy_print_df or
+   % fancy_lower_digits.
   begin scalar m;
      m:= lispeval u;
      if eqcar(m,'!*sq) then m:=reval m;

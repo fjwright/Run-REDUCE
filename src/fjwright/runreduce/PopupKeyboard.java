@@ -34,8 +34,7 @@ public class PopupKeyboard {
      * This method is registered as an event handler on the input editor.
      */
     public static void showPopupKbdOnInputEditor(MouseEvent mouseEvent) {
-        if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
-                (mouseEvent.getButton() == MouseButton.MIDDLE)) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) {
             target = (Node) mouseEvent.getSource();
             showPopupKbd(mouseEvent);
         }
@@ -45,8 +44,7 @@ public class PopupKeyboard {
      * This method is registered as an event filter on the root node of a Template.
      */
     public static void showPopupKbdOnTemplate(MouseEvent mouseEvent) {
-        if ((mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) ||
-                (mouseEvent.getButton() == MouseButton.MIDDLE)) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.isControlDown()) {
             // A TextField contains content that contains a caret, so...
             target = (Node) mouseEvent.getTarget();
             while (target != null) {
