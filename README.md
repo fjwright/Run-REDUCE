@@ -2,7 +2,7 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, September 2020
+### Francis Wright, October 2020
 
 Run-REDUCE-FX is a re-implementation of
 [Run-REDUCE](https://fjwright.github.io/Run-REDUCE/) using JavaFX
@@ -181,3 +181,13 @@ Run-REDUCE-FX currently uses a bundled copy of
     functions, and the classical orthogonal polynomials.
 
 ### Updates since last release
+
+* Retain compatibility with tmprint so that `excalc.tst` now runs.
+  Add a test directory containing `symbols_and_functions.tst`.
+* Internal discretionary times -> \, since otherwise x*y is
+  indistinguishable from xy.  Save raw session log to a `.html` file
+  rather than a `.log` file.
+* Remove the middle mouse button binding for the pop-up keyboard,
+  since it clashes with the X Window primary paste gesture (which
+  doesn't work anyway).  Add some comments to rrprint.
+* v2.11 Update `UserGuide.html` and add a new section on Editing.

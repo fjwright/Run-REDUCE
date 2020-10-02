@@ -38,6 +38,7 @@
       <li><a href="#GeneralInformation">General Information</a></li>
       <li><a href="#MainWindow">The Main Window</a></li>
       <li><a href="#PopupKeyboard">The Pop-up Keyboard</a></li>
+      <li><a href="#Editing">Editing</a></li>
       <li><a href="#FileMenu">The File Menu</a></li>
       <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
       <li><a href="#Configure">Configure REDUCE...</a></li>
@@ -187,33 +188,25 @@
     Greek letters on the top half of the keyboard and elementary
     functions on the bottom half.  It is available by clicking the
     primary mouse-button (normally the left if there is more than one)
-    while holding down the <em>Control</em> key or clicking the middle
-    mouse-button on an input editor text area or any text field in
+    while holding down the <em>Control</em> key while the mouse
+    pointer is over an input editor text area or any text field in
     a <a href="#TemplatesMenu">template</a>
-    or <a href="#FunctionsMenu">function</a> dialogue.  Clicking on a
-    character button on the top half of the pop-up keyboard causes
-    that character to overwrite the selected text if there is any or
-    otherwise to insert at the text cursor (caret).  Clicking on a
-    function button on the bottom half of the pop-up keyboard causes
-    that function to be applied to the selected text if there is any
-    (i.e. wrapped around it using parentheses) or otherwise to be
-    inserted followed by parentheses at the text cursor, which is left
-    within the parentheses.  The pop-up then closes.  The pop-up also
-    closes if you click anywhere outside it, or you can close it by
-    clicking on the <em>Close</em> button in the bottom left corner or
-    by pressing the <em>Escape</em> key on your main keyboard.
+    or <a href="#FunctionsMenu">function</a> dialogue.  Note that
+    clicking the secondary (normally the right) mouse-button on any
+    text field pops up a generic editing context menu.
     </p>
-    <p>If you don't have a middle mouse-button but you have a wheel
-    mouse then pressing on the wheel may generate a middle
-    mouse-button click.  If you use an older touch pad with separate
-    buttons then clicking the left and right touch-pad buttons
-    together may generate a middle mouse-button click.  If you use a
-    newer touch pad with no separate buttons then pressing (not just
-    tapping) with three fingers may generate a middle mouse-button
-    click.  You may need to adjust your mouse or touch-pad
-    configuration to be able to generate a middle mouse-button click.
-    Note that clicking the secondary (normally the right) mouse-button
-    on any text field pops up a generic editor context menu.
+    <p>Clicking on a character button on the top half of the pop-up
+    keyboard causes that character to overwrite the selected text if
+    there is any or otherwise to insert at the text cursor (caret).
+    Clicking on a function button on the bottom half of the pop-up
+    keyboard causes that function to be applied to the selected text
+    if there is any (i.e. wrapped around it using parentheses) or
+    otherwise to be inserted followed by parentheses at the text
+    cursor, which is left within the parentheses.  The pop-up then
+    closes.  The pop-up also closes if you click anywhere outside it,
+    or you can close it by clicking on the <em>Close</em> button in
+    the bottom left corner or by pressing the <em>Escape</em> key on
+    your main keyboard.
     </p>
     <p>By default, the top half of the pop-up keyboard provides the
     REDUCE symbolic constants &infin; (infinity) and &pi; (pi) in the
@@ -277,6 +270,45 @@
     delete a symbolic constant you should also delete the ZWNJ
     character, although again you will not see the cursor move.  (If
     you don't delete it then it could cause confusion.)
+    </p>
+
+    <h2 id="Editing">Editing</h2>
+
+    <p>Run-REDUCE-FX supports the following keyboard shortcuts on
+      Windows and Linux:
+    </p>
+    <table>
+      <tr>
+        <th>Select all in focused control or window</th>
+        <td><kbd>Ctrl</kbd>+<kbd>A</kbd></td>
+      </tr>
+      <tr>
+        <th>Cut the selection and store it in
+          the <a href="https://en.wikipedia.org/wiki/Clipboard_(software)">clipboard</a></th>
+        <td><a href="https://en.wikipedia.org/wiki/Ctrl-X"><kbd>Ctrl</kbd>+<kbd>X</kbd></a></td>
+      </tr>
+      <tr>
+        <th>Copy the selection into
+          the <a href="https://en.wikipedia.org/wiki/Clipboard_(software)">clipboard</a></th>
+        <td><a href="https://en.wikipedia.org/wiki/Ctrl-C"><kbd>Ctrl</kbd>+<kbd>C</kbd></a></td>
+      </tr>
+      <tr>
+        <th>Paste contents
+          of <a href="https://en.wikipedia.org/wiki/Clipboard_(software)">clipboard</a>
+          at <a href="https://en.wikipedia.org/wiki/Cursor_(computers)">cursor</a></th>
+        <td><a href="https://en.wikipedia.org/wiki/Ctrl-V"><kbd>Ctrl</kbd>+<kbd>V</kbd></a></td>
+      </tr>
+      <tr>
+        <th><a href="https://en.wikipedia.org/wiki/Undo">Undo</a>
+          the last operation</th>
+        <td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td>
+      </tr>
+    </table>
+    <p>However, REDUCE input/output display panes are read-only and so
+      only support select and copy operations.  All input areas also
+      support an editing context menu, which is available by clicking
+      the secondary (normally the right) mouse-button while the mouse
+      pointer is over the input area.
     </p>
 
     <h2 id="FileMenu">The File Menu</h2>
