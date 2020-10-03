@@ -535,12 +535,13 @@ symbolic procedure fancy!-prin2!*(u,n);
       if car u = '!\ then long!*:=nil;
       l := if numberp n then n else 2*length u;
       if id and not numberp n then
+         % Process implicit subscripts: digits within an identifier or
+         % digits or a single letter after an underscore:
          u:=fancy!-lower!-digits(fancy!-esc u);
       if long!* then
-         %% fancy!-line!* := '!{ . '!m . '!r . '!h . '!t . '!a . '!m . '!\ . fancy!-line!*;
          fancy!-line!* := '!\mathit!{ . fancy!-line!*; %FJW '!\mathrm!{ . fancy!-line!*;
       for each x in u do
-      <<if str and (x='!    or x='!_)
+      <<if str and (x = blank or x = '!_)
       then fancy!-line!* := '!\ . fancy!-line!*;
          fancy!-line!* :=
             (if id and !*fancy!-lower
@@ -571,14 +572,18 @@ symbolic procedure fancy!-prin2number1 u;
   end;
 
 symbolic procedure fancy!-esc u;
+   % u is a list of characters in an identifier.
+   % Return u with each _ escaped by preceding it with !.
+   % Only called by fancy!-prin2!*.
    if not('!_ memq u) then u else
    (if car u eq '!_ then '!\ . w else w)
       where w = car u . fancy!-esc cdr u;
 
 symbolic procedure fancy!-lower!-digits u;
    % Typeset digits in an identifier as subscripts if
-   % fancy_lower_digits = all or fancy_lower_digits = t
+   % fancy_lower_digits = all or if fancy_lower_digits = t
    % and the digits are all at the end.
+   % Only called in fancy!-prin2!*.
    (if null m then u else if m = 'all or
       fancy!-lower!-digitstrail(u,nil) then
          fancy!-lower!-digits1(u,nil)
@@ -587,8 +592,9 @@ symbolic procedure fancy!-lower!-digits u;
 
 symbolic procedure fancy!-lower!-digits1(u,s);
    % Call as fancy!-lower!-digits1(u,nil).
+   % Convert '(a !1 b !2) to '(a !_ !{ !1 !} b !_ !{ !2 !})
    begin scalar c,q,r,w,x;
- loop: % through characters in list w
+ loop: % through characters in list u
     if u then <<c:=car u; u:=cdr u>> else c:=nil;
     if null s then
       if not digit c and c then w:=c.w else
