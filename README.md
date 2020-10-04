@@ -191,3 +191,9 @@ Run-REDUCE-FX currently uses a bundled copy of
   since it clashes with the X Window primary paste gesture (which
   doesn't work anyway).  Add some comments to rrprint.
 * v2.11 Update `UserGuide.html` and add a new section on Editing.
+* Allow `print_indexed` to be used as a declaration without
+  parentheses even for multiple arguments.  Separate `print_indexed`
+  subscripts with commas, which are unambiguous, rather than spaces
+  (from \*).  To be copied over to tmprint (probably).
+* v2.12 Update `UserGuide.html` and add a new section on Controlling
+  Typeset Maths Display, which uses KaTeX from a CDN.
