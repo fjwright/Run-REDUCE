@@ -781,7 +781,7 @@ symbolic procedure fancy!-maprint!-atom(l,p);
 % five cases of oddity:
 %   (1) Strings: If the user puts a string in the input it ought to end
 %                up rendered literally come what may. At present it tends
-%                to get transcrioned to the TeX stream unaltered, and if the
+%                to get transcribed to the TeX stream unaltered, and if the
 %                string has TeX special characters in it the result can be
 %                odd!
 %   (2) Names with special characters within. For instance "abc!%def" leads
@@ -801,7 +801,7 @@ symbolic procedure fancy!-maprint!-atom(l,p);
 % core of Reduce and its front-end using a textual interface like this is
 % unsatisfactory, even though it has been a good place-holder and a path of
 % least resistance. The problems noted here only escalate if you imagine
-% delevloping the graphical front-end to support cut and (particularly)
+% developing the graphical front-end to support cut and (particularly)
 % paste operations where the same sorts of textual conversion would need to
 % be done but consistently and in the other direction. It also makes the
 % issue about who takes responsibility for line breaks a muddled one.
