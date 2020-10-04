@@ -901,10 +901,15 @@ symbolic procedure fancy!-tex!-character c;
       fancy!-line!* := '!{!\pound!} . fancy!-line!*
   else fancy!-line!* := c . fancy!-line!*;
 
-put('print_indexed,'psopfn,'(lambda(u)(flag u 'print!-indexed)));
+remprop('print_indexed, 'stat);
+
+symbolic procedure print_indexed u;
+   flag(u, 'print!-indexed);
+
+put('print_indexed, 'stat, 'rlis);
 
 symbolic procedure fancy!-print!-indexlist l;
-   fancy!-print!-indexlist1(l,'!_,nil);
+   fancy!-print!-indexlist1(l, '!_, '!,);
 
 symbolic procedure fancy!-print!-indexlist1(l,op,sep);
   % print index or exponent lists, with or without separator.
