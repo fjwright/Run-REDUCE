@@ -834,10 +834,23 @@ symbolic procedure fancy!-maprint!-atom(l,p);
          x:=fancy!-inprint(",",0,l);
          fancy!-prin2!*("]",0);
          return x >>
-     else if stringp l or (idp l and contains!-tex!-special l) then <<
-         fancy!-line!* := '!\mathrm!{ . fancy!-line!*;
+
+     %FJW Output strings as text rather than maths:
+     %FJW The result looks OK!
+
+     %FJW fancy!-tex!-character adds a character, escaped or replaced
+     %as necessary, to fancy!-line!*.
+     else if stringp l then <<
+         fancy!-line!* := '!\text!{ . fancy!-line!*;
          for each c in explode2 l do fancy!-tex!-character c;
          fancy!-line!* := '!} . fancy!-line!* >>
+
+     %FJW ***TO DO*** Review processing of identifiers later:
+     else if idp l and contains!-tex!-special l then <<
+         fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+         for each c in explode2 l do fancy!-tex!-character c;
+         fancy!-line!* := '!} . fancy!-line!* >>
+
      else if not numberp l or (not (l<0) or p<=get('minus,'infix))
          then fancy!-prin2!*(l,'index)
      else fancy!-in!-brackets({'fancy!-prin2!*,mkquote l,t}, '!(,'!));
@@ -878,35 +891,27 @@ top:if null u then return nil
     go to top
   end;
 
-
 symbolic procedure fancy!-tex!-character c;
 % This arranges to print something even if it is a funny character as
 % far as TeX is concerned. I display a tab as two spaces, and a newline
 % as $eol$ and rather hope that neither ever arises. I also need to check
 % that my TeX parser can handle all these...
-  if c = '!# or
-     c = '!$ or
-     c = '!% or
-     c = '!& or
-     c = '!_ or
-     c = '!{ or
-     c = '!} then fancy!-line!* := c . '!\ . fancy!-line!*
-  else if c = '!~ then fancy!-line!* := '!{!\textasciitilde!} . fancy!-line!*
-  else if c = '!^ then fancy!-line!* := '!{!\textasciicircum!} . fancy!-line!*
-  else if c = '!\ then fancy!-line!* := '!{!\textbackslash!} . fancy!-line!*
-  else if c = blank   then fancy!-line!* := '!~ . fancy!-line!*
-  else if c = tab     then fancy!-line!* := '!~ . '!~ . fancy!-line!*
-  else if c = !$eol!$ then fancy!-line!* := '!\!$eol!\!$ . fancy!-line!*
-  else if c = pound1!* or c = pound2!* then
-      fancy!-line!* := '!{!\pound!} . fancy!-line!*
-  else fancy!-line!* := c . fancy!-line!*;
-
-remprop('print_indexed, 'stat);
+   fancy!-line!* :=
+      if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
+      else if c eq '!~ then '!{!\textasciitilde!} . fancy!-line!*
+      else if c eq '!^ then '!{!\textasciicircum!} . fancy!-line!*
+      else if c eq '!\ then '!{!\textbackslash!} . fancy!-line!*
+      else if c eq blank   then '!~ . fancy!-line!*
+      else if c eq tab     then '!~ . '!~ . fancy!-line!*
+      else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
+      else if c eq pound1!* or c eq pound2!* then
+         '!{!\pound!} . fancy!-line!*
+      else c . fancy!-line!*;
 
 symbolic procedure print_indexed u;
    flag(u, 'print!-indexed);
 
-put('print_indexed, 'stat, 'rlis);
+rlistat '(print_indexed);
 
 symbolic procedure fancy!-print!-indexlist l;
    fancy!-print!-indexlist1(l, '!_, '!,);
@@ -1616,15 +1621,22 @@ symbolic procedure fancy!-powerreform u;
 
 put('df,'fancy!-pprifn,'fancy!-dfpri);
 
+global '(!*dfprint);
+
 symbolic procedure fancy!-dfpri(u,l);
-  (if flagp(cadr u,'print!-indexed) or
+   % E.g. u = (df f x y) or (df (g x y) x y)
+   if !*dfprint then
+      fancy!-dfpriindexed(
+         if atom cadr u then u else car u . caadr u . cddr u, l)
+   else
+   (if flagp(cadr u,'print!-indexed) or
       pairp cadr u and flagp(caadr u,'print!-indexed)
-    then fancy!-dfpriindexed(u,l)
+   then fancy!-dfpriindexed(u,l)
    else if m = 'partial then fancy!-dfpri0(u,l,'partial!-df)
    else if m = 'total then fancy!-dfpri0(u,l,'!d)
    else if m = 'indexed then fancy!-dfpriindexed(u,l)
    else rederr "unknown print mode for DF")
-        where m=fancy!-mode('fancy_print_df);
+      where m=fancy!-mode('fancy_print_df);
 
 symbolic procedure fancy!-partialdfpri(u,l);
      fancy!-dfpri0(u,l,'partial!-df);
@@ -2065,14 +2077,14 @@ symbolic procedure fancy!-Pochhammer(u);
 
 % Integral Functions
 
-put('ei, 'fancy!-functionsymbol, "\mathrm{Ei}");
-put('si, 'fancy!-functionsymbol, "\mathrm{Si}");
-put('ci, 'fancy!-functionsymbol, "\mathrm{Ci}");
-put('shi, 'fancy!-functionsymbol, "\mathrm{Shi}");
-put('chi, 'fancy!-functionsymbol, "\mathrm{Chi}");
+put('Ei, 'fancy!-functionsymbol, "\mathrm{Ei}");
+put('Si, 'fancy!-functionsymbol, "\mathrm{Si}");
+put('Ci, 'fancy!-functionsymbol, "\mathrm{Ci}");
+put('Shi, 'fancy!-functionsymbol, "\mathrm{Shi}");
+put('Chi, 'fancy!-functionsymbol, "\mathrm{Chi}");
 put('erf, 'fancy!-functionsymbol, "\mathrm{erf}");
-put('fresnel_s, 'fancy!-functionsymbol, "\mathrm{S}");
-put('fresnel_c, 'fancy!-functionsymbol, "\mathrm{C}");
+put('Fresnel_S, 'fancy!-functionsymbol, "\mathrm{S}");
+put('Fresnel_C, 'fancy!-functionsymbol, "\mathrm{C}");
 
 % Airy, Bessel and Related Functions
 
