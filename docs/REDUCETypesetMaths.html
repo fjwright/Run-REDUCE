@@ -61,7 +61,7 @@
       not do this in Run-REDUCE; use the <em>Typeset Maths</em> check
       item in the <em>View</em> menu.)
     </p>
-    <h3 id="derivatives">Derivatives</h3>
+    <h3>Derivatives</h3>
     <p>
       The (shared) variable <code>fancy_print_df</code> can be set to
       one of the values <code>partial</code>, <code>total</code>
@@ -86,22 +86,29 @@
       </tr>
       <tr>
         <td><code>indexed</code></td>
-        <td>\(f_{xxy}\)</td>
+        <td>\(f_{x,x,y}\)</td>
       </tr>
     </table>
-    <h3 id="operators">Operators</h3>
+    <p>
+      From REDUCE revision 5418 onward, typeset maths supports
+      the <code>dfprint</code> switch, and if this switch is on then
+      <code>fancy_print_df</code> is ignored.
+    </p>
+    <h3>Operators</h3>
     <p>
       An operator declared <code>print_indexed</code> has its
       arguments displayed as indices, e.g. after <code>print_indexed
       a;</code> the operator value <code>a(i,2)</code> is displayed as
-      \(a_{i\,2}\). You can also declare several operators together to
-      be indexed, e.g.  <code>print_indexed(y, z);</code> and
-      operators can be <em>n</em>-ary, e.g. <code>y(2,3)</code> and
-      <code>z(i,j)</code> should display as \(y_{2\,3}\) and
-      \(z_{i\,j}\). (However, CSL REDUCE currently
-      displays <code>y(2,3)</code> as \(y_{2\,\times3}\)).
+      \(a_{i,2}\).  (In REDUCE versions before revision 5417 the
+      display is slightly different and possibly incorrect.)  You can
+      also declare several operators together to be indexed, e.g.
     </p>
-    <h3 id="digits-in-identifiers">Digits in identifiers</h3>
+    <pre>print_indexed b, c;</pre>
+    <p>
+      (In REDUCE versions before revision 5417, parentheses are
+      required, i.e. <code>print_indexed(b, c);</code>.)
+    </p>
+    <h3>Digits in identifiers</h3>
     <p>
       The (shared) variable <code>fancy_lower_digits</code> can be set
       to one of the values <code>t</code>, <code>nil</code>
