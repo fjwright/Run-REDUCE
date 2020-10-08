@@ -537,7 +537,7 @@ symbolic procedure fancy!-prin2!*(u,n);
       if id and not numberp n then
          % Process implicit subscripts: digits within an identifier or
          % digits or a single letter after an underscore:
-         u:=fancy!-lower!-digits(fancy!-esc u);
+         u:=fancy!-lower!-digits(fancy!-esc u); % SHOULD NO LONGER BE USED!
       if long!* then
          fancy!-line!* := '!\mathit!{ . fancy!-line!*; %FJW '!\mathrm!{ . fancy!-line!*;
       for each x in u do
@@ -579,7 +579,7 @@ symbolic procedure fancy!-esc u;
    (if car u eq '!_ then '!\ . w else w)
       where w = car u . fancy!-esc cdr u;
 
-symbolic procedure fancy!-lower!-digits u;
+symbolic procedure fancy!-lower!-digits u; % SHOULD NO LONGER BE USED!
    % Typeset digits in an identifier as subscripts if
    % fancy_lower_digits = all or if fancy_lower_digits = t
    % and the digits are all at the end.
@@ -590,39 +590,39 @@ symbolic procedure fancy!-lower!-digits u;
    else u
       ) where m=fancy!-mode 'fancy_lower_digits;
 
-symbolic procedure fancy!-lower!-digits1(u,s);
+symbolic procedure fancy!-lower!-digits1(u, s);
    % Call as fancy!-lower!-digits1(u,nil).
    % Convert '(a !1 b !2) to '(a !_ !{ !1 !} b !_ !{ !2 !})
    begin scalar c,q,r,w,x;
- loop: % through characters in list u
-    if u then <<c:=car u; u:=cdr u>> else c:=nil;
-    if null s then
-      if not digit c and c then w:=c.w else
-      << % need to close the symbol w;
-         w:=reversip w;
-         q:=intern compress w;
-	 % The following test "explode q = w" is a hack to avoid the
-	 % problem that in CSL compress '(a l p h a !\ !_) is just
-	 % alpha. In PSL it is !_, which is not correct either but
-	 % this does not cause problems here:
-         if explode q = w and stringp (x:=get(q,'fancy!-special!-symbol))
-            then w:=explode2 x;
-         if cdr w then
-            if car w = '!\ then long!*:=nil else long!*:=t
-         else long!*:=nil;
-         r:=nconc(r,w);
-         if digit c then <<s:=t; w:={c}>> else w:=nil;
-      >>
-    else
-      if digit c then w:=c.w else
-      << % need to close the number w.
-        w:='!_ . '!{ . reversip('!} . w);
-        r:=nconc(r,w);
-        if c then <<s:=nil; w:={c}>> else w:=nil;
-      >>;
-    if w then goto loop;
-    return r;
-  end;
+  loop: % through characters c in list u:
+     if u then <<c:=car u; u:=cdr u>> else c:=nil;
+     if null s then
+        if not digit c and c then w:=c.w else
+        << % need to close the symbol w;
+           w:=reversip w;
+           q:=intern compress w;
+	   % The following test "explode q = w" is a hack to avoid the
+	   % problem that in CSL compress '(a l p h a !\ !_) is just
+	   % alpha. In PSL it is !_, which is not correct either but
+	   % this does not cause problems here:
+           if explode q = w and stringp (x:=get(q,'fancy!-special!-symbol))
+           then w:=explode2 x;
+           if cdr w then
+              if car w = '!\ then long!*:=nil else long!*:=t
+           else long!*:=nil;
+           r:=nconc(r,w);
+           if digit c then <<s:=t; w:={c}>> else w:=nil;
+        >>
+     else
+        if digit c then w:=c.w else
+        << % need to close the number w.
+           w:='!_ . '!{ . reversip('!} . w);
+           r:=nconc(r,w);
+           if c then <<s:=nil; w:={c}>> else w:=nil;
+        >>;
+     if w then goto loop;
+     return r;
+   end;
 
 symbolic procedure fancy!-lower!-digitstrail(u,s);
    % Call as fancy!-lower!-digitstrail(u,nil).
@@ -797,32 +797,12 @@ symbolic procedure fancy!-maprint!-atom(l,p);
 %                sterling" character into a name...
 %   (5) All the follow-on joys that go beyond just (4) and correspond to
 %       "Internationalisation"!
-% I view all of these as illustrating the fact that interfacing between the
-% core of Reduce and its front-end using a textual interface like this is
-% unsatisfactory, even though it has been a good place-holder and a path of
-% least resistance. The problems noted here only escalate if you imagine
-% developing the graphical front-end to support cut and (particularly)
-% paste operations where the same sorts of textual conversion would need to
-% be done but consistently and in the other direction. It also makes the
-% issue about who takes responsibility for line breaks a muddled one.
-%
-% Going via LaTeX is not automatically or comfortably 1:1, it loses structural
-% information and it adds the inefficiency of the conversion done here which
-% feeds instantly into a TeX parser that tries to reconstruct a box-structure
-% that could be closely related to a Lisp prefix form.
-%
-% So in the long term I would really like to discard this and go directly
-% from the Reduce internal form to a box-structure that can be used for
-% layout and rendering.
 %
 % If an identifier contains one of the TeX special characters (other than
 % underscore) I will just display it as in \mathrm{} context. Doing so will
 % override any detection of trailing digits that could otherwise end up
 % displayed as subscripts.
 %
-% I suspect that I really want to render strings in the cmtt fixed-pitch font,
-% but at present I am not confident that Reduce always makes a careful enough
-% distinction about what it provides as string and what as symbol data here.
  fancy!-level
   begin scalar x;
      if (x:=get(l,'fancy!-special!-symbol)) then
@@ -839,23 +819,84 @@ symbolic procedure fancy!-maprint!-atom(l,p);
      %FJW The result looks OK!
 
      %FJW fancy!-tex!-character adds a character, escaped or replaced
-     %as necessary, to fancy!-line!*.
+     % as necessary, to fancy!-line!*.
      else if stringp l then <<
          fancy!-line!* := '!\text!{ . fancy!-line!*;
          for each c in explode2 l do fancy!-tex!-character c;
          fancy!-line!* := '!} . fancy!-line!* >>
 
-     %FJW ***TO DO*** Review processing of identifiers later:
-     else if idp l and contains!-tex!-special l then <<
-         fancy!-line!* := '!\mathit!{ . fancy!-line!*;
-         for each c in explode2 l do fancy!-tex!-character c;
-         fancy!-line!* := '!} . fancy!-line!* >>
+     else if idp l then fancy!-maprint!-identifier l
 
      else if not numberp l or (not (l<0) or p<=get('minus,'infix))
          then fancy!-prin2!*(l,'index)
      else fancy!-in!-brackets({'fancy!-prin2!*,mkquote l,t}, '!(,'!));
      return (if testing!-width!* and overflowed!* then 'failed else nil);
   end;
+
+
+symbolic procedure fancy!-maprint!-identifier ident;
+   %FJW New procedure, 08/10/2020
+   % ident -> ident, body123 -> body_{123}, body_123 -> body_{123},
+   % body_k -> body_k, body_alpha -> body_{\alpha}.
+   
+   % Only the last _ introduces a subscript, and only if it is or
+   % translates to a digit sequence or a single character.
+   
+   % Both body and sub in body_sub are processed for special
+   % symbols, e.g. beta -> \beta, and TeX special characters
+   % (#$%&~_\{}}) are escaped, e.g. # -> \#.
+
+   % Find the last _; check/process what follows it.
+   % Otherwise, find and process a trailing digit sequence.
+   % Process the main part.
+   <<
+      ident := explode2 ident;
+      if null cdr ident then
+         % A single-character identifier:
+         fancy!-tex!-character car ident
+      else
+      % begin scalar !_found, sub, digits := t, digsub;
+      %    for c in ident do <<
+      %       if not (!_found or c eq '!_) then sub := c . sub
+      %       else !_found := t;
+      %       if (digits := digits and digitp c) then digsub := c . digsub;
+      %    >>;
+      %    if !_found
+      % end
+
+      begin scalar !_found, subscript, body, subscript_symbol, body_symbol;
+         % Search ident backwards and build body and subscript forwards.
+         for each c in reverse ident do
+            if not (!_found or c eq '!_) then subscript := c . subscript
+            else if !_found then body := c . body
+            else !_found := t;
+         if !_found and % subscript is, or translates to, a single character
+            ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
+               or null cdr subscript) then
+         <<                        % body_{subscript} after processing
+            if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
+               fancy!-line!* := body_symbol . fancy!-line!*
+            else <<
+               fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+               for each c in body do fancy!-tex!-character c;
+               fancy!-line!* := '!} . fancy!-line!*
+            >>;
+            fancy!-line!* := '!_ . fancy!-line!*;
+            if subscript_symbol then
+               fancy!-line!* := subscript_symbol . fancy!-line!*
+            else
+               fancy!-tex!-character car subscript
+         >>
+         else                           % no subscript
+         <<
+            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+            for each c in ident do fancy!-tex!-character(c, nil);
+            fancy!-line!* := '!} . fancy!-line!*
+         >>
+      end
+   >>;
+
+
 
 fluid '(pound1!* pound2!* bad_chars!*);
 
@@ -874,33 +915,34 @@ global '(blank tab);
 blank := '! ;
 tab := '!	;
 
-bad_chars!* := blank . tab . !$eol!$ . pound1!* . pound2!* .
-               '(!# !$ !% !& !{ !} !~ !^ !\);
+% bad_chars!* := blank . tab . !$eol!$ . pound1!* . pound2!* .
+%                '(!# !$ !% !& !{ !} !~ !^ !\);
 
-symbolic procedure contains!-tex!-special x;
-% Checks if an identifier contains any character that could "upset" TeX
-% in its name. Note that as a special case I do NOT count underscore as
-% special here!
-  begin
-    scalar u;
-    u:= (if !*fancy!-lower then explode2lc x
-         else explode2 x);
-top:if null u then return nil
-    else if memq(car u, bad_chars!*) then return t;
-    u := cdr u;
-    go to top
-  end;
+% symbolic procedure contains!-tex!-special x;
+% % Checks if an identifier contains any character that could "upset" TeX
+% % in its name. Note that as a special case I do NOT count underscore as
+% % special here!
+%   begin
+%     scalar u;
+%     u:= (if !*fancy!-lower then explode2lc x
+%          else explode2 x);
+% top:if null u then return nil
+%     else if memq(car u, bad_chars!*) then return t;
+%     u := cdr u;
+%     go to top
+%   end;
 
 symbolic procedure fancy!-tex!-character c;
-% This arranges to print something even if it is a funny character as
-% far as TeX is concerned. I display a tab as two spaces, and a newline
-% as $eol$ and rather hope that neither ever arises. I also need to check
-% that my TeX parser can handle all these...
+   %FJW Add a character to fancy!-line!*, handling special TeX
+   % characters appropriately.
+   % When processing an identifier, idp = t and _ is not escaped
+   % because it has already been escapted if necessary.
+   % When processing a string, idp = nil and _ is escaped.
    fancy!-line!* :=
       if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
       else if c eq '!~ then '!{!\textasciitilde!} . fancy!-line!*
       else if c eq '!^ then '!{!\textasciicircum!} . fancy!-line!*
-      else if c eq '!\ then '!{!\textbackslash!} . fancy!-line!*
+      else if c eq '!\ then '!{!\backslash!} . fancy!-line!* % was textbackslash, check CSL!!!
       else if c eq blank   then '!~ . fancy!-line!*
       else if c eq tab     then '!~ . '!~ . fancy!-line!*
       else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
