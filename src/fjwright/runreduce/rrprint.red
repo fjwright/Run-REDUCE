@@ -849,7 +849,7 @@ symbolic procedure fancy!-maprint!-identifier ident;
    % Find the last _; check/process what follows it.
    % Otherwise, find and process a trailing digit sequence.
    % Process the main part.
-   begin scalar !_found, subscript, body, subscript_symbol, body_symbol;
+   begin scalar chars, subscript, body, subscript_symbol, body_symbol, digits;
       ident := explode2 ident;
       if null cdr ident then <<
          % A single-character identifier:
@@ -858,11 +858,13 @@ symbolic procedure fancy!-maprint!-identifier ident;
       >>;
 
       % Search ident backwards for _ and build body and subscript forwards.
-      for each c in reverse ident do
-         if not (!_found or c eq '!_) then subscript := c . subscript
-         else if !_found then body := c . body
-         else !_found := t;
-      if !_found and body and subscript and
+      chars := reverse ident;
+      while chars and not (car chars eq '!_) do <<
+         subscript := car chars . subscript;
+         chars := cdr chars
+      >>;
+      if chars then body := reversip cdr chars;
+      if body and subscript and
          ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
             or null cdr subscript) then <<
                % subscript is, or translates to, a single character;
@@ -883,20 +885,18 @@ symbolic procedure fancy!-maprint!-identifier ident;
             >>;
 
       % Search ident backwards for digits and build body and subscript forwards.
-      begin scalar chars := reverse ident;
-         % Collect trailing digits into subscript:
-         subscript := nil;
-         while chars and digit car chars do <<
-            subscript := car chars . subscript;
-            chars := cdr chars
-         >>;
-         % Skip next char if it is _:
-         if eqcar(chars, '!_) then chars := cdr chars;
-         % Retrieve identifier body:
-         body := reversip chars;
-      end;
-      if body and subscript then
-      <<                           % body_{subscript} after processing
+      % Collect trailing digits:
+      chars := reverse ident;
+      while chars and digit car chars do <<
+         digits := car chars . digits;
+         chars := cdr chars
+      >>;
+      % Skip next char if it is _:
+      if eqcar(chars, '!_) then chars := cdr chars;
+      % Retrieve identifier body:
+      body := reversip chars;
+      if body and digits then
+      <<                           % body_{digits} after processing
          if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
             fancy!-line!* := body_symbol . fancy!-line!*
          else <<
@@ -905,7 +905,7 @@ symbolic procedure fancy!-maprint!-identifier ident;
             fancy!-line!* := '!} . fancy!-line!*
          >>;
          fancy!-line!* := '!{ . '!_ . fancy!-line!*;
-         for each c in subscript do fancy!-line!* := c . fancy!-line!*;
+         for each c in digits do fancy!-line!* := c . fancy!-line!*;
          fancy!-line!* := '!} . fancy!-line!*;
          return
       >>;
