@@ -534,10 +534,10 @@ symbolic procedure fancy!-prin2!*(u,n);
       if cdr u then long!*:=t;            %FJW identifier longer than 1 character
       if car u = '!\ then long!*:=nil;
       l := if numberp n then n else 2*length u;
-      if id and not numberp n then
-         % Process implicit subscripts: digits within an identifier or
-         % digits or a single letter after an underscore:
-         u:=fancy!-lower!-digits(fancy!-esc u); % SHOULD NO LONGER BE USED!
+      % if id and not numberp n then
+      %    % Process implicit subscripts: digits within an identifier or
+      %    % digits or a single letter after an underscore:
+      %    u:=fancy!-lower!-digits(fancy!-esc u); % SHOULD NO LONGER BE USED!
       if long!* then
          fancy!-line!* := '!\mathit!{ . fancy!-line!*; %FJW '!\mathrm!{ . fancy!-line!*;
       for each x in u do
@@ -571,69 +571,69 @@ symbolic procedure fancy!-prin2number1 u;
    >>;
   end;
 
-symbolic procedure fancy!-esc u;
-   % u is a list of characters in an identifier.
-   % Return u with each _ escaped by preceding it with !.
-   % Only called by fancy!-prin2!*.
-   if not('!_ memq u) then u else
-   (if car u eq '!_ then '!\ . w else w)
-      where w = car u . fancy!-esc cdr u;
+% symbolic procedure fancy!-esc u;
+%    % u is a list of characters in an identifier.
+%    % Return u with each _ escaped by preceding it with !.
+%    % Only called by fancy!-prin2!*.
+%    if not('!_ memq u) then u else
+%    (if car u eq '!_ then '!\ . w else w)
+%       where w = car u . fancy!-esc cdr u;
 
-symbolic procedure fancy!-lower!-digits u; % SHOULD NO LONGER BE USED!
-   % Typeset digits in an identifier as subscripts if
-   % fancy_lower_digits = all or if fancy_lower_digits = t
-   % and the digits are all at the end.
-   % Only called in fancy!-prin2!*.
-   (if null m then u else if m = 'all or
-      fancy!-lower!-digitstrail(u,nil) then
-         fancy!-lower!-digits1(u,nil)
-   else u
-      ) where m=fancy!-mode 'fancy_lower_digits;
+% symbolic procedure fancy!-lower!-digits u; % SHOULD NO LONGER BE USED!
+%    % Typeset digits in an identifier as subscripts if
+%    % fancy_lower_digits = all or if fancy_lower_digits = t
+%    % and the digits are all at the end.
+%    % Only called in fancy!-prin2!*.
+%    (if null m then u else if m = 'all or
+%       fancy!-lower!-digitstrail(u,nil) then
+%          fancy!-lower!-digits1(u,nil)
+%    else u
+%       ) where m=fancy!-mode 'fancy_lower_digits;
 
-symbolic procedure fancy!-lower!-digits1(u, s);
-   % Call as fancy!-lower!-digits1(u,nil).
-   % Convert '(a !1 b !2) to '(a !_ !{ !1 !} b !_ !{ !2 !})
-   begin scalar c,q,r,w,x;
-  loop: % through characters c in list u:
-     if u then <<c:=car u; u:=cdr u>> else c:=nil;
-     if null s then
-        if not digit c and c then w:=c.w else
-        << % need to close the symbol w;
-           w:=reversip w;
-           q:=intern compress w;
-	   % The following test "explode q = w" is a hack to avoid the
-	   % problem that in CSL compress '(a l p h a !\ !_) is just
-	   % alpha. In PSL it is !_, which is not correct either but
-	   % this does not cause problems here:
-           if explode q = w and stringp (x:=get(q,'fancy!-special!-symbol))
-           then w:=explode2 x;
-           if cdr w then
-              if car w = '!\ then long!*:=nil else long!*:=t
-           else long!*:=nil;
-           r:=nconc(r,w);
-           if digit c then <<s:=t; w:={c}>> else w:=nil;
-        >>
-     else
-        if digit c then w:=c.w else
-        << % need to close the number w.
-           w:='!_ . '!{ . reversip('!} . w);
-           r:=nconc(r,w);
-           if c then <<s:=nil; w:={c}>> else w:=nil;
-        >>;
-     if w then goto loop;
-     return r;
-   end;
+% symbolic procedure fancy!-lower!-digits1(u, s);
+%    % Call as fancy!-lower!-digits1(u,nil).
+%    % Convert '(a !1 b !2) to '(a !_ !{ !1 !} b !_ !{ !2 !})
+%    begin scalar c,q,r,w,x;
+%   loop: % through characters c in list u:
+%      if u then <<c:=car u; u:=cdr u>> else c:=nil;
+%      if null s then
+%         if not digit c and c then w:=c.w else
+%         << % need to close the symbol w;
+%            w:=reversip w;
+%            q:=intern compress w;
+% 	   % The following test "explode q = w" is a hack to avoid the
+% 	   % problem that in CSL compress '(a l p h a !\ !_) is just
+% 	   % alpha. In PSL it is !_, which is not correct either but
+% 	   % this does not cause problems here:
+%            if explode q = w and stringp (x:=get(q,'fancy!-special!-symbol))
+%            then w:=explode2 x;
+%            if cdr w then
+%               if car w = '!\ then long!*:=nil else long!*:=t
+%            else long!*:=nil;
+%            r:=nconc(r,w);
+%            if digit c then <<s:=t; w:={c}>> else w:=nil;
+%         >>
+%      else
+%         if digit c then w:=c.w else
+%         << % need to close the number w.
+%            w:='!_ . '!{ . reversip('!} . w);
+%            r:=nconc(r,w);
+%            if c then <<s:=nil; w:={c}>> else w:=nil;
+%         >>;
+%      if w then goto loop;
+%      return r;
+%    end;
 
-symbolic procedure fancy!-lower!-digitstrail(u,s);
-   % Call as fancy!-lower!-digitstrail(u,nil).
-   % u is a list of characters, i.e. single character identifiers.
-   % Return t if the first digit is followed only by digits, nil otherwise.
-   % s := t when the first digit is found.
-   if null u then s else
-   if not s and digit car u then
-          fancy!-lower!-digitstrail(cdr u,t) else
-   if s and not digit car u then nil
-   else fancy!-lower!-digitstrail(cdr u,s);
+% symbolic procedure fancy!-lower!-digitstrail(u,s);
+%    % Call as fancy!-lower!-digitstrail(u,nil).
+%    % u is a list of characters, i.e. single character identifiers.
+%    % Return t if the first digit is followed only by digits, nil otherwise.
+%    % s := t when the first digit is found.
+%    if null u then s else
+%    if not s and digit car u then
+%           fancy!-lower!-digitstrail(cdr u,t) else
+%    if s and not digit car u then nil
+%    else fancy!-lower!-digitstrail(cdr u,s);
 
 symbolic procedure fancy!-terpri!* u;
    <<
@@ -798,11 +798,6 @@ symbolic procedure fancy!-maprint!-atom(l,p);
 %   (5) All the follow-on joys that go beyond just (4) and correspond to
 %       "Internationalisation"!
 %
-% If an identifier contains one of the TeX special characters (other than
-% underscore) I will just display it as in \mathrm{} context. Doing so will
-% override any detection of trailing digits that could otherwise end up
-% displayed as subscripts.
-%
  fancy!-level
   begin scalar x;
      if (x:=get(l,'fancy!-special!-symbol)) then
@@ -814,61 +809,69 @@ symbolic procedure fancy!-maprint!-atom(l,p);
          x:=fancy!-inprint(",",0,l);
          fancy!-prin2!*("]",0);
          return x >>
-
      %FJW Output strings as text rather than maths:
      %FJW The result looks OK!
-
      %FJW fancy!-tex!-character adds a character, escaped or replaced
      % as necessary, to fancy!-line!*.
      else if stringp l then <<
          fancy!-line!* := '!\text!{ . fancy!-line!*;
          for each c in explode2 l do fancy!-tex!-character c;
          fancy!-line!* := '!} . fancy!-line!* >>
-
      else if idp l then fancy!-maprint!-identifier l
-
      else if not numberp l or (not (l<0) or p<=get('minus,'infix))
          then fancy!-prin2!*(l,'index)
      else fancy!-in!-brackets({'fancy!-prin2!*,mkquote l,t}, '!(,'!));
      return (if testing!-width!* and overflowed!* then 'failed else nil);
   end;
 
-
 symbolic procedure fancy!-maprint!-identifier ident;
-   %FJW New procedure, 08/10/2020
+   %FJW New procedure, 09/10/2020
    % ident -> ident, body123 -> body_{123}, body_123 -> body_{123},
    % body_k -> body_k, body_alpha -> body_{\alpha}.
-   
    % Only the last _ introduces a subscript, and only if it is, or
    % translates to, a digit sequence or a single character.
-   
    % Both body and subscript in body_subscript are processed for
    % special symbols, e.g. beta -> \beta, and TeX special characters
    % (#$%&~_\{}}) are escaped, e.g. # -> \#.
-
-   % Find the last _; check/process what follows it.
-   % Otherwise, find and process a trailing digit sequence.
-   % Process the main part.
    begin scalar chars, subscript, body, subscript_symbol, body_symbol, digits;
       ident := explode2 ident;
       if null cdr ident then <<
          % A single-character identifier:
-         fancy!-tex!-character car ident;
+         ident := car ident;
+         if liter ident then
+            fancy!-line!* := ident . fancy!-line!*
+         else <<
+            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+            fancy!-tex!-character ident;
+            fancy!-line!* := '!} . fancy!-line!*
+         >>;
          return
       >>;
 
-      % Search ident backwards for _ and build body and subscript forwards.
+      % Search ident backwards for digits:
       chars := reverse ident;
-      while chars and not (car chars eq '!_) do <<
-         subscript := car chars . subscript;
+      % Collect trailing digits, which take precedence over _:
+      while chars and digit car chars do <<
+         digits := car chars . digits;
          chars := cdr chars
       >>;
-      if chars then body := reversip cdr chars;
-      if body and subscript and
+      if null digits then
+         % Search ident backwards for _:
+         while chars and not (car chars eq '!_) do <<
+            subscript := car chars . subscript;
+            chars := cdr chars
+         >>;
+      % Skip next char if it is _:
+      if eqcar(chars, '!_) then chars := cdr chars;
+      % Retrieve identifier body:
+      body := reversip chars;
+
+      if body and (digits or (subscript and
          ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
-            or null cdr subscript) then <<
-               % subscript is, or translates to, a single character;
-               % output body_{subscript} after processing.
+            or null cdr subscript))) then <<
+               % If digits then output body_{digits} after processing,
+               % else subscript is, or translates to, a single character,
+               % so output body_{subscript} after processing.
                if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
                   fancy!-line!* := body_symbol . fancy!-line!*
                else <<
@@ -877,38 +880,18 @@ symbolic procedure fancy!-maprint!-identifier ident;
                   fancy!-line!* := '!} . fancy!-line!*
                >>;
                fancy!-line!* := '!_ . fancy!-line!*;
-               if subscript_symbol then
-                  fancy!-line!* := subscript_symbol . fancy!-line!*
-               else
-                  fancy!-tex!-character car subscript;
+               if digits then <<
+                  fancy!-line!* := '!{ . fancy!-line!*;
+                  for each c in digits do fancy!-line!* := c . fancy!-line!*;
+                  fancy!-line!* := '!} . fancy!-line!*;
+               >> else <<
+                  if subscript_symbol then
+                     fancy!-line!* := subscript_symbol . fancy!-line!*
+                  else
+                     fancy!-tex!-character car subscript;
+               >>;
                return
             >>;
-
-      % Search ident backwards for digits and build body and subscript forwards.
-      % Collect trailing digits:
-      chars := reverse ident;
-      while chars and digit car chars do <<
-         digits := car chars . digits;
-         chars := cdr chars
-      >>;
-      % Skip next char if it is _:
-      if eqcar(chars, '!_) then chars := cdr chars;
-      % Retrieve identifier body:
-      body := reversip chars;
-      if body and digits then
-      <<                           % body_{digits} after processing
-         if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
-            fancy!-line!* := body_symbol . fancy!-line!*
-         else <<
-            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
-            for each c in body do fancy!-tex!-character c;
-            fancy!-line!* := '!} . fancy!-line!*
-         >>;
-         fancy!-line!* := '!{ . '!_ . fancy!-line!*;
-         for each c in digits do fancy!-line!* := c . fancy!-line!*;
-         fancy!-line!* := '!} . fancy!-line!*;
-         return
-      >>;
 
       % No subscript:
       fancy!-line!* := '!\mathit!{ . fancy!-line!*;
@@ -916,8 +899,7 @@ symbolic procedure fancy!-maprint!-identifier ident;
       fancy!-line!* := '!} . fancy!-line!*;
    end;
 
-
-fluid '(pound1!* pound2!* bad_chars!*);
+fluid '(pound1!* pound2!*);             % bad_chars!*);
 
 % Pounds signs are HORRID! Well all sorts of characters that are not
 % in the original 96-char ASCII set are horrid, but pounds signs are
@@ -934,29 +916,9 @@ global '(blank tab);
 blank := '! ;
 tab := '!	;
 
-% bad_chars!* := blank . tab . !$eol!$ . pound1!* . pound2!* .
-%                '(!# !$ !% !& !{ !} !~ !^ !\);
-
-% symbolic procedure contains!-tex!-special x;
-% % Checks if an identifier contains any character that could "upset" TeX
-% % in its name. Note that as a special case I do NOT count underscore as
-% % special here!
-%   begin
-%     scalar u;
-%     u:= (if !*fancy!-lower then explode2lc x
-%          else explode2 x);
-% top:if null u then return nil
-%     else if memq(car u, bad_chars!*) then return t;
-%     u := cdr u;
-%     go to top
-%   end;
-
 symbolic procedure fancy!-tex!-character c;
    %FJW Add a character to fancy!-line!*, handling special TeX
    % characters appropriately.
-   % When processing an identifier, idp = t and _ is not escaped
-   % because it has already been escapted if necessary.
-   % When processing a string, idp = nil and _ is escaped.
    fancy!-line!* :=
       if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
       else if c eq '!~ then '!{!\textasciitilde!} . fancy!-line!*
