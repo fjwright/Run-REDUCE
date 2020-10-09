@@ -449,7 +449,7 @@ public class REDUCEPanel extends BorderPane {
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollWebViewToBottom() {
-        webEngine.executeScript("setTimeout(function(){document.body.scrollIntoView(false)},200);");
+        webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},200);");
     }
 
     /*

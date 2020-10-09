@@ -1408,7 +1408,7 @@ symbolic procedure fancy!-prefix!-operator(u);
        get(u,'fancy!-functionsymbol) or get(u,'fancy!-special!-symbol);
      if sy
       then fancy!-special!-symbol(sy,get(u,'fancy!-symbol!-length) or 2)
-      else fancy!-prin2!*(u,t);
+      else fancy!-maprint!-identifier u; % fancy!-prin2!*(u,t);
    end;
 
 put('sqrt,'fancy!-prifn,'fancy!-sqrtpri);
