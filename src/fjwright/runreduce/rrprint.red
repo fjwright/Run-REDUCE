@@ -839,63 +839,82 @@ symbolic procedure fancy!-maprint!-identifier ident;
    % ident -> ident, body123 -> body_{123}, body_123 -> body_{123},
    % body_k -> body_k, body_alpha -> body_{\alpha}.
    
-   % Only the last _ introduces a subscript, and only if it is or
-   % translates to a digit sequence or a single character.
+   % Only the last _ introduces a subscript, and only if it is, or
+   % translates to, a digit sequence or a single character.
    
-   % Both body and sub in body_sub are processed for special
-   % symbols, e.g. beta -> \beta, and TeX special characters
+   % Both body and subscript in body_subscript are processed for
+   % special symbols, e.g. beta -> \beta, and TeX special characters
    % (#$%&~_\{}}) are escaped, e.g. # -> \#.
 
    % Find the last _; check/process what follows it.
    % Otherwise, find and process a trailing digit sequence.
    % Process the main part.
-   <<
+   begin scalar !_found, subscript, body, subscript_symbol, body_symbol;
       ident := explode2 ident;
-      if null cdr ident then
+      if null cdr ident then <<
          % A single-character identifier:
-         fancy!-tex!-character car ident
-      else
-      % begin scalar !_found, sub, digits := t, digsub;
-      %    for c in ident do <<
-      %       if not (!_found or c eq '!_) then sub := c . sub
-      %       else !_found := t;
-      %       if (digits := digits and digitp c) then digsub := c . digsub;
-      %    >>;
-      %    if !_found
-      % end
+         fancy!-tex!-character car ident;
+         return
+      >>;
 
-      begin scalar !_found, subscript, body, subscript_symbol, body_symbol;
-         % Search ident backwards and build body and subscript forwards.
-         for each c in reverse ident do
-            if not (!_found or c eq '!_) then subscript := c . subscript
-            else if !_found then body := c . body
-            else !_found := t;
-         if !_found and % subscript is, or translates to, a single character
-            ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
-               or null cdr subscript) then
-         <<                        % body_{subscript} after processing
-            if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
-               fancy!-line!* := body_symbol . fancy!-line!*
-            else <<
-               fancy!-line!* := '!\mathit!{ . fancy!-line!*;
-               for each c in body do fancy!-tex!-character c;
-               fancy!-line!* := '!} . fancy!-line!*
+      % Search ident backwards for _ and build body and subscript forwards.
+      for each c in reverse ident do
+         if not (!_found or c eq '!_) then subscript := c . subscript
+         else if !_found then body := c . body
+         else !_found := t;
+      if !_found and body and subscript and
+         ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
+            or null cdr subscript) then <<
+               % subscript is, or translates to, a single character;
+               % output body_{subscript} after processing.
+               if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
+                  fancy!-line!* := body_symbol . fancy!-line!*
+               else <<
+                  fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+                  for each c in body do fancy!-tex!-character c;
+                  fancy!-line!* := '!} . fancy!-line!*
+               >>;
+               fancy!-line!* := '!_ . fancy!-line!*;
+               if subscript_symbol then
+                  fancy!-line!* := subscript_symbol . fancy!-line!*
+               else
+                  fancy!-tex!-character car subscript;
+               return
             >>;
-            fancy!-line!* := '!_ . fancy!-line!*;
-            if subscript_symbol then
-               fancy!-line!* := subscript_symbol . fancy!-line!*
-            else
-               fancy!-tex!-character car subscript
-         >>
-         else                           % no subscript
-         <<
-            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
-            for each c in ident do fancy!-tex!-character(c, nil);
-            fancy!-line!* := '!} . fancy!-line!*
-         >>
-      end
-   >>;
 
+      % Search ident backwards for digits and build body and subscript forwards.
+      begin scalar chars := reverse ident;
+         % Collect trailing digits into subscript:
+         subscript := nil;
+         while chars and digit car chars do <<
+            subscript := car chars . subscript;
+            chars := cdr chars
+         >>;
+         % Skip next char if it is _:
+         if eqcar(chars, '!_) then chars := cdr chars;
+         % Retrieve identifier body:
+         body := reversip chars;
+      end;
+      if body and subscript then
+      <<                           % body_{subscript} after processing
+         if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
+            fancy!-line!* := body_symbol . fancy!-line!*
+         else <<
+            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+            for each c in body do fancy!-tex!-character c;
+            fancy!-line!* := '!} . fancy!-line!*
+         >>;
+         fancy!-line!* := '!{ . '!_ . fancy!-line!*;
+         for each c in subscript do fancy!-line!* := c . fancy!-line!*;
+         fancy!-line!* := '!} . fancy!-line!*;
+         return
+      >>;
+
+      % No subscript:
+      fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+      for each c in ident do fancy!-tex!-character c;
+      fancy!-line!* := '!} . fancy!-line!*;
+   end;
 
 
 fluid '(pound1!* pound2!* bad_chars!*);
