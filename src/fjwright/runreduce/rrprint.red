@@ -1831,10 +1831,11 @@ symbolic procedure fancy!-matpri2(u,x,bkt);
      <<row := car fmat; fmat:=cdr fmat;
        while row do
        <<elt:=car row; row:=cdr row;
+         fancy!-line!* := "\displaystyle " . fancy!-line!*; %FJW
          fancy!-line!* := append(car elt,fancy!-line!*);
          if row then fancy!-line!* :='!& . fancy!-line!*
           else if fmat then
-             fancy!-line!* := "\\". fancy!-line!*;
+             fancy!-line!* := "\\[1.5em]" . fancy!-line!*; %FJW
        >>;
      >>;
      fancy!-prin2!*(bldmsg("\end{matrix}\right%w",
