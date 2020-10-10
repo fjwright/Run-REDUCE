@@ -14,6 +14,9 @@
 {asin(x), acos(x), atan(x), acsc(x), asec(x), acot(x)};
 {asinh(x), acosh(x), atanh(x), acsch(x), asech(x), acoth(x)};
 
+% Complex value functions:
+{repart(z), impart(z), conj(z), conj(a+i*b)};
+
 % Gamma, Beta and related functions:
 {Gamma(z), Beta(a, b), psi(z), polygamma(n, z), iGamma(a, z), iBeta(a, b, x), dilog(z),
    Pochhammer(a, n), binomial(m, n), zeta(s)};
