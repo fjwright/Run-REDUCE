@@ -296,19 +296,6 @@ public class RunREDUCEFrame {
         RunREDUCE.reducePanel.outputFileDisableMenuItemsMaybe();
     }
 
-    // Load Packages...
-    @FXML
-    private void loadPackagesMenuItemAction() {
-        if (packageList == null) packageList = new REDUCEPackageList();
-        if (packageList.isEmpty()) {
-            // Allow the user to correct the packages directory and try again:
-            packageList = null;
-            return;
-        }
-        // Select packages to load:
-        showDialogAndWait("Load Packages...", "LoadPackagesDialog.fxml");
-    }
-
     // Print Session Log...
     @FXML
     private void printLogMenuItemAction() {
@@ -442,10 +429,20 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void loadPackagesMenuItemAction() {
+        if (packageList == null) packageList = new REDUCEPackageList();
+        if (packageList.isEmpty()) {
+            // Allow the user to correct the packages directory and try again:
+            packageList = null;
+            return;
+        }
+        // Select packages to load:
+        showDialogAndWait("Load Packages...", "LoadPackagesDialog.fxml");
+    }
+
+    @FXML
     private void stopREDUCEMenuItemAction() {
         RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
-        RunREDUCE.reducePanel.runningREDUCE = false;
-        RunREDUCE.reducePanel.outputFileList.clear();
         // Reset enabled status of controls:
         RunREDUCE.reducePanel.reduceStopped();
     }
@@ -464,8 +461,6 @@ public class RunREDUCEFrame {
     @FXML
     private void killREDUCEMenuItemAction() {
         RunREDUCE.reducePanel.reduceProcess.destroyForcibly();
-        RunREDUCE.reducePanel.runningREDUCE = false;
-        RunREDUCE.reducePanel.outputFileList.clear();
         // Reset enabled status of controls:
         RunREDUCE.reducePanel.reduceStopped();
     }

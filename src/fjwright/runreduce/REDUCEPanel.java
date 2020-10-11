@@ -374,8 +374,6 @@ public class REDUCEPanel extends BorderPane {
             earlierButton.setDisable(false);
             laterButton.setDisable(true);
             if (quitPattern.matcher(text).matches()) {
-                runningREDUCE = false;
-                outputFileList.clear();
                 // Reset enabled status of controls:
                 reduceStopped();
             }
@@ -532,9 +530,6 @@ public class REDUCEPanel extends BorderPane {
         outputLabel.setText(outputLabelDefault + "  |  " + title);
         if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
             RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
-
-        runningREDUCE = true;
-
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -964,6 +959,8 @@ public class REDUCEPanel extends BorderPane {
      * Reset disabled status of controls as appropriate when REDUCE is not running.
      */
     void reduceStopped() {
+        runningREDUCE = false;
+        outputFileList.clear();
         startingOrStoppingREDUCE(false);
     }
 
@@ -971,6 +968,7 @@ public class REDUCEPanel extends BorderPane {
      * Reset disabled status of controls as appropriate when REDUCE has just started.
      */
     void reduceStarted() {
+        runningREDUCE = true;
         startingOrStoppingREDUCE(true);
     }
 
