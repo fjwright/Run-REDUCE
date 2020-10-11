@@ -197,3 +197,19 @@ Run-REDUCE-FX currently uses a bundled copy of
   (from \*).  To be copied over to tmprint (probably).
 * v2.12 Update `UserGuide.html` and add a new section on Controlling
   Typeset Maths Display, which uses KaTeX from a CDN.
+* Output strings as text rather than maths and identifiers using
+  mathit.  Support the dfprint switch.
+* Treat trailing digits in an identifier (optionally preceded by _) as
+  a subscript.  Treat the final _ in an identifier as introducing a
+  subscript if it followed by (the name of) a single character.
+* v2.13 In procedure fancy!-prefix!-operator, replace fancy!-prin2!*
+  with fancy!-maprint!-identifier, which ensures that operator
+  identifiers are subscripted like non-operator identifiers.  Note
+  that line breaking is now thoroughly broken!
+* In scrollWebViewToBottom(), scroll to the bottom of the
+  documentElement, i.e. <html>, rather than the body element, which
+  was not always scrolling to the bottom of the display.
+* Display repart and impart as \Re and \Im.
+* Display matrices more readably by using \displaystyle for each
+  element and increasing the row spacing to 1.5em.
+* v2.14 Update `UserGuide.html`.
