@@ -463,6 +463,19 @@ public class RunREDUCEFrame {
         RunREDUCE.reducePanel.reduceProcess.destroyForcibly();
         // Reset enabled status of controls:
         RunREDUCE.reducePanel.reduceStopped();
+        try {
+            RunREDUCE.reducePanel.reduceProcess.waitFor();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    "REDUCE has been killed!");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.initOwner(RunREDUCE.primaryStage);
+            alert.setTitle("REDUCE Process");
+            alert.setHeaderText("REDUCE process status");
+            alert.showAndWait();
+        } catch (InterruptedException e) {
+            RunREDUCE.errorMessageDialog("REDUCE Process",
+                    "REDUCE may not have been killed! You are advised to restart Run-REDUCE-FX.");
+        }
     }
 
     /* ********* *

@@ -309,7 +309,7 @@ public class REDUCEPanel extends BorderPane {
 
     /**
      * Return essentially the string
-     *   out "/dev/null"; in "../rrprint.red"; shut "/dev/null";
+     * out "/dev/null"; in "../rrprint.red"; shut "/dev/null";
      * in a way that works on Windows and non-Windows platforms.
      * If running from a jar file then copy the resource to a real temporary file first.
      */
@@ -464,10 +464,14 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void sendStringToREDUCENoEcho(String text) {
-        // Send the input to the REDUCE input pipe:
-        if (reduceInputPrintWriter != null) {
+        // Send the input to the REDUCE input pipe provided REDUCE is still alive:
+        if (reduceProcess.isAlive() && reduceInputPrintWriter != null) {
             reduceInputPrintWriter.print(text);
             reduceInputPrintWriter.flush();
+        } else {
+            RunREDUCE.errorMessageDialog("REDUCE Process",
+                    "REDUCE is no longer running!");
+            reduceStopped();
         }
     }
 
@@ -590,6 +594,8 @@ public class REDUCEPanel extends BorderPane {
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
+            // REDUCE has stopped running for some reason!
+            System.err.println("REDUCE has stopped running for some reason!");
             return null;
         }
     }
