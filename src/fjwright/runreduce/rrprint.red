@@ -95,7 +95,7 @@ fluid  '(
          obrkp!*    % outside-brackets-p
             );
 
-global '(!*eraise initl!* nat!*!* spare!* ofl!*);
+global '(ofl!*);
 
 %
 % The interaction between the code here and a variety of other REDUCE flags
@@ -125,7 +125,7 @@ fluid '(
       !*fancy!-lower    % control of conversion to lower case
       );
 
-fluid '(fancy!-texwidth fancy!-texpos tex!-pointsize);
+fluid '(fancy!-texpos);                 %FJW not really used?
 
 fancy!-switch!-on!* := int2id 16$
 fancy!-switch!-off!* := int2id 17$
@@ -312,175 +312,6 @@ symbolic procedure fancy!-prin2 u;
 % positions that the TeX material should fit with seems messy) the calculation
 % done here is a bit of a mess.
 
-% I think that what I wish to do is to assume that reasonable output width
-% for TeX is (say) 500pts and so replace all calls "linelenth nil" with
-% reference to tex!-width!-points, a global variable initialised to 500.
-% Then I would want to re-work fancy!-prin2 to provide at least a rough
-% estimate of the width of each character based on expecting the width of
-% an average letter or digit to be around 6.25pts. Well it will be rather
-% nicer if even these crude estimates are made in units of millipoints, since
-% otherwise I will have enough issues of rounding to corrupt even rather
-% coarse calculations.
-
-% If I suppose that letters and digits are generally going to be set in
-% cmr or cmmi fonts in main, script or scriptscript size can have at least
-% approximate tabulation rather easily. To exploit this fancy!-prin2!* will
-% need to be aware when it is setting full-sized text and when it is processing
-% a sub- or superscript. It may be acceptable here to keep just one table of
-% widths and cope with scripts by simple scaling.
-
-% Greek letters and mathematic symbols (such as "\infty" and "\forall")
-% will need a width attribute. And any parts of tmprint.red that generate
-% stacked structures (such as displayed fractions, matrices etc) may need
-% to be reviewed.
-
-% For the purposes of a width estimate sufficient to guide line breaking
-% I feel that ligatures and kerning can be ignored. Life is messy and hard
-% enough as it is!
-
-
-% The unit for texwidth will be "points". That perhaps really means
-% something on paper, with 72 points per inch (or thereabouts, depending
-% on how pedantic you are). On screen it is much less certain. However
-% 500 points is roughtly a sensible width to use as the printable area
-% across an A4 or letter sheet of paper, so for now I make it my default.
-
-fancy!-texwidth := 500;
-
-% texwidth will let you reset the width that will be used, but as a matter
-% of sanity I will never let it set a width of less than 100 points (ie
-% about 1.4 inches, 3.5cm). The previously set width is returned.
-
-symbolic procedure texwidth n;
-  begin
-    scalar old;
-    old := fancy!-texwidth;
-    if fixp n and n >= 100 then fancy!-texwidth := n;
-    return old
-  end;
-
-flag('(texwidth), 'opfn);
-
-
-% You may generate the TeX either as a (default) 10pt document or
-% with a 12-point basic size. This only gives a rather small change
-% but it may be useful in terms of control over readibility.
-
-tex!-pointsize := 12;   %FJW Was 10, but not actually used anywhere!!!
-
-
-symbolic procedure texpointsize n;
-  begin
-    scalar old;
-    old := tex!-pointsize;
-    if n = 10 or n = 12 then tex!-pointsize := n;
-    return old
-  end;
-
-flag('(texpointsize), 'opfn);
-
-
-% Widths for characters in Computer Modern Fonts
-
-% extracted from wxfonts/tfm
-
-% Widths here are given in millipoints, and I include (at present)
-% four key mathematical fonts, all at nominal size 10pt. Since I am
-% only using this to give me an ESTIMATE of the width of the TeX
-% output so I have a reasonable idea of where to split lines I will
-% assume that other sizes can have their metrics deduced by scaling.
-% But when I do a bit of research I find different sizes quoted even
-% for basic cases, so the line I will follow will be based on the
-% following sequences for 10 and 12-point main text.
-%
-%   tiny       5     6
-%   script     7     8
-%   footnote   8     10
-%   small      9     11
-%   normal     10    12   <<<<< main default size
-%   large      12    14
-%   Large      14    17
-%   LARGE      17    20
-%   huge       20    25
-%   Huge       25    25
-
-fluid '(cm!-widths!*);
-
-cm!-widths!* := list(
-    % name checksum design-size (millipoints)
-    list("cmex10", -89033454, 10000, list!-to!-vector '(
-       4583    4583    4166    4166    4722    4722    4722    4722
-       5833    5833    4722    4722    3333    5555    5777    5777
-       5972    5972    7361    7361    5277    5277    5833    5833
-       5833    5833    7500    7500    7500    7500   10444   10444
-       7916    7916    5833    5833    6388    6388    6388    6388
-       8055    8055    8055    8055   12777   12777    8111    8111
-       8750    8750    6666    6666    6666    6666    6666    6666
-       8888    8888    8888    8888    8888    8888    8888    6666
-       8750    8750    8750    8750    6111    6111    8333   11111
-       4722    5555   11111   15111   11111   15111   11111   15111
-      10555    9444    4722    8333    8333    8333    8333    8333
-      14444   12777    5555   11111   11111   11111   11111   11111
-       9444   12777    5555   10000   14444    5555   10000   14444
-       4722    4722    5277    5277    5277    5277    6666    6666
-      10000   10000   10000   10000   10555   10555   10555    7777
-       6666    6666    4500    4500    4500    4500    7777    7777)),
-    % name checksum design-size (millipoints)
-    list("cmmi10", -1725937524, 10000, list!-to!-vector '(
-       6152    8333    7627    6944    7423    8312    7798    5833
-       6666    6122    7723    6397    5656    5177    4444    4059
-       4375    4965    4694    3539    5761    5833    6025    4939
-       4375    5700    5170    5714    4371    5402    5958    6256
-       6513    6224    4663    5914    8281    5170    3628    6541
-      10000   10000   10000   10000    2777    2777    5000    5000
-       5000    5000    5000    5000    5000    5000    5000    5000
-       5000    5000    2777    2777    7777    5000    7777    5000
-       5309    7500    7585    7147    8279    7381    6430    7862
-       8312    4395    5545    8493    6805    9701    8034    7627
-       6420    7905    7592    6131    5843    6827    5833    9444
-       8284    5805    6826    3888    3888    3888   10000   10000
-       4166    5285    4291    4327    5204    4656    4895    4769
-       5761    3445    4118    5206    2983    8780    6002    4847
-       5031    4464    4511    4687    3611    5724    4847    7159
-       5715    4902    4650    3224    3840    6364    5000    2777)),
-    % name checksum design-size (millipoints)
-    list("cmr10", 1274110073, 10000, list!-to!-vector '(
-       6250    8333    7777    6944    6666    7500    7222    7777
-       7222    7777    7222    5833    5555    5555    8333    8333
-       2777    3055    5000    5000    5000    5000    5000    7500
-       4444    5000    7222    7777    5000    9027   10138    7777
-       2777    2777    5000    8333    5000    8333    7777    2777
-       3888    3888    5000    7777    2777    3333    2777    5000
-       5000    5000    5000    5000    5000    5000    5000    5000
-       5000    5000    2777    2777    2777    7777    4722    4722
-       7777    7500    7083    7222    7638    6805    6527    7847
-       7500    3611    5138    7777    6250    9166    7500    7777
-       6805    7777    7361    5555    7222    7500    7500   10277
-       7500    7500    6111    2777    5000    2777    5000    2777
-       2777    5000    5555    4444    5555    4444    3055    5000
-       5555    2777    3055    5277    2777    8333    5555    5000
-       5555    5277    3916    3944    3888    5555    5277    7222
-       5277    5277    4444    5000   10000    5000    5000    5000)),
-    % name checksum design-size (millipoints)
-    list("cmsy10", 555887770, 10000, list!-to!-vector '(
-       7777    2777    7777    5000    7777    5000    7777    7777
-       7777    7777    7777    7777    7777   10000    5000    5000
-       7777    7777    7777    7777    7777    7777    7777    7777
-       7777    7777    7777    7777   10000   10000    7777    7777
-      10000   10000    5000    5000   10000   10000   10000    7777
-      10000   10000    6111    6111   10000   10000   10000    7777
-       2749   10000    6666    6666    8888    8888       0       0
-       5555    5555    6666    5000    7222    7222    7777    7777
-       6111    7984    6568    5265    7713    5277    7187    5948
-       8445    5445    6777    7619    6897   12009    8204    7961
-       6955    8166    8475    6055    5446    6258    6127    9877
-       7132    6683    7247    6666    6666    6666    6666    6666
-       6111    6111    4444    4444    4444    4444    5000    5000
-       3888    3888    2777    5000    5000    6111    5000    2777
-       8333    7500    8333    4166    6666    6666    7777    7777
-       4444    4444    4444    6111    7777    7777    7777    7777))
-    );
-
 for each x in '(
     !\sqrt        !\equiv        !\alpha        !\beta
     !\gamma       !\delta        !\varepsilon   !\zeta
@@ -504,7 +335,7 @@ for each x in '(
    !\arcsin  !\arccos  !\arctan  !\arccot  !\arcsec  !\arccsc
    !\sinh    !\cosh    !\tanh    !\coth    !\sech    !\csch
    !\arcsinh !\arccosh !\arctanh !\arccoth !\arcsech !\arccsch
-   !\exp     !\log     !\ln      !\max     !\min    %!\re      !\im
+   !\exp     !\log     !\ln      !\max     !\min     !\Re      !\Im
    ) do put(x, 'texcharwidth, sub1 length explode2 x);
 
 symbolic procedure fancy!-prin2!*(u,n);
@@ -571,70 +402,6 @@ symbolic procedure fancy!-prin2number1 u;
    >>;
   end;
 
-% symbolic procedure fancy!-esc u;
-%    % u is a list of characters in an identifier.
-%    % Return u with each _ escaped by preceding it with !.
-%    % Only called by fancy!-prin2!*.
-%    if not('!_ memq u) then u else
-%    (if car u eq '!_ then '!\ . w else w)
-%       where w = car u . fancy!-esc cdr u;
-
-% symbolic procedure fancy!-lower!-digits u; % SHOULD NO LONGER BE USED!
-%    % Typeset digits in an identifier as subscripts if
-%    % fancy_lower_digits = all or if fancy_lower_digits = t
-%    % and the digits are all at the end.
-%    % Only called in fancy!-prin2!*.
-%    (if null m then u else if m = 'all or
-%       fancy!-lower!-digitstrail(u,nil) then
-%          fancy!-lower!-digits1(u,nil)
-%    else u
-%       ) where m=fancy!-mode 'fancy_lower_digits;
-
-% symbolic procedure fancy!-lower!-digits1(u, s);
-%    % Call as fancy!-lower!-digits1(u,nil).
-%    % Convert '(a !1 b !2) to '(a !_ !{ !1 !} b !_ !{ !2 !})
-%    begin scalar c,q,r,w,x;
-%   loop: % through characters c in list u:
-%      if u then <<c:=car u; u:=cdr u>> else c:=nil;
-%      if null s then
-%         if not digit c and c then w:=c.w else
-%         << % need to close the symbol w;
-%            w:=reversip w;
-%            q:=intern compress w;
-% 	   % The following test "explode q = w" is a hack to avoid the
-% 	   % problem that in CSL compress '(a l p h a !\ !_) is just
-% 	   % alpha. In PSL it is !_, which is not correct either but
-% 	   % this does not cause problems here:
-%            if explode q = w and stringp (x:=get(q,'fancy!-special!-symbol))
-%            then w:=explode2 x;
-%            if cdr w then
-%               if car w = '!\ then long!*:=nil else long!*:=t
-%            else long!*:=nil;
-%            r:=nconc(r,w);
-%            if digit c then <<s:=t; w:={c}>> else w:=nil;
-%         >>
-%      else
-%         if digit c then w:=c.w else
-%         << % need to close the number w.
-%            w:='!_ . '!{ . reversip('!} . w);
-%            r:=nconc(r,w);
-%            if c then <<s:=nil; w:={c}>> else w:=nil;
-%         >>;
-%      if w then goto loop;
-%      return r;
-%    end;
-
-% symbolic procedure fancy!-lower!-digitstrail(u,s);
-%    % Call as fancy!-lower!-digitstrail(u,nil).
-%    % u is a list of characters, i.e. single character identifiers.
-%    % Return t if the first digit is followed only by digits, nil otherwise.
-%    % s := t when the first digit is found.
-%    if null u then s else
-%    if not s and digit car u then
-%           fancy!-lower!-digitstrail(cdr u,t) else
-%    if s and not digit car u then nil
-%    else fancy!-lower!-digitstrail(cdr u,s);
-
 symbolic procedure fancy!-terpri!* u;
    <<
      if fancy!-line!* then
@@ -644,7 +411,6 @@ symbolic procedure fancy!-terpri!* u;
      fancy!-line!*:= {'tab . tablevel!*};
      overflowed!* := nil
    >>;
-
 
 % Moved to alg/general.red so that other modules could use it when
 % implementing their own custom printing.
@@ -899,7 +665,7 @@ symbolic procedure fancy!-maprint!-identifier ident;
       fancy!-line!* := '!} . fancy!-line!*;
    end;
 
-fluid '(pound1!* pound2!*);             % bad_chars!*);
+fluid '(pound1!* pound2!*);
 
 % Pounds signs are HORRID! Well all sorts of characters that are not
 % in the original 96-char ASCII set are horrid, but pounds signs are
@@ -921,20 +687,15 @@ symbolic procedure fancy!-tex!-character c;
    % characters appropriately.
    fancy!-line!* :=
       if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
-      else if c eq '!~ then '!{!\textasciitilde!} . fancy!-line!*
-      else if c eq '!^ then '!{!\textasciicircum!} . fancy!-line!*
-      else if c eq '!\ then '!{!\backslash!} . fancy!-line!* % was textbackslash, check CSL!!!
+      else if c eq '!~ then '!\text!{!\textasciitilde!} . fancy!-line!*
+      else if c eq '!^ then '!\text!{!\textasciicircum!} . fancy!-line!*
+      else if c eq '!\ then '!\text!{!\textbackslash!} . fancy!-line!*
       else if c eq blank   then '!~ . fancy!-line!*
       else if c eq tab     then '!~ . '!~ . fancy!-line!*
       else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
       else if c eq pound1!* or c eq pound2!* then
          '!{!\pound!} . fancy!-line!*
       else c . fancy!-line!*;
-
-symbolic procedure print_indexed u;
-   flag(u, 'print!-indexed);
-
-rlistat '(print_indexed);
 
 symbolic procedure fancy!-print!-indexlist l;
    fancy!-print!-indexlist1(l, '!_, '!,);
@@ -982,7 +743,6 @@ symbolic procedure fancy!-in!-brackets(u,l,r);
      return w;
    end)
     where fancy!-bstack!* = fancy!-bstack!*;
-
 
 symbolic procedure fancy!-adjust!-bkt!-levels u;
    if null u or null cdr u then nil
@@ -1071,7 +831,6 @@ symbolic procedure fancy!-inprint(op,p,l);
      if testing!-width!* and w='failed then return fancy!-fail(pos,tpos,fl);
    end
    ) where tablevel!*=tablevel!*, sumlevel!*=sumlevel!*;
-
 
 symbolic procedure fancy!-inprint1(op,p,l);
    % main line (top level) infix printing, allow line break;
@@ -1394,7 +1153,6 @@ symbolic procedure fancy!-print!-format1(u,p,a);
     return w;
   end;
 
-
 %-----------------------------------------------------------
 %
 %   some operator-specific print functions
@@ -1431,7 +1189,6 @@ symbolic procedure fancy!-sqrtpri!*(u,n);
      return fancy!-maprint!-tex!-bkt(u,0,t);
    end;
 
-
 symbolic procedure fancy!-sub(l,p);
 % Prints expression in an exponent notation.
   if get('expt,'infix)<=p then
@@ -1455,7 +1212,6 @@ symbolic procedure fancy!-sub(l,p);
    end;
 
 put('sub,'fancy!-pprifn,'fancy!-sub);
-
 
 put('factorial,'fancy!-pprifn,'fancy!-factorial);
 
@@ -1613,7 +1369,6 @@ symbolic procedure fancy!-sfreform u;
       if not null u then z := prepd u . z;
       return replus reversip z;
    end;
-
 
 symbolic procedure fancy!-termreform u;
      begin scalar v,w,z,sgn;
