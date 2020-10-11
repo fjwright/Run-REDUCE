@@ -43,6 +43,9 @@
                           text="Clear I/O Display"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..."/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem fx:id="killREDUCEMenuItem" disable="true" mnemonicParsing="false"
+                          onAction="#killREDUCEMenuItemAction" text="Kill REDUCE"/>
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..."/>

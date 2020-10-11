@@ -491,6 +491,8 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
+    Process reduceProcess;
+
     /**
      * Run the specified REDUCE command in this REDUCE panel.
      */
@@ -507,15 +509,15 @@ public class REDUCEPanel extends BorderPane {
             pb.directory(new File(RunREDUCE.reduceConfiguration.workingDir));
             // pb.redirectErrorStream(true);
             // pb.redirectInput(ProcessBuilder.Redirect.INHERIT); // Works!
-            Process p = pb.start();
+            reduceProcess = pb.start();
 
             // Assign the REDUCE input stream to an instance field:
-            OutputStreamWriter osr = new OutputStreamWriter(p.getOutputStream());
+            OutputStreamWriter osr = new OutputStreamWriter(reduceProcess.getOutputStream());
             reduceInputPrintWriter = new PrintWriter(osr);
 
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
-            REDUCEOutputThread outputGobbler = new REDUCEOutputThread(p.getInputStream());
+            REDUCEOutputThread outputGobbler = new REDUCEOutputThread(reduceProcess.getInputStream());
             Thread th = new Thread(outputGobbler);
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
@@ -949,9 +951,10 @@ public class REDUCEPanel extends BorderPane {
     private boolean outputHereMenuItemDisabled;
     private boolean shutFileMenuItemDisabled;
     private boolean shutLastMenuItemDisabled;
+    private boolean runREDUCESubmenuDisabled;
     private boolean loadPackagesMenuItemDisabled;
     private boolean stopREDUCEMenuItemDisabled;
-    private boolean runREDUCESubmenuDisabled;
+    private boolean killREDUCEMenuItemDisabled;
     private boolean templatesMenuDisabled;
     private boolean functionsMenuDisabled;
 
@@ -980,6 +983,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled = !starting);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled = !starting);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled = !starting);
         // Items to disable/enable when REDUCE starts/stops running:
@@ -1005,8 +1009,9 @@ public class REDUCEPanel extends BorderPane {
         FRAME.shutLastMenuItem.setDisable(shutLastMenuItemDisabled);
         // REDUCE menu items:
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
-        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
+        FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled);
         // View menu items:
         FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
         FRAME.setSelectedColouredIORadioButton(colouredIOState);

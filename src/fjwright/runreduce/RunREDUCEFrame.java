@@ -43,10 +43,10 @@ public class RunREDUCEFrame {
     @FXML
     MenuItem inputFileMenuItem, inputPackageFileMenuItem, outputNewFileMenuItem, outputOpenFileMenuItem;
     @FXML
-    MenuItem outputHereMenuItem, shutFileMenuItem, shutLastMenuItem, loadPackagesMenuItem;
+    MenuItem outputHereMenuItem, shutFileMenuItem, shutLastMenuItem;
     // REDUCE menu:
     @FXML
-    MenuItem stopREDUCEMenuItem;
+    MenuItem loadPackagesMenuItem, stopREDUCEMenuItem, killREDUCEMenuItem;
     @FXML
     Menu runREDUCESubmenu;
     @FXML
@@ -459,6 +459,15 @@ public class RunREDUCEFrame {
     private void configureREDUCEMenuItemAction() {
         showDialogAndWait("Configure REDUCE Directories and Commands",
                 "REDUCEConfigDialog.fxml");
+    }
+
+    @FXML
+    private void killREDUCEMenuItemAction() {
+        RunREDUCE.reducePanel.reduceProcess.destroyForcibly();
+        RunREDUCE.reducePanel.runningREDUCE = false;
+        RunREDUCE.reducePanel.outputFileList.clear();
+        // Reset enabled status of controls:
+        RunREDUCE.reducePanel.reduceStopped();
     }
 
     /* ********* *
