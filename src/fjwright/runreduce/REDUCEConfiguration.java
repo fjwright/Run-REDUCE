@@ -159,18 +159,18 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             // On Windows, all REDUCE directories should be found automatically in "/Program Files/Reduce".
             reduceRootDir = findREDUCERootDir();
             packagesDir = Path.of(reduceRootDir, "packages").toString();
-            manualDir = Path.of(reduceRootDir, "lib/csl/reduce.doc").toString();
+            manualDir = Path.of(reduceRootDir, "lib\\csl\\reduce.doc").toString();
             primersDir = Path.of(reduceRootDir, "doc").toString();
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
             // before attempting to run REDUCE.
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     "",
-                    "$REDUCE/lib/csl/reduce.exe",
+                    "$REDUCE\\lib\\csl\\reduce.exe",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
                     "",
-                    "$REDUCE/lib/psl/psl/bpsl.exe",
-                    "-td", "1000", "-f", "$REDUCE/lib/psl/red/reduce.img"));
+                    "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
+                    "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
         } else {
             // This is appropriate for Ubuntu:
             reduceRootDir = "/usr/lib/reduce";
