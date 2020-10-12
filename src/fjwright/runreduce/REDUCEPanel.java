@@ -455,9 +455,11 @@ public class REDUCEPanel extends BorderPane {
      * <pre class=inputCSSClass><span class="prompt">Prompt</span>REDUCE input</pre>
      */
     void sendStringToREDUCEAndEcho(String text) {
-        inputPre.appendChild(doc.createTextNode(text));
-        // Make sure the new input text is visible:
-        scrollWebViewToBottom();
+        if (inputPre != null) {
+            inputPre.appendChild(doc.createTextNode(text));
+            // Make sure the new input text is visible:
+            scrollWebViewToBottom();
+        }
         sendStringToREDUCENoEcho(text);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
@@ -509,7 +511,7 @@ public class REDUCEPanel extends BorderPane {
         try {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(new File(RunREDUCE.reduceConfiguration.workingDir));
-            // pb.redirectErrorStream(true);
+            pb.redirectErrorStream(true); // necessary if start-up fails
             // pb.redirectInput(ProcessBuilder.Redirect.INHERIT); // Works!
             reduceProcess = pb.start();
 
@@ -523,17 +525,12 @@ public class REDUCEPanel extends BorderPane {
             Thread th = new Thread(outputGobbler);
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
-
-            // Reset enabled state of controls:
-            reduceStarted();
         } catch (Exception exc) {
-            RunREDUCE.errorMessageDialog("REDUCE Process", "Error running REDUCE:\n" + exc);
+            RunREDUCE.errorMessageDialog("REDUCE Process",
+                    "Error starting REDUCE:\n" + exc +
+                            "\nCheck the REDUCE configuration.");
         }
-
         title = reduceCommand.name;
-        outputLabel.setText(outputLabelDefault + "  |  " + title);
-        if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
-            RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -813,6 +810,11 @@ public class REDUCEPanel extends BorderPane {
             if (promptString != null) {
                 // Text ends with the first prompt...
                 beforeFirstPrompt = false;
+                // Reset enabled state of controls:
+                reduceStarted();
+                outputLabel.setText(outputLabelDefault + "  |  " + title);
+                if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
+                    RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
                 if (colouredIOState != RRPreferences.ColouredIO.REDFRONT && !typesetMathsState) {
                     if (colouredIOState == RRPreferences.ColouredIO.NONE) {
                         outputHeaderText(text.substring(0, promptIndex));
