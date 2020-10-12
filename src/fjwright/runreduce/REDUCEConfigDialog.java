@@ -50,9 +50,9 @@ public class REDUCEConfigDialog {
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        showREDUCECommand(reduceCommandList.get(0));
         setListViewItems();
         listView.getSelectionModel().selectFirst();
+        showREDUCECommand(reduceCommandList.get(0));
     }
 
     @FXML
