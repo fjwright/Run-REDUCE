@@ -318,7 +318,7 @@ public class REDUCEPanel extends BorderPane {
         String rrprintFilename = "rrprint.red";
         URL url = RunREDUCEFrame.class.getResource(rrprintFilename);
         if (url == null) {
-            RunREDUCE.errorMessageDialog("Typeset Maths",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Typeset Maths",
                     "Resource file \"" + rrprintFilename + "\" could not be located.");
         } else if (url.getProtocol().equals("file")) // Useful during development only!
             rrprintFilename = new File(url.getFile()).toString(); // to avoid leading / on Windows
@@ -471,7 +471,7 @@ public class REDUCEPanel extends BorderPane {
             reduceInputPrintWriter.print(text);
             reduceInputPrintWriter.flush();
         } else {
-            RunREDUCE.errorMessageDialog("REDUCE Process",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
                     "REDUCE is no longer running!");
             reduceStopped();
         }
@@ -526,7 +526,7 @@ public class REDUCEPanel extends BorderPane {
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
         } catch (Exception exc) {
-            RunREDUCE.errorMessageDialog("REDUCE Process",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
                     "Error starting REDUCE:\n" + exc +
                             "\nCheck the REDUCE configuration.");
         }

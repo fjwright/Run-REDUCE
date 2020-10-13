@@ -2,6 +2,7 @@ package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -18,7 +19,8 @@ public class For extends Template {
     @FXML
     private TabPane tabPane;
 
-    @FXML @Override
+    @FXML
+    @Override
     protected void initialize() {
         super.initialize();
         foreachChoiceBox.getSelectionModel().selectFirst();
@@ -31,7 +33,7 @@ public class For extends Template {
     private void listOrVarCheckKeyTyped() {
         final String text = foreachListTextField.getText();
         if (!(text.isEmpty() || LIST_OR_VAR_PATTERN.matcher(text).matches())) {
-            RunREDUCE.errorMessageDialog("For Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "For Template Error",
                     "The 'list' entry must be a list or a variable that evaluates to a list.");
             foreachListTextField.setText("");
         }

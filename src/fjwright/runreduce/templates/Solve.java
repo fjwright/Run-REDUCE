@@ -4,6 +4,7 @@ import fjwright.runreduce.RunREDUCE;
 import javafx.beans.binding.When;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -81,7 +82,7 @@ public class Solve extends Template {
         // Process equations:
         String[] eqns = stream(eqnTextFields).map(t -> t.getText().trim()).filter(s -> !s.isEmpty()).toArray(String[]::new);
         if (eqns.length == 0) {
-            RunREDUCE.errorMessageDialog("Solve Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Solve Template Error",
                     "At least one equation/expression field is required.");
             throw new EmptyFieldException();
         }
@@ -96,7 +97,7 @@ public class Solve extends Template {
         if (numRadioButton.isSelected()) {
             // Numeric:
             if (vars.length == 0) {
-                RunREDUCE.errorMessageDialog("Solve Numeric Template Error",
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Solve Numeric Template Error",
                         "All variable(s) must be specified.");
                 throw new EmptyFieldException();
             }

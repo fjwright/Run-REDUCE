@@ -71,17 +71,13 @@ public class RunREDUCE extends Application {
         // ToDo Consider bundling a font as a resource.
         reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         Font reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
-        if (!reduceFont.getFamily().equals(reduceFontFamilyName)) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(primaryStage);
-            alert.setHeaderText("REDUCE I/O Font");
-            alert.setContentText(String.format(
-                    "Specified font '%s' not found."
-                            + "\nReplacement font '%s' used instead."
-                            + "\nBeware that REDUCE output may be mangled!",
-                    reduceFontFamilyName, reduceFont.getFamily()));
-            alert.showAndWait();
-        }
+        if (!reduceFont.getFamily().equals(reduceFontFamilyName))
+            alert(Alert.AlertType.WARNING, "REDUCE I/O Font",
+                    String.format(
+                            "Specified font '%s' not found."
+                                    + "\nReplacement font '%s' used instead."
+                                    + "\nBeware that REDUCE output may be mangled!",
+                            reduceFontFamilyName, reduceFont.getFamily()));
         if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
 
         reducePanel = new REDUCEPanel();
@@ -188,12 +184,13 @@ public class RunREDUCE extends Application {
         }
     }
 
-    public static void errorMessageDialog(String headerText, String contentText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static void alert(Alert.AlertType alertType, String headerText, String contentText, String... title) {
+        Alert alert = new Alert(alertType);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.initOwner(primaryStage);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+        if (title.length > 0) alert.setTitle(title[0]);
         alert.showAndWait();
     }
 

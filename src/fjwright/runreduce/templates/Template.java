@@ -98,7 +98,7 @@ public abstract class Template {
         final TextField textField = (TextField) keyEvent.getTarget();
         final String text = textField.getText();
         if (!(text.isEmpty() || VAR_PATTERN.matcher(text).matches())) {
-            RunREDUCE.errorMessageDialog("Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Template Error",
                     "This field must be, or begin with, an identifier.");
             textField.setText("");
         }
@@ -112,7 +112,7 @@ public abstract class Template {
         final TextField textField = (TextField) keyEvent.getTarget();
         final String text = textField.getText();
         if (!(text.isEmpty() || INT_OR_VAR_PATTERN.matcher(text).matches())) {
-            RunREDUCE.errorMessageDialog("Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Template Error",
                     "This field must be an integer or an identifier.");
             textField.setText("");
         }
@@ -165,7 +165,7 @@ public abstract class Template {
     protected static String getTextCheckNonEmpty(final TextField textField) throws EmptyFieldException {
         final String text = textField.getText().trim();
         if (getTextCheckNonEmpty && text.isEmpty()) {
-            RunREDUCE.errorMessageDialog("Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Template Error",
                     "A required field is empty.");
             throw new EmptyFieldException();
         } else
@@ -285,7 +285,7 @@ public abstract class Template {
             try {
                 manualIndex = Files.readString(manualDirPath.resolve("index.html"));
             } catch (IOException e) {
-                RunREDUCE.errorMessageDialog(
+                RunREDUCE.alert(Alert.AlertType.ERROR,
                         "REDUCE Manual Hyperlink Error",
                         "Cannot read the index file at\n"
                                 + manualDirPath.resolve("index.html"));
@@ -309,7 +309,7 @@ public abstract class Template {
         if (matcher.find())
             RunREDUCE.hostServices.showDocument(manualDirPath.resolve(matcher.group(1)).toString());
         else
-            RunREDUCE.errorMessageDialog(
+            RunREDUCE.alert(Alert.AlertType.ERROR,
                     "REDUCE Manual Hyperlink Error",
                     "Link not found for\n" + searchText);
     }

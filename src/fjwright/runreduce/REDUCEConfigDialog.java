@@ -137,7 +137,7 @@ public class REDUCEConfigDialog {
                 workingDirTextField.getText()};
         for (String dir : dirs)
             if (!new File(dir).canRead()) {
-                RunREDUCE.errorMessageDialog("Invalid Directory",
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
                         "The directory\n" + dir + "\ndoes not exist or is not accessible.");
                 return;
             }

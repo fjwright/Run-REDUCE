@@ -304,16 +304,16 @@ public class RunREDUCEFrame {
             if (printerJob.showPrintDialog(frame.getScene().getWindow())) {
                 RunREDUCE.reducePanel.webEngine.print(printerJob);
                 if (printerJob.endJob()) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setHeaderText("Print Session Log...");
-                    alert.setContentText("Session log sent to printer.");
-                    alert.showAndWait();
+                    RunREDUCE.alert(Alert.AlertType.INFORMATION,
+                            "Print Session Log...",
+                            "Session log sent to printer.");
                 } else
-                    RunREDUCE.errorMessageDialog("Print Session Log...",
-                            "Cannot send session log to printer!");
+                    RunREDUCE.alert(Alert.AlertType.ERROR,
+                            "Print Session Log...",
+                            "Failed to send session log to printer!");
             }
         } else
-            RunREDUCE.errorMessageDialog("Print Session Log...",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Print Session Log...",
                     "Cannot create printer job. Check that you have a printer installed!");
     }
 
@@ -465,15 +465,12 @@ public class RunREDUCEFrame {
         RunREDUCE.reducePanel.reduceStopped();
         try {
             RunREDUCE.reducePanel.reduceProcess.waitFor();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    "REDUCE has been killed!");
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            alert.initOwner(RunREDUCE.primaryStage);
-            alert.setTitle("REDUCE Process");
-            alert.setHeaderText("REDUCE process status");
-            alert.showAndWait();
+            RunREDUCE.alert(Alert.AlertType.INFORMATION,
+                    "REDUCE process status",
+                    "REDUCE has been killed!",
+                    "REDUCE Process");
         } catch (InterruptedException e) {
-            RunREDUCE.errorMessageDialog("REDUCE Process",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
                     "REDUCE may not have been killed! You are advised to restart Run-REDUCE-FX.");
         }
     }
@@ -641,7 +638,7 @@ public class RunREDUCEFrame {
             // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
             // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
             if (url == null) {
-                RunREDUCE.errorMessageDialog("Run-REDUCE-FX User Guide",
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE-FX User Guide",
                         "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
             } else if (url.getProtocol().equals("file")) // Useful during development only!
                 RunREDUCE.hostServices.showDocument(url.toString());
@@ -671,14 +668,11 @@ public class RunREDUCEFrame {
 
     @FXML
     private void aboutMenuItemAction() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Version 2.14, October 2020\n" +
-                        "\u00A9 2020 Francis Wright");
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.initOwner(RunREDUCE.primaryStage);
-        alert.setTitle("About Run-REDUCE-FX");
-        alert.setHeaderText("Run REDUCE in a JavaFX GUI");
-        alert.showAndWait();
+        RunREDUCE.alert(Alert.AlertType.INFORMATION,
+                "Run REDUCE in a JavaFX GUI",
+                "Version 2.15, October 2020\n" +
+                        "\u00A9 2020 Francis Wright",
+                "About Run-REDUCE-FX");
     }
 
     /* ************** *

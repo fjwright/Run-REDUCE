@@ -2,6 +2,7 @@ package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -70,7 +71,7 @@ public class Integral extends Template {
     protected String result() throws Template.EmptyFieldException {
         final String integrand = integrandTextField.getText();
         if (integrand.isEmpty() || xIntVarTextField.getText().isEmpty()) {
-            RunREDUCE.errorMessageDialog("Integral Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Integral Template Error",
                     "The integrand and integration variable are both required.");
             throw new EmptyFieldException();
         }
@@ -105,7 +106,7 @@ public class Integral extends Template {
                     final String lowLim = lowLimTextFields[i].getText(), upLim = upLimTextFields[i].getText();
                     final boolean indefInt;
                     if ((indefInt = lowLim.isEmpty()) ^ upLim.isEmpty()) {
-                        RunREDUCE.errorMessageDialog("Integral Template Error",
+                        RunREDUCE.alert(Alert.AlertType.ERROR, "Integral Template Error",
                                 "The limits must be both empty or both specified.");
                         throw new EmptyFieldException();
                     }

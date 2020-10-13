@@ -2,6 +2,7 @@ package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import static java.util.Arrays.stream;
@@ -18,7 +19,8 @@ public class Matrix extends Template {
 
     private TextField[][] cells;
 
-    @FXML @Override
+    @FXML
+    @Override
     protected void initialize() {
         super.initialize();
         cells = new TextField[][]{
@@ -48,7 +50,7 @@ public class Matrix extends Template {
             if (nColsI > 0) nRows = i + 1;
         }
         if (nRows == 0) {
-            RunREDUCE.errorMessageDialog("Matrix Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Matrix Template Error",
                     "A least one field must be non-empty.");
             throw new EmptyFieldException();
         }

@@ -1,5 +1,7 @@
 package fjwright.runreduce;
 
+import javafx.scene.control.Alert;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +113,7 @@ class REDUCECommand {
             command[i] = element;
         }
         if (!Files.isExecutable(Paths.get(command[0]))) {
-            RunREDUCE.errorMessageDialog("REDUCE Configuration",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Configuration",
                     "The command path name\n" + command[0] + "\ndoes not exist or is not executable.");
             return null;
         }
@@ -309,9 +311,10 @@ class REDUCEPackageList extends ArrayList<String> {
         Path packagesDirPath = Paths.get(RunREDUCE.reduceConfiguration.packagesDir);
         Path packageMapFile = packagesDirPath.resolve("package.map");
         if (!Files.isReadable(packageMapFile)) {
-            RunREDUCE.errorMessageDialog("Packages", "The REDUCE package map file is not available!" +
-                    "\nPlease correct 'REDUCE Packages Directory' in the 'Configure REDUCE...' dialogue," +
-                    "\nwhich will open automatically when you close this dialogue.");
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Packages",
+                    "The REDUCE package map file is not available!" +
+                            "\nPlease correct 'REDUCE Packages Directory' in the 'Configure REDUCE...' dialogue," +
+                            "\nwhich will open automatically when you close this dialogue.");
             RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
                     "REDUCEConfigDialog.fxml");
             return;

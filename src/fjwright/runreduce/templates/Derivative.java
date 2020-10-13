@@ -2,6 +2,7 @@ package fjwright.runreduce.templates;
 
 import fjwright.runreduce.RunREDUCE;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -24,7 +25,8 @@ public class Derivative extends Template {
 
     private final static Pattern NUMBER_PATTERN = Pattern.compile("[1-9]\\d*");
 
-    @FXML @Override
+    @FXML
+    @Override
     protected void initialize() {
         super.initialize();
         indVarTextFields = new TextField[]{indVar0TextField, indVar1TextField, indVar2TextField};
@@ -39,14 +41,14 @@ public class Derivative extends Template {
         if (indVar.isEmpty())
             order = 0;
         else if (!VAR_PATTERN.matcher(indVar).matches()) {
-            RunREDUCE.errorMessageDialog("Derivative Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Derivative Template Error",
                     "An independent variable entry must be an identifier or empty.");
             indVarTextFields[n].setText(""); // Error recovery
             return;
         } else if ((ordString = ordTextFields[n].getText()).isEmpty())
             order = 1;
         else if (!(NUMBER_PATTERN.matcher(ordString).matches() && (order = Integer.parseInt(ordString)) > 0)) {
-            RunREDUCE.errorMessageDialog("Derivative Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Derivative Template Error",
                     "An order entry must be a positive integer or empty.");
             ordTextFields[n].setText(""); // Error recovery
             order = 1;
@@ -78,7 +80,7 @@ public class Derivative extends Template {
     protected String result() throws EmptyFieldException {
         final String depVar = depVarTextField.getText();
         if (depVar.isEmpty()) {
-            RunREDUCE.errorMessageDialog("Derivative Template Error",
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Derivative Template Error",
                     "A dependent variable or expression is required.");
             throw new EmptyFieldException();
         }
@@ -90,7 +92,7 @@ public class Derivative extends Template {
                 text.append(", ").append(indVar);
                 if (orders[i] > 1) text.append(", ").append(orders[i]);
             } else if (i == 0) {
-                RunREDUCE.errorMessageDialog("Derivative Template Error",
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Derivative Template Error",
                         "The first independent variable is required.");
                 throw new EmptyFieldException();
             }
