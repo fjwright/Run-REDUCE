@@ -13,7 +13,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.Arrays;
+import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import static java.lang.System.getProperty;
@@ -62,7 +63,13 @@ public class REDUCEConfigDialog {
         setupDialog(RunREDUCE.reduceConfiguration);
         listView.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends String> ov, String old_val, String new_val) -> {
-                    if (old_val != null) saveREDUCECommand(old_val);
+                    if (old_val != null) {
+                        try {
+                            saveREDUCECommand(old_val);
+                        } catch (FileNotFoundException e) {
+                            return;
+                        }
+                    }
                     for (REDUCECommand cmd : reduceCommandList)
                         if (cmd.name.equals(new_val)) {
                             showREDUCECommand(cmd);
@@ -125,45 +132,6 @@ public class REDUCEConfigDialog {
         showREDUCECommand(newCmd);
     }
 
-    @FXML
-    private void saveButtonAction(ActionEvent actionEvent) {
-        // Write form data back to REDUCEConfiguration
-        // after validating generic root directory fields:
-        String[] dirs = new String[]{
-                reduceRootDirTextField.getText(),
-                packagesDirTextField.getText(),
-                manualDirTextField.getText(),
-                primersDirTextField.getText(),
-                workingDirTextField.getText()};
-        for (String dir : dirs)
-            if (!new File(dir).canRead()) {
-                RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
-                        "The directory\n" + dir + "\ndoes not exist or is not accessible.");
-                return;
-            }
-        RunREDUCE.reduceConfiguration.reduceRootDir = dirs[0];
-        RunREDUCE.reduceConfiguration.packagesDir = dirs[1];
-        RunREDUCE.reduceConfiguration.manualDir = dirs[2];
-        RunREDUCE.reduceConfiguration.primersDir = dirs[3];
-        RunREDUCE.reduceConfiguration.workingDir = dirs[4];
-        saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
-        RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
-        RunREDUCE.reduceConfiguration.save();
-        // Close dialogue:
-        cancelButtonAction(actionEvent);
-        // Rebuild the Run REDUCE submenus:
-        RunREDUCE.runREDUCEFrame.runREDUCESubmenuBuild();
-        RunREDUCE.runREDUCEFrame.autoRunREDUCESubmenuBuild();
-    }
-
-    @FXML
-    private void cancelButtonAction(ActionEvent actionEvent) {
-        // Close dialogue:
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-    }
-
     /**
      * Set the command-specific text fields in the dialogue from the specified REDUCE command.
      */
@@ -177,10 +145,65 @@ public class REDUCEConfigDialog {
             commandTextFieldArray[i].setText("");
     }
 
+    private String directoryReadableCheck(String dir) throws FileNotFoundException {
+        if (new File(dir).canRead()) return dir;
+        else {
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
+                    "The directory\n" + dir + "\ndoes not exist or is not accessible.");
+            throw new FileNotFoundException();
+        }
+    }
+
+    @FXML
+    private void saveButtonAction(ActionEvent actionEvent) {
+        // Write form data back to REDUCEConfiguration
+        // after validating generic root directory fields:
+        try {
+            RunREDUCE.reduceConfiguration.reduceRootDir =
+                    directoryReadableCheck(reduceRootDirTextField.getText());
+            RunREDUCE.reduceConfiguration.packagesDir =
+                    directoryReadableCheck(packagesDirTextField.getText());
+            RunREDUCE.reduceConfiguration.manualDir =
+                    directoryReadableCheck(manualDirTextField.getText());
+            RunREDUCE.reduceConfiguration.primersDir =
+                    directoryReadableCheck(primersDirTextField.getText());
+            RunREDUCE.reduceConfiguration.workingDir =
+                    directoryReadableCheck(workingDirTextField.getText());
+            saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
+            RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
+            RunREDUCE.reduceConfiguration.save();
+            // Close dialogue:
+            cancelButtonAction(actionEvent);
+            // Rebuild the Run REDUCE submenus:
+            RunREDUCE.runREDUCEFrame.runREDUCESubmenuBuild();
+            RunREDUCE.runREDUCEFrame.autoRunREDUCESubmenuBuild();
+        } catch (FileNotFoundException ignored) {
+        }
+    }
+
+    /**
+     * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or alwaysCheck == true.
+     */
+    private String fileOrDirReadableCheck(String fileOrDir, boolean alwaysCheck) throws FileNotFoundException {
+        if (fileOrDir.startsWith("$REDUCE")) {// replace $REDUCE/ or $REDUCE\
+            fileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
+                    resolve(fileOrDir.substring(8)).toString();
+            alwaysCheck = true;
+        }
+        if (alwaysCheck) {
+            if (new File(fileOrDir).canRead()) return fileOrDir;
+            else {
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
+                        fileOrDir + "\ndoes not exist or is not accessible.");
+                throw new FileNotFoundException();
+            }
+        } else return fileOrDir;
+    }
+
     /**
      * Save the command-specific text fields in the dialogue to the specified REDUCE command.
      */
-    private void saveREDUCECommand(String commandName) {
+    private void saveREDUCECommand(String commandName) throws FileNotFoundException {
         REDUCECommand cmd = null;
         for (REDUCECommand c : reduceCommandList)
             if (c.name.equals(commandName)) {
@@ -189,10 +212,20 @@ public class REDUCEConfigDialog {
             }
         if (cmd == null) return; // Report an error?
         cmd.name = commandNameTextField.getText().trim();
-        cmd.rootDir = commandRootDirTextField.getText().trim();
+        cmd.rootDir = directoryReadableCheck(commandRootDirTextField.getText().trim());
         // Do not save blank arguments:
-        cmd.command = Arrays.stream(commandTextFieldArray).map(e -> e.getText().trim())
-                .filter(e -> !e.isEmpty()).toArray(String[]::new);
+        for (int i = 0, j = 0; i < commandTextFieldArray.length; i++) {
+            String element = commandTextFieldArray[i].getText().trim();
+            if (!element.isEmpty()) cmd.command[j++] = fileOrDirReadableCheck(element, i == 0);
+        }
+    }
+
+    @FXML
+    private void cancelButtonAction(ActionEvent actionEvent) {
+        // Close dialogue:
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     /**
