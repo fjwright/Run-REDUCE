@@ -184,6 +184,11 @@ public class RunREDUCE extends Application {
         }
     }
 
+    /**
+     * Display a standard modal JavaFX pop-up alert dialogue and wait for a response.
+     * alertType can be Alert.AlertType.CONFIRMATION / ERROR / INFORMATION / NONE / WARNING.
+     * title is most useful for INFORMATION / NONE.
+     */
     public static void alert(Alert.AlertType alertType, String headerText, String contentText, String... title) {
         Alert alert = new Alert(alertType);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);

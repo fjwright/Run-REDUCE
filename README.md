@@ -213,3 +213,16 @@ Run-REDUCE-FX currently uses a bundled copy of
 * Display matrices more readably by using \displaystyle for each
   element and increasing the row spacing to 1.5em.
 * v2.14 Update `UserGuide.html`.
+* Add a Kill REDUCE item to the bottom of the REDUCE menu.
+* Check that REDUCE is alive before trying to send it input.  Display
+  an information alert when REDUCE is killed and an error message if
+  this may have failed.
+* Handle failure of REDUCE to start better.
+* Use \ as directory separator in the Windows default configuration
+  and make reset configuration button work correctly even if the first
+  command in the list is not currently selected.
+* v2.15 Change a print alert from CONFIRMATION to INFORMATION, since
+  it only makes sense to acknowledge this dialogue, and revise the
+  wording of one of the error alerts, which will appear if the
+  printing fails or is cancelled by the user.
+* Update `UserGuide.html`.

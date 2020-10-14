@@ -56,6 +56,7 @@
       <li><a href="#FunctionsMenu">The Functions Menu</a></li>
       <li><a href="#HelpMenu">The Help Menu</a></li>
       <li><a href="#TypesetMaths">Typeset Maths Display</a></li>
+      <li><a href="#Printing">Printing on Linux</a></li>
     </ul>
 
     <h2 id="GeneralInformation">General Information</h2>
@@ -405,6 +406,9 @@
     your platform's standard print dialogue.  After you confirm the
     print dialogue, an alert pops up to either confirm that the
     session log has been sent to the printer or report failure.
+    Whilst printing seems to work fine on Microsoft Windows it can be
+    a bit awkward on Linux; see <a href="#Printing">Printing on
+    Linux</a>.
     </p>
     <h3>Save Session Log...</h3>
     <p>This displays a file chooser that allows you to specify a file
@@ -591,6 +595,15 @@
     <p>The directories described above relate to the portable REDUCE
     source code and are independent of particular REDUCE
     implementations, so they are fixed for all REDUCE commands.
+    </p>
+    <h3>Kill REDUCE</h3>
+    <p>This cab be used to kill REDUCE in an emergency, such as if it
+    hangs or you put it into an infinite loop.  Once REDUCE has been
+    successfully killed, an information dialogue pops up.  If the
+    attempt to kill REDUCE may have failed then an error dialogue pops
+    up.  In this (unlikely) situation, it may be advisable to use
+    operating system facilities to check that REDUCE has been killed
+    and if necessary kill it, and then restart Run-REDUCE-FX.
     </p>
 
     <h2 id="ViewMenu">The View Menu</h2>
@@ -1002,5 +1015,19 @@
       indexed, e.g.
       <pre>print_indexed a, b, c;</pre>
     </p>
+
+    <h2 id="Printing">Printing on Linux</h2>
+    
+    <p>It appears that on Linux, JavaFX is not aware of the default
+    "Print to File" printer and only displays the print dialogue if
+    there is at least one physical printer installed.  If you cancel
+    the print dialogue then Run-REDUCE-FX is left unresponsive for a
+    long time.  A workaround seems to be to select the "Print To File"
+    option for a real printer, click Print and then cancel the
+    resulting file selector, which cancels the whole print job
+    immediately.  (Nearly all of the code involved is in the standard
+    JavaFX library and so out of my control, although in the longer
+    term I might be able to improve the response by running printing
+    in a separate thread.)
 </body>
 </html>
