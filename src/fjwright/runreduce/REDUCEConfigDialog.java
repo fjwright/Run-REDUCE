@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.System.getProperty;
@@ -51,10 +53,13 @@ public class REDUCEConfigDialog {
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        setListViewItems();
+        // The order of the next three statements seems to be critical!
         listView.getSelectionModel().selectFirst();
+        setListViewItems();
         showREDUCECommand(reduceCommandList.get(0));
     }
+
+    boolean listViewNoListen;
 
     @FXML
     private void initialize() {
@@ -63,10 +68,17 @@ public class REDUCEConfigDialog {
         setupDialog(RunREDUCE.reduceConfiguration);
         listView.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends String> ov, String old_val, String new_val) -> {
+                    if (listViewNoListen) return;
+                    // Must save any valid changes to the current command,
+                    // otherwise they will be lost on switching to a different command.
+                    // But also need to abort the switch.
                     if (old_val != null) {
                         try {
                             saveREDUCECommand(old_val);
                         } catch (FileNotFoundException e) {
+                            listViewNoListen = true; // to avoid recursion
+                            listView.getSelectionModel().select(old_val);
+                            listViewNoListen = false;
                             return;
                         }
                     }
@@ -145,15 +157,6 @@ public class REDUCEConfigDialog {
             commandTextFieldArray[i].setText("");
     }
 
-    private String directoryReadableCheck(String dir) throws FileNotFoundException {
-        if (new File(dir).canRead()) return dir;
-        else {
-            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
-                    "The directory\n" + dir + "\ndoes not exist or is not accessible.");
-            throw new FileNotFoundException();
-        }
-    }
-
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
         // Write form data back to REDUCEConfiguration
@@ -182,22 +185,35 @@ public class REDUCEConfigDialog {
     }
 
     /**
+     * Check that dir is a readable directory and if not throw an exception.
+     */
+    private String directoryReadableCheck(String dir) throws FileNotFoundException {
+        if (new File(dir).canRead()) return dir;
+        else {
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
+                    "The directory\n" + dir + "\ndoes not exist or is not accessible.");
+            throw new FileNotFoundException();
+        }
+    }
+
+    /**
      * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or alwaysCheck == true.
+     * If not throw an exception.
      */
     private String fileOrDirReadableCheck(String fileOrDir, boolean alwaysCheck) throws FileNotFoundException {
-        if (fileOrDir.startsWith("$REDUCE")) {// replace $REDUCE/ or $REDUCE\
-            fileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
+        String localFileOrDir;
+        // Replace $REDUCE/ or $REDUCE\ in local copy of fileOrDir:
+        if (fileOrDir.startsWith("$REDUCE")) {
+            localFileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
                     resolve(fileOrDir.substring(8)).toString();
             alwaysCheck = true;
+        } else localFileOrDir = fileOrDir;
+        if (alwaysCheck && !new File(localFileOrDir).canRead()) {
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
+                    fileOrDir + "\ndoes not exist or is not accessible.");
+            throw new FileNotFoundException();
         }
-        if (alwaysCheck) {
-            if (new File(fileOrDir).canRead()) return fileOrDir;
-            else {
-                RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
-                        fileOrDir + "\ndoes not exist or is not accessible.");
-                throw new FileNotFoundException();
-            }
-        } else return fileOrDir;
+        return fileOrDir;
     }
 
     /**
@@ -211,13 +227,17 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
-        cmd.name = commandNameTextField.getText().trim();
-        cmd.rootDir = directoryReadableCheck(commandRootDirTextField.getText().trim());
-        // Do not save blank arguments:
-        for (int i = 0, j = 0; i < commandTextFieldArray.length; i++) {
+//        cmd.name = commandNameTextField.getText().trim(); // redundant since used as test in loop above!
+        // Do not check or save blank arguments:
+        String field = commandRootDirTextField.getText().trim();
+        if (!field.isEmpty()) cmd.rootDir = directoryReadableCheck(field);
+        // Must replace the whole command array because its length may have changed:
+        List<String> commandList = new ArrayList<>();
+        for (int i = 0; i < commandTextFieldArray.length; i++) {
             String element = commandTextFieldArray[i].getText().trim();
-            if (!element.isEmpty()) cmd.command[j++] = fileOrDirReadableCheck(element, i == 0);
+            if (!element.isEmpty()) commandList.add(fileOrDirReadableCheck(element, i == 0));
         }
+        cmd.command = commandList.toArray(new String[0]);
     }
 
     @FXML
