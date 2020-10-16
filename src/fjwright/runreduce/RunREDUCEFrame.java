@@ -670,7 +670,7 @@ public class RunREDUCEFrame {
     private void aboutMenuItemAction() {
         RunREDUCE.alert(Alert.AlertType.INFORMATION,
                 "Run REDUCE in a JavaFX GUI",
-                "Version 2.15, October 2020\n" +
+                "Version 2.16, October 2020\n" +
                         "\u00A9 2020 Francis Wright",
                 "About Run-REDUCE-FX");
     }

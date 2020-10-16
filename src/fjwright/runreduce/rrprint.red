@@ -599,7 +599,9 @@ symbolic procedure fancy!-maprint!-identifier ident;
    % Both body and subscript in body_subscript are processed for
    % special symbols, e.g. beta -> \beta, and TeX special characters
    % (#$%&~_\{}}) are escaped, e.g. # -> \#.
-   begin scalar chars, subscript, body, subscript_symbol, body_symbol, digits;
+   % Special case: body_bar -> \bar{body} for a single-character body
+   % or \overline{body} for a multi-character body.
+   begin scalar chars, subscript, body, subscript_symbol, body_symbol, digits, bar;
       ident := explode2 ident;
       if null cdr ident then <<
          % A single-character identifier:
@@ -634,16 +636,28 @@ symbolic procedure fancy!-maprint!-identifier ident;
 
       if body and (digits or (subscript and
          ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
-            or null cdr subscript))) then <<
-               % If digits then output body_{digits} after processing,
+            or null cdr subscript or (bar := subscript = '(b a r))))) then <<
+               % If subscript is bar then output \bar{body} after processing.
+               % Otherwise, if digits then output body_{digits} after processing,
                % else subscript is, or translates to, a single character,
                % so output body_{subscript} after processing.
-               if (body_symbol := get(intern compress body, 'fancy!-special!-symbol)) then
+               body_symbol := get(intern compress body, 'fancy!-special!-symbol);
+               if bar then <<
+                  if body_symbol or null cdr body then 
+                     fancy!-line!* := '!\bar!{ . fancy!-line!*
+                  else
+                     fancy!-line!* := '!\overline!{ . fancy!-line!*;
+               >>;
+               if body_symbol then
                   fancy!-line!* := body_symbol . fancy!-line!*
                else <<
                   fancy!-line!* := '!\mathit!{ . fancy!-line!*;
                   for each c in body do fancy!-tex!-character c;
                   fancy!-line!* := '!} . fancy!-line!*
+               >>;
+               if bar then <<
+                  fancy!-line!* := '!} . fancy!-line!*;
+                  return;
                >>;
                fancy!-line!* := '!_ . fancy!-line!*;
                if digits then <<
