@@ -486,7 +486,18 @@
     the <em>Save</em> button, in which case the new configuration is
     used within Run-REDUCE-FX and saved as preferences.  Clicking on
     the <em>Cancel</em> button causes all changes made since the
-    dialogue opened to be forgotten.
+    dialogue opened to be forgotten.  However, Run-REDUCE-FX checks
+    that all fields that are directories or files exist and are
+    readable before it saves them.  This includes any command
+    arguments that begin with <code>$REDUCE</code> (see below).  When
+    you click on the <em>Save</em> button, Run-REDUCE-FX updates its
+    internal configuration from the top down to match the fields
+    displayed up to any erroneous field but it does not save any
+    configuration information externally if there is an error.  When
+    you select a different REDUCE command, Run-REDUCE-FX updates its
+    internal configuration for the current command up to any erroneous
+    field but it does not save any configuration information
+    externally.
     </p>
     <p>Note that all field values are stripped of leading and trailing
     space before they are used or saved, and empty fields are not
@@ -961,12 +972,26 @@
       <li>Always display trailing digits in an identifier, optionally
         preceded by "_", as a subscript.  Treat the final "_" in an
         identifier as introducing a subscript if it is followed by
-        (the name of) a single character.
-        Ignore <code>fancy_lower_digits</code>.</li>
+        (the name of) a single character.  As a special case, display
+        <code>identifier_bar</code> as
+        \(\overline{\mathit{identifier}}\) (for
+        any <code>identifier</code>).  See the examples in the table
+        below.  Ignore <code>fancy_lower_digits</code>.</li>
       <li>Display <code>repart</code> and <code>impart</code> as
-      &real; and &image;.</li>
+      \(\Re\) and \(\Im\).</li>
       <li>Line breaking is currently thoroughly broken!</li>
     </ul>
+    <table>
+      <tr><th>Identifier</th><th>Displays as</th></tr>
+      <tr><td><code>my_id123</code></td><td>\(\mathit{my\_id}_{123}\)</td></tr>
+      <tr><td><code>alpha123</code></td><td>\(\alpha_{123}\)</td></tr>
+      <tr><td><code>beta_i</code></td><td>\(\beta_i\)</td></tr>
+      <tr><td><code>gamma_delta</code></td><td>\(\gamma_\delta\)</td></tr>
+      <tr><td><code>my_long_id</code></td><td>\(\mathit{my\_long\_id}\)</td></tr>
+      <tr><td><code>z_bar</code></td><td>\(\bar{z}\)</td></tr>
+      <tr><td><code>complex_variable_bar</code></td>
+        <td>\(\overline{\mathit{complex\_variable}}\)</td></tr>
+    </table>
     <h3>Derivatives</h3>
     <p>
       The (shared) variable <code>fancy_print_df</code> can be set to

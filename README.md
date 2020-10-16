@@ -226,3 +226,9 @@ Run-REDUCE-FX currently uses a bundled copy of
   wording of one of the error alerts, which will appear if the
   printing fails or is cancelled by the user.
 * Update `UserGuide.html`.
+* Detect unreadable directories and files more elegantly and in more
+  fields in the REDUCE Configuration Dialogue.  Fields will be saved
+  up to the first invalid field.
+* v2.16 body_bar -> \bar{body} for a single-character body or
+  \overline{body} for a multi-character body.
+* Update `UserGuide.html`.

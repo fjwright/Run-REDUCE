@@ -15,7 +15,8 @@
 {asinh(x), acosh(x), atanh(x), acsch(x), asech(x), acoth(x)};
 
 % Complex value functions:
-{repart(z), impart(z), conj(z), conj(a+i*b)};
+{repart z, impart z, conj z, conj(a+i*b)};
+let conj z => z_bar; {conj z, conj z_bar, z*z_bar};
 
 % Gamma, Beta and related functions:
 {Gamma(z), Beta(a, b), psi(z), polygamma(n, z), iGamma(a, z), iBeta(a, b, x), dilog(z),
