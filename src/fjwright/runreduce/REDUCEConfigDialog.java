@@ -1,5 +1,6 @@
 package fjwright.runreduce;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -16,7 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,12 +63,9 @@ public class REDUCEConfigDialog {
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        // The order of the next statements seems to be critical!
-//        listView.getSelectionModel().selectedItemProperty().removeListener(this::listViewListener);
-        if (init) setListViewItems(); // Swap with statement below to fix reset breaks select bug?
-        listView.getSelectionModel().selectFirst(); // DON'T WANT THIS TO DO ANY CHECKING OR SAVING
+        if (init) setListViewItems();
+        listView.getSelectionModel().selectFirst();
         showREDUCECommand(reduceCommandList.get(0));
-//        listView.getSelectionModel().selectedItemProperty().addListener(this::listViewListener);
     }
 
     @FXML
@@ -76,7 +73,7 @@ public class REDUCEConfigDialog {
         commandTextFieldArray = new TextField[]{commandPathNameTextField,
                 arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField};
         setupDialog(RunREDUCE.reduceConfiguration, true);
-        listView.getSelectionModel().selectedItemProperty().addListener(this::listViewListener);
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
         createCommandArgFCButtons();
     }
 
@@ -85,23 +82,26 @@ public class REDUCEConfigDialog {
      * will be lost, and display the new REDUCE command from reduceCommandList.
      * Abort the switch in case of errors in the old command.
      */
-    private void listViewListener(ObservableValue<? extends String> ov, String old_val, String new_val) {
-        if (old_val != null) {
-//            try {
-            saveREDUCECommand(old_val);
-//            } catch (FileNotFoundException e) {
-//                listView.getSelectionModel().selectedItemProperty().removeListener(this::listViewListener);
-//                listView.getSelectionModel().select(old_val); // DON'T WANT THIS TO DO ANY CHECKING OR SAVING
-//                listView.getSelectionModel().selectedItemProperty().addListener(this::listViewListener);
-//                return;
-//            }
-        }
-        for (REDUCECommand cmd : reduceCommandList)
-            if (cmd.name.equals(new_val)) {
-                showREDUCECommand(cmd);
-                break;
+    private final ChangeListener<String> listViewListener = new ChangeListener<>() {
+        @Override
+        public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
+            if (old_val != null) {
+                try {
+                    saveREDUCECommand(old_val);
+                } catch (FileNotFoundException e) {
+                    ov.removeListener(this);
+                    listView.getSelectionModel().select(old_val); // Don't want this to do any checking or saving
+                    ov.addListener(this);
+                    return;
+                }
             }
-    }
+            for (REDUCECommand cmd : reduceCommandList)
+                if (cmd.name.equals(new_val)) {
+                    showREDUCECommand(cmd);
+                    break;
+                }
+        }
+    };
 
     /**
      * Reset all configuration data to the default.
@@ -212,28 +212,28 @@ public class REDUCEConfigDialog {
      * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or alwaysCheck == true.
      * If not throw an exception.
      */
-//    private String fileOrDirReadableCheck(String fileOrDir, boolean alwaysCheck) throws FileNotFoundException {
-//        String localFileOrDir;
-//        // Replace $REDUCE/ or $REDUCE\ in local copy of fileOrDir:
-//        if (fileOrDir.startsWith("$REDUCE")) {
-//            localFileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
-//                    resolve(fileOrDir.substring(8)).toString();
-//            alwaysCheck = true;
-//        } else localFileOrDir = fileOrDir;
-//        if (alwaysCheck && !new File(localFileOrDir).canRead()) {
-//            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
-//                    fileOrDir + "\ndoes not exist or is not accessible.");
-//            throw new FileNotFoundException();
-//        }
-//        return fileOrDir;
-//    }
+    private String fileOrDirReadableCheck(String fileOrDir, boolean alwaysCheck) throws FileNotFoundException {
+        String localFileOrDir;
+        // Replace $REDUCE/ or $REDUCE\ in local copy of fileOrDir:
+        if (fileOrDir.startsWith("$REDUCE")) {
+            localFileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
+                    resolve(fileOrDir.substring(8)).toString();
+            alwaysCheck = true;
+        } else localFileOrDir = fileOrDir;
+        if (alwaysCheck && !new File(localFileOrDir).canRead()) {
+            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
+                    fileOrDir + "\ndoes not exist or is not accessible.");
+            throw new FileNotFoundException();
+        }
+        return fileOrDir;
+    }
 
     /**
      * Save the command-specific text fields in the dialogue
      * to the specified REDUCE command in reduceCommandList.
      * This is a local save; nothing is saved back to Run-REDUCE.
      */
-    private void saveREDUCECommand(String commandName) /*throws FileNotFoundException*/ {
+    private void saveREDUCECommand(String commandName) throws FileNotFoundException {
         REDUCECommand cmd = null;
         for (REDUCECommand c : reduceCommandList)
             if (c.name.equals(commandName)) {
@@ -241,21 +241,18 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
-        cmd.name = commandNameTextField.getText().trim(); // redundant since used as test in loop above!
+//        cmd.name = commandNameTextField.getText().trim(); // redundant since used as test in loop above!
         cmd.rootDir = commandRootDirTextField.getText().trim();
-        // Do not save blank arguments:
-        cmd.command = Arrays.stream(commandTextFieldArray).map(e -> e.getText().trim())
-                .filter(e -> !e.isEmpty()).toArray(String[]::new);
         // Do not check or save blank arguments:
-//        String field = commandRootDirTextField.getText().trim();
-//        if (!field.isEmpty()) cmd.rootDir = directoryReadableCheck(field);
-//        // Must replace the whole command array because its length may have changed:
-//        List<String> commandList = new ArrayList<>();
-//        for (int i = 0; i < commandTextFieldArray.length; i++) {
-//            String element = commandTextFieldArray[i].getText().trim();
-//            if (!element.isEmpty()) commandList.add(fileOrDirReadableCheck(element, i == 0));
-//        }
-//        cmd.command = commandList.toArray(new String[0]);
+        String field = commandRootDirTextField.getText().trim();
+        if (!field.isEmpty()) cmd.rootDir = directoryReadableCheck(field);
+        // Must replace the whole command array because its length may have changed:
+        List<String> commandList = new ArrayList<>();
+        for (int i = 0; i < commandTextFieldArray.length; i++) {
+            String element = commandTextFieldArray[i].getText().trim();
+            if (!element.isEmpty()) commandList.add(fileOrDirReadableCheck(element, i == 0));
+        }
+        cmd.command = commandList.toArray(new String[0]);
     }
 
     @FXML
