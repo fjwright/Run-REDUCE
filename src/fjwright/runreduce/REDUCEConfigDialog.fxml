@@ -103,7 +103,7 @@
             <Insets bottom="10.0" top="10.0"/>
         </padding>
         <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER"/>
-        <ListView fx:id="listView" editable="true" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
+        <ListView fx:id="listView" editable="false" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
                   GridPane.rowIndex="1"/>
         <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command"
                 GridPane.halignment="CENTER" GridPane.rowIndex="2">
