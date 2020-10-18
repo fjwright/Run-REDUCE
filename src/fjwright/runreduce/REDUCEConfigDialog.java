@@ -43,6 +43,11 @@ public class REDUCEConfigDialog {
     private static REDUCECommandList reduceCommandList; // local copy
 
     private void setListViewItems() {
+        // From ListView documentation:
+        // The elements of the ListView are contained within the items ObservableList.
+        // This ObservableList is automatically observed by the ListView, such that any changes
+        // that occur inside the ObservableList will be automatically shown in the ListView itself.
+        // *** Therefore, this method should be called only once to initialize the ListView. ***
         listView.setItems(FXCollections.observableArrayList(
                 reduceCommandList.stream().map(cmd -> cmd.name).collect(Collectors.toList())));
     }
@@ -51,7 +56,7 @@ public class REDUCEConfigDialog {
      * Assign all generic fields and specific fields for the first REDUCE command.
      * Called by initialize() and resetAllDefaultsButtonAction() only.
      */
-    private void setupDialog(REDUCEConfigurationType reduceConfiguration) {
+    private void setupDialog(REDUCEConfigurationType reduceConfiguration, boolean init) {
         reduceRootDirTextField.setText(reduceConfiguration.reduceRootDir);
         packagesDirTextField.setText(reduceConfiguration.packagesDir);
         manualDirTextField.setText(reduceConfiguration.manualDir);
@@ -60,7 +65,7 @@ public class REDUCEConfigDialog {
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
         // The order of the next statements seems to be critical!
 //        listView.getSelectionModel().selectedItemProperty().removeListener(this::listViewListener);
-        setListViewItems(); // Swap with statement below to fix reset breaks select bug?
+        if (init) setListViewItems(); // Swap with statement below to fix reset breaks select bug?
         listView.getSelectionModel().selectFirst(); // DON'T WANT THIS TO DO ANY CHECKING OR SAVING
         showREDUCECommand(reduceCommandList.get(0));
 //        listView.getSelectionModel().selectedItemProperty().addListener(this::listViewListener);
@@ -70,7 +75,7 @@ public class REDUCEConfigDialog {
     private void initialize() {
         commandTextFieldArray = new TextField[]{commandPathNameTextField,
                 arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField};
-        setupDialog(RunREDUCE.reduceConfiguration);
+        setupDialog(RunREDUCE.reduceConfiguration, true);
         listView.getSelectionModel().selectedItemProperty().addListener(this::listViewListener);
         createCommandArgFCButtons();
     }
@@ -83,7 +88,7 @@ public class REDUCEConfigDialog {
     private void listViewListener(ObservableValue<? extends String> ov, String old_val, String new_val) {
         if (old_val != null) {
 //            try {
-                saveREDUCECommand(old_val);
+            saveREDUCECommand(old_val);
 //            } catch (FileNotFoundException e) {
 //                listView.getSelectionModel().selectedItemProperty().removeListener(this::listViewListener);
 //                listView.getSelectionModel().select(old_val); // DON'T WANT THIS TO DO ANY CHECKING OR SAVING
@@ -103,7 +108,7 @@ public class REDUCEConfigDialog {
      */
     @FXML
     private void resetAllDefaultsButtonAction() {
-        setupDialog(RunREDUCE.reduceConfigurationDefault);
+        setupDialog(RunREDUCE.reduceConfigurationDefault, false);
     }
 
     /**
