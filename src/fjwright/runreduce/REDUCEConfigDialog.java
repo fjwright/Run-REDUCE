@@ -63,8 +63,10 @@ public class REDUCEConfigDialog {
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        if (init) setListViewItems();
-        listView.getSelectionModel().selectFirst();
+        if (init) setListViewItems(); // Need reduceCommandList to be set.
+        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectFirst(); // Don't want this to do any checking or saving.
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
         showREDUCECommand(reduceCommandList.get(0));
     }
 
@@ -73,7 +75,6 @@ public class REDUCEConfigDialog {
         commandTextFieldArray = new TextField[]{commandPathNameTextField,
                 arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField};
         setupDialog(RunREDUCE.reduceConfiguration, true);
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
         createCommandArgFCButtons();
     }
 
@@ -90,7 +91,7 @@ public class REDUCEConfigDialog {
                     saveREDUCECommand(old_val);
                 } catch (FileNotFoundException e) {
                     ov.removeListener(this);
-                    listView.getSelectionModel().select(old_val); // Don't want this to do any checking or saving
+                    listView.getSelectionModel().select(old_val); // Don't want this to do any checking or saving.
                     ov.addListener(this);
                     return;
                 }
