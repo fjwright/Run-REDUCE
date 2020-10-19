@@ -180,56 +180,40 @@ Run-REDUCE-FX currently uses a bundled copy of
   * Support Struve, Lommel, Kummer, Whittaker and spherical harmonic
     functions, and the classical orthogonal polynomials.
 
-### Updates since last release
+### Version 2.2
 
-* Retain compatibility with tmprint so that `excalc.tst` now runs.
-  Add a test directory containing `symbols_and_functions.tst`.
-* Internal discretionary times -> \, since otherwise x*y is
-  indistinguishable from xy.  Save raw session log to a `.html` file
-  rather than a `.log` file.
 * Remove the middle mouse button binding for the pop-up keyboard,
-  since it clashes with the X Window primary paste gesture (which
-  doesn't work anyway).  Add some comments to rrprint.
-* v2.11 Update `UserGuide.html` and add a new section on Editing.
-* Allow `print_indexed` to be used as a declaration without
-  parentheses even for multiple arguments.  Separate `print_indexed`
-  subscripts with commas, which are unambiguous, rather than spaces
-  (from \*).  To be copied over to tmprint (probably).
-* v2.12 Update `UserGuide.html` and add a new section on Controlling
-  Typeset Maths Display, which uses KaTeX from a CDN.
-* Output strings as text rather than maths and identifiers using
-  mathit.  Support the dfprint switch.
-* Treat trailing digits in an identifier (optionally preceded by _) as
-  a subscript.  Treat the final _ in an identifier as introducing a
-  subscript if it followed by (the name of) a single character.
-* v2.13 In procedure fancy!-prefix!-operator, replace fancy!-prin2!*
-  with fancy!-maprint!-identifier, which ensures that operator
-  identifiers are subscripted like non-operator identifiers.  Note
-  that line breaking is now thoroughly broken!
-* In scrollWebViewToBottom(), scroll to the bottom of the
-  documentElement, i.e. <html>, rather than the body element, which
-  was not always scrolling to the bottom of the display.
-* Display repart and impart as \Re and \Im.
-* Display matrices more readably by using \displaystyle for each
-  element and increasing the row spacing to 1.5em.
-* v2.14 Update `UserGuide.html`.
-* Add a Kill REDUCE item to the bottom of the REDUCE menu.
-* Check that REDUCE is alive before trying to send it input.  Display
-  an information alert when REDUCE is killed and an error message if
-  this may have failed.
-* Handle failure of REDUCE to start better.
-* Use \ as directory separator in the Windows default configuration
-  and make reset configuration button work correctly even if the first
-  command in the list is not currently selected.
-* v2.15 Change a print alert from CONFIRMATION to INFORMATION, since
-  it only makes sense to acknowledge this dialogue, and revise the
-  wording of one of the error alerts, which will appear if the
-  printing fails or is cancelled by the user.
-* Update `UserGuide.html`.
-* Detect unreadable directories and files more elegantly and in more
-  fields in the REDUCE Configuration Dialogue.
-* v2.16 body_bar -> \bar{body} for a single-character body or
-  \overline{body} for a multi-character body.
-* Update `UserGuide.html`.
-* Substantial revision of REDUCEConfigDialog to fix a number of bugs.
-* v2.17 Display the version number on the title bar.
+  since it clashes with the X Window primary paste gesture (although
+  this is not supported).
+* Scroll more reliably to the bottom of the REDUCE I/O display window.
+* Add a Kill REDUCE item to the bottom of the REDUCE menu.  Display an
+  information alert when REDUCE is killed and an error message if this
+  may have failed.  Handle failure of REDUCE to start better and check
+  that REDUCE is alive before trying to send it input.
+* Improve alerts relating to printing.
+* Display the version number on the title bar.
+* Add new sections on Editing, Typeset Maths Display and Printing on
+  Linux to the User Guide.
+* Typeset maths improvements:
+  * Restore compatibility with tmprint so that `excalc.tst` runs.
+  * Use a narrow space to indicate multiplication (except at the end of
+    a line) because with no space x*y is indistinguishable from xy.
+  * Output strings as text rather than maths and identifiers using
+    mathit.  Support the dfprint switch.
+  * Treat trailing digits in an identifier (optionally preceded by \_)
+    as a subscript.  Treat the final _ in an identifier as introducing
+    a subscript if it is followed by (the name of) a single character.
+    But as a special case, display body_bar as \bar{body} for a
+    single-character body or \overline{body} for a multi-character
+    body.
+  * Ensure that operator identifiers are subscripted like non-operator
+    identifiers.  Note that line breaking is thoroughly broken!
+  * Display repart and impart as \Re and \Im.
+  * Display matrices more readably by using \displaystyle for each
+    element and increasing the row spacing to 1.5em.
+* REDUCE Configuration Dialogue improvements:
+  * Use \ as directory separator in the Windows default configuration.
+  * Detect unreadable directories and files in more fields.
+  * Substantial revision to fix some subtle misbehaviour.
+
+### Updates since last release
