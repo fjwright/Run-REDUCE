@@ -3,6 +3,7 @@ package fjwright.runreduce;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -41,6 +42,7 @@ public class REDUCEConfigDialog {
 
     private static TextField[] commandTextFieldArray;
     private static REDUCECommandList reduceCommandList; // local copy
+    private static ObservableList<String> listViewObservableList;
 
     private void setListViewItems() {
         // From ListView documentation:
@@ -48,7 +50,7 @@ public class REDUCEConfigDialog {
         // This ObservableList is automatically observed by the ListView, such that any changes
         // that occur inside the ObservableList will be automatically shown in the ListView itself.
         // *** Therefore, this method should be called only once to initialize the ListView. ***
-        listView.setItems(FXCollections.observableArrayList(
+        listView.setItems(listViewObservableList = FXCollections.observableArrayList(
                 reduceCommandList.stream().map(cmd -> cmd.name).collect(Collectors.toList())));
     }
 
@@ -110,6 +112,8 @@ public class REDUCEConfigDialog {
     @FXML
     private void resetAllDefaultsButtonAction() {
         setupDialog(RunREDUCE.reduceConfigurationDefault, false);
+        for (int i = 0; i < reduceCommandList.size(); i++)
+            listViewObservableList.set(i, reduceCommandList.get(i).name);
     }
 
     /**
@@ -270,9 +274,11 @@ public class REDUCEConfigDialog {
     @FXML
     private void commandNameTextFieldAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        reduceCommandList.get(selectedIndex).name = commandNameTextField.getText().trim();
-        setListViewItems();
-        listView.getSelectionModel().select(selectedIndex);
+        String text = commandNameTextField.getText().trim();
+        reduceCommandList.get(selectedIndex).name = text;
+        listViewObservableList.set(selectedIndex, text);
+//        setListViewItems();
+//        listView.getSelectionModel().select(selectedIndex);
     }
 
     /**
