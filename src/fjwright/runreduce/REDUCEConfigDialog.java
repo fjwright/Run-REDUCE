@@ -44,40 +44,37 @@ public class REDUCEConfigDialog {
     private static REDUCECommandList reduceCommandList; // local copy
     private static ObservableList<String> listViewObservableList;
 
-    private void setListViewItems() {
+    @FXML
+    private void initialize() {
+        commandTextFieldArray = new TextField[]{commandPathNameTextField,
+                arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField};
         // From ListView documentation:
         // The elements of the ListView are contained within the items ObservableList.
         // This ObservableList is automatically observed by the ListView, such that any changes
         // that occur inside the ObservableList will be automatically shown in the ListView itself.
-        // *** Therefore, this method should be called only once to initialize the ListView. ***
-        listView.setItems(listViewObservableList = FXCollections.observableArrayList(
-                reduceCommandList.stream().map(cmd -> cmd.name).collect(Collectors.toList())));
+        // *** Therefore, call listView.setItems() only once to initialize the ListView. ***
+        listView.setItems(listViewObservableList = FXCollections.observableArrayList());
+        setupDialog(RunREDUCE.reduceConfiguration);
+        createCommandArgFCButtons();
     }
 
     /**
      * Assign all generic fields and specific fields for the first REDUCE command.
      * Called by initialize() and resetAllDefaultsButtonAction() only.
      */
-    private void setupDialog(REDUCEConfigurationType reduceConfiguration, boolean init) {
+    private void setupDialog(REDUCEConfigurationType reduceConfiguration) {
         reduceRootDirTextField.setText(reduceConfiguration.reduceRootDir);
         packagesDirTextField.setText(reduceConfiguration.packagesDir);
         manualDirTextField.setText(reduceConfiguration.manualDir);
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        if (init) setListViewItems(); // Need reduceCommandList to be set.
         listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
-        listView.getSelectionModel().selectFirst(); // Don't want this to do any checking or saving.
+        listViewObservableList.setAll(
+                reduceCommandList.stream().map(cmd -> cmd.name).collect(Collectors.toList()));
+        listView.getSelectionModel().selectFirst();
         listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
         showREDUCECommand(reduceCommandList.get(0));
-    }
-
-    @FXML
-    private void initialize() {
-        commandTextFieldArray = new TextField[]{commandPathNameTextField,
-                arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField};
-        setupDialog(RunREDUCE.reduceConfiguration, true);
-        createCommandArgFCButtons();
     }
 
     /**
@@ -107,13 +104,21 @@ public class REDUCEConfigDialog {
     };
 
     /**
+     * Select a ListView item by index after first removing listViewListener
+     * to avoid any checking or saving, then add listViewListener.
+     */
+    private void listViewSelectIndexRemoveAddListener(int index) {
+        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().select(index);
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+    }
+
+    /**
      * Reset all configuration data to the default.
      */
     @FXML
     private void resetAllDefaultsButtonAction() {
-        setupDialog(RunREDUCE.reduceConfigurationDefault, false);
-        for (int i = 0; i < reduceCommandList.size(); i++)
-            listViewObservableList.set(i, reduceCommandList.get(i).name);
+        setupDialog(RunREDUCE.reduceConfigurationDefault);
     }
 
     /**
@@ -123,11 +128,11 @@ public class REDUCEConfigDialog {
     private void deleteCommandButtonAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         reduceCommandList.remove(selectedIndex);
-        setListViewItems();
+        listViewObservableList.remove(selectedIndex);
         int size = reduceCommandList.size(); // new size!
         if (size > 0) {
             if (selectedIndex == size) selectedIndex--;
-            listView.getSelectionModel().select(selectedIndex);
+            listViewSelectIndexRemoveAddListener(selectedIndex);
             showREDUCECommand(reduceCommandList.get(selectedIndex));
         } else
             addCommandButtonAction();
@@ -144,8 +149,8 @@ public class REDUCEConfigDialog {
         REDUCECommand newCmd = new REDUCECommand(
                 oldCmd.name + " New", oldCmd.rootDir, oldCmd.command);
         reduceCommandList.add(selectedIndex, newCmd);
-        setListViewItems();
-        listView.getSelectionModel().select(selectedIndex);
+        listViewObservableList.add(selectedIndex, newCmd.name);
+        listViewSelectIndexRemoveAddListener(selectedIndex);
         showREDUCECommand(newCmd);
     }
 
@@ -156,8 +161,8 @@ public class REDUCEConfigDialog {
     private void addCommandButtonAction() {
         REDUCECommand newCmd = new REDUCECommand("New Command");
         reduceCommandList.add(newCmd);
-        setListViewItems();
-        listView.getSelectionModel().selectLast();
+        listViewObservableList.add(newCmd.name);
+        listViewSelectIndexRemoveAddListener(listViewObservableList.size() - 1);
         showREDUCECommand(newCmd);
     }
 
@@ -177,7 +182,7 @@ public class REDUCEConfigDialog {
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
         // Write form data back to REDUCEConfiguration
-        // after validating generic root directory fields:
+        // after validating directory and file fields:
         try {
             RunREDUCE.reduceConfiguration.reduceRootDir =
                     directoryReadableCheck(reduceRootDirTextField.getText());
@@ -246,7 +251,6 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
-//        cmd.name = commandNameTextField.getText().trim(); // redundant since used as test in loop above!
         cmd.rootDir = commandRootDirTextField.getText().trim();
         // Do not check or save blank arguments:
         String field = commandRootDirTextField.getText().trim();
@@ -269,7 +273,7 @@ public class REDUCEConfigDialog {
     }
 
     /**
-     * Update the ListView when the command name TextField is edited.
+     * Update reduceCommandList and the ListView when the command name TextField is edited.
      */
     @FXML
     private void commandNameTextFieldAction() {
@@ -277,8 +281,6 @@ public class REDUCEConfigDialog {
         String text = commandNameTextField.getText().trim();
         reduceCommandList.get(selectedIndex).name = text;
         listViewObservableList.set(selectedIndex, text);
-//        setListViewItems();
-//        listView.getSelectionModel().select(selectedIndex);
     }
 
     /**
