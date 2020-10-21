@@ -124,7 +124,7 @@ public class REDUCEPanel extends BorderPane {
         colouredIOState = RRPreferences.colouredIOState;
         typesetMathsState = RRPreferences.typesetMathsState;
 
-        outputWebView.setContextMenuEnabled(false);
+        outputWebView.setContextMenuEnabled(false); // Cannot be done in FXML!
         webEngine = outputWebView.getEngine();
 
         // See https://katex.org/docs/browser.html
@@ -133,7 +133,7 @@ public class REDUCEPanel extends BorderPane {
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
-                "<style>pre{margin:0}</style>" +
+                "<style>pre{margin:0}html{margin-bottom:15px}</style>" +
                 "</head><body></body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {

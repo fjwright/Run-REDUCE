@@ -63,6 +63,8 @@ public class RunREDUCE extends Application {
         primaryStage.setTitle(String.format("Run-REDUCE-FX (v%s)", RunREDUCEFrame.VERSION));
         primaryStage.setScene(new Scene(root, initialFrameSize.getWidth(), initialFrameSize.getHeight()));
         primaryStage.show();
+        primaryStage.setMinWidth(500);
+        primaryStage.setMinHeight(375);
 
         // REDUCE I/O requires a monospaced font:
         // Only "system" fonts (in C:\Windows\Fonts) are found, not
