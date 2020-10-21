@@ -45,7 +45,7 @@
         <Label style="-fx-font-weight: bold;" text="Generic information for all REDUCE commands:"
                GridPane.columnSpan="2147483647"/>
         <Label text="REDUCE Root Directory" GridPane.rowIndex="1"/>
-        <TextField fx:id="reduceRootDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="reduceRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
                 <Tooltip
                         text="As an optional convenience, specify a root directory path&#10;that provides a default for all command root directories."/>
@@ -54,7 +54,7 @@
         <Button mnemonicParsing="false" onAction="#reduceRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="1"/>
         <Label text="REDUCE Packages Directory" GridPane.rowIndex="2"/>
-        <TextField fx:id="packagesDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <TextField fx:id="packagesDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
                 <Tooltip text="A directory containing the standard REDUCE packages: alg, algint, arith, etc."/>
             </tooltip>
@@ -62,7 +62,7 @@
         <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="2"/>
         <Label text="REDUCE Manual Directory" GridPane.rowIndex="3"/>
-        <TextField fx:id="manualDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <TextField fx:id="manualDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="A directory containing the REDUCE User's Manual."/>
             </tooltip>
@@ -70,7 +70,7 @@
         <Button mnemonicParsing="false" onAction="#manualDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="3"/>
         <Label text="REDUCE Primers Directory" GridPane.rowIndex="4"/>
-        <TextField fx:id="primersDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <TextField fx:id="primersDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip
                         text="A directory containing Inside Reduce, the REDUCE Symbolic Mode Primer, and the Standard Lisp Report."/>
@@ -79,7 +79,7 @@
         <Button mnemonicParsing="false" onAction="#primersDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="4"/>
         <Label text="REDUCE Working Directory" GridPane.rowIndex="5"/>
-        <TextField fx:id="workingDirTextField" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <TextField fx:id="workingDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
                 <Tooltip text="The initial working directory for REDUCE and the file choosers used by the File menu."/>
             </tooltip>

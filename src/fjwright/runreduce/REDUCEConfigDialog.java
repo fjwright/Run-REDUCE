@@ -183,17 +183,24 @@ public class REDUCEConfigDialog {
     private void saveButtonAction(ActionEvent actionEvent) {
         // Write form data back to REDUCEConfiguration
         // after validating directory and file fields:
+        String s;
         try {
+            // Optional:
             RunREDUCE.reduceConfiguration.reduceRootDir =
-                    directoryReadableCheck(reduceRootDirTextField.getText());
+                    directoryTextFieldReadableCheck(reduceRootDirTextField);
+            // All required:
+            s = directoryTextFieldReadableCheck(packagesDirTextField);
             RunREDUCE.reduceConfiguration.packagesDir =
-                    directoryReadableCheck(packagesDirTextField.getText());
+                    s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.packagesDir : s;
+            s = directoryTextFieldReadableCheck(manualDirTextField);
             RunREDUCE.reduceConfiguration.manualDir =
-                    directoryReadableCheck(manualDirTextField.getText());
+                    s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.manualDir : s;
+            s = directoryTextFieldReadableCheck(primersDirTextField);
             RunREDUCE.reduceConfiguration.primersDir =
-                    directoryReadableCheck(primersDirTextField.getText());
+                    s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.primersDir : s;
+            s = directoryTextFieldReadableCheck(workingDirTextField);
             RunREDUCE.reduceConfiguration.workingDir =
-                    directoryReadableCheck(workingDirTextField.getText());
+                    s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.workingDir : s;
             saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
             RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
             RunREDUCE.reduceConfiguration.save();
@@ -209,8 +216,9 @@ public class REDUCEConfigDialog {
     /**
      * Check that dir is a readable directory and if not throw an exception.
      */
-    private String directoryReadableCheck(String dir) throws FileNotFoundException {
-        if (new File(dir).canRead()) return dir;
+    private String directoryTextFieldReadableCheck(TextField dirTextField) throws FileNotFoundException {
+        String dir = dirTextField.getText().trim();
+        if (dir.isEmpty() || new File(dir).canRead()) return dir;
         else {
             RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
                     "The directory\n" + dir + "\ndoes not exist or is not accessible.");
@@ -222,12 +230,12 @@ public class REDUCEConfigDialog {
      * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or alwaysCheck == true.
      * If not throw an exception.
      */
-    private String fileOrDirReadableCheck(String fileOrDir, boolean alwaysCheck) throws FileNotFoundException {
-        String localFileOrDir;
+    private String fileOrDirTextFieldReadableCheck(TextField fileOrDirTextField, String commandRootDir,
+                                                   boolean alwaysCheck) throws FileNotFoundException {
+        String localFileOrDir, fileOrDir = fileOrDirTextField.getText().trim();
         // Replace $REDUCE/ or $REDUCE\ in local copy of fileOrDir:
         if (fileOrDir.startsWith("$REDUCE")) {
-            localFileOrDir = Paths.get(RunREDUCE.reduceConfiguration.reduceRootDir).
-                    resolve(fileOrDir.substring(8)).toString();
+            localFileOrDir = Paths.get(commandRootDir).resolve(fileOrDir.substring(8)).toString();
             alwaysCheck = true;
         } else localFileOrDir = fileOrDir;
         if (alwaysCheck && !new File(localFileOrDir).canRead()) {
@@ -251,15 +259,15 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
-        cmd.rootDir = commandRootDirTextField.getText().trim();
-        // Do not check or save blank arguments:
-        String field = commandRootDirTextField.getText().trim();
-        if (!field.isEmpty()) cmd.rootDir = directoryReadableCheck(field);
+        cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+        String commandRootDir =
+                cmd.rootDir.isEmpty() ? reduceRootDirTextField.getText().trim() : cmd.rootDir;
         // Must replace the whole command array because its length may have changed:
         List<String> commandList = new ArrayList<>();
         for (int i = 0; i < commandTextFieldArray.length; i++) {
-            String element = commandTextFieldArray[i].getText().trim();
-            if (!element.isEmpty()) commandList.add(fileOrDirReadableCheck(element, i == 0));
+            String element = fileOrDirTextFieldReadableCheck(
+                    commandTextFieldArray[i], commandRootDir, i == 0);
+            if (!element.isEmpty()) commandList.add(element);
         }
         cmd.command = commandList.toArray(new String[0]);
     }
