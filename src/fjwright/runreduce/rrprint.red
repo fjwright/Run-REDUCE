@@ -186,8 +186,10 @@ symbolic procedure fancy!-out!-item(it);
       for i:=1:cdr it do prin2 " "
     else
   if eqcar(it,'bkt) then
-     begin scalar m,b,l; integer n;
-      m:=cadr it; b:=caddr it; n:=cadddr it;
+%     begin scalar m,b,l; integer n;
+%      m:=cadr it; b:=caddr it; n:=cadddr it;
+     begin scalar b, l;
+      b := caddr it;
       l := b member '( !( !{ );
    %  if m then prin2 if l then "\left" else "\right"
    % else
@@ -207,7 +209,6 @@ symbolic procedure set!-fancymode bool;
   if bool neq !*fancy!-mode then
     <<!*fancy!-mode:=bool;
       fancy!-pos!* :=0;
-      fancy!-texpos:=0;
       fancy!-page!*:=nil;
       fancy!-line!*:=nil;
       overflowed!* := nil;
@@ -406,8 +407,7 @@ symbolic procedure fancy!-terpri!* u;
    <<
      if fancy!-line!* then
          fancy!-page!* := fancy!-line!* . fancy!-page!*;
-     fancy!-pos!* :=tablevel!* * 10;
-     fancy!-texpos := tablevel!* * 30000; % Roughly 1 cm
+     fancy!-pos!* := tablevel!* * 10;
      fancy!-line!*:= {'tab . tablevel!*};
      overflowed!* := nil
    >>;
@@ -431,14 +431,14 @@ symbolic procedure fancy!-terpri!* u;
 symbolic procedure fancy!-begin();
   % collect current status of fancy output. Return as a list
   % for later recovery.
-  {fancy!-pos!*,fancy!-line!*,fancy!-texpos};
+  {fancy!-pos!*,fancy!-line!*};
 
 symbolic procedure fancy!-end(r,s);
   % terminates a fancy print sequence. Eventually resets
   % the output status from status record <s> if the result <r>
   % signals an overflow.
   <<if r='failed then
-     <<fancy!-line!*:=car s; fancy!-pos!*:=cadr s;fancy!-texpos:=caddr s>>;
+     <<fancy!-line!*:=car s; fancy!-pos!*:=cadr s>>;
      r>>;
 
 symbolic procedure fancy!-mode u;
@@ -461,11 +461,11 @@ symbolic procedure fancy!-maprint(l,p!*!*);
    % print line.  Special cases are handled by:
    %    pprifn: a print function that includes bracket level as 2nd arg.
    %     prifn: a print function with one argument.
-  (begin scalar p,x,w,pos,tpos, fl;
+  (begin scalar p,x,w,pos,fl;
         p := p!*!*;     % p!*!* needed for (expt a (quotient ...)) case.
         if null l then return nil;
         if atom l then return fancy!-maprint!-atom(l,p);
-        pos := fancy!-pos!*; tpos := fancy!-texpos; fl := fancy!-line!*;
+        pos := fancy!-pos!*; fl := fancy!-line!*;
 
         if not atom car l then return fancy!-maprint(car l,p);
 
@@ -482,7 +482,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
           then return nil;
 
         if testing!-width!* and overflowed!*
-           or w='failed then return fancy!-fail(pos,tpos,fl);
+           or w='failed then return fancy!-fail(pos,fl);
 
         % eventually convert expression to a different form
         % for printing.
@@ -514,7 +514,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
         >>;
 
         return if testing!-width!* and overflowed!*
-              or w='failed then fancy!-fail(pos,tpos,fl) else nil;
+              or w='failed then fancy!-fail(pos,fl) else nil;
     end ) where obrkp!*=obrkp!*;
 
 symbolic procedure fancy!-convert(l,m);
@@ -766,8 +766,8 @@ symbolic procedure fancy!-adjust!-bkt!-levels u;
 
 symbolic procedure fancy!-exptpri(l,p);
 % Prints expression in an exponent notation.
-   (begin scalar !*list,pp,w,w1,w2,pos,tpos,fl;
-      pos:=fancy!-pos!*; tpos:=fancy!-texpos; fl:=fancy!-line!*;
+   (begin scalar !*list,pp,w,w1,w2,pos,fl;
+      pos:=fancy!-pos!*; fl:=fancy!-line!*;
       w1 := cadr l; w2 := caddr l;
       pp := eqcar(w1, 'quotient) or
             eqcar(w1, 'expt) or
@@ -784,24 +784,23 @@ symbolic procedure fancy!-exptpri(l,p);
                                    mkquote w1,
                                    get('expt,'infix)},
                                  '!(, '!))='failed
-            then return fancy!-fail(pos,tpos,fl) >>
+            then return fancy!-fail(pos,fl) >>
       else if fancy!-maprint(w1,get('expt,'infix))='failed
-            then return fancy!-fail(pos,tpos,fl);
+            then return fancy!-fail(pos,fl);
      fancy!-prin2!*("^",0);
      if eqcar(w2,'quotient) and fixp cadr w2 and fixp caddr w2 then
       <<fancy!-prin2!*("{",0); w:=fancy!-inprint('!/,0,cdr w2);
                  fancy!-prin2!*("}",0)>>
            else w:=fancy!-maprint!-tex!-bkt(w2,0,nil);
-     if w='failed then return fancy!-fail(pos,tpos,fl) ;
+     if w='failed then return fancy!-fail(pos,fl) ;
     end) where !*ratpri=!*ratpri,
            testing!-width!*=testing!-width!*;
 
 put('expt,'fancy!-pprifn,'fancy!-exptpri);
 
 symbolic procedure fancy!-inprint(op,p,l);
-  (begin scalar x,y,w, pos,tpos,fl;
+  (begin scalar x,y,w, pos,fl;
      pos:=fancy!-pos!*;
-     tpos:= fancy!-texpos;
      fl:=fancy!-line!*;
       % print product of quotients using *.
      if op = 'times and eqcar(car l,'quotient) and
@@ -834,7 +833,7 @@ symbolic procedure fancy!-inprint(op,p,l);
           l := cdr l
       >>;
      if testing!-width!* and (overflowed!* or w='failed)
-            then return fancy!-fail(pos,tpos,fl);
+            then return fancy!-fail(pos,fl);
      if !*list and obrkp!* and memq(op,'(plus minus)) then
         <<sumlevel!*:=sumlevel!*+1;
           tablevel!* := tablevel!* + 1>>;
@@ -842,7 +841,7 @@ symbolic procedure fancy!-inprint(op,p,l);
           % main line:
          fancy!-inprint1(op,p,l)
      else w:=fancy!-inprint2(op,p,l);
-     if testing!-width!* and w='failed then return fancy!-fail(pos,tpos,fl);
+     if testing!-width!* and w='failed then return fancy!-fail(pos,fl);
    end
    ) where tablevel!*=tablevel!*, sumlevel!*=sumlevel!*;
 
@@ -1029,27 +1028,22 @@ symbolic procedure fancy!-boolvalpri u;
 put('boolvalue!*,'fancy!-prifn,'fancy!-boolvalpri);
 
 symbolic procedure fancy!-quotpri u;
-   begin scalar n1,n2,n1t,n2t,fl,w,pos,tpos,testing!-width!*,!*list;
+   begin scalar n1,n2,fl,w,pos,testing!-width!*,!*list;
      if overflowed!* or (!*acn and !*list) then return 'failed;
      testing!-width!*:=t;
      pos:=fancy!-pos!*;
-     tpos:=fancy!-texpos;
      fl:=fancy!-line!*;
      fancy!-prin2!*("\frac",0);
      w:=fancy!-maprint!-tex!-bkt(cadr u,0,t);
      n1 := fancy!-pos!*;
-     n1t := fancy!-texpos;
      if w='failed
-       then return fancy!-fail(pos,tpos,fl);
+       then return fancy!-fail(pos,fl);
      fancy!-pos!* := pos;
-     fancy!-texpos := tpos;
      w := fancy!-maprint!-tex!-bkt(caddr u,0,t);
      n2 := fancy!-pos!*;
-     n2t := fancy!-texpos;
      if w='failed
-       then return fancy!-fail(pos,tpos,fl);
+       then return fancy!-fail(pos,fl);
      fancy!-pos!* := max(n1,n2);
-     fancy!-texpos := max(n1t,n2t);
      return t;
   end;
 
@@ -1057,26 +1051,24 @@ symbolic procedure fancy!-maprint!-tex!-bkt(u,p,m);
   % Produce expression with tex brackets {...} if
   % necessary. Ensure that {} unit is in same formula.
   % If m=t brackets will be inserted in any case.
-  begin scalar w,pos,tpos,fl,testing!-width!*;
+  begin scalar w,pos,fl,testing!-width!*;
     testing!-width!*:=t;
     pos:=fancy!-pos!*;
-    tpos:=fancy!-texpos;
     fl:=fancy!-line!*;
    if not m and (numberp u and 0<=u and u <=9 or liter u) then
    << fancy!-prin2!*(u,t);
-      return if overflowed!* then fancy!-fail(pos,tpos,fl);
+      return if overflowed!* then fancy!-fail(pos,fl);
    >>;
    fancy!-prin2!*("{",0);
    w := fancy!-maprint(u,p);
    fancy!-prin2!*("}",0);
-   if w='failed then return fancy!-fail(pos,tpos,fl);
+   if w='failed then return fancy!-fail(pos,fl);
   end;
 
-symbolic procedure fancy!-fail(pos,tpos,fl);
+symbolic procedure fancy!-fail(pos,fl);
  <<
      overflowed!* := nil;
      fancy!-pos!* := pos;
-     fancy!-texpos := tpos;
      fancy!-line!* := fl;
      'failed
  >>;
@@ -1086,11 +1078,10 @@ put('quotient,'fancy!-prifn,'fancy!-quotpri);
 symbolic procedure fancy!-prinfit(u, p, op);
 % Display u (as with maprint) with op in front of it, but starting
 % a new line before it if there would be overflow otherwise.
-   begin scalar pos,tpos,fl,w,ll,f;
+   begin scalar pos,fl,w,ll,f;
      if pairp u and (f:=get(car u,'fancy!-prinfit)) then
         return apply(f,{u,p,op});
      pos:=fancy!-pos!*;
-     tpos:=fancy!-texpos;
      fl:=fancy!-line!*;
      begin scalar testing!-width!*;
        testing!-width!*:=t;
@@ -1098,7 +1089,7 @@ symbolic procedure fancy!-prinfit(u, p, op);
        if w neq 'failed then w := fancy!-maprint(u,p);
      end;
      if w neq 'failed then return t;
-     fancy!-line!*:=fl; fancy!-pos!*:=pos; fancy!-texpos:=tpos;
+     fancy!-line!*:=fl; fancy!-pos!*:=pos;
      if testing!-width!* and w eq 'failed then return w;
 
      if op='plus and eqcar(u,'minus) then <<op := 'minus; u:=cadr u>>;
@@ -1676,9 +1667,8 @@ symbolic procedure fancy!-matfit(u,p,op);
 % Prinfit routine for matrix.
 % a new line before it if there would be overflow otherwise.
  fancy!-level
-   begin scalar pos,tpos,fl,fp,w,ll;
+   begin scalar pos,fl,fp,w,ll;
      pos:=fancy!-pos!*;
-     tpos:=fancy!-texpos;
      fl:=fancy!-line!*;
      begin scalar testing!-width!*;
        testing!-width!*:=t;
@@ -1687,7 +1677,7 @@ symbolic procedure fancy!-matfit(u,p,op);
      end;
      if w neq 'failed or
        (w eq 'failed and testing!-width!*) then return w;
-     fancy!-line!*:=fl; fancy!-pos!*:=pos; fancy!-texpos:=tpos; w:=nil;
+     fancy!-line!*:=fl; fancy!-pos!*:=pos; w:=nil;
      fp := fancy!-page!*;
 % matrix: give us a second chance with a fresh line
      begin scalar testing!-width!*;
@@ -1697,7 +1687,7 @@ symbolic procedure fancy!-matfit(u,p,op);
        if w neq 'failed then w := fancy!-matpri u;
      end;
      if w neq 'failed then return t;
-     fancy!-line!*:=fl; fancy!-pos!*:=pos; fancy!-texpos:=tpos; fancy!-page!*:=fp;
+     fancy!-line!*:=fl; fancy!-pos!*:=pos; fancy!-page!*:=fp;
 
      ll:=linelength nil;
      if op then fancy!-oprin op;
