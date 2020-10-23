@@ -516,7 +516,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
             w:=apply(x,{l})
         else
         <<
-           w := fancy!-prefix!-operator l;
+           fancy!-prefix!-operator l;
            obrkp!* := nil;
            if w neq 'failed then
              w:=fancy!-print!-function!-arguments cdr l;
@@ -651,7 +651,7 @@ symbolic procedure fancy!-maprint!-identifier ident;
                % so output body_{subscript} after processing.
                body_symbol := get(intern compress body, 'fancy!-special!-symbol);
                if bar then <<
-                  if body_symbol or null cdr body then 
+                  if body_symbol or null cdr body then
                      fancy!-prin2!*('!\bar!{, 0)
                   else
                      fancy!-prin2!*('!\overline!{, 0)
@@ -1180,11 +1180,12 @@ symbolic procedure fancy!-prefix!-operator(u);
    % FJW Display an operator identifier, possibly as a special symbol
    % that may depend on the arity.
    begin scalar sy;
-      if atom u then
+      if atom u then <<
          % u is the operator identifier, for backward compatibility
-         sy :=
-            get(u, 'fancy!-functionsymbol) or get(u, 'fancy!-special!-symbol)
-      else <<
+         if not((sy := get(u, 'fancy!-functionsymbol))
+            and (atom sy or car sy eq 'ascii)) then
+               sy := get(u, 'fancy!-special!-symbol)
+      >> else <<
          % u is the full sexpr (fn arg1 arg2 ...) for arity checking.
          % fancy!-functionsymbol may be a symbol or an alist of
          % (arity . symbol) pairs.
