@@ -339,8 +339,17 @@ for each x in '(
    !\exp     !\log     !\ln      !\max     !\min     !\Re      !\Im
    ) do put(x, 'texcharwidth, sub1 length explode2 x);
 
+% FJW fancy!-prin2!* should do *all* (virtual) output and record
+% position on the (virtual) line.  It should not do much else!
+
 symbolic procedure fancy!-prin2!*(u,n);
-   if atom u and eqcar(explode2 u,'!\) then <<
+   % Print (internally) u.  If n is a number then it is the width (in characters) of u.
+   if numberp n then <<                 % width provided
+      fancy!-pos!* := fancy!-pos!* + n;
+      if fancy!-pos!* > 2*(linelength nil + 1) then overflowed!* := t; % FJW Why +1?
+      fancy!-line!* := u . fancy!-line!* >>
+   else                                 % compute the width
+      if atom u and eqcar(explode2 u,'!\) then <<
       n := (idp u and get(u, 'texcharwidth)) or
          (stringp u and get(intern u, 'texcharwidth));
       if n then fancy!-pos!* := fancy!-pos!* + n;
@@ -606,12 +615,11 @@ symbolic procedure fancy!-maprint!-identifier ident;
       if null cdr ident then <<
          % A single-character identifier:
          ident := car ident;
-         if liter ident then
-            fancy!-line!* := ident . fancy!-line!*
+         if liter ident then fancy!-prin2!*(ident, 1)
          else <<
-            fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+            fancy!-prin2!*('!\mathit!{, 0);
             fancy!-tex!-character ident;
-            fancy!-line!* := '!} . fancy!-line!*
+            fancy!-prin2!*('!}, 0)
          >>;
          return
       >>;
@@ -644,39 +652,39 @@ symbolic procedure fancy!-maprint!-identifier ident;
                body_symbol := get(intern compress body, 'fancy!-special!-symbol);
                if bar then <<
                   if body_symbol or null cdr body then 
-                     fancy!-line!* := '!\bar!{ . fancy!-line!*
+                     fancy!-prin2!*('!\bar!{, 0)
                   else
-                     fancy!-line!* := '!\overline!{ . fancy!-line!*;
+                     fancy!-prin2!*('!\overline!{, 0)
                >>;
                if body_symbol then
-                  fancy!-line!* := body_symbol . fancy!-line!*
+                  fancy!-prin2!*(body_symbol, 1)
                else <<
-                  fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+                  fancy!-prin2!*('!\mathit!{, 0);
                   for each c in body do fancy!-tex!-character c;
-                  fancy!-line!* := '!} . fancy!-line!*
+                  fancy!-prin2!*('!}, 0)
                >>;
                if bar then <<
-                  fancy!-line!* := '!} . fancy!-line!*;
+                  fancy!-prin2!*('!}, 0);
                   return;
                >>;
-               fancy!-line!* := '!_ . fancy!-line!*;
+               fancy!-prin2!*('!_, 0);
                if digits then <<
-                  fancy!-line!* := '!{ . fancy!-line!*;
-                  for each c in digits do fancy!-line!* := c . fancy!-line!*;
-                  fancy!-line!* := '!} . fancy!-line!*;
+                  fancy!-prin2!*('!{, 0);
+                  for each c in digits do fancy!-prin2!*(c, 1);
+                  fancy!-prin2!*('!}, 0)
                >> else <<
                   if subscript_symbol then
-                     fancy!-line!* := subscript_symbol . fancy!-line!*
+                     fancy!-prin2!*(subscript_symbol, 1)
                   else
-                     fancy!-tex!-character car subscript;
+                     fancy!-tex!-character car subscript
                >>;
                return
             >>;
 
       % No subscript:
-      fancy!-line!* := '!\mathit!{ . fancy!-line!*;
+      fancy!-prin2!*('!\mathit!{, 0);
       for each c in ident do fancy!-tex!-character c;
-      fancy!-line!* := '!} . fancy!-line!*;
+      fancy!-prin2!*('!}, 0);
    end;
 
 fluid '(pound1!* pound2!*);
@@ -697,19 +705,23 @@ blank := '! ;
 tab := '!	;
 
 symbolic procedure fancy!-tex!-character c;
-   %FJW Add a character to fancy!-line!*, handling special TeX
-   % characters appropriately.
-   fancy!-line!* :=
-      if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
-      else if c eq '!~ then '!\text!{!\textasciitilde!} . fancy!-line!*
-      else if c eq '!^ then '!\text!{!\textasciicircum!} . fancy!-line!*
-      else if c eq '!\ then '!\text!{!\textbackslash!} . fancy!-line!*
-      else if c eq blank   then '!~ . fancy!-line!*
-      else if c eq tab     then '!~ . '!~ . fancy!-line!*
-      else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
-      else if c eq pound1!* or c eq pound2!* then
-         '!{!\pound!} . fancy!-line!*
-      else c . fancy!-line!*;
+   % FJW Output a single (inert) character to the (virtual) line,
+   % handling special (active) TeX characters appropriately.
+   <<
+      fancy!-pos!* := add1 fancy!-pos!*;
+      fancy!-line!* :=
+         (if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\
+         else if c eq '!~ then '!\text!{!\textasciitilde!}
+         else if c eq '!^ then '!\text!{!\textasciicircum!}
+         else if c eq '!\ then '!\text!{!\textbackslash!}
+         else if c eq blank   then '!~
+         else if c eq tab     then <<
+            fancy!-pos!* := add1 fancy!-pos!*;
+            '!~ . '!~ >>
+         else if c eq !$eol!$ then '!\!$eol!\!$
+         else if c eq pound1!* or c eq pound2!* then '!{!\pound!}
+         else c) . fancy!-line!*;
+   >>;
 
 symbolic procedure fancy!-print!-indexlist l;
    fancy!-print!-indexlist1(l, '!_, '!,);
