@@ -500,8 +500,8 @@ symbolic procedure fancy!-maprint(l,p!*!*);
 
         % printing operators with integer argument in index form.
         if flagp(car l,'print!-indexed) then
-        << fancy!-prefix!-operator(car l);
-           w :=fancy!-print!-indexlist cdr l
+        << fancy!-prefix!-operator l;
+           w := fancy!-print!-indexlist cdr l
         >>
 
         else if x := get(car l,'infix) then
@@ -516,7 +516,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
             w:=apply(x,{l})
         else
         <<
-           w:=fancy!-prefix!-operator(car l);
+           w := fancy!-prefix!-operator l;
            obrkp!* := nil;
            if w neq 'failed then
              w:=fancy!-print!-function!-arguments cdr l;
@@ -1177,23 +1177,41 @@ symbolic procedure fancy!-print!-format1(u,p,a);
 %-----------------------------------------------------------
 
 symbolic procedure fancy!-prefix!-operator(u);
-   % Print as function, but with a special character.
+   % FJW Display an operator identifier, possibly as a special symbol
+   % that may depend on the arity.
    begin scalar sy;
-      sy :=
-         get(u,'fancy!-functionsymbol) or get(u,'fancy!-special!-symbol);
-      if sy
-      then fancy!-special!-symbol(sy,get(u,'fancy!-symbol!-length) or 2)
-      else if stringp u then fancy!-prin2!*(u,t) % FJW new
+      if atom u then
+         % u is the operator identifier, for backward compatibility
+         sy :=
+            get(u, 'fancy!-functionsymbol) or get(u, 'fancy!-special!-symbol)
+      else <<
+         % u is the full sexpr (fn arg1 arg2 ...) for arity checking.
+         % fancy!-functionsymbol may be a symbol or an alist of
+         % (arity . symbol) pairs.
+         if sy := get(car u, 'fancy!-functionsymbol) then
+            if pairp sy then
+               sy := (sy := assoc(length cdr u, sy)) and cdr sy;
+         u := car u;
+         if not sy then sy := get(u, 'fancy!-special!-symbol);
+      >>;
+      if sy then
+         % This needs more work. Currently, fancy!-symbol!-length is
+         % not used, but it could and probably should be!
+         fancy!-special!-symbol(sy, get(u, 'fancy!-symbol!-length) or 2)
+      else if stringp u then fancy!-prin2!*(u, t) % FJW new
       else fancy!-maprint!-identifier u; %FJW was fancy!-prin2!*(u,t);
    end;
 
 put('sqrt,'fancy!-prifn,'fancy!-sqrtpri);
 
 symbolic procedure fancy!-sqrtpri(u);
-    fancy!-sqrtpri!*(cadr u,2);
+   % FJW Display the square root of u.
+   fancy!-sqrtpri!*(cadr u,2);
 
 symbolic procedure fancy!-sqrtpri!*(u,n);
-  fancy!-level
+   % FJW Display the n'th root of u, where n must be a number or a
+   % single character.
+   fancy!-level
    begin
      if not numberp n and not liter n then return 'failed;
      fancy!-prin2!*("\sqrt",0);
@@ -1777,7 +1795,7 @@ put('impart, 'fancy!-special!-symbol, "\Im");
 % Gamma, Beta and Related Functions
 
 put('Euler_gamma, 'fancy!-special!-symbol, "\gamma ");
-put('Gamma, 'fancy!-functionsymbol, "\Gamma ");
+put('Gamma, 'fancy!-functionsymbol, '((1 . "\Gamma "))); % unary only
 put('polygamma, 'fancy!-prifn, 'fancy!-polygamma);
 
 symbolic procedure fancy!-polygamma(u);
