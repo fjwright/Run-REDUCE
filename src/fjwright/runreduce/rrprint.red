@@ -111,6 +111,7 @@ switch list,ratpri,revpri,nosplit;
 % some incremental changes being made here.   But evenually this switch
 % will be retired.                 ACN March 2011
 switch acn;
+on acn;                                 % FJW Seems better!
 
 % Global variables initialized in this section.
 
@@ -252,11 +253,25 @@ symbolic procedure fancy!-output(mode,l);
 % fancy!-assgnpri checks whether a special printing function is defined
 % and calls it
 symbolic procedure fancy!-assgnpri u;
+   % E.g. u = ((mat (...)) (m) only)
+   % FJW But this seems to be called when there is no assignment! Why?
    begin scalar x,y;
-     x := getrtype car u;
+     x := getrtype car u;               % e.g. matrix; tag = mat
      y := get(get(x,'tag),'fancy!-assgnpri);
      return if y then apply1(y,u) else fancy!-maprin0 car u
-  end;
+   end;
+
+symbolic procedure fancy!-assgnpri!-matrix u; % FJW
+   % E.g. u = ((mat (...)) (m) only)
+   <<
+      if cadr u then <<                 % temporary hack?
+         fancy!-maprin0 caadr u;
+         fancy!-oprin 'setq;
+      >>;
+      fancy!-maprin0 car u
+   >>;
+
+put('mat, 'fancy!-assgnpri, 'fancy!-assgnpri!-matrix); % FJW
 
 symbolic procedure fancy!-out!-header();
    <<
@@ -919,7 +934,8 @@ put('times, 'fancy!-prtch, "\*");
 %FJW TeX discretionary times (\*) is not defined in LaTeX and not
 %FJW supported by KaTeX, so I handle it in Run-REDUCE.
 
-put('setq, 'fancy!-prtch, "\coloneqq "); %FJW otherwise uses prtch prop !:!=
+put('setq, 'fancy!-infix!-symbol, "\coloneqq "); %FJW otherwise uses prtch prop !:!=
+put('setq, 'fancy!-symbol!-length, 2);
 
 symbolic procedure fancy!-oprin op;
  fancy!-level
