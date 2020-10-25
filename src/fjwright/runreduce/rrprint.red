@@ -202,8 +202,13 @@ symbolic procedure fancy!-out!-item(it);
       if b member '(!{ !}) then prin2 "\";
       prin2 b;
     end
-    else
-      rederr "unknown print item";
+  else <<
+     % Finish processing as fancy!-flush() would have done to avoid
+     % hanging the GUI:
+     fancy!-out!-trailer();
+     set!-fancymode nil;
+     rederr {"unknown print item", it};
+  >>;
 
 symbolic procedure set!-fancymode bool;
   if bool neq !*fancy!-mode then
@@ -609,7 +614,8 @@ symbolic procedure fancy!-maprint!-identifier ident;
    % special symbols, e.g. beta -> \beta, and TeX special characters
    % (#$%&~_\{}}) are escaped, e.g. # -> \#.
    % Special case: body_bar -> \bar{body} for a single-character body
-   % or \overline{body} for a multi-character body.
+   % or \overline{body} for a multi-character body.  This form can be
+   % followed by digits or _k, which is displayed as a subscript.
    begin scalar chars, subscript, body, subscript_symbol, body_symbol, digits, bar;
       ident := explode2 ident;
       if null cdr ident then <<
@@ -639,47 +645,52 @@ symbolic procedure fancy!-maprint!-identifier ident;
          >>;
       % Skip next char if it is _:
       if eqcar(chars, '!_) then chars := cdr chars;
+      if subscript then
+         if (bar := subscript = '(b a r)) or
+         not((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
+            or null cdr subscript) then subscript := nil;
+      % Look again for _bar:
+      if (digits or subscript) and length chars > 4 and
+         car chars eq 'r and cadr chars eq 'a and caddr chars eq 'b and cadddr chars eq '!_ then <<
+            bar := t;
+            chars := cddddr chars
+         >>;
       % Retrieve identifier body:
       body := reversip chars;
 
-      if body and (digits or (subscript and
-         ((subscript_symbol := get(intern compress subscript, 'fancy!-special!-symbol))
-            or null cdr subscript or (bar := subscript = '(b a r))))) then <<
-               % If subscript is bar then output \bar{body} after processing.
-               % Otherwise, if digits then output body_{digits} after processing,
-               % else subscript is, or translates to, a single character,
-               % so output body_{subscript} after processing.
-               body_symbol := get(intern compress body, 'fancy!-special!-symbol);
-               if bar then <<
-                  if body_symbol or null cdr body then
-                     fancy!-prin2!*('!\bar!{, 0)
-                  else
-                     fancy!-prin2!*('!\overline!{, 0)
-               >>;
-               if body_symbol then
-                  fancy!-prin2!*(body_symbol, 1)
-               else <<
-                  fancy!-prin2!*('!\mathit!{, 0);
-                  for each c in body do fancy!-tex!-character c;
-                  fancy!-prin2!*('!}, 0)
-               >>;
-               if bar then <<
-                  fancy!-prin2!*('!}, 0);
-                  return;
-               >>;
-               fancy!-prin2!*('!_, 0);
-               if digits then <<
-                  fancy!-prin2!*('!{, 0);
-                  for each c in digits do fancy!-prin2!*(c, 1);
-                  fancy!-prin2!*('!}, 0)
-               >> else <<
-                  if subscript_symbol then
-                     fancy!-prin2!*(subscript_symbol, 1)
-                  else
-                     fancy!-tex!-character car subscript
-               >>;
-               return
-            >>;
+      if body and (digits or subscript or bar) then <<
+         % If subscript is bar then output \bar{body} after processing.
+         % Otherwise, if digits then output body_{digits} after processing,
+         % else subscript is, or translates to, a single character,
+         % so output body_{subscript} after processing.
+         body_symbol := get(intern compress body, 'fancy!-special!-symbol);
+         if bar then <<
+            if body_symbol or null cdr body then
+               fancy!-prin2!*('!\bar!{, 0)
+            else
+               fancy!-prin2!*('!\overline!{, 0)
+         >>;
+         if body_symbol then
+            fancy!-prin2!*(body_symbol, 1)
+         else <<
+            fancy!-prin2!*('!\mathit!{, 0);
+            for each c in body do fancy!-tex!-character c;
+            fancy!-prin2!*('!}, 0)
+         >>;
+         if bar then fancy!-prin2!*('!}, 0);
+         if digits then <<
+            fancy!-prin2!*('!_!{, 0);
+            for each c in digits do fancy!-prin2!*(c, 1);
+            fancy!-prin2!*('!}, 0)
+         >> else if subscript then <<
+            fancy!-prin2!*('!_, 0);
+            if subscript_symbol then
+               fancy!-prin2!*(subscript_symbol, 1)
+            else
+               fancy!-tex!-character car subscript
+         >>;
+         return
+      >>;
 
       % No subscript:
       fancy!-prin2!*('!\mathit!{, 0);
@@ -710,17 +721,17 @@ symbolic procedure fancy!-tex!-character c;
    <<
       fancy!-pos!* := add1 fancy!-pos!*;
       fancy!-line!* :=
-         (if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\
-         else if c eq '!~ then '!\text!{!\textasciitilde!}
-         else if c eq '!^ then '!\text!{!\textasciicircum!}
-         else if c eq '!\ then '!\text!{!\textbackslash!}
-         else if c eq blank   then '!~
+         if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
+         else if c eq '!~ then '!\text!{!\textasciitilde!} . fancy!-line!*
+         else if c eq '!^ then '!\text!{!\textasciicircum!} . fancy!-line!*
+         else if c eq '!\ then '!\text!{!\textbackslash!} . fancy!-line!*
+         else if c eq blank   then '!~ . fancy!-line!*
          else if c eq tab     then <<
             fancy!-pos!* := add1 fancy!-pos!*;
-            '!~ . '!~ >>
-         else if c eq !$eol!$ then '!\!$eol!\!$
-         else if c eq pound1!* or c eq pound2!* then '!{!\pound!}
-         else c) . fancy!-line!*;
+            '!~ . '!~  . fancy!-line!* >>
+         else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
+         else if c eq pound1!* or c eq pound2!* then '!{!\pound!} . fancy!-line!*
+         else c . fancy!-line!*;
    >>;
 
 symbolic procedure fancy!-print!-indexlist l;
