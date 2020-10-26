@@ -837,6 +837,7 @@ symbolic procedure fancy!-exptpri(l,p);
 put('expt,'fancy!-pprifn,'fancy!-exptpri);
 
 symbolic procedure fancy!-inprint(op,p,l);
+   % E.g. op = plus, p = 28, l = ((times a (plus x y z)) (times b (plus x y z)))
   (begin scalar x,y,w, pos,fl;
      pos:=fancy!-pos!*;
      fl:=fancy!-line!*;
@@ -873,7 +874,9 @@ symbolic procedure fancy!-inprint(op,p,l);
      if testing!-width!* and (overflowed!* or w='failed)
             then return fancy!-fail(pos,fl);
      if !*list and obrkp!* and memq(op,'(plus minus)) then
-        <<sumlevel!*:=sumlevel!*+1;
+        % sumlevel!* is the recursion depth of fancy!-inprint applied
+        % to a sum and is used only in fancy!-oprin.
+        <<sumlevel!* := sumlevel!* + 1;
           tablevel!* := tablevel!* + 1>>;
      if !*nosplit and not testing!-width!* then
           % main line:
@@ -935,7 +938,6 @@ put('times, 'fancy!-prtch, "\*");
 %FJW supported by KaTeX, so I handle it in Run-REDUCE.
 
 put('setq, 'fancy!-infix!-symbol, "\coloneqq "); %FJW otherwise uses prtch prop !:!=
-put('setq, 'fancy!-symbol!-length, 2);
 
 symbolic procedure fancy!-oprin op;
  fancy!-level
@@ -949,7 +951,10 @@ symbolic procedure fancy!-oprin op;
     if null(x:=get(op,'prtch)) then fancy!-prin2!*(op,t)
       else
     << if !*list and obrkp!* and op memq '(plus minus)
-        and sumlevel!*=2
+        and (sumlevel!* = 2 or sumlevel!* = 3) % FJW hack
+           % to improve `on list', but probably not right!
+           % The right fix may be to change how or where sumlevel!* is
+           % incremented in fancy!-inprint, but I can't see how to do it.
        then
         if testing!-width!* and not (!*acn and !*list) then return 'failed
             else fancy!-terpri!* t;
