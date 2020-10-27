@@ -1797,7 +1797,7 @@ put('acoth, 'fancy!-functionsymbol, "\mathrm{arccoth}");
 put('asech, 'fancy!-functionsymbol, "\mathrm{arcsech}");
 put('acsch, 'fancy!-functionsymbol, "\mathrm{arccsch}");
 
-put('exp, 'fancy!-functionsymbol, "\exp");
+% Note that exp x displays as e^x, so no need to support exp.
 put('log, 'fancy!-functionsymbol, "\log");
 put('logb, 'fancy!-prifn, 'fancy!-logb);
 put('log10, 'fancy!-prifn, 'fancy!-log10);
@@ -1824,13 +1824,24 @@ put('impart, 'fancy!-symbol!-length, 4);
 for each x in '(
    sin     cos     tan     cot     sec     csc
    sinh    cosh    tanh    coth    sech    csch
-   exp     log     ln      max     min
+   log     ln      max     min
    ) do put(x, 'fancy!-symbol!-length, 2*length explode2 x);
 
 for each x in '(
    arcsin  arccos  arctan  arccot  arcsec  arccsc
    arcsinh arccosh arctanh arccoth arcsech arccsch
    ) do put(x, 'fancy!-symbol!-length, 2*(length explode2 x + 2));
+
+put('abs, 'fancy!-prifn, 'fancy!-abs);
+
+symbolic procedure fancy!-abs u;
+   fancy!-level
+   begin scalar w;
+      fancy!-prin2!*("\left|", 1);
+      w := fancy!-maprin0 cadr u;
+      fancy!-prin2!*("\right|", 1);
+      return w
+   end;
 
 % Gamma, Beta and Related Functions
 
