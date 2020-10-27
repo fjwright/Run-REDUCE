@@ -49,30 +49,33 @@ module rrprint; % Output interface for Run-REDUCE (a JavaFX GUI for REDUCE)
 
 % Switches:
 %
-%  on fancy                enable algebraic output processing
+%  on fancy                enable algebraic output processing.
 %                          (Defaults to on when the package is loaded.)
 %
 % Properties:
 %
-%  fancy!-prifn            print function for an operator
+%  fancy!-prifn            print function for an operator.
 %
 %  fancy!-pprifn           print function for an operator including current
-%                          operator precedence for infix printing
+%                          operator precedence for infix printing.
 %
 %  fancy!-flatprifn        print function for objects which require
 %                          special printing if prefix operator form
-%                          would have been used, e.g. matrix, list
+%                          would have been used, e.g. matrix, list.
 %
 %  fancy!-prtch            string for infix printing of an operator
 %
 %  fancy!-special!-symbol  print expression for a non-indexed item
-%                          string with TeX expression "\alpha " or
-%                          number referring to ASCII symbol code
+%                          string with TeX expression e.g. "\alpha " or a
+%                          number referring to ASCII symbol code (deprecated).
 %
-%  fancy!-infix!-symbol    special symbol for infix operators
+%  fancy!-infix!-symbol    special symbol for an infix operator.
+%
+%  fancy!-functionsymbol   special symbol for a (prefix) function.
 %
 %  fancy!-symbol!-length   the number of horizontal units needed for
-%                          the symbol.  A standard character has 2 units.
+%                          a special symbol.  A standard character has
+%                          2 units, which is the default.
 
 create!-package('(rrprint), nil);
 
@@ -333,31 +336,23 @@ symbolic procedure fancy!-prin2 u;
 % positions that the TeX material should fit with seems messy) the calculation
 % done here is a bit of a mess.
 
-for each x in '(
-    !\sqrt        !\equiv        !\alpha        !\beta
-    !\gamma       !\delta        !\varepsilon   !\zeta
-    !\eta         !\theta        !\iota         !\varkappa
-    !\lambda      !\mu           !\nu           !\xi
-    !\pi          !\rho          !\sigma        !\tau
-    !\upsilon     !\phi          !\chi          !\psi
-    !\omega       !\mathit!{a!}  !\mathit!{b!}  !\chi!     % Trailing space
-    !\delta!      !\mathit!{e!}  !\phi!         !\gamma!   %
-    !\mathit!{h!} !\mathit!{i!}  !\vartheta     !\kappa!   %
-    !\lambda!     !\mathit!{m!}  !\mathit!{n!}  !\mathit!{o!}
-    !\pi!         !\theta!       !\mathit!{r!}  !\sigma!   %
-    !\tau!        !\upsilon!     !\omega!       !\xi!      %
-    !\psi!        !\mathit!{z!}  !\varphi!      !\pound\    )
-  do put(x, 'texcharwidth, 1);
+% for each x in '(
+%     !\sqrt        !\equiv        !\alpha        !\beta
+%     !\gamma       !\delta        !\varepsilon   !\zeta
+%     !\eta         !\theta        !\iota         !\varkappa
+%     !\lambda      !\mu           !\nu           !\xi
+%     !\pi          !\rho          !\sigma        !\tau
+%     !\upsilon     !\phi          !\chi          !\psi
+%     !\omega       !\mathit!{a!}  !\mathit!{b!}  !\chi!     % Trailing space
+%     !\delta!      !\mathit!{e!}  !\phi!         !\gamma!   %
+%     !\mathit!{h!} !\mathit!{i!}  !\vartheta     !\kappa!   %
+%     !\lambda!     !\mathit!{m!}  !\mathit!{n!}  !\mathit!{o!}
+%     !\pi!         !\theta!       !\mathit!{r!}  !\sigma!   %
+%     !\tau!        !\upsilon!     !\omega!       !\xi!      %
+%     !\psi!        !\mathit!{z!}  !\varphi!      !\pound\    )
+%   do put(x, 'fancy!-symbol!-length, 1);
 
-put('!\not, 'texcharwidth, 0);
-
-for each x in '(
-   !\sin     !\cos     !\tan     !\cot     !\sec     !\csc
-   !\arcsin  !\arccos  !\arctan  !\arccot  !\arcsec  !\arccsc
-   !\sinh    !\cosh    !\tanh    !\coth    !\sech    !\csch
-   !\arcsinh !\arccosh !\arctanh !\arccoth !\arcsech !\arccsch
-   !\exp     !\log     !\ln      !\max     !\min     !\Re      !\Im
-   ) do put(x, 'texcharwidth, sub1 length explode2 x);
+put('!\not, 'fancy!-symbol!-length, 0);
 
 % FJW fancy!-prin2!* should do *all* (virtual) output and record
 % position on the (virtual) line.  It should not do much else!
@@ -368,11 +363,11 @@ symbolic procedure fancy!-prin2!*(u,n);
       fancy!-pos!* := fancy!-pos!* + n;
       if fancy!-pos!* > 2*(linelength nil + 1) then overflowed!* := t; % FJW Why +1?
       fancy!-line!* := u . fancy!-line!* >>
-   else                                 % compute the width
+   else                                 % look up the width
       if atom u and eqcar(explode2 u,'!\) then <<
-      n := (idp u and get(u, 'texcharwidth)) or
-         (stringp u and get(intern u, 'texcharwidth));
-      if n then fancy!-pos!* := fancy!-pos!* + n;
+      n := (idp u and get(u, 'fancy!-symbol!-length)) or
+         (stringp u and get(intern u, 'fancy!-symbol!-length)) or 2;
+      fancy!-pos!* := fancy!-pos!* + n;
       if fancy!-pos!* > 2*(linelength nil + 1) then overflowed!* := t;
       fancy!-line!* := u . fancy!-line!* >>
    else if numberp u then
@@ -596,8 +591,7 @@ symbolic procedure fancy!-maprint!-atom(l,p);
  fancy!-level
   begin scalar x;
      if (x:=get(l,'fancy!-special!-symbol)) then
-         fancy!-special!-symbol(x,
-                get(l,'fancy!-special!-symbol!-size) or 2)
+         fancy!-special!-symbol(x, get(l,'fancy!-symbol!-length) or 2)
      else if vectorp l then <<
          fancy!-prin2!*("[",0);
          l:=for i:=0:upbv l collect getv(l,i);
@@ -1772,58 +1766,71 @@ module fancy_standard_functions;
 
 % Elementary transcendental functions
 
-put('sin, 'fancy!-special!-symbol, "\sin");
-put('cos, 'fancy!-special!-symbol, "\cos");
-put('tan, 'fancy!-special!-symbol, "\tan");
-put('cot, 'fancy!-special!-symbol, "\cot");
-put('sec, 'fancy!-special!-symbol, "\sec");
-put('csc, 'fancy!-special!-symbol, "\csc");
+put('sin, 'fancy!-functionsymbol, "\sin");
+put('cos, 'fancy!-functionsymbol, "\cos");
+put('tan, 'fancy!-functionsymbol, "\tan");
+put('cot, 'fancy!-functionsymbol, "\cot");
+put('sec, 'fancy!-functionsymbol, "\sec");
+put('csc, 'fancy!-functionsymbol, "\csc");
 
-put('sinh, 'fancy!-special!-symbol, "\sinh");
-put('cosh, 'fancy!-special!-symbol, "\cosh");
-put('tanh, 'fancy!-special!-symbol, "\tanh");
-put('coth, 'fancy!-special!-symbol, "\coth");
-put('sech, 'fancy!-special!-symbol, "\mathrm{sech}");
-put('csch, 'fancy!-special!-symbol, "\mathrm{csch}");
+put('sinh, 'fancy!-functionsymbol, "\sinh");
+put('cosh, 'fancy!-functionsymbol, "\cosh");
+put('tanh, 'fancy!-functionsymbol, "\tanh");
+put('coth, 'fancy!-functionsymbol, "\coth");
+put('sech, 'fancy!-functionsymbol, "\mathrm{sech}");
+put('csch, 'fancy!-functionsymbol, "\mathrm{csch}");
 
 % The inverse of the trigonometric or hyperbolic function fn is named
 % arcfn and is written in normal (roman) font style.
 
-put('asin, 'fancy!-special!-symbol, "\arcsin");
-put('acos, 'fancy!-special!-symbol, "\arccos");
-put('atan, 'fancy!-special!-symbol, "\arctan");
-put('acot, 'fancy!-special!-symbol, "\mathrm{arccot}");
-put('asec, 'fancy!-special!-symbol, "\mathrm{arcsec}");
-put('acsc, 'fancy!-special!-symbol, "\mathrm{arccsc}");
+put('asin, 'fancy!-functionsymbol, "\arcsin");
+put('acos, 'fancy!-functionsymbol, "\arccos");
+put('atan, 'fancy!-functionsymbol, "\arctan");
+put('acot, 'fancy!-functionsymbol, "\mathrm{arccot}");
+put('asec, 'fancy!-functionsymbol, "\mathrm{arcsec}");
+put('acsc, 'fancy!-functionsymbol, "\mathrm{arccsc}");
 
-put('asinh, 'fancy!-special!-symbol, "\mathrm{arcsinh}");
-put('acosh, 'fancy!-special!-symbol, "\mathrm{arccosh}");
-put('atanh, 'fancy!-special!-symbol, "\mathrm{arctanh}");
-put('acoth, 'fancy!-special!-symbol, "\mathrm{arccoth}");
-put('asech, 'fancy!-special!-symbol, "\mathrm{arcsech}");
-put('acsch, 'fancy!-special!-symbol, "\mathrm{arccsch}");
+put('asinh, 'fancy!-functionsymbol, "\mathrm{arcsinh}");
+put('acosh, 'fancy!-functionsymbol, "\mathrm{arccosh}");
+put('atanh, 'fancy!-functionsymbol, "\mathrm{arctanh}");
+put('acoth, 'fancy!-functionsymbol, "\mathrm{arccoth}");
+put('asech, 'fancy!-functionsymbol, "\mathrm{arcsech}");
+put('acsch, 'fancy!-functionsymbol, "\mathrm{arccsch}");
 
-put('exp, 'fancy!-special!-symbol, "\exp");
-put('log, 'fancy!-special!-symbol, "\log");
+put('exp, 'fancy!-functionsymbol, "\exp");
+put('log, 'fancy!-functionsymbol, "\log");
 put('logb, 'fancy!-prifn, 'fancy!-logb);
 put('log10, 'fancy!-prifn, 'fancy!-log10);
 
 symbolic procedure fancy!-logb(u);
    % u = (logb(x, b) -> \log_{b}(x)
-   fancy!-indexed!-fn {"\log", caddr u, cadr u};
+   fancy!-indexed!-fn {'log, caddr u, cadr u};
 
 symbolic procedure fancy!-log10(u);
    % u = (log10 x) -> \log_{10}(x)
-   fancy!-indexed!-fn {"\log", 10, cadr u};
+   fancy!-indexed!-fn {'log, 10, cadr u};
 
 symbolic inline procedure fancy!-indexed!-fn u;
    fancy!-bessel u;
 
-put('ln, 'fancy!-special!-symbol, "\ln");
-put('max, 'fancy!-special!-symbol, "\max");
-put('min, 'fancy!-special!-symbol, "\min");
-put('repart, 'fancy!-special!-symbol, "\Re");
-put('impart, 'fancy!-special!-symbol, "\Im");
+put('ln, 'fancy!-functionsymbol, "\ln");
+put('max, 'fancy!-functionsymbol, "\max");
+put('min, 'fancy!-functionsymbol, "\min");
+put('repart, 'fancy!-functionsymbol, "\Re");
+put('impart, 'fancy!-functionsymbol, "\Im");
+put('repart, 'fancy!-symbol!-length, 4); % wide symbols
+put('impart, 'fancy!-symbol!-length, 4);
+
+for each x in '(
+   sin     cos     tan     cot     sec     csc
+   sinh    cosh    tanh    coth    sech    csch
+   exp     log     ln      max     min
+   ) do put(x, 'fancy!-symbol!-length, 2*length explode2 x);
+
+for each x in '(
+   arcsin  arccos  arctan  arccot  arcsec  arccsc
+   arcsinh arccosh arctanh arccoth arcsech arccsch
+   ) do put(x, 'fancy!-symbol!-length, 2*(length explode2 x + 2));
 
 % Gamma, Beta and Related Functions
 
@@ -1853,6 +1860,7 @@ symbolic procedure fancy!-iBeta(u);
    fancy!-indexed!-fn({car u, cadddr u, cadr u, caddr u});
 
 put('dilog, 'fancy!-functionsymbol, "\mathrm{Li}_2"); % roman Li_2(z)
+put('dilog, 'fancy!-symbol!-length, 5);
 
 put('Pochhammer, 'fancy!-prifn, 'fancy!-Pochhammer); % (a)_{n}
 
@@ -1878,21 +1886,28 @@ put('erf, 'fancy!-functionsymbol, "\mathrm{erf}");
 put('Fresnel_S, 'fancy!-functionsymbol, "\mathrm{S}");
 put('Fresnel_C, 'fancy!-functionsymbol, "\mathrm{C}");
 
+for each x in '(Ei Si Ci Shi Chi erf) do
+   put(x, 'fancy!-symbol!-length, 2*length explode2 x);
+
 % Airy, Bessel and Related Functions
 
 put('Airy_Ai, 'fancy!-functionsymbol, "\mathrm{Ai}");
 put('Airy_Bi, 'fancy!-functionsymbol, "\mathrm{Bi}");
+put('Airy_Ai, 'fancy!-symbol!-length, 4);
+put('Airy_Bi, 'fancy!-symbol!-length, 4);
 put('Airy_AiPrime, 'fancy!-functionsymbol, "\mathrm{Ai}'");
 put('Airy_BiPrime, 'fancy!-functionsymbol, "\mathrm{Bi}'");
+put('Airy_AiPrime, 'fancy!-symbol!-length, 5);
+put('Airy_BiPrime, 'fancy!-symbol!-length, 5);
 
-put('BesselI,'fancy!-prifn,'fancy!-bessel);
-put('BesselJ,'fancy!-prifn,'fancy!-bessel);
-put('BesselY,'fancy!-prifn,'fancy!-bessel);
-put('BesselK,'fancy!-prifn,'fancy!-bessel);
-put('BesselI,'fancy!-functionsymbol,'(ascii 73));
-put('BesselJ,'fancy!-functionsymbol,'(ascii 74));
-put('BesselY,'fancy!-functionsymbol,'(ascii 89));
-put('BesselK,'fancy!-functionsymbol,'(ascii 75));
+put('BesselI, 'fancy!-prifn, 'fancy!-bessel);
+put('BesselJ, 'fancy!-prifn, 'fancy!-bessel);
+put('BesselY, 'fancy!-prifn, 'fancy!-bessel);
+put('BesselK, 'fancy!-prifn, 'fancy!-bessel);
+put('BesselI, 'fancy!-functionsymbol, '!I);
+put('BesselJ, 'fancy!-functionsymbol, '!J);
+put('BesselY, 'fancy!-functionsymbol, '!Y);
+put('BesselK, 'fancy!-functionsymbol, '!K);
 
 symbolic procedure fancy!-bessel(u);
  fancy!-level
@@ -1979,10 +1994,10 @@ symbolic procedure fancy!-Gegenbauer!-style(u);
       return fancy!-print!-function!-arguments cdddr u;
    end;
 
-put('ChebyshevT,'fancy!-prifn,'fancy!-indexed!-fn); % T_n(x)
-put('ChebyshevT,'fancy!-functionsymbol,'(ascii 84));
-put('ChebyshevU,'fancy!-prifn,'fancy!-indexed!-fn); % U_n(x)
-put('ChebyshevU,'fancy!-functionsymbol,'(ascii 85));
+put('ChebyshevT, 'fancy!-prifn, 'fancy!-indexed!-fn); % T_n(x)
+put('ChebyshevT, 'fancy!-functionsymbol, '!T);
+put('ChebyshevU, 'fancy!-prifn, 'fancy!-indexed!-fn); % U_n(x)
+put('ChebyshevU, 'fancy!-functionsymbol, '!U);
 
 put('LegendreP, 'fancy!-prifn, 'fancy!-Legendre!-style);
 put('LegendreP, 'fancy!-functionsymbol, '!P);
@@ -2001,8 +2016,9 @@ put('HermiteP, 'fancy!-functionsymbol, '!H);
 
 % Other Special Functions
 
-put('polylog,'fancy!-prifn,'fancy!-indexed!-fn);
-put('polylog,'fancy!-functionsymbol,'!L!i);
+put('polylog, 'fancy!-prifn, 'fancy!-indexed!-fn);
+put('polylog, 'fancy!-functionsymbol, "Li");
+put('polylog, 'fancy!-symbolic!-length, 4);
 
 % Hypergeometric Functions
 
@@ -2014,23 +2030,23 @@ symbolic procedure fancy!-hypergeometric u;
    a1 :=cdr cadr u;
    a2 := cdr caddr u;
    a3 := cadddr u;
-   fancy!-prin2!*("{}",0);
+   fancy!-prin2!*("{}", 0);
    w:=fancy!-print!-one!-index length a1;
    if testing!-width!* and w eq 'failed then return w;
-   fancy!-prin2!*("F",nil);
+   fancy!-prin2!*("F", 2);
    w:=fancy!-print!-one!-index length a2;
    if testing!-width!* and w eq 'failed then return w;
-   fancy!-prin2!*("\left(\left.",nil);
-   fancy!-prin2!*("{}",0);
+   fancy!-prin2!*("\left(\left.", 1);
+   fancy!-prin2!*("{}", 0);
    if null a1 then a1 := list '!-;
    if null a2 then a2 := list '!-;
-   w := w eq 'failed or fancy!-print!-indexlist1(a1,'!^,'!*comma!*);
-   w := w eq 'failed or fancy!-print!-indexlist1(a2,'!_,'!*comma!*);
-   fancy!-prin2!*("\,",1);
+   w := w eq 'failed or fancy!-print!-indexlist1(a1, '!^, '!*comma!*);
+   w := w eq 'failed or fancy!-print!-indexlist1(a2, '!_, '!*comma!*);
+   fancy!-prin2!*("\,", 1);
    %w := w eq 'failed or fancy!-special!-symbol(124,1);    % vertical bar
-   fancy!-prin2!*("\right|\,",1);
-   w := w eq 'failed or fancy!-prinfit(a3,0,nil);
-   fancy!-prin2!*("\right)",nil);
+   fancy!-prin2!*("\right|\,", 2);
+   w := w eq 'failed or fancy!-prinfit(a3, 0, nil);
+   fancy!-prin2!*("\right)", 1);
    return w;
   end;
 
@@ -2050,21 +2066,21 @@ symbolic procedure fancy!-meijerg u;
    a1 := append(cdar a1 , cdr a1);
    a2 := append(cdar a2 , cdr a2);
    p:=length a1; q:=length a2;
-   fancy!-prin2!*("G",nil);
+   fancy!-prin2!*("G", 2);
    w := w eq 'failed or
         fancy!-print!-indexlist1({m,n},'!^,nil);
    w := w eq 'failed or
         fancy!-print!-indexlist1({p,q},'!_,nil);
-   fancy!-prin2!*("\left(",nil);
+   fancy!-prin2!*("\left(", 1);
    w := w eq 'failed or fancy!-prinfit(a3,0,nil);
-   fancy!-prin2!*("\,",1);
+   fancy!-prin2!*("\,", 1);
    %w := w eq 'failed or fancy!-special!-symbol(124,1);    % vertical bar
-   fancy!-prin2!*("\left|\,{}",1);
+   fancy!-prin2!*("\left|\,{}", 2);
    if null a1 then a1 := list '!-;
    if null a2 then a2 := list '!-;
-   w := w eq 'failed or fancy!-print!-indexlist1(a1,'!^,'!*comma!*);
-   w := w eq 'failed or fancy!-print!-indexlist1(a2,'!_,'!*comma!*);
-   fancy!-prin2!*("\right.\right)",nil);
+   w := w eq 'failed or fancy!-print!-indexlist1(a1, '!^, '!*comma!*);
+   w := w eq 'failed or fancy!-print!-indexlist1(a2, '!_, '!*comma!*);
+   fancy!-prin2!*("\right.\right)", 1);
    return w;
   end;
 
