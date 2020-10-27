@@ -16,7 +16,7 @@
 
 % Complex value functions:
 {repart z, impart z, conj z, conj(a+i*b)};
-let conj z => z_bar; {conj z, conj z_bar, z*z_bar};
+let conj z => z_bar; {conj z, conj z_bar, z*z_bar = abs(z)^2};
 
 % Gamma, Beta and related functions:
 {Gamma(z), Beta(a, b), psi(z), polygamma(n, z), iGamma(a, z), iBeta(a, b, x), dilog(z),

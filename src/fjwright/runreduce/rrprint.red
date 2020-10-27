@@ -256,7 +256,7 @@ symbolic procedure fancy!-output(mode,l);
 % fancy!-assgnpri checks whether a special printing function is defined
 % and calls it
 symbolic procedure fancy!-assgnpri u;
-   % E.g. u = ((mat (...)) (m) only)
+   % E.g. a := b := c := mat(()) -> u = ((mat (0)) (a b c) only)
    % FJW But this seems to be called when there is no assignment! Why?
    begin scalar x,y;
      x := getrtype car u;               % e.g. matrix; tag = mat
@@ -265,14 +265,17 @@ symbolic procedure fancy!-assgnpri u;
    end;
 
 symbolic procedure fancy!-assgnpri!-matrix u; % FJW
-   % E.g. u = ((mat (...)) (m) only)
-   <<
-      if cadr u then <<                 % temporary hack?
-         fancy!-maprin0 caadr u;
+   % E.g. a := b := c := mat(()) -> u = ((mat (0)) (a b c) only)
+   begin scalar lhvars := cadr u;
+      if lhvars then <<
+         if cdr lhvars then
+            fancy!-inprint('setq, get('setq,'infix), lhvars)
+         else
+            fancy!-maprin0 car lhvars;
          fancy!-oprin 'setq;
       >>;
-      fancy!-maprin0 car u
-   >>;
+      return fancy!-maprin0 car u
+   end;
 
 put('mat, 'fancy!-assgnpri, 'fancy!-assgnpri!-matrix); % FJW
 
@@ -831,7 +834,9 @@ symbolic procedure fancy!-exptpri(l,p);
 put('expt,'fancy!-pprifn,'fancy!-exptpri);
 
 symbolic procedure fancy!-inprint(op,p,l);
-   % E.g. op = plus, p = 28, l = ((times a (plus x y z)) (times b (plus x y z)))
+   % Print (internally) an infix expression.
+   % op = infix operator, p = op infix precedence,
+   % E.g. l = ((times a (plus x y z)) (times b (plus x y z)))
   (begin scalar x,y,w, pos,fl;
      pos:=fancy!-pos!*;
      fl:=fancy!-line!*;
