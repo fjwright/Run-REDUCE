@@ -552,10 +552,10 @@ symbolic procedure fancy!-convert(l,m);
     else l;
 
 symbolic procedure fancy!-print!-function!-arguments u;
-  % u is a parameter list for a function.
-    fancy!-in!-brackets(
-       u and {'fancy!-inprint, mkquote '!*comma!*,0,mkquote u},
-            '!(,'!));
+   % u is a function argument list.
+   fancy!-in!-brackets(
+      u and {'fancy!-inprint, mkquote '!*comma!*, 0, mkquote u},
+      '!(,'!));
 
 symbolic procedure fancy!-maprint!-atom(l,p);
 % This should be where any atomic entity provided by the user gets
@@ -774,24 +774,26 @@ symbolic procedure fancy!-print!-one!-index i;
   end;
 
 symbolic procedure fancy!-in!-brackets(u,l,r);
-  % put form into brackets (round, curly,...).
-  % u: form to be evaluated,
-  % l,r: left and right brackets to be inserted.
-  fancy!-level
+   % put form into brackets (round, curly, ...).
+   % u: form to be evaluated,
+   % l,r: left and right brackets to be inserted.
+   fancy!-level
    (begin scalar fp,w,r1,r2,rec;
-     rec := {0};
-     fancy!-bstack!* := rec . fancy!-bstack!*;
-     fancy!-adjust!-bkt!-levels fancy!-bstack!*;
-     fp := length fancy!-page!*;
-     fancy!-prin2!* (r1:='bkt.nil.l.rec, 2);
-     w := eval u;
-     fancy!-prin2!* (r2:='bkt.nil.r.rec, 2);
-       % no line break: use \left( .. \right) pair.
-     if fp = length fancy!-page!* then
-     <<car cdr r1:= t; car cdr r2:= t>>;
-     return w;
+      rec := {0};
+      fancy!-bstack!* := rec . fancy!-bstack!*;
+      fancy!-adjust!-bkt!-levels fancy!-bstack!*;
+      fp := length fancy!-page!*;
+      fancy!-prin2!*(r1 := 'bkt.nil.l.rec, 2);
+      % E.g. r1 = (bkt nil !( 0)
+      w := eval u;
+      fancy!-prin2!*(r2 := 'bkt.nil.r.rec, 2);
+      % E.g. r2 = (bkt nil !) 0)
+      % no line break: use \left( .. \right) pair.
+      if fp = length fancy!-page!* then
+         <<car cdr r1 := t; car cdr r2 := t>>;
+      return w;
    end)
-    where fancy!-bstack!* = fancy!-bstack!*;
+      where fancy!-bstack!* = fancy!-bstack!*;
 
 symbolic procedure fancy!-adjust!-bkt!-levels u;
    if null u or null cdr u then nil
@@ -913,20 +915,16 @@ symbolic procedure fancy!-inprint2(op,p,l);
   end;
 
 symbolic procedure fancy!-inprintlist(op,p,l);
-   % Print (internally) contents of an algebraic list, e.g. {...}.
+   % Print (internally) contents of an algebraic list or matrix row.
    % op is the operator, e.g. !*comma!*.
    % p is ignored
    % l is the list to print
    fancy!-level
-   begin scalar fst,w,v;
+   begin scalar fst, w, v;
   loop:
      if null l then return w;
      v := car l; l:= cdr l;
-     if fst then
-     << % fancy!-prin2!*("\,",1);
-        w := fancy!-oprin op;
-        % fancy!-prin2!*("\,",1);
-     >>;
+     if fst then w := fancy!-oprin op;
      if w eq 'failed  and testing!-width!* then return w;
      w := if w eq 'failed then fancy!-prinfit(v,0,op)
      else fancy!-prinfit(v,0,nil);
@@ -999,7 +997,7 @@ put('member,'fancy!-infix!-symbol,"\in ");
 put('and,'fancy!-infix!-symbol,"\wedge ");
 put('or,'fancy!-infix!-symbol,"\vee ");
 put('when,'fancy!-infix!-symbol,"|");
-put('!*wcomma!*,'fancy!-infix!-symbol,",\,");
+% put('!*wcomma!*,'fancy!-infix!-symbol,",\,");
 put('replaceby,'fancy!-infix!-symbol,"\Rightarrow ");
 %put('replaceby,'fancy!-symbol!-length,8);
 put('!~,'fancy!-functionsymbol,"\forall ");     % forall
@@ -1698,34 +1696,31 @@ symbolic procedure fancy!-matpriflat(u);
  begin
   fancy!-oprin 'mat;
   fancy!-in!-brackets(
-   {'fancy!-matpriflat1,mkquote '!*wcomma!*,0,mkquote cdr u},
+   {'fancy!-matpriflat1,mkquote '!*comma!*,0,mkquote cdr u},
                '!(,'!));
  end;
 
 symbolic procedure fancy!-matpriflat1(op,p,l);
-   % inside algebraic list
- begin scalar fst,w;
-   for each v in l do
-     <<if fst then
-       << fancy!-prin2!*("\,",1);
-          fancy!-oprin op;
-          fancy!-prin2!*("\,",1);
-       >>;
-  % if the next row does not fit on the current print line
-  % we move it completely to a new line.
-       if fst then
-        w:= fancy!-level
-         fancy!-in!-brackets(
-          {'fancy!-inprintlist,mkquote '!*wcomma!*,0,mkquote v},
-            '!(,'!)) where testing!-width!*=t;
-       if w eq 'failed then fancy!-terpri!* t;
-       if not fst or w eq 'failed then
-         fancy!-in!-brackets(
-          {'fancy!-inprintlist,mkquote '!*wcomma!*,0,mkquote v},
-            '!(,'!));
-       fst := t;
-     >>;
-  end;
+   % Print (internally) the rows of a matrix.
+   begin scalar fst, w;
+      for each v in l do <<
+         if fst then <<
+            fancy!-oprin op;
+            % If the next row does not fit on the current print line
+            % then move it completely to a new line:
+            w := fancy!-level
+               fancy!-in!-brackets(
+                  {'fancy!-inprintlist, mkquote '!*comma!*, 0, mkquote v},
+                  '!(,'!)) where testing!-width!* = t;
+         >>;
+         if w eq 'failed then fancy!-terpri!* t;
+         if not fst or w eq 'failed then
+            fancy!-in!-brackets(
+               {'fancy!-inprintlist, mkquote '!*comma!*, 0, mkquote v},
+               '!(,'!));
+         fst := t;
+      >>;
+   end;
 
 put('mat,'fancy!-flatprifn,'fancy!-matpriflat);
 
