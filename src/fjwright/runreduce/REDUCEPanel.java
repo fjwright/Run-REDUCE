@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -497,6 +498,7 @@ public class REDUCEPanel extends BorderPane {
         }
     }
 
+    REDUCECommand previousREDUCECommand;
     Process reduceProcess;
 
     /**
@@ -535,6 +537,24 @@ public class REDUCEPanel extends BorderPane {
         title = reduceCommand.name;
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
+        previousREDUCECommand = reduceCommand;
+    }
+
+    void stop() {
+        sendStringToREDUCEAndEcho("bye;\n");
+        // Reset enabled status of controls:
+        reduceStopped();
+    }
+
+    void restart() {
+        stop();
+        try {
+            reduceProcess.waitFor(1, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {
+        }
+        clearDisplay();
+        // FixMe PSL REDUCE leaves "quitting" in the display pane.
+        if (previousREDUCECommand != null) run(previousREDUCECommand);
     }
 
     // REDUCE output processing *******************************************************************
@@ -959,6 +979,7 @@ public class REDUCEPanel extends BorderPane {
     private boolean runREDUCESubmenuDisabled;
     private boolean loadPackagesMenuItemDisabled;
     private boolean stopREDUCEMenuItemDisabled;
+    private boolean restartREDUCEMenuItemDisabled;
     private boolean killREDUCEMenuItemDisabled;
     private boolean templatesMenuDisabled;
     private boolean functionsMenuDisabled;
@@ -991,6 +1012,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.outputNewFileMenuItem.setDisable(outputNewFileMenuItemDisabled = !starting);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled = !starting);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled = !starting);
+        FRAME.restartREDUCEMenuItem.setDisable(restartREDUCEMenuItemDisabled = !starting);
         FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled = !starting);
         FRAME.templatesMenu.setDisable(templatesMenuDisabled = !starting);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled = !starting);
@@ -1019,6 +1041,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.runREDUCESubmenu.setDisable(runREDUCESubmenuDisabled);
         FRAME.loadPackagesMenuItem.setDisable(loadPackagesMenuItemDisabled);
         FRAME.stopREDUCEMenuItem.setDisable(stopREDUCEMenuItemDisabled);
+        FRAME.restartREDUCEMenuItem.setDisable(restartREDUCEMenuItemDisabled);
         FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled);
         // View menu items:
         FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);

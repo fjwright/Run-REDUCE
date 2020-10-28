@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,7 +45,7 @@ public class RunREDUCEFrame {
     MenuItem outputHereMenuItem, shutFileMenuItem, shutLastMenuItem;
     // REDUCE menu:
     @FXML
-    MenuItem loadPackagesMenuItem, stopREDUCEMenuItem, killREDUCEMenuItem;
+    MenuItem loadPackagesMenuItem, stopREDUCEMenuItem, restartREDUCEMenuItem, killREDUCEMenuItem;
     @FXML
     Menu runREDUCESubmenu;
     @FXML
@@ -442,14 +441,17 @@ public class RunREDUCEFrame {
 
     @FXML
     private void stopREDUCEMenuItemAction() {
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("bye;\n");
-        // Reset enabled status of controls:
-        RunREDUCE.reducePanel.reduceStopped();
+        RunREDUCE.reducePanel.stop();
     }
 
     @FXML
     private void clearDisplayMenuItemAction() {
         RunREDUCE.reducePanel.clearDisplay();
+    }
+
+    @FXML
+    private void restartREDUCEMenuItemAction() {
+        RunREDUCE.reducePanel.restart();
     }
 
     @FXML
@@ -666,7 +668,7 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.23";
+    static final String VERSION = "2.24";
 
     @FXML
     private void aboutMenuItemAction() {

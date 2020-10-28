@@ -41,6 +41,8 @@
                           onAction="#stopREDUCEMenuItemAction" text="Stop REDUCE"/>
                 <MenuItem fx:id="clearDisplayMenuItem" mnemonicParsing="false" onAction="#clearDisplayMenuItemAction"
                           text="Clear I/O Display"/>
+                <MenuItem fx:id="restartREDUCEMenuItem" disable="true" mnemonicParsing="false"
+                          onAction="#restartREDUCEMenuItemAction" text="Restart REDUCE"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#configureREDUCEMenuItemAction" text="Configure REDUCE..."/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
