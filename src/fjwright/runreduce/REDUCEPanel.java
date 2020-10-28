@@ -447,7 +447,9 @@ public class REDUCEPanel extends BorderPane {
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollWebViewToBottom() {
-        webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},200);");
+        webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},200);" +
+                // Scroll again after KaTeX has had time to complete:
+                "setTimeout(function(){document.documentElement.scrollIntoView(false)},400);");
     }
 
     /*
