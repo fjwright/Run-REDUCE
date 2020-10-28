@@ -455,18 +455,18 @@ symbolic procedure fancy!-terpri!* u;
 %              (setq fancy!-pos!* pos))),
 %       '(return w)};
 
-symbolic procedure fancy!-begin();
-  % collect current status of fancy output. Return as a list
-  % for later recovery.
-  {fancy!-pos!*,fancy!-line!*};
+% symbolic procedure fancy!-begin();
+%   % collect current status of fancy output. Return as a list
+%   % for later recovery.
+%   {fancy!-pos!*,fancy!-line!*};
 
-symbolic procedure fancy!-end(r,s);
-  % terminates a fancy print sequence. Eventually resets
-  % the output status from status record <s> if the result <r>
-  % signals an overflow.
-  <<if r='failed then
-     <<fancy!-line!*:=car s; fancy!-pos!*:=cadr s>>;
-     r>>;
+% symbolic procedure fancy!-end(r,s);
+%   % terminates a fancy print sequence. Eventually resets
+%   % the output status from status record <s> if the result <r>
+%   % signals an overflow.
+%   <<if r='failed then
+%      <<fancy!-line!*:=car s; fancy!-pos!*:=cadr s>>;
+%      r>>;
 
 symbolic procedure fancy!-mode u;
    % Get the value of the shared variable fancy_print_df or
@@ -496,7 +496,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
 
         if not atom car l then return fancy!-maprint(car l,p);
 
-        l := fancy!-convert(l,nil);
+        l := fancy!-convert(l,nil); % Convert e^x to exp(x) if x is long.
 
         if (x:=get(car l,'fancy!-reform)) then
           return fancy!-maprint(apply1(x,l),p);
@@ -514,7 +514,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
         % eventually convert expression to a different form
         % for printing.
 
-        l := fancy!-convert(l,'infix);
+        l := fancy!-convert(l,'infix);  % Convert e^x to exp(x).
 
         % printing operators with integer argument in index form.
         if flagp(car l,'print!-indexed) then
@@ -545,7 +545,7 @@ symbolic procedure fancy!-maprint(l,p!*!*);
     end ) where obrkp!*=obrkp!*;
 
 symbolic procedure fancy!-convert(l,m);
-  % special converters.
+  % Convert e^x to exp(x) if appropriate.
   if eqcar(l,'expt) and cadr l= 'e and
      ( m='infix or treesizep(l,20) )
         then {'exp,caddr l}
@@ -731,7 +731,7 @@ symbolic procedure fancy!-tex!-character c;
    % FJW Output a single (inert) character to the (virtual) line,
    % handling special (active) TeX characters appropriately.
    <<
-      fancy!-pos!* := add1 fancy!-pos!*;
+      fancy!-pos!* := fancy!-pos!* #+ 2;
       fancy!-line!* :=
          if c memq '(!# !$ !% !& !_ !{ !}) then c . '!\ . fancy!-line!*
          else if c eq '!~ then '!\text!{!\textasciitilde!} . fancy!-line!*
@@ -739,7 +739,7 @@ symbolic procedure fancy!-tex!-character c;
          else if c eq '!\ then '!\text!{!\textbackslash!} . fancy!-line!*
          else if c eq blank   then '!~ . fancy!-line!*
          else if c eq tab     then <<
-            fancy!-pos!* := add1 fancy!-pos!*;
+            fancy!-pos!* := fancy!-pos!* #+ 2;
             '!~ . '!~  . fancy!-line!* >>
          else if c eq !$eol!$ then '!\!$eol!\!$ . fancy!-line!*
          else if c eq pound1!* or c eq pound2!* then '!{!\pound!} . fancy!-line!*
@@ -913,24 +913,27 @@ symbolic procedure fancy!-inprint2(op,p,l);
   end;
 
 symbolic procedure fancy!-inprintlist(op,p,l);
-   % inside algebraic list
-fancy!-level
- begin scalar fst,w,v;
+   % Print (internally) contents of an algebraic list, e.g. {...}.
+   % op is the operator, e.g. !*comma!*.
+   % p is ignored
+   % l is the list to print
+   fancy!-level
+   begin scalar fst,w,v;
   loop:
-   if null l then return w;
-   v := car l; l:= cdr l;
-   if fst then
-       << fancy!-prin2!*("\,",1);
-          w:=fancy!-oprin op;
-          fancy!-prin2!*("\,",1);
-       >>;
-   if w eq 'failed  and testing!-width!* then return w;
-   w:= if w eq 'failed then fancy!-prinfit(v,0,op)
-                    else fancy!-prinfit(v,0,nil);
-   if w eq 'failed  and testing!-width!* then return w;
-   fst := t;
-   goto loop;
-  end;
+     if null l then return w;
+     v := car l; l:= cdr l;
+     if fst then
+     << % fancy!-prin2!*("\,",1);
+        w := fancy!-oprin op;
+        % fancy!-prin2!*("\,",1);
+     >>;
+     if w eq 'failed  and testing!-width!* then return w;
+     w := if w eq 'failed then fancy!-prinfit(v,0,op)
+     else fancy!-prinfit(v,0,nil);
+     if w eq 'failed and testing!-width!* then return w;
+     fst := t;
+     goto loop;
+   end;
 
 put('times, 'fancy!-prtch, "\*");
 %FJW TeX discretionary times (\*) is not defined in LaTeX and not
@@ -1411,13 +1414,14 @@ symbolic procedure fancy!-limpri(u,p);
 put('limit,'fancy!-pprifn,'fancy!-limpri);
 
 symbolic procedure fancy!-listpri(u);
- fancy!-level
- (if null cdr u then fancy!-maprint('empty!-set,0)
-   else
-  fancy!-in!-brackets(
-   {'fancy!-inprintlist,mkquote '!*wcomma!*,0,mkquote cdr u},
-               '!{,'!})
-  );
+   % Print (internally) an algebraic list.
+   % u = (list ...)
+   fancy!-level
+      if null cdr u then fancy!-maprint('empty!-set, 0)
+      else
+         fancy!-in!-brackets(
+            {'fancy!-inprintlist, mkquote '!*comma!*, 0, mkquote cdr u},
+            '!{,'!});
 
 put('list,'fancy!-prifn,'fancy!-listpri);
 put('list,'fancy!-flatprifn,'fancy!-listpri);
@@ -1802,7 +1806,7 @@ put('acoth, 'fancy!-functionsymbol, "\mathrm{arccoth}");
 put('asech, 'fancy!-functionsymbol, "\mathrm{arcsech}");
 put('acsch, 'fancy!-functionsymbol, "\mathrm{arccsch}");
 
-% Note that exp x displays as e^x, so no need to support exp.
+put('exp, 'fancy!-functionsymbol, "\exp"); % Used in special cases, e.g. complicated argument.
 put('log, 'fancy!-functionsymbol, "\log");
 put('logb, 'fancy!-prifn, 'fancy!-logb);
 put('log10, 'fancy!-prifn, 'fancy!-log10);
@@ -1829,7 +1833,7 @@ put('impart, 'fancy!-symbol!-length, 4);
 for each x in '(
    sin     cos     tan     cot     sec     csc
    sinh    cosh    tanh    coth    sech    csch
-   log     ln      max     min
+   exp     log     ln      max     min
    ) do put(x, 'fancy!-symbol!-length, 2*length explode2 x);
 
 for each x in '(
