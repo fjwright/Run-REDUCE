@@ -450,7 +450,7 @@ public class REDUCEPanel extends BorderPane {
     private void scrollWebViewToBottom() {
         webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},200);" +
                 // Scroll again after KaTeX has had time to complete:
-                "setTimeout(function(){document.documentElement.scrollIntoView(false)},400);");
+                "setTimeout(function(){document.documentElement.scrollIntoView(false)},500);");
     }
 
     /*

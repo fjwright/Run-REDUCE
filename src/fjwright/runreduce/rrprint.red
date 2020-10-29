@@ -1237,24 +1237,24 @@ symbolic procedure fancy!-prefix!-operator(u);
 
 put('sqrt,'fancy!-prifn,'fancy!-sqrtpri);
 
-symbolic procedure fancy!-sqrtpri(u);
+inline procedure fancy!-sqrtpri(u);
    % FJW Display the square root of u.
-   fancy!-sqrtpri!*(cadr u,2);
+   fancy!-sqrtpri!*(cadr u, 2);
 
-symbolic procedure fancy!-sqrtpri!*(u,n);
+symbolic procedure fancy!-sqrtpri!*(u, n);
    % FJW Display the n'th root of u, where n must be a number or a
    % single character.
    fancy!-level
    begin
      if not numberp n and not liter n then return 'failed;
-     fancy!-prin2!*("\sqrt",0);
+     fancy!-prin2!*("\sqrt", 3);        % should the width be larger?
      if n neq 2 then
-     <<fancy!-prin2!*("[",0);
-       fancy!-prin2!*("\,",1);
-       fancy!-prin2!*(n,t);
-       fancy!-prin2!*("]",0);
+     <<fancy!-prin2!*("[", 0);
+       % fancy!-prin2!*("\,",1);
+       fancy!-prin2!*(n, 0);     % nth root no wider than square root
+       fancy!-prin2!*("]", 0);
      >>;
-     return fancy!-maprint!-tex!-bkt(u,0,t);
+     return fancy!-maprint!-tex!-bkt(u, 0, t);
    end;
 
 symbolic procedure fancy!-sub(l,p);
