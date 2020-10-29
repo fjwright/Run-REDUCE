@@ -500,6 +500,7 @@ public class REDUCEPanel extends BorderPane {
 
     REDUCECommand previousREDUCECommand;
     Process reduceProcess;
+    private REDUCEOutputThread outputGobbler;
 
     /**
      * Run the specified REDUCE command in this REDUCE panel.
@@ -525,7 +526,7 @@ public class REDUCEPanel extends BorderPane {
 
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
-            REDUCEOutputThread outputGobbler = new REDUCEOutputThread(reduceProcess.getInputStream());
+            outputGobbler = new REDUCEOutputThread(reduceProcess.getInputStream());
             Thread th = new Thread(outputGobbler);
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
@@ -552,8 +553,8 @@ public class REDUCEPanel extends BorderPane {
             reduceProcess.waitFor(1, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {
         }
+        outputGobbler.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
         clearDisplay();
-        // FixMe PSL REDUCE leaves "quitting" in the display pane.
         if (previousREDUCECommand != null) run(previousREDUCECommand);
     }
 
@@ -576,8 +577,7 @@ public class REDUCEPanel extends BorderPane {
             try (InputStreamReader isr = new InputStreamReader(input);
                  BufferedReader br = new BufferedReader(isr)) {
                 int c;
-                for (; ; ) {
-                    if (isCancelled()) break;
+                while (!isCancelled()) {
                     if (!br.ready()) {
                         // This type declaration (or similar) is critical for inter-thread communication:
                         AtomicReference<String> textAtomicReferenceString = new AtomicReference<>(text.toString());
@@ -613,8 +613,7 @@ public class REDUCEPanel extends BorderPane {
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
-            // REDUCE has stopped running for some reason!
-            System.err.println("REDUCE has stopped running for some reason!");
+//            System.err.println("REDUCE has stopped running for some reason!");
             return null;
         }
     }
