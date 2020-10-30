@@ -88,6 +88,8 @@ public class REDUCEPanel extends BorderPane {
     private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
     private static final String ALGEBRAIC_INPUT_CSS_CLASS = "algebraic-input";
     private static final String SYMBOLIC_INPUT_CSS_CLASS = "symbolic-input";
+    private static final String WARNING_CSS_CLASS = "warning";
+    private static final String ERROR_CSS_CLASS = "error";
     private String inputCSSClass;
     private String outputCSSClass;
     private HTMLElement fontSizeStyle;
@@ -222,7 +224,9 @@ public class REDUCEPanel extends BorderPane {
         colorStyle = (HTMLElement) doc.createElement("style");
         colorStyle.appendChild(doc.createTextNode(
                 ".algebraic-output{color:blue}.symbolic-output{color:#800080}" +
-                        ".algebraic-input{color:red}.symbolic-input{color:#800000}"));
+                        ".algebraic-input{color:red}.symbolic-input{color:#800000}" +
+                        ".warning{background-color:#ffa50040}" + // orange, quarter opaque
+                        ".error{background-color:#ff000040}"));  // red, quarter opaque
         if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
@@ -627,14 +631,22 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
+    private static final Pattern WARNING_ERROR_PATTERN = Pattern.compile("^\n(\\*{3,5})");
+
     /**
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (typesetMathsState) {
-            if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected()) {
-                outputPlainText(text, cssClass);
+        if (colouredIOState != RRPreferences.ColouredIO.NONE) {
+            Matcher matcher = WARNING_ERROR_PATTERN.matcher(text);
+            if (matcher.find()) {
+                outputPlainText(text, matcher.group(1).equals("***") ? WARNING_CSS_CLASS: ERROR_CSS_CLASS);
+                return;
             }
+        }
+        if (typesetMathsState) {
+            if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected())
+                outputPlainText(text, cssClass);
             outputTypesetMaths(text, cssClass);
         } else outputPlainText(text, cssClass);
     }

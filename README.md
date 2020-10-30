@@ -259,3 +259,4 @@ selected.
   clean restart of the last-run REDUCE command.
 * Give sqrt a width of 3 but remove the width of the n in an nth root.
   The output from "int.tst" is now reasonable.
+* v2.25 Highlight warnings and errors with an appropriate background colour.
