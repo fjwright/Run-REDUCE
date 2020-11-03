@@ -2,7 +2,7 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, October 2020
+### Francis Wright, November 2020
 
 Run-REDUCE-FX is a re-implementation of
 [Run-REDUCE](https://fjwright.github.io/Run-REDUCE/) using JavaFX
@@ -260,3 +260,4 @@ selected.
 * Give sqrt a width of 3 but remove the width of the n in an nth root.
   The output from "int.tst" is now reasonable.
 * v2.25 Highlight warnings and errors with an appropriate background colour.
+* Update UserGuide.

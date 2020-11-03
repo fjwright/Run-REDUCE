@@ -472,6 +472,12 @@
     the <em>Save / Append Session Log...</em> item on
     the <em>File</em> menu before clearing!
     </p>
+    <h3>Restart REDUCE</h3>
+    <p>This does a full clean restart of the last-run REDUCE command,
+      which is equivalent to <em>Stop REDUCE</em> followed
+      by <em>Clear I/O Display</em> followed by running the last-run
+      REDUCE command.
+    </p>
     <h3 id="Configure">Configure REDUCE...</h3>
     <p>This displays a dialogue that allows you to configure the
     REDUCE directories and commands.  The defaults should work for
@@ -643,6 +649,9 @@
     input are red, algebraic-mode output is blue, and echoed file
     input and symbolic-mode output are not coloured.
     </p>
+    <p>When I/O colouring is enabled, Run-REDUCE-FX highlights
+    warnings and errors with appropriate background colours.
+    </p>
     <p>Note that turning I/O colouring on does not fully take effect
     until the next input prompt.  Turning I/O colouring off (by
     selecting <em>None</em>) takes effect immediately and turning it
@@ -658,10 +667,10 @@
       Typeset Maths is currently experimental.  It interacts badly
       with redfront I/O colouring, so don't try to use the two
       together: one will effectively cancel the other.  The display
-      may be incorrect in some cases, such as with the switch
-      setting <em>on list</em>.  If any TeX markup appears (coloured
-      red) in the output then please let me know!  <em>Save Session
-      Log...</em> outputs typeset maths using TeX markup.
+      may be incorrect in some cases, e.g. with unusual switch
+      settings such as <em>on list</em>.  If any TeX markup appears
+      (coloured red) in the output then please let me know!  <em>Save
+      Session Log...</em> outputs typeset maths using TeX markup.
     </p>
     <h3>Single Pane Display</h3>
     <p>Selecting this causes Run-REDUCE-FX to display the selected
@@ -967,11 +976,15 @@
         (the name of) a single character.  As a special case, display
         <code>identifier_bar</code> as
         \(\overline{\mathit{identifier}}\) (for
-        any <code>identifier</code>).  See the examples in the table
+        any <code>identifier</code>), which can be followed by digits
+        or "_" as described above.  See the examples in the table
         below.  Ignore <code>fancy_lower_digits</code>.</li>
       <li>Display <code>repart</code> and <code>impart</code> as
       \(\Re\) and \(\Im\).</li>
-      <li>Line breaking is currently thoroughly broken!</li>
+      <li>Display <code>abs(x)</code> as \(|x|\) and matrix
+        assignments as assignments.</li>
+      <li>Do not display superfluous space around commas in algebraic
+        lists and flat printed matrix rows.</li>
     </ul>
     <table>
       <tr><th>Identifier</th><th>Displays as</th></tr>
@@ -983,6 +996,8 @@
       <tr><td><code>z_bar</code></td><td>\(\bar{z}\)</td></tr>
       <tr><td><code>complex_variable_bar</code></td>
         <td>\(\overline{\mathit{complex\_variable}}\)</td></tr>
+      <tr><td><code>z_bar123</code></td><td>\(\bar{z}_{123}\)</td></tr>
+      <tr><td><code>z_bar_k</code></td><td>\(\bar{z}_k\)</td></tr>
     </table>
     <h3>Derivatives</h3>
     <p>
