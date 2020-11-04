@@ -452,9 +452,9 @@ public class REDUCEPanel extends BorderPane {
      * This may not be the best solution but it seems to work provided the delay is long enough.
      */
     private void scrollWebViewToBottom() {
-        webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},200);" +
+        webEngine.executeScript("setTimeout(function(){document.documentElement.scrollIntoView(false)},300);" +
                 // Scroll again after KaTeX has had time to complete:
-                "setTimeout(function(){document.documentElement.scrollIntoView(false)},500);");
+                "setTimeout(function(){document.documentElement.scrollIntoView(false)},1000);");
     }
 
     /*
@@ -552,12 +552,14 @@ public class REDUCEPanel extends BorderPane {
     }
 
     void restart() {
-        stop();
+        outputGobbler.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
+        sendStringToREDUCENoEcho("bye;\n");
+        // Reset enabled status of controls:
+        reduceStopped();
         try {
             reduceProcess.waitFor(1, TimeUnit.SECONDS);
         } catch (InterruptedException ignored) {
         }
-        outputGobbler.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
         clearDisplay();
         if (previousREDUCECommand != null) run(previousREDUCECommand);
     }

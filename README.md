@@ -217,47 +217,29 @@ selected.
   * Detect unreadable directories and files in more fields.
   * Substantial revision to fix some subtle misbehaviour.
 
-### Updates since last release
+### Version 2.3
 
-* Set minimum size for the main window.  Allow space at the bottom of
-  the main display so that the horizontal scroll bar does not obscure
-  the prompt.
-* v2.21 Make "Generic information for all REDUCE commands" fields all
+* Make *Generic information for all REDUCE commands* fields all
   optional, resetting to defaults where appropriate.  Correct the
   behaviour to allow the REDUCE Root Directory text field to be empty,
   and to use the Command Root Directory if it is set.
-* Add line breaking support to the new code for displaying
-  identifiers.
-* Add support for conditional fancy!-functionsymbol properties that
-  are association lists of pairs of the form `(arity . symbol)` and
-  use it for the gamma function.
-* v2.22 Fix fancy!-out!-item() so as not to hang the GUI if an error
-  occurs and to output a more useful error message.
-* Process _bar in an identifier as an over-bar even if it is followed
-  by digits or _k.
-* Set switch ACN on by default, since it seems to improve display with
-  ON LIST.
-* Add fancy!-assgnpri!-matrix() to display matrix assignments as
-  assignments.
-* Remove the declaration of fancy!-symbol!-length for setq and let it
-  default to 4, which seems appropriate.  In fancy!-oprin, if `!*list`
-  then break the line if `sumlevel!*` is 2 or 3; including 3 is a hack
-  to fix the `on list` example in "alg.tst".
-* v2.23 Use fancy!-functionsymbol rather than fancy!-special!-symbol
-  for function names and set fancy!-symbol!-length as appropriate for
-  function names.  Stop using `(ascii n)`, but retain support for it.
-  Tidy up some of the functions for displaying special functions.
-  This shortens some lines in `symbols_and_functions.tst` output.
-* Display abs(x) as |x| and add abs to `symbols_and_functions.tst`.
-* Display multiple matrix assignment correctly, e.g. `a := b :=
-  mat(...)`.
-* Use a character width of 2 instead of 1 in fancy!-tex!-character().
-* Remove all superfluous space around commas in algebraic lists and
-  flat printed matrix rows.
+* Add a *Restart REDUCE* item to the REDUCE menu to do a full clean
+  restart of the last-run REDUCE command.
+* Set a minimum size for the main window.
+* Allow space at the bottom of the main display so that the horizontal
+  scroll bar does not obscure the prompt.
 * Improve automatic scrolling to the bottom of the display pane.
-* v2.24 Add a *Restart REDUCE* item to the REDUCE menu to do a full
-  clean restart of the last-run REDUCE command.
-* Give sqrt a width of 3 but remove the width of the n in an nth root.
-  The output from "int.tst" is now reasonable.
-* v2.25 Highlight warnings and errors with an appropriate background colour.
-* Update UserGuide.
+* Highlight warnings and errors with an appropriate background colour.
+* Typeset maths improvements:
+  * Improve line breaking.
+  * Allow special function symbols to depend on a function's arity and
+    use this for the gamma function to avoid perturbing "excalc.tst".
+  * Process `_bar` in an identifier as an over-bar even if it is
+    followed by digits or `_k`.
+  * Improve display with `on list` and display matrix assignments as
+    assignments, which now both appear correct for "alg.tst".
+  * Display `abs(x)` as |x|.
+  * Remove all superfluous space around commas in algebraic lists and
+    flat printed matrix rows.
+
+### Updates since last release
