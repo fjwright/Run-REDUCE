@@ -284,7 +284,7 @@ public class REDUCEPanel extends BorderPane {
                             "statcounter:=statcounter-1;end$\n");
                     rrprintLoaded = true;
                 }
-            } else stealthInput("outputhandler!*:=nil");
+            } else if (!typesetMathsState) stealthInput("outputhandler!*:=nil");
         }
     }
 
@@ -306,7 +306,8 @@ public class REDUCEPanel extends BorderPane {
                             "statcounter:=statcounter-1;end$\n");
                     rrprintLoaded = true;
                 }
-            } else stealthInput("outputhandler!*:=nil");
+            } else if (colouredIOState) stealthInput("outputhandler!*:='coloured!-output");
+            else stealthInput("outputhandler!*:=nil");
         }
     }
 
@@ -800,8 +801,7 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    // Allow ^A prompt ^B in case redfront mode turned on then off.
-    private static final Pattern promptPattern = Pattern.compile("\u0001?((?:\\d+([:*]) )|.*\\?.*)\u0002?");
+    private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|.*\\?.*");
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -818,11 +818,10 @@ public class REDUCEPanel extends BorderPane {
         // But a question prompt may not be preceded by a newline.
         promptIndex = text.lastIndexOf("\n");
         if ((promptIndex <= 0 || Character.isISOControl(text.charAt(promptIndex - 1))) &&
-//                promptIndex < text.length() && // Dont' see how this could be false!
                 (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
             // Now promptIndex = actual start index of the prompt line.
-            questionPrompt = promptMatcher.group(2) == null;
-            if (promptIndex > 0 || questionPrompt) promptString = promptMatcher.group(1); // exclude ^A/^B
+            questionPrompt = promptMatcher.group(1) == null;
+            if (promptIndex > 0 || questionPrompt) promptString = promptMatcher.group();
         }
         // Handle stealth input:
         if (hideNextOutputAndPrompt) {
@@ -849,37 +848,23 @@ public class REDUCEPanel extends BorderPane {
                 outputLabel.setText(outputLabelDefault + "  |  " + title);
                 if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
                     RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
-                if (!colouredIOState && !typesetMathsState) { // ToDo CHECK THIS IF
+                if (!colouredIOState && !typesetMathsState) {
                     outputHeaderText(text.substring(0, promptIndex));
                     outputPromptText(promptString, null);
-                    return;
-                } else {
+                } else { // colouredIOState || typesetMathsState
                     outputHeaderText(text.substring(0, promptIndex - 1)); // without trailing newline
-                    if (colouredIOState) {
-                        hideNextOutputShowPrompt = true;
-                        sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                inputRRprint() + "outputhandler!*:='coloured!-output;" +
-                                "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
-                        rrprintLoaded = true;
-                    }
-                    if (typesetMathsState) {
-                        if (rrprintLoaded) {
-                            stealthInput("outputhandler!*:='fancy!-output");
-                        } else {
-                            hideNextOutputShowPrompt = true;
-                            sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                    inputRRprint() + "outputhandler!*:='fancy!-output;" +
-                                    "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
-                            rrprintLoaded = true;
-                        }
-                    }
-                    return;
+                    hideNextOutputShowPrompt = true;
+                    sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                            inputRRprint() + "outputhandler!*:='" +
+                            (typesetMathsState ? "fancy" : "coloured") + "!-output;" +
+                            "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
+                    rrprintLoaded = true;
                 }
             } else {
                 // Before the first prompt...
                 outputHeaderText(text);
-                return;
             }
+            return;
         }
 
         if (!colouredIOState) {
@@ -895,7 +880,7 @@ public class REDUCEPanel extends BorderPane {
             if (promptString != null) {
                 outputText(text.substring(0, promptIndex), outputCSSClass);
                 // Only colour output *after* initial REDUCE header.
-                if (!questionPrompt) switch (promptMatcher.group(2)) {
+                if (!questionPrompt) switch (promptMatcher.group(1)) {
                     case "*":
                         inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                         outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
