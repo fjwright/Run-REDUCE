@@ -52,9 +52,7 @@ public class RunREDUCEFrame {
     private Menu autoRunREDUCESubmenu;
     // View menu:
     @FXML
-    CheckMenuItem boldPromptsCheckBox, typesetMathsCheckBox;
-    @FXML
-    private RadioMenuItem noColouredIORadioButton, modeColouredIORadioButton, redfrontColouredIORadioButton;
+    CheckMenuItem boldPromptsCheckBox, colouredIOCheckBox, typesetMathsCheckBox;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
@@ -118,7 +116,7 @@ public class RunREDUCEFrame {
 
         boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
 
-        setSelectedColouredIORadioButton(RRPreferences.colouredIOState);
+        colouredIOCheckBox.setSelected(RRPreferences.colouredIOState);
 
         typesetMathsCheckBox.setSelected(RRPreferences.typesetMathsState);
 
@@ -492,18 +490,8 @@ public class RunREDUCEFrame {
     }
 
     @FXML
-    private void noColouredIORadioButtonAction() {
-        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.NONE);
-    }
-
-    @FXML
-    private void modeColouredIORadioButtonAction() {
-        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.MODAL);
-    }
-
-    @FXML
-    private void redfrontColouredIORadioButtonAction() {
-        RRPreferences.save(RRPreferences.COLOUREDIO, RRPreferences.ColouredIO.REDFRONT);
+    private void colouredIOCheckBoxAction() {
+        RRPreferences.save(RRPreferences.COLOUREDIO, colouredIOCheckBox.isSelected());
     }
 
     @FXML
@@ -711,19 +699,5 @@ public class RunREDUCEFrame {
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();
-    }
-
-    void setSelectedColouredIORadioButton(RRPreferences.ColouredIO colouredIOState) {
-        switch (colouredIOState) {
-            case NONE:
-            default:
-                noColouredIORadioButton.setSelected(true);
-                break;
-            case MODAL:
-                modeColouredIORadioButton.setSelected(true);
-                break;
-            case REDFRONT:
-                redfrontColouredIORadioButton.setSelected(true);
-        }
     }
 }

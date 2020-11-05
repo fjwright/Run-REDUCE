@@ -53,20 +53,8 @@
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..."/>
                 <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false" onAction="#boldPromptsCheckBoxAction"
                                text="Bold Prompts"/>
-                <Menu mnemonicParsing="false" text="I/O Colouring">
-                    <RadioMenuItem fx:id="noColouredIORadioButton" mnemonicParsing="false"
-                                   onAction="#noColouredIORadioButtonAction" selected="true" text="None">
-                        <toggleGroup>
-                            <ToggleGroup fx:id="colouredIOButtonGroup"/>
-                        </toggleGroup>
-                    </RadioMenuItem>
-                    <RadioMenuItem fx:id="modeColouredIORadioButton" mnemonicParsing="false"
-                                   onAction="#modeColouredIORadioButtonAction" text="Modal"
-                                   toggleGroup="$colouredIOButtonGroup"/>
-                    <RadioMenuItem fx:id="redfrontColouredIORadioButton" mnemonicParsing="false"
-                                   onAction="#redfrontColouredIORadioButtonAction" text="Redfront"
-                                   toggleGroup="$colouredIOButtonGroup"/>
-                </Menu>
+                <CheckMenuItem fx:id="colouredIOCheckBox" mnemonicParsing="false" onAction="#colouredIOCheckBoxAction"
+                               text="I/O Colouring"/>
                 <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false"
                                onAction="#typesetMathsCheckBoxAction" text="Typeset Maths"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>

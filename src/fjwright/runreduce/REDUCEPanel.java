@@ -56,8 +56,7 @@ public class REDUCEPanel extends BorderPane {
     private Button earlierButton, laterButton;
 
     int fontSize;
-    private boolean boldPromptsState, typesetMathsState;
-    private RRPreferences.ColouredIO colouredIOState;
+    private boolean boldPromptsState, colouredIOState, typesetMathsState;
     private double[] dividerPositions;
 
     final WebEngine webEngine;
@@ -227,7 +226,7 @@ public class REDUCEPanel extends BorderPane {
                         ".algebraic-input{color:red}.symbolic-input{color:#800000}" +
                         ".warning{background-color:#ffa50040}" + // orange, quarter opaque
                         ".error{background-color:#ff000040}"));  // red, quarter opaque
-        if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
+        if (colouredIOState) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
         if (!RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) {
@@ -268,12 +267,12 @@ public class REDUCEPanel extends BorderPane {
     /**
      * Called in RRPreferences.save (only) to control coloured I/O.
      */
-    void setColouredIO() {
-        colouredIOState = RRPreferences.colouredIOState;
-        if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
+    void setColouredIO(boolean enabled) {
+        colouredIOState = enabled;
+        if (enabled) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
         if (runningREDUCE) {
-            if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+            if (enabled) {
                 if (rrprintLoaded) {
                     stealthInput("outputhandler!*:='coloured!-output");
                 } else {
@@ -639,7 +638,7 @@ public class REDUCEPanel extends BorderPane {
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (colouredIOState != RRPreferences.ColouredIO.NONE) {
+        if (colouredIOState) {
             Matcher matcher = WARNING_ERROR_PATTERN.matcher(text);
             if (matcher.find()) {
                 outputPlainText(text, matcher.group(1).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
@@ -850,15 +849,13 @@ public class REDUCEPanel extends BorderPane {
                 outputLabel.setText(outputLabelDefault + "  |  " + title);
                 if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED)
                     RunREDUCE.tabPane.getSelectionModel().getSelectedItem().setText(title);
-                if (colouredIOState != RRPreferences.ColouredIO.REDFRONT && !typesetMathsState) {
-                    if (colouredIOState == RRPreferences.ColouredIO.NONE) {
-                        outputHeaderText(text.substring(0, promptIndex));
-                        outputPromptText(promptString, null);
-                        return;
-                    } // else MODAL so fall through to the general case code
+                if (!colouredIOState && !typesetMathsState) { // ToDo CHECK THIS IF
+                    outputHeaderText(text.substring(0, promptIndex));
+                    outputPromptText(promptString, null);
+                    return;
                 } else {
                     outputHeaderText(text.substring(0, promptIndex - 1)); // without trailing newline
-                    if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+                    if (colouredIOState) {
                         hideNextOutputShowPrompt = true;
                         sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
                                 inputRRprint() + "outputhandler!*:='coloured!-output;" +
@@ -885,89 +882,87 @@ public class REDUCEPanel extends BorderPane {
             }
         }
 
-        switch (colouredIOState) {
-            case NONE:
-            default: // no IO display colouring, but maybe prompt processing
-                inputCSSClass = null;
-                if (promptString != null) {
-                    outputText(text.substring(0, promptIndex), null);
-                    outputPromptText(promptString, null);
-                } else
-                    outputText(text, null);
-                break;
-
-            case MODAL: // mode coloured IO display processing
-                if (promptString != null) {
-                    outputText(text.substring(0, promptIndex), outputCSSClass);
-                    // Only colour output *after* initial REDUCE header.
-                    if (!questionPrompt) switch (promptMatcher.group(2)) {
-                        case "*":
-                            inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
-                            outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
-                            break;
-                        case ":":
-                        default:
-                            inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
-                            outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                            break;
-                    }
-                    outputPromptText(promptString, inputCSSClass);
-                } else
-                    outputText(text, outputCSSClass);
-                break; // end of case RunREDUCEPrefs.MODAL
-
-            case REDFRONT: // redfront coloured IO display processing
-                /*
-                 * The markup output by the redfront package uses ASCII control characters:
-                 * ^A prompt ^B input
-                 * ^C algebraic-mode output ^D
-                 * where ^A = \u0001, etc. ^A/^B and ^C/^D should always be paired.
-                 * Prompts and input are always red, algebraic-mode output is blue,
-                 * but any other output (echoed input or symbolic-mode output) is not coloured.
-                 */
-                // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
-                inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
-                int start = 0;
-                for (; ; ) {
-                    int algOutputStartMarker = text.indexOf("\u0003", start);
-                    int algOutputEndMarker = text.indexOf("\u0004", start);
-                    if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
-                        if (algOutputStartMarker < algOutputEndMarker) {
-                            // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
-                            if (start < algOutputStartMarker)
-                                outputText(text.substring(start, algOutputStartMarker), null);
-                            outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                            outputCSSClass = null;
-                            start = algOutputEndMarker + 1;
-                        } else {
-                            // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                            outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                            if (algOutputEndMarker + 1 < algOutputStartMarker)
-                                outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
-                            outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                            start = algOutputStartMarker + 1;
-                        }
-                    } else if (algOutputStartMarker >= 0) {
-                        // TEXT < algOutputStartMarker < TEXT
-                        if (start < algOutputStartMarker)
-                            outputText(text.substring(start, algOutputStartMarker), null);
-                        outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_CSS_CLASS);
+        if (!colouredIOState) {
+            // no IO display colouring, but maybe prompt processing
+            inputCSSClass = null;
+            if (promptString != null) {
+                outputText(text.substring(0, promptIndex), null);
+                outputPromptText(promptString, null);
+            } else
+                outputText(text, null);
+        } else {
+            // coloured IO display processing
+            if (promptString != null) {
+                outputText(text.substring(0, promptIndex), outputCSSClass);
+                // Only colour output *after* initial REDUCE header.
+                if (!questionPrompt) switch (promptMatcher.group(2)) {
+                    case "*":
+                        inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
+                        outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
+                        break;
+                    case ":":
+                    default:
+                        inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                         outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                         break;
-                    } else if (algOutputEndMarker >= 0) {
-                        // TEXT < algOutputEndMarker < TEXT
-                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                        outputCSSClass = null;
-                        processPromptMarkers(text, algOutputEndMarker + 1);
-                        break;
-                    } else {
-                        // No algebraic output markers
-                        processPromptMarkers(text, start);
-                        break;
-                    }
                 }
-                break; // end of case RunREDUCEPrefs.REDFRONT
-        } // end of switch (colouredIOState)
+                outputPromptText(promptString, inputCSSClass);
+            } else
+                outputText(text, outputCSSClass);
+        } // end of coloured IO display processing
+
+        if (false) {
+            // redfront coloured IO display processing
+            /*
+             * The markup output by the redfront package uses ASCII control characters:
+             * ^A prompt ^B input
+             * ^C algebraic-mode output ^D
+             * where ^A = \u0001, etc. ^A/^B and ^C/^D should always be paired.
+             * Prompts and input are always red, algebraic-mode output is blue,
+             * but any other output (echoed input or symbolic-mode output) is not coloured.
+             */
+            // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
+            inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
+            int start = 0;
+            for (; ; ) {
+                int algOutputStartMarker = text.indexOf("\u0003", start);
+                int algOutputEndMarker = text.indexOf("\u0004", start);
+                if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
+                    if (algOutputStartMarker < algOutputEndMarker) {
+                        // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
+                        if (start < algOutputStartMarker)
+                            outputText(text.substring(start, algOutputStartMarker), null);
+                        outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                        outputCSSClass = null;
+                        start = algOutputEndMarker + 1;
+                    } else {
+                        // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
+                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                        if (algOutputEndMarker + 1 < algOutputStartMarker)
+                            outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
+                        outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
+                        start = algOutputStartMarker + 1;
+                    }
+                } else if (algOutputStartMarker >= 0) {
+                    // TEXT < algOutputStartMarker < TEXT
+                    if (start < algOutputStartMarker)
+                        outputText(text.substring(start, algOutputStartMarker), null);
+                    outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                    outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
+                    break;
+                } else if (algOutputEndMarker >= 0) {
+                    // TEXT < algOutputEndMarker < TEXT
+                    outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
+                    outputCSSClass = null;
+                    processPromptMarkers(text, algOutputEndMarker + 1);
+                    break;
+                } else {
+                    // No algebraic output markers
+                    processPromptMarkers(text, start);
+                    break;
+                }
+            }
+        }  // end of case RunREDUCEPrefs.REDFRONT
 
         scrollWebViewToBottom();
     }
@@ -1065,7 +1060,7 @@ public class REDUCEPanel extends BorderPane {
         FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled);
         // View menu items:
         FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
-        FRAME.setSelectedColouredIORadioButton(colouredIOState);
+        FRAME.colouredIOCheckBox.setSelected(colouredIOState);
         FRAME.typesetMathsCheckBox.setSelected(typesetMathsState);
         // Templates and Functions menus:
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
