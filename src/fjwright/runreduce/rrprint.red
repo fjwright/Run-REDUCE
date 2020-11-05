@@ -77,6 +77,9 @@ module rrprint; % Output interface for Run-REDUCE (a JavaFX GUI for REDUCE)
 %                          a special symbol.  A standard character has
 %                          2 units, which is the default.
 
+% To enable typeset algebraic-mode output set
+% outputhandler!* := 'fancy!-output;
+
 create!-package('(rrprint), nil);
 
 fluid  '(
@@ -135,57 +138,51 @@ fancy!-switch!-on!* := int2id 16$
 fancy!-switch!-off!* := int2id 17$
 !*fancy!-lower := nil;
 
-global '(fancy_lower_digits fancy_print_df);
+% global '(fancy_lower_digits);  % not currently used
 
-share fancy_lower_digits; % T, NIL or ALL.
+% share fancy_lower_digits; % T, NIL or ALL.
 
-if null fancy_lower_digits then fancy_lower_digits:=t;
+% if null fancy_lower_digits then fancy_lower_digits:=t;
+
+global '(fancy_print_df);
 
 share fancy_print_df;     % PARTIAL, TOTAL, INDEXED.
 
 if null fancy_print_df then fancy_print_df := 'partial;
 switch fancy;
 
-put('fancy,'simpfg,
-  '((t (fmp!-switch t))
-    (nil (fmp!-switch nil)) ));
+% put('fancy,'simpfg,
+%   '((t (fmp!-switch t))
+%     (nil (fmp!-switch nil)) ));
 
-symbolic procedure fmp!-switch mode;
-      if mode then
-        <<if outputhandler!* neq 'fancy!-output then
-          <<outputhandler!-stack!* :=
-                outputhandler!* . outputhandler!-stack!*;
-           outputhandler!* := 'fancy!-output;
-          >>;
-          % !*fancy := t %FJW Handled by switch module
-        >>
-      else
-        <<if outputhandler!* = 'fancy!-output then
-          <<outputhandler!* := car outputhandler!-stack!*;
-            outputhandler!-stack!* := cdr outputhandler!-stack!*;
-            % !*fancy := nil %FJW Handled by switch module
-          >>
-	  else
-          << % !*fancy := nil; %FJW Handled by switch module
-             rederr "FANCY is not current output handler" >>
-% ACN feels that raising an error on an attempt to switch off an option
-% in the case that the option is already disabled is a bit harsh.
-        >>;
+% symbolic procedure fmp!-switch mode;
+%       if mode then
+%         <<if outputhandler!* neq 'fancy!-output then
+%           <<outputhandler!-stack!* :=
+%                 outputhandler!* . outputhandler!-stack!*;
+%            outputhandler!* := 'fancy!-output;
+%           >>;
+%           % !*fancy := t %FJW Handled by switch module
+%         >>
+%       else
+%         <<if outputhandler!* = 'fancy!-output then
+%           <<outputhandler!* := car outputhandler!-stack!*;
+%             outputhandler!-stack!* := cdr outputhandler!-stack!*;
+%             % !*fancy := nil %FJW Handled by switch module
+%           >>
+% 	  else
+%           << % !*fancy := nil; %FJW Handled by switch module
+%              rederr "FANCY is not current output handler" >>
+% % ACN feels that raising an error on an attempt to switch off an option
+% % in the case that the option is already disabled is a bit harsh.
+%         >>;
 
-fluid '(lispsystem!*);
-
-#if (memq 'csl lispsystem!*)
-
-% Print the character whose code is n.
-inline procedure writechar n;
-    tyo n;    % Like "prin2 int2id n"
-
-#endif
+% fluid '(lispsystem!*);
 
 symbolic procedure fancy!-out!-item(it);
    % Called by fancy!-flush only.
   if atom it then prin2 it else
-  if eqcar(it,'ascii) then writechar(cadr it) else
+  if eqcar(it,'ascii) then prin2 int2id cadr it else
   if eqcar(it,'tab) then
       for i:=1:cdr it do prin2 " "
     else
@@ -1583,7 +1580,7 @@ symbolic procedure fancy!-dn!:prin u;
 
 put ('!:dn!:, 'fancy!-prifn, 'fancy!-dn!:prin);
 
-on fancy; %FJW fmp!-switch t;
+% on fancy; %FJW fmp!-switch t;
 
 endmodule;
 
@@ -2210,6 +2207,53 @@ symbolic procedure fancy!-texfbox u;
       fancy!-prin2 "}";
       return u
     end;
+
+endmodule;
+
+
+module rrprint_redfront;
+
+% Code based on the redfront package to support font colouring for
+% non-typeset algebraic-mode output.  To enable set
+% outputhandler!* := 'coloured!-output;
+
+fluid '(orig!*);
+
+procedure coloured!-output(mode,l);
+   begin scalar outputhandler!*;
+      if mode eq 'maprin then
+         if ofl!* or posn!* neq orig!* then
+            maprin l
+	 else <<
+            coloured!-output!-on();
+	    assgnpri(l,nil,nil);
+            coloured!-output!-off()
+         >>
+      else if mode eq 'prin2!* then
+         prin2!* l
+      else if mode eq 'terpri then
+         terpri!* l
+      else if mode eq 'assgnpri then <<
+            coloured!-output!-on();
+	    assgnpri(car l,nil,nil);
+            coloured!-output!-off()
+         >>
+      else
+         rederr {"unknown method ", mode, " in coloured!-output"}
+   end;
+
+procedure coloured!-output!-on();
+   <<
+      terpri!* nil;
+      prin2 int2id 3;
+      terpri!* nil
+   >>;
+
+procedure coloured!-output!-off();
+   <<
+      terpri!* nil;
+      prin2 int2id 4
+   >>;
 
 endmodule;
 

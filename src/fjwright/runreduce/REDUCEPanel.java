@@ -96,7 +96,7 @@ public class REDUCEPanel extends BorderPane {
     private HTMLElement promptWeightStyle;
     private HTMLElement colorStyle;
 
-    private boolean fmprintLoaded, hideNextOutputAndPrompt, hideNextOutputShowPrompt;
+    private boolean rrprintLoaded, hideNextOutputAndPrompt, hideNextOutputShowPrompt;
 
     /*
      * JavaScript debugging support. See
@@ -265,8 +265,6 @@ public class REDUCEPanel extends BorderPane {
         else head.removeChild(promptWeightStyle);
     }
 
-    private boolean redfrontLoaded;
-
     /**
      * Called in RRPreferences.save (only) to control coloured I/O.
      */
@@ -274,15 +272,20 @@ public class REDUCEPanel extends BorderPane {
         colouredIOState = RRPreferences.colouredIOState;
         if (colouredIOState != RRPreferences.ColouredIO.NONE) head.appendChild(colorStyle);
         else head.removeChild(colorStyle);
-        if (colouredIOState == RRPreferences.ColouredIO.REDFRONT && runningREDUCE && !redfrontLoaded) {
-            // Hide the interaction with REDUCE:
-            hideNextOutputAndPrompt = true;
-            sendStringToREDUCENoEcho(
-                    // See the bottom of packages/redfront/redfront.red.
-                    // Done this way because CSL does not allow statcounter to be rebound!
-                    "symbolic begin scalar c:=crbuf!*,i:=inputbuflis!*,s:=statcounter;" +
-                            "load_package redfront;crbuf!*:=cdr c;inputbuflis!*:=cdr i;statcounter:=s-1;end$\n");
-            redfrontLoaded = true;
+        if (runningREDUCE) {
+            if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
+                if (rrprintLoaded) {
+                    stealthInput("outputhandler!*:='coloured!-output");
+                } else {
+//                stealthInput("load_package rrprint");
+                    hideNextOutputAndPrompt = true;
+                    sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                            inputRRprint() + "outputhandler!*:='coloured!-output;" +
+                            "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
+                            "statcounter:=statcounter-1;end$\n");
+                    rrprintLoaded = true;
+                }
+            } else stealthInput("outputhandler!*:=nil");
         }
     }
 
@@ -293,20 +296,18 @@ public class REDUCEPanel extends BorderPane {
         typesetMathsState = enabled;
         if (runningREDUCE) {
             if (enabled) {
-                if (fmprintLoaded) {
-                    stealthInput("on fancy");
+                if (rrprintLoaded) {
+                    stealthInput("outputhandler!*:='fancy!-output");
                 } else {
-//                    stealthInput("load_package fmprint");
+//                    stealthInput("load_package rrprint");
                     hideNextOutputAndPrompt = true;
                     sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                            inputRRprint() +
+                            inputRRprint() + "outputhandler!*:='fancy!-output;" +
                             "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
                             "statcounter:=statcounter-1;end$\n");
-                    fmprintLoaded = true;
+                    rrprintLoaded = true;
                 }
-            } else {
-                stealthInput("off fancy");
-            }
+            } else stealthInput("outputhandler!*:=nil");
         }
     }
 
@@ -512,8 +513,7 @@ public class REDUCEPanel extends BorderPane {
     void run(REDUCECommand reduceCommand) {
         outputCSSClass = null; // for initial header
         beforeFirstPrompt = true;
-        fmprintLoaded = false;
-        redfrontLoaded = false;
+        rrprintLoaded = false;
 
         String[] command = reduceCommand.buildCommand();
         if (command == null) return;
@@ -642,7 +642,7 @@ public class REDUCEPanel extends BorderPane {
         if (colouredIOState != RRPreferences.ColouredIO.NONE) {
             Matcher matcher = WARNING_ERROR_PATTERN.matcher(text);
             if (matcher.find()) {
-                outputPlainText(text, matcher.group(1).equals("***") ? WARNING_CSS_CLASS: ERROR_CSS_CLASS);
+                outputPlainText(text, matcher.group(1).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
                 return;
             }
         }
@@ -664,7 +664,7 @@ public class REDUCEPanel extends BorderPane {
     private StringBuilder mathOutputSB = new StringBuilder();
     private static final Pattern TIMES_PATTERN = Pattern.compile("\\\\\\*");
     private static final Pattern LR_PATTERN = Pattern.compile("\\\\(left|right)");
-    // fmprint outputs a non-standard macro, so \symb{182} -> \partial, etc:
+    // rrprint could output a non-standard macro, so \symb{182} -> \partial, etc:
     // This mapping corresponds to the Microsoft Windows Symbol font.
     private static final Pattern SYMB_PATTERN = Pattern.compile("\\\\symb\\{(\\d+)}");
     private static final Map<String, String> SYMB_MAP = new HashMap<>();
@@ -685,7 +685,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private String reprocessedMathOutputString() {
-        // By default, fmprint breaks lines at 80 characters,
+        // By default, rrprint breaks lines at 80 characters,
         // and the resulting newlines break KaTeX rendering, so remove them:
         for (int i = mathOutputSB.length() - 1; i > 0; i--)
             if (mathOutputSB.charAt(i) == '\n') mathOutputSB.deleteCharAt(i);
@@ -744,7 +744,7 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private void outputTypesetMaths(String text, String cssClass) {
-        // fmprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
+        // rrprint delimits LaTeX output with ^P (DLE, 0x10) before and ^Q (DC1, 0x11) after
         // (always at the start/finish of a the end).
         int textLength = text.length(), start = 0, finish;
         while (start < textLength)
@@ -859,15 +859,22 @@ public class REDUCEPanel extends BorderPane {
                 } else {
                     outputHeaderText(text.substring(0, promptIndex - 1)); // without trailing newline
                     if (colouredIOState == RRPreferences.ColouredIO.REDFRONT) {
-                        sendStringToREDUCENoEcho("load_package redfront$\n");
-                        redfrontLoaded = true;
-                    }
-                    if (typesetMathsState) {
                         hideNextOutputShowPrompt = true;
                         sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                                inputRRprint() +
+                                inputRRprint() + "outputhandler!*:='coloured!-output;" +
                                 "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
-                        fmprintLoaded = true;
+                        rrprintLoaded = true;
+                    }
+                    if (typesetMathsState) {
+                        if (rrprintLoaded) {
+                            stealthInput("outputhandler!*:='fancy!-output");
+                        } else {
+                            hideNextOutputShowPrompt = true;
+                            sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
+                                    inputRRprint() + "outputhandler!*:='fancy!-output;" +
+                                    "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
+                            rrprintLoaded = true;
+                        }
                     }
                     return;
                 }
