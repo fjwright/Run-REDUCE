@@ -2235,7 +2235,7 @@ procedure coloured!-output(mode,l);
          terpri!* l
       else if mode eq 'assgnpri then <<
             coloured!-output!-on();
-	    assgnpri(car l,nil,nil);
+	    assgnpri(car l, cadr l, caddr l);
             coloured!-output!-off()
          >>
       else

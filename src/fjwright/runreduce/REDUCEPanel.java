@@ -775,12 +775,12 @@ public class REDUCEPanel extends BorderPane {
                 // Look for start of maths, ^P:
                 if ((finish = text.indexOf('\u0010', start)) != -1) { // ^P found
                     // Output current non-maths element:
-                    if (start < finish) outputPlainText(text.substring(start, finish), cssClass);
+                    if (start < finish) outputPlainText(text.substring(start, finish), null); // cssClass
                     start = finish + 1; // skip ^P
                     // Start new maths output:
                     inMathOutput = true;
                 } else { // ^P not found so all non-maths:
-                    outputPlainText(text.substring(start), cssClass);
+                    outputPlainText(text.substring(start), null); // cssClass
                     return;
                 }
             }
