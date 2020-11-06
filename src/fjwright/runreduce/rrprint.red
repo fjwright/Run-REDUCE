@@ -18,7 +18,11 @@ module rrprint; % Output interface for Run-REDUCE (a JavaFX GUI for REDUCE)
 % specific to TeXmacs and CSL whilst aiming not to break the LaTeX
 % output!
 
-% Francis Wright, September 2020
+% The code at the end of this file is based on code from
+% "redfront.red" and supports colouring of non-typeset algebraic-mode
+% mathematical output.
+
+% Francis Wright, initiated September 2020.
 
 % ----------------------------------------------------------------------
 % $Id: tmprint.red 5408 2020-09-25 12:22:46Z eschruefer $
@@ -263,11 +267,12 @@ symbolic procedure fancy!-assgnpri u;
 
 symbolic procedure fancy!-assgnpri!-matrix u; % FJW
    % E.g. a := b := c := mat(()) -> u = ((mat (0)) (a b c) only)
+   % Plain printing displays this as "a := [0]", ignoring b and c!
    begin scalar lhvars := cadr u;
       if lhvars then <<
-         if cdr lhvars then
-            fancy!-inprint('setq, get('setq,'infix), lhvars)
-         else
+         % if cdr lhvars then
+         %    fancy!-inprint('setq, get('setq,'infix), lhvars)
+         % else
             fancy!-maprin0 car lhvars;
          fancy!-oprin 'setq;
       >>;
@@ -2234,11 +2239,11 @@ procedure coloured!-output(mode,l);
       else if mode eq 'terpri then
          terpri!* l
       else if mode eq 'assgnpri then <<
-            coloured!-output!-on();
-	    assgnpri(car l, cadr l, caddr l);
-            coloured!-output!-off()
-         >>
-      else
+         coloured!-output!-on();
+         % All args needed for matrix assignments:
+         assgnpri(car l, cadr l, caddr l);
+         coloured!-output!-off()
+      >> else
          rederr {"unknown method ", mode, " in coloured!-output"}
    end;
 
@@ -2254,6 +2259,18 @@ procedure coloured!-output!-off();
       terpri!* nil;
       prin2 int2id 4
    >>;
+
+procedure coloured!-output!-formwrite(u,vars,mode);
+   % Workaround to avoid linebreaks between elements output by write.
+   begin scalar z;
+      z := formwrite(u,vars,mode);
+      if z then return {'cond,
+         {{'and,{'eq,'outputhandler!*,'(quote coloured!-output)},'(not ofl!*)},
+            {'prog,'(outputhandler!*),'(coloured!-output!-on),z,'(coloured!-output!-off)}},
+         {t,z}}
+   end;
+
+put('write, 'formfn, 'coloured!-output!-formwrite);
 
 endmodule;
 
