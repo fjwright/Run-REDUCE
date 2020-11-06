@@ -83,6 +83,7 @@ public class REDUCEPanel extends BorderPane {
     private boolean beforeFirstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
+    private static final String DEFAULT_OUTPUT_CSS_CLASS = null; // echoing of file input
     private static final String ALGEBRAIC_OUTPUT_CSS_CLASS = "algebraic-output";
     private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
     private static final String ALGEBRAIC_INPUT_CSS_CLASS = "algebraic-input";
@@ -545,12 +546,18 @@ public class REDUCEPanel extends BorderPane {
         previousREDUCECommand = reduceCommand;
     }
 
+    /**
+     * Implement "Stop REDUCE" in the REDUCE menu.
+     */
     void stop() {
         sendStringToREDUCEAndEcho("bye;\n");
         // Reset enabled status of controls:
         reduceStopped();
     }
 
+    /**
+     * Implement "Restart REDUCE" in the REDUCE menu.
+     */
     void restart() {
         outputGobbler.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
         sendStringToREDUCENoEcho("bye;\n");
@@ -650,7 +657,7 @@ public class REDUCEPanel extends BorderPane {
             if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected())
                 outputPlainText(text, cssClass);
             outputTypesetMaths(text, cssClass);
-        } else outputPlainText(text, cssClass);
+        } else outputAlgebraicModeText(text, cssClass);
     }
 
     private void outputPlainText(String text, String cssClass) {
@@ -658,6 +665,46 @@ public class REDUCEPanel extends BorderPane {
         outputElement.setTextContent(text);
         if (cssClass != null) outputElement.setClassName(cssClass);
         body.appendChild(outputElement);
+    }
+
+    private boolean inAlgOutput = false;
+
+    private void outputAlgebraicModeText(String text, String cssClass) {
+        /*
+         * rrprint delimits non-typeset algebraic output with ASCII control characters
+         * (always at the start of a line):
+         * ^C<algebraic-mode output>
+         * ^D
+         * where ^C = \u0003, ^D = \u0004. ^C/^D should always be paired (eventually).
+         * But must process arbitrary chunks of output, which may
+         * not contain matched pairs of start and end markers.
+         * Algebraic-mode output is coloured blue (by default),but echoed input is not coloured.
+         */
+        int textLength = text.length(), start = 0, finish;
+        while (start < textLength)
+            if (inAlgOutput) { // in algebraic output; look for end of algebraic output, ^D:
+                if ((finish = text.indexOf('\u0004', start)) != -1) { // ^D found
+                    // Finish current algebraic output:
+                    outputPlainText(text.substring(start, finish), cssClass);
+                    inAlgOutput = false;
+                    start = finish + 1; // Skip ^D:
+                } else { // ^D not found so all algebraic output:
+                    outputPlainText(text.substring(start), cssClass);
+                    return;
+                }
+            } else { // Not in algebraic output so create a non-algebraic output element:
+                // Look for start of algebraic output, ^C:
+                if ((finish = text.indexOf('\u0003', start)) != -1) { // ^C found
+                    // Output current non-algebraic output element:
+                    if (start < finish) outputPlainText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
+                    start = finish + 1; // skip ^C
+                    // Start new algebraic output:
+                    inAlgOutput = true;
+                } else { // ^C not found so all non-algebraic output:
+                    outputPlainText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
+                    return;
+                }
+            }
     }
 
     private boolean inMathOutput = false;
@@ -775,12 +822,12 @@ public class REDUCEPanel extends BorderPane {
                 // Look for start of maths, ^P:
                 if ((finish = text.indexOf('\u0010', start)) != -1) { // ^P found
                     // Output current non-maths element:
-                    if (start < finish) outputPlainText(text.substring(start, finish), null); // cssClass
+                    if (start < finish) outputPlainText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
                     start = finish + 1; // skip ^P
                     // Start new maths output:
                     inMathOutput = true;
                 } else { // ^P not found so all non-maths:
-                    outputPlainText(text.substring(start), null); // cssClass
+                    outputPlainText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
                     return;
                 }
             }
