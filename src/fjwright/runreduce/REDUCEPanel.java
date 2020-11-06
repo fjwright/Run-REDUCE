@@ -653,11 +653,14 @@ public class REDUCEPanel extends BorderPane {
                 return;
             }
         }
-        if (typesetMathsState) {
+        if (SYMBOLIC_OUTPUT_CSS_CLASS.equals(cssClass))
+            outputPlainText(text, cssClass);
+        else if (typesetMathsState) {
             if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected())
                 outputPlainText(text, cssClass);
             outputTypesetMaths(text, cssClass);
-        } else outputAlgebraicModeText(text, cssClass);
+        } else
+            outputAlgebraicModeText(text, cssClass);
     }
 
     private void outputPlainText(String text, String cssClass) {
@@ -914,16 +917,8 @@ public class REDUCEPanel extends BorderPane {
             return;
         }
 
-        if (!colouredIOState) {
-            // no IO display colouring, but maybe prompt processing
-            inputCSSClass = null;
-            if (promptString != null) {
-                outputText(text.substring(0, promptIndex), null);
-                outputPromptText(promptString, null);
-            } else
-                outputText(text, null);
-        } else {
-            // coloured IO display processing
+        if (colouredIOState) {
+            // Coloured IO display:
             if (promptString != null) {
                 outputText(text.substring(0, promptIndex), outputCSSClass);
                 // Only colour output *after* initial REDUCE header.
@@ -941,76 +936,16 @@ public class REDUCEPanel extends BorderPane {
                 outputPromptText(promptString, inputCSSClass);
             } else
                 outputText(text, outputCSSClass);
-        } // end of coloured IO display processing
-
-        if (false) {
-            // redfront coloured IO display processing
-            /*
-             * The markup output by the redfront package uses ASCII control characters:
-             * ^A prompt ^B input
-             * ^C algebraic-mode output ^D
-             * where ^A = \u0001, etc. ^A/^B and ^C/^D should always be paired.
-             * Prompts and input are always red, algebraic-mode output is blue,
-             * but any other output (echoed input or symbolic-mode output) is not coloured.
-             */
-            // Must process arbitrary chunks of output, which may not contain matched pairs of start and end markers:
-            inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
-            int start = 0;
-            for (; ; ) {
-                int algOutputStartMarker = text.indexOf("\u0003", start);
-                int algOutputEndMarker = text.indexOf("\u0004", start);
-                if (algOutputStartMarker >= 0 && algOutputEndMarker >= 0) {
-                    if (algOutputStartMarker < algOutputEndMarker) {
-                        // TEXT < algOutputStartMarker < TEXT < algOutputEndMarker
-                        if (start < algOutputStartMarker)
-                            outputText(text.substring(start, algOutputStartMarker), null);
-                        outputText(text.substring(algOutputStartMarker + 1, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                        outputCSSClass = null;
-                        start = algOutputEndMarker + 1;
-                    } else {
-                        // TEXT < algOutputEndMarker < TEXT < algOutputStartMarker
-                        outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                        if (algOutputEndMarker + 1 < algOutputStartMarker)
-                            outputText(text.substring(algOutputEndMarker + 1, algOutputStartMarker), null);
-                        outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                        start = algOutputStartMarker + 1;
-                    }
-                } else if (algOutputStartMarker >= 0) {
-                    // TEXT < algOutputStartMarker < TEXT
-                    if (start < algOutputStartMarker)
-                        outputText(text.substring(start, algOutputStartMarker), null);
-                    outputText(text.substring(algOutputStartMarker + 1), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                    outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                    break;
-                } else if (algOutputEndMarker >= 0) {
-                    // TEXT < algOutputEndMarker < TEXT
-                    outputText(text.substring(start, algOutputEndMarker), ALGEBRAIC_OUTPUT_CSS_CLASS);
-                    outputCSSClass = null;
-                    processPromptMarkers(text, algOutputEndMarker + 1);
-                    break;
-                } else {
-                    // No algebraic output markers
-                    processPromptMarkers(text, start);
-                    break;
-                }
-            }
-        }  // end of case RunREDUCEPrefs.REDFRONT
-
+        } else {
+            // No IO display colouring, but maybe bold prompt:
+            inputCSSClass = null;
+            if (promptString != null) {
+                outputText(text.substring(0, promptIndex), null);
+                outputPromptText(promptString, null);
+            } else
+                outputText(text, null);
+        }
         scrollWebViewToBottom();
-    }
-
-    private void processPromptMarkers(String text, int start) {
-        // FixMe Merge this more with the prompt handling code at the start of processOutput().
-        // Look for prompt markers:
-        int promptStartMarker = text.indexOf("\u0001", start);
-        int promptEndMarker = text.indexOf("\u0002", start);
-        if (promptStartMarker >= 0 && promptEndMarker >= 0) {
-            if (start < promptStartMarker)
-                outputText(text.substring(start, promptStartMarker), outputCSSClass);
-            String promptString = text.substring(promptStartMarker + 1, promptEndMarker);
-            outputPromptText(promptString, ALGEBRAIC_INPUT_CSS_CLASS);
-        } else
-            outputText(text.substring(start), outputCSSClass);
     }
 
     // Menu processing etc. ***********************************************************************
