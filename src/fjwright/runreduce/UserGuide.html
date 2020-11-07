@@ -68,8 +68,8 @@
     the preferences for this application are stored in the registry
     under the key
     "<code>Computer\HKEY_CURRENT_USER\Software\JavaSoft\Prefs\fjwright\runreduce</code>"
-    and on Linux they are stored in the XML file
-    "<code>~/.java/.userPrefs/fjwright/runreduce/prefs.xml</code>".
+    and on Linux they are stored in XML files under the directory
+    "<code>~/.java/.userPrefs/fjwright/runreduce/</code>".
     </p>
     <p>By default, Run-REDUCE-FX looks in the standard places for a
     REDUCE installation. On Microsoft Windows it looks for the folder
@@ -527,6 +527,11 @@
     more commands running REDUCE on Common Lisp.  (At some future date
     I may include CL REDUCE in the default configuration.)
     </p>
+    <p>If you edit the label used for a REDUCE command then you must
+      press the <em>Return</em> key to confirm the edit, otherwise it
+      will be ignored.  The label will then change in the list of
+      REDUCE commands on the left and the new label will be saved if
+      you click on the <em>Save</em> button.</p>
     <p>A complete REDUCE command must be split into the pathname of an
       executable <strong>binary</strong> command and a sequence of up
       to 5 command arguments. (It would be easy to increase this

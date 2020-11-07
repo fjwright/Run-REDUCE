@@ -153,7 +153,8 @@
         <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
                    GridPane.columnIndex="1" GridPane.rowIndex="1">
             <tooltip>
-                <Tooltip text="An arbitrary label used to identify this REDUCE command."/>
+                <Tooltip
+                        text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
             </tooltip>
         </TextField>
         <Label text="Command Root Directory" GridPane.rowIndex="2"/>
