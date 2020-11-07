@@ -259,7 +259,7 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
-        cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+        cmd.name = commandNameTextField.getText().trim(); // in case edited but not confirmed!
         String commandRootDir =
                 cmd.rootDir.isEmpty() ? reduceRootDirTextField.getText().trim() : cmd.rootDir;
         // Must replace the whole command array because its length may have changed:

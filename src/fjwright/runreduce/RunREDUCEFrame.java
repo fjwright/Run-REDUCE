@@ -656,7 +656,7 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.31";
+    static final String VERSION = "2.32";
 
     @FXML
     private void aboutMenuItemAction() {
