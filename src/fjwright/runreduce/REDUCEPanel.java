@@ -83,13 +83,19 @@ public class REDUCEPanel extends BorderPane {
     private boolean beforeFirstPrompt, questionPrompt;
     final List<File> outputFileList = new ArrayList<>();
 
-    private static final String DEFAULT_OUTPUT_CSS_CLASS = null; // echoing of file input
-    private static final String ALGEBRAIC_OUTPUT_CSS_CLASS = "algebraic-output";
-    private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
     private static final String ALGEBRAIC_INPUT_CSS_CLASS = "algebraic-input";
     private static final String SYMBOLIC_INPUT_CSS_CLASS = "symbolic-input";
+    private static final String ALGEBRAIC_OUTPUT_CSS_CLASS = "algebraic-output";
+    private static final String SYMBOLIC_OUTPUT_CSS_CLASS = "symbolic-output";
     private static final String WARNING_CSS_CLASS = "warning";
     private static final String ERROR_CSS_CLASS = "error";
+    private static final String DEFAULT_OUTPUT_CSS_CLASS = null; // echoing of file input
+    private static String algebraicInputCssColour = "red";
+    private static String symbolicInputCssColour = "green";
+    private static String algebraicOutputCssColour = "blue";
+    private static String symbolicOutputCssColour = "brown";
+    private static String warningCssColour = "#ffa50040"; // orange, 1/4 opaque
+    private static String errorCssColour = "#ff000040";  // red, 1/4 opaque
     private String inputCSSClass;
     private String outputCSSClass;
     private HTMLElement fontSizeStyle;
@@ -224,11 +230,14 @@ public class REDUCEPanel extends BorderPane {
         if (boldPromptsState) head.appendChild(promptWeightStyle);
 
         colorStyle = (HTMLElement) doc.createElement("style");
-        colorStyle.appendChild(doc.createTextNode(
-                ".algebraic-output{color:blue}.symbolic-output{color:#800080}" +
-                        ".algebraic-input{color:red}.symbolic-input{color:#800000}" +
-                        ".warning{background-color:#ffa50040}" + // orange, quarter opaque
-                        ".error{background-color:#ff000040}"));  // red, quarter opaque
+        colorStyle.appendChild(doc.createTextNode(String.format(
+                ".algebraic-output{color:%s}.symbolic-output{color:%s}" +
+                        ".algebraic-input{color:%s}.symbolic-input{color:%s}" +
+                        ".warning{background-color:%s}" +
+                        ".error{background-color:%s}",
+                algebraicOutputCssColour, symbolicOutputCssColour,
+                algebraicInputCssColour, symbolicInputCssColour,
+                warningCssColour, errorCssColour)));
         if (colouredIOState) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
