@@ -814,9 +814,8 @@ public class REDUCEPanel extends BorderPane {
                     katex.call("render", reprocessedMathOutputString(), mathOutputElement, new KaTeXOptions());
                     mathOutputSB.setLength(0);
                     inMathOutput = false;
-                    // Skip ^Q and following white space:
-                    for (start = finish + 1; start < textLength; start++)
-                        if (!Character.isWhitespace(text.charAt(start))) break;
+                    // Skip ^Q and one following newline:
+                    start = finish + 2;
                 } else { // ^Q not found so all maths
                     mathOutputSB.append(text, start, textLength);
                     return;
