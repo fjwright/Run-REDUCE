@@ -164,10 +164,12 @@ public class REDUCEPanel extends BorderPane {
             if (((ObservableBooleanValue) hide).getValue()) {
                 dividerPositions = splitPane.getDividerPositions();
                 this.setCenter(ioDisplayPane);
+                outputWebView.requestFocus();
             } else {
                 splitPane.getItems().set(0, ioDisplayPane);
                 splitPane.setDividerPositions(dividerPositions);
                 this.setCenter(splitPane);
+                inputTextArea.requestFocus();
             }
         });
     }
