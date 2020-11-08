@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fjwright.runreduce.FontColorsDialog">
+    <GridPane alignment="center" hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+        <Label text="Algebraic Input Colour" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <ColorPicker onAction="#algebraicInputColourAction" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Symbolic Input Colour" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ColorPicker onAction="#symbolicInputColourAction" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="Algebraic Output Colour" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ColorPicker onAction="#algebraicOutputColourAction" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Symbolic Output Colour" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ColorPicker onAction="#symbolicOutputColourAction" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="Warning Colour" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <ColorPicker onAction="#warningColourAction" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Label text="Error Colour" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <ColorPicker onAction="#errorColourAction" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+    <HBox alignment="CENTER_RIGHT" spacing="20.0">
+        <Button mnemonicParsing="false" onAction="#okButtonAction" text="OK"/>
+        <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
+    </HBox>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+</VBox>

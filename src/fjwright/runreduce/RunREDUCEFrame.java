@@ -495,6 +495,11 @@ public class RunREDUCEFrame {
     }
 
     @FXML
+    private void fontColorsMenuItemAction() {
+        showDialogAndWait("Font Colours...", "FontColorsDialog.fxml");
+    }
+
+    @FXML
     private void typesetMathsCheckBoxAction() {
         RRPreferences.save(RRPreferences.TYPESET_MATHS, typesetMathsCheckBox.isSelected());
     }

@@ -51,6 +51,8 @@
             </Menu>
             <Menu mnemonicParsing="false" text="View">
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..."/>
+                <MenuItem mnemonicParsing="false" onAction="#fontColorsMenuItemAction" text="Font Colours..."/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
                 <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false" onAction="#boldPromptsCheckBoxAction"
                                text="Bold Prompts"/>
                 <CheckMenuItem fx:id="colouredIOCheckBox" mnemonicParsing="false" onAction="#colouredIOCheckBoxAction"
