@@ -81,8 +81,8 @@ module rrprint; % Output interface for Run-REDUCE (a JavaFX GUI for REDUCE)
 %                          a special symbol.  A standard character has
 %                          2 units, which is the default.
 
-% To enable typeset algebraic-mode output set
-% outputhandler!* := 'fancy!-output;
+% To enable typeset algebraic-mode output execute
+% rrprint 'fancy!-output;
 
 create!-package('(rrprint), nil);
 
@@ -2219,8 +2219,8 @@ endmodule;
 module rrprint_redfront;
 
 % Code based on the redfront package to support font colouring for
-% non-typeset algebraic-mode output.  To enable set
-% outputhandler!* := 'coloured!-output;
+% non-typeset algebraic-mode output.  To enable it, execute
+% rrprint 'coloured!-output;
 
 fluid '(orig!*);
 
@@ -2270,7 +2270,12 @@ procedure coloured!-output!-formwrite(u,vars,mode);
          {t,z}}
    end;
 
-put('write, 'formfn, 'coloured!-output!-formwrite);
+procedure rrprint outputhandler;
+   % Select an output handler or none.
+   % outputhandler = 'fancy!-output, 'coloured!-output or nil.
+   put('write, 'formfn,
+      if (outputhandler!* := outputhandler) eq 'coloured!-output
+      then 'coloured!-output!-formwrite  else 'formwrite);
 
 endmodule;
 

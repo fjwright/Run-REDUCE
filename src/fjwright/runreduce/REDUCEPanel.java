@@ -286,17 +286,17 @@ public class REDUCEPanel extends BorderPane {
         if (runningREDUCE) {
             if (enabled) {
                 if (rrprintLoaded) {
-                    stealthInput("outputhandler!*:='coloured!-output");
+                    stealthInput("rrprint 'coloured!-output");
                 } else {
 //                stealthInput("load_package rrprint");
                     hideNextOutputAndPrompt = true;
                     sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                            inputRRprint() + "outputhandler!*:='coloured!-output;" +
+                            inputRRprint() + "rrprint 'coloured!-output;" +
                             "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
                             "statcounter:=statcounter-1;end$\n");
                     rrprintLoaded = true;
                 }
-            } else if (!typesetMathsState) stealthInput("outputhandler!*:=nil");
+            } else if (!typesetMathsState) stealthInput("rrprint nil");
         }
     }
 
@@ -308,18 +308,18 @@ public class REDUCEPanel extends BorderPane {
         if (runningREDUCE) {
             if (enabled) {
                 if (rrprintLoaded) {
-                    stealthInput("outputhandler!*:='fancy!-output");
+                    stealthInput("rrprint 'fancy!-output");
                 } else {
 //                    stealthInput("load_package rrprint");
                     hideNextOutputAndPrompt = true;
                     sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                            inputRRprint() + "outputhandler!*:='fancy!-output;" +
+                            inputRRprint() + "rrprint 'fancy!-output;" +
                             "crbuf!*:=cdr crbuf!*;inputbuflis!*:=cdr inputbuflis!*;" +
                             "statcounter:=statcounter-1;end$\n");
                     rrprintLoaded = true;
                 }
-            } else if (colouredIOState) stealthInput("outputhandler!*:='coloured!-output");
-            else stealthInput("outputhandler!*:=nil");
+            } else if (colouredIOState) stealthInput("rrprint 'coloured!-output");
+            else stealthInput("rrprint nil");
         }
     }
 
@@ -915,7 +915,7 @@ public class REDUCEPanel extends BorderPane {
                     outputHeaderText(text.substring(0, promptIndex - 1)); // without trailing newline
                     hideNextOutputShowPrompt = true;
                     sendStringToREDUCENoEcho("symbolic begin scalar !*msg,!*redefmsg,!*comp:=t;" +
-                            inputRRprint() + "outputhandler!*:='" +
+                            inputRRprint() + "rrprint '" +
                             (typesetMathsState ? "fancy" : "coloured") + "!-output;" +
                             "crbuf!*:=nil;inputbuflis!*:=nil;statcounter:=0;end$\n");
                     rrprintLoaded = true;
