@@ -90,12 +90,12 @@ public class REDUCEPanel extends BorderPane {
     private static final String WARNING_CSS_CLASS = "warning";
     private static final String ERROR_CSS_CLASS = "error";
     private static final String DEFAULT_OUTPUT_CSS_CLASS = null; // echoing of file input
-    private static String algebraicInputCssColour = "red";
-    private static String symbolicInputCssColour = "green";
-    private static String algebraicOutputCssColour = "blue";
-    private static String symbolicOutputCssColour = "brown";
-    private static String warningCssColour = "#ffa50040"; // orange, 1/4 opaque
-    private static String errorCssColour = "#ff000040";  // red, 1/4 opaque
+    static String algebraicInputCssColour = "red";
+    static String symbolicInputCssColour = "green";
+    static String algebraicOutputCssColour = "blue";
+    static String symbolicOutputCssColour = "brown";
+    static String warningCssColour = "#ffa50040"; // orange, 1/4 opaque
+    static String errorCssColour = "#ff000040";  // red, 1/4 opaque
     private String inputCSSClass;
     private String outputCSSClass;
     private HTMLElement fontSizeStyle;
@@ -265,6 +265,17 @@ public class REDUCEPanel extends BorderPane {
     void updateFontSize(int newFontSize) {
         fontSize = newFontSize;
         fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", newFontSize));
+    }
+
+    void updateFontColours() {
+        colorStyle.getFirstChild().setNodeValue(String.format(
+                ".algebraic-output{color:%s}.symbolic-output{color:%s}" +
+                        ".algebraic-input{color:%s}.symbolic-input{color:%s}" +
+                        ".warning{background-color:%s}" +
+                        ".error{background-color:%s}",
+                algebraicOutputCssColour, symbolicOutputCssColour,
+                algebraicInputCssColour, symbolicInputCssColour,
+                warningCssColour, errorCssColour));
     }
 
     /**
