@@ -221,8 +221,8 @@ public class REDUCEPanel extends BorderPane {
         head.appendChild(fontFamilyStyle);
 
         fontSizeStyle = (HTMLElement) doc.createElement("style");
-        fontSizeStyle.appendChild(doc.createTextNode(
-                String.format("body{font-size:%dpx}", fontSize)));
+        fontSizeStyle.appendChild(doc.createTextNode(null));
+        updateFontSize(0);
         head.appendChild(fontSizeStyle);
 
         promptWeightStyle = (HTMLElement) doc.createElement("style");
@@ -230,14 +230,8 @@ public class REDUCEPanel extends BorderPane {
         if (boldPromptsState) head.appendChild(promptWeightStyle);
 
         colorStyle = (HTMLElement) doc.createElement("style");
-        colorStyle.appendChild(doc.createTextNode(String.format(
-                ".algebraic-output{color:%s}.symbolic-output{color:%s}" +
-                        ".algebraic-input{color:%s}.symbolic-input{color:%s}" +
-                        ".warning{background-color:%s}" +
-                        ".error{background-color:%s}",
-                algebraicOutputCssColour, symbolicOutputCssColour,
-                algebraicInputCssColour, symbolicInputCssColour,
-                warningCssColour, errorCssColour)));
+        colorStyle.appendChild(doc.createTextNode(null));
+        updateFontColours();
         if (colouredIOState) head.appendChild(colorStyle);
 
         // Auto-run REDUCE if appropriate:
@@ -256,15 +250,9 @@ public class REDUCEPanel extends BorderPane {
 //                "getComputedStyle(document.body, null).getPropertyValue('font-size'))");
     }
 
-    void clearDisplay() {
-        HTMLElement newBody = (HTMLElement) doc.createElement("body");
-        html.replaceChild(newBody, body);
-        body = newBody;
-    }
-
     void updateFontSize(int newFontSize) {
-        fontSize = newFontSize;
-        fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", newFontSize));
+        if (newFontSize > 0) fontSize = newFontSize;
+        fontSizeStyle.getFirstChild().setNodeValue(String.format("body{font-size:%dpx}", fontSize));
     }
 
     void updateFontColours() {
@@ -276,6 +264,12 @@ public class REDUCEPanel extends BorderPane {
                 algebraicOutputCssColour, symbolicOutputCssColour,
                 algebraicInputCssColour, symbolicInputCssColour,
                 warningCssColour, errorCssColour));
+    }
+
+    void clearDisplay() {
+        HTMLElement newBody = (HTMLElement) doc.createElement("body");
+        html.replaceChild(newBody, body);
+        body = newBody;
     }
 
     /**
