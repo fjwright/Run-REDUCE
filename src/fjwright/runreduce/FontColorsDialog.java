@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FontColorsDialog {
-
     @FXML
     private ColorPicker algebraicInputColourPicker, symbolicInputColourPicker,
             algebraicOutputColourPicker, symbolicOutputColourPicker, warningColourPicker, errorColourPicker;
@@ -42,12 +41,25 @@ public class FontColorsDialog {
     public void errorColourAction(ActionEvent actionEvent) {
     }
 
+    /**
+    * Convert a Color to an RGBA web string.
+    */
     private static String colorToWeb(Color color) {
         return String.format("rgba(%d,%d,%d,%.2f)",
                 Math.round(color.getRed() * 255),
                 Math.round(color.getGreen() * 255),
                 Math.round(color.getBlue() * 255),
                 color.getOpacity());
+    }
+
+    @FXML
+    private void resetAllDefaultsButtonAction() {
+        algebraicInputColourPicker.setValue(Color.web(FontColors.algebraicInputDefault));
+        symbolicInputColourPicker.setValue(Color.web(FontColors.symbolicInputDefault));
+        algebraicOutputColourPicker.setValue(Color.web(FontColors.algebraicOutputDefault));
+        symbolicOutputColourPicker.setValue(Color.web(FontColors.symbolicOutputDefault));
+        warningColourPicker.setValue(Color.web(FontColors.warningDefault));
+        errorColourPicker.setValue(Color.web(FontColors.errorDefault));
     }
 
     @FXML

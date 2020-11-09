@@ -90,12 +90,12 @@ class FontColors {
     private static final String WARNING = "warning";
     private static final String ERROR = "error";
     // Default colour values:
-    private static final String algebraicInputDefault = "red";
-    private static final String symbolicInputDefault = "green";
-    private static final String algebraicOutputDefault = "blue";
-    private static final String symbolicOutputDefault = "brown";
-    private static final String warningDefault = "#ffa50040"; // orange, 1/4 opaque
-    private static final String errorDefault = "#ff000040";  // red, 1/4 opaque
+    static final String algebraicInputDefault = "red";
+    static final String symbolicInputDefault = "green";
+    static final String algebraicOutputDefault = "blue";
+    static final String symbolicOutputDefault = "brown";
+    static final String warningDefault = "#ffa50040"; // orange, 1/4 opaque
+    static final String errorDefault = "#ff000040";  // red, 1/4 opaque
     // Current colour values:
     static String algebraicInput;
     static String symbolicInput;
@@ -105,7 +105,7 @@ class FontColors {
     static String error;
 
     /*
-     * Static constructor restores preferences from backing store.
+     * Restore colours from preferences.
      */
     static {
         Preferences prefs = RRPreferences.prefs.node(FONT_COLORS);
@@ -118,7 +118,7 @@ class FontColors {
     }
 
     /**
-     * Save preferences to backing store.
+     * Save colours as preferences.
      */
     static void save() {
         RunREDUCE.reducePanel.updateFontColours();
