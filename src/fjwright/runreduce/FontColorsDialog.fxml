@@ -39,7 +39,7 @@
                      GridPane.columnIndex="1" GridPane.rowIndex="5"/>
     </GridPane>
     <HBox alignment="CENTER_RIGHT" spacing="20.0">
-        <Button mnemonicParsing="false" onAction="#saveButtonAction" text="OK"/>
+        <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save"/>
         <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
     </HBox>
     <padding>

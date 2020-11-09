@@ -77,6 +77,62 @@ class RRPreferences {
 }
 
 /**
+ * This class defines the font colours used in the I/O Display pane.
+ * They are represented as web colour strings.
+ */
+class FontColors {
+    // Preference keys:
+    private static final String FONT_COLORS = "fontColors";
+    private static final String ALGEBRAIC_INPUT = "algebraicInput";
+    private static final String SYMBOLIC_INPUT = "symbolicInput";
+    private static final String ALGEBRAIC_OUTPUT = "algebraicOutput";
+    private static final String SYMBOLIC_OUTPUT = "symbolicOutput";
+    private static final String WARNING = "warning";
+    private static final String ERROR = "error";
+    // Default colour values:
+    private static final String algebraicInputDefault = "red";
+    private static final String symbolicInputDefault = "green";
+    private static final String algebraicOutputDefault = "blue";
+    private static final String symbolicOutputDefault = "brown";
+    private static final String warningDefault = "#ffa50040"; // orange, 1/4 opaque
+    private static final String errorDefault = "#ff000040";  // red, 1/4 opaque
+    // Current colour values:
+    static String algebraicInput;
+    static String symbolicInput;
+    static String algebraicOutput;
+    static String symbolicOutput;
+    static String warning;
+    static String error;
+
+    /*
+     * Static constructor restores preferences from backing store.
+     */
+    static {
+        Preferences prefs = RRPreferences.prefs.node(FONT_COLORS);
+        algebraicInput = prefs.get(ALGEBRAIC_INPUT, algebraicInputDefault);
+        symbolicInput = prefs.get(SYMBOLIC_INPUT, symbolicInputDefault);
+        algebraicOutput = prefs.get(ALGEBRAIC_OUTPUT, algebraicOutputDefault);
+        symbolicOutput = prefs.get(SYMBOLIC_OUTPUT, symbolicOutputDefault);
+        warning = prefs.get(WARNING, warningDefault);
+        error = prefs.get(ERROR, errorDefault);
+    }
+
+    /**
+     * Save preferences to backing store.
+     */
+    static void save() {
+        RunREDUCE.reducePanel.updateFontColours();
+        Preferences prefs = RRPreferences.prefs.node(FONT_COLORS);
+        prefs.put(ALGEBRAIC_INPUT, algebraicInput);
+        prefs.put(SYMBOLIC_INPUT, symbolicInput);
+        prefs.put(ALGEBRAIC_OUTPUT, algebraicOutput);
+        prefs.put(SYMBOLIC_OUTPUT, symbolicOutput);
+        prefs.put(WARNING, warning);
+        prefs.put(ERROR, error);
+    }
+}
+
+/**
  * This class defines a command to run REDUCE after checking it is executable.
  */
 class REDUCECommand {

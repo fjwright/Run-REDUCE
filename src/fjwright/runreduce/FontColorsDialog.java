@@ -15,12 +15,12 @@ public class FontColorsDialog {
 
     @FXML
     private void initialize() {
-        algebraicInputColourPicker.setValue(Color.web(REDUCEPanel.algebraicInputCssColour));
-        symbolicInputColourPicker.setValue(Color.web(REDUCEPanel.symbolicInputCssColour));
-        algebraicOutputColourPicker.setValue(Color.web(REDUCEPanel.algebraicOutputCssColour));
-        symbolicOutputColourPicker.setValue(Color.web(REDUCEPanel.symbolicOutputCssColour));
-        warningColourPicker.setValue(Color.web(REDUCEPanel.warningCssColour));
-        errorColourPicker.setValue(Color.web(REDUCEPanel.errorCssColour));
+        algebraicInputColourPicker.setValue(Color.web(FontColors.algebraicInput));
+        symbolicInputColourPicker.setValue(Color.web(FontColors.symbolicInput));
+        algebraicOutputColourPicker.setValue(Color.web(FontColors.algebraicOutput));
+        symbolicOutputColourPicker.setValue(Color.web(FontColors.symbolicOutput));
+        warningColourPicker.setValue(Color.web(FontColors.warning));
+        errorColourPicker.setValue(Color.web(FontColors.error));
     }
 
     public void algebraicInputColourAction(ActionEvent actionEvent) {
@@ -43,7 +43,7 @@ public class FontColorsDialog {
     }
 
     private static String colorToWeb(Color color) {
-        return String.format("rgba(%d,%d,%d,%2f)",
+        return String.format("rgba(%d,%d,%d,%.2f)",
                 Math.round(color.getRed() * 255),
                 Math.round(color.getGreen() * 255),
                 Math.round(color.getBlue() * 255),
@@ -52,13 +52,13 @@ public class FontColorsDialog {
 
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
-        REDUCEPanel.algebraicInputCssColour = colorToWeb(algebraicInputColourPicker.getValue());
-        REDUCEPanel.symbolicInputCssColour = colorToWeb(symbolicInputColourPicker.getValue());
-        REDUCEPanel.algebraicOutputCssColour = colorToWeb(algebraicOutputColourPicker.getValue());
-        REDUCEPanel.symbolicOutputCssColour = colorToWeb(symbolicOutputColourPicker.getValue());
-        REDUCEPanel.warningCssColour = colorToWeb(warningColourPicker.getValue());
-        REDUCEPanel.errorCssColour = colorToWeb(errorColourPicker.getValue());
-        RunREDUCE.reducePanel.updateFontColours();
+        FontColors.algebraicInput = colorToWeb(algebraicInputColourPicker.getValue());
+        FontColors.symbolicInput = colorToWeb(symbolicInputColourPicker.getValue());
+        FontColors.algebraicOutput = colorToWeb(algebraicOutputColourPicker.getValue());
+        FontColors.symbolicOutput = colorToWeb(symbolicOutputColourPicker.getValue());
+        FontColors.warning = colorToWeb(warningColourPicker.getValue());
+        FontColors.error = colorToWeb(errorColourPicker.getValue());
+        FontColors.save();
         // Close dialogue:
         cancelButtonAction(actionEvent);
     }
