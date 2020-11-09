@@ -19,28 +19,27 @@
             <RowConstraints/>
             <RowConstraints/>
         </rowConstraints>
-        <Label text="Algebraic Input Colour" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label text="Algebraic Input" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <ColorPicker fx:id="algebraicInputColourPicker" onAction="#algebraicInputColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="0"/>
-        <Label text="Symbolic Input Colour" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Label text="Symbolic Input" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <ColorPicker fx:id="symbolicInputColourPicker" onAction="#symbolicInputColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="1"/>
-        <Label text="Algebraic Output Colour" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label text="Algebraic Output" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <ColorPicker fx:id="algebraicOutputColourPicker" onAction="#algebraicOutputColourAction"
                      GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <Label text="Symbolic Output Colour" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label text="Symbolic Output" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <ColorPicker fx:id="symbolicOutputColourPicker" onAction="#symbolicOutputColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="3"/>
-        <Label text="Warning Colour" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <Label text="Warning" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
         <ColorPicker fx:id="warningColourPicker" onAction="#warningColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="4"/>
-        <Label text="Error Colour" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <Label text="Error" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
         <ColorPicker fx:id="errorColourPicker" onAction="#errorColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="5"/>
     </GridPane>
     <HBox alignment="CENTER" spacing="20.0">
-        <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults"/>
-        <Region HBox.hgrow="ALWAYS"/>
+        <Button mnemonicParsing="false" onAction="#resetDefaultsButtonAction" text="Reset Defaults"/>
         <Button mnemonicParsing="false" onAction="#saveButtonAction" text="Save"/>
         <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel"/>
     </HBox>

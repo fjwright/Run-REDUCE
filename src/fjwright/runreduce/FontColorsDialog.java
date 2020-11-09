@@ -53,7 +53,7 @@ public class FontColorsDialog {
     }
 
     @FXML
-    private void resetAllDefaultsButtonAction() {
+    private void resetDefaultsButtonAction() {
         algebraicInputColourPicker.setValue(Color.web(FontColors.algebraicInputDefault));
         symbolicInputColourPicker.setValue(Color.web(FontColors.symbolicInputDefault));
         algebraicOutputColourPicker.setValue(Color.web(FontColors.algebraicOutputDefault));
