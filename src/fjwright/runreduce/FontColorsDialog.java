@@ -4,35 +4,38 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FontColorsDialog {
     @FXML
-    private ColorPicker algebraicInputColourPicker, symbolicInputColourPicker,
-            algebraicOutputColourPicker, symbolicOutputColourPicker, warningColourPicker, errorColourPicker;
+    private Label algebraicInputLabel, symbolicInputLabel,
+            algebraicOutputLabel, symbolicOutputLabel, warningLabel, errorLabel;
+    @FXML
+    private ColorPicker algebraicInputColorPicker, symbolicInputColorPicker,
+            algebraicOutputColorPicker, symbolicOutputColorPicker, warningColorPicker, errorColorPicker;
 
     @FXML
     private void initialize() {
-        algebraicInputColourPicker.setValue(Color.web(FontColors.algebraicInput));
-        symbolicInputColourPicker.setValue(Color.web(FontColors.symbolicInput));
-        algebraicOutputColourPicker.setValue(Color.web(FontColors.algebraicOutput));
-        symbolicOutputColourPicker.setValue(Color.web(FontColors.symbolicOutput));
-        warningColourPicker.setValue(Color.web(FontColors.warning));
-        errorColourPicker.setValue(Color.web(FontColors.error));
-    }
+        algebraicInputLabel.textFillProperty().bind(algebraicInputColorPicker.valueProperty());
+        symbolicInputLabel.textFillProperty().bind(symbolicInputColorPicker.valueProperty());
+        algebraicOutputLabel.textFillProperty().bind(algebraicOutputColorPicker.valueProperty());
+        symbolicOutputLabel.textFillProperty().bind(symbolicOutputColorPicker.valueProperty());
 
-    public void algebraicInputColourAction(ActionEvent actionEvent) {
+        algebraicInputColorPicker.setValue(Color.web(FontColors.algebraicInput));
+        symbolicInputColorPicker.setValue(Color.web(FontColors.symbolicInput));
+        algebraicOutputColorPicker.setValue(Color.web(FontColors.algebraicOutput));
+        symbolicOutputColorPicker.setValue(Color.web(FontColors.symbolicOutput));
 
-    }
-
-    public void symbolicInputColourAction(ActionEvent actionEvent) {
-    }
-
-    public void algebraicOutputColourAction(ActionEvent actionEvent) {
-    }
-
-    public void symbolicOutputColourAction(ActionEvent actionEvent) {
+        Color color = Color.web(FontColors.warning);
+        warningLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
+        warningColorPicker.setValue(color);
+        color = Color.web(FontColors.error);
+        errorLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
+        errorColorPicker.setValue(color);
     }
 
     public void warningColourAction(ActionEvent actionEvent) {
@@ -42,8 +45,8 @@ public class FontColorsDialog {
     }
 
     /**
-    * Convert a Color to an RGBA web string.
-    */
+     * Convert a Color to an RGBA web string.
+     */
     private static String colorToWeb(Color color) {
         return String.format("rgba(%d,%d,%d,%.2f)",
                 Math.round(color.getRed() * 255),
@@ -54,22 +57,22 @@ public class FontColorsDialog {
 
     @FXML
     private void resetDefaultsButtonAction() {
-        algebraicInputColourPicker.setValue(Color.web(FontColors.algebraicInputDefault));
-        symbolicInputColourPicker.setValue(Color.web(FontColors.symbolicInputDefault));
-        algebraicOutputColourPicker.setValue(Color.web(FontColors.algebraicOutputDefault));
-        symbolicOutputColourPicker.setValue(Color.web(FontColors.symbolicOutputDefault));
-        warningColourPicker.setValue(Color.web(FontColors.warningDefault));
-        errorColourPicker.setValue(Color.web(FontColors.errorDefault));
+        algebraicInputColorPicker.setValue(Color.web(FontColors.algebraicInputDefault));
+        symbolicInputColorPicker.setValue(Color.web(FontColors.symbolicInputDefault));
+        algebraicOutputColorPicker.setValue(Color.web(FontColors.algebraicOutputDefault));
+        symbolicOutputColorPicker.setValue(Color.web(FontColors.symbolicOutputDefault));
+        warningColorPicker.setValue(Color.web(FontColors.warningDefault));
+        errorColorPicker.setValue(Color.web(FontColors.errorDefault));
     }
 
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
-        FontColors.algebraicInput = colorToWeb(algebraicInputColourPicker.getValue());
-        FontColors.symbolicInput = colorToWeb(symbolicInputColourPicker.getValue());
-        FontColors.algebraicOutput = colorToWeb(algebraicOutputColourPicker.getValue());
-        FontColors.symbolicOutput = colorToWeb(symbolicOutputColourPicker.getValue());
-        FontColors.warning = colorToWeb(warningColourPicker.getValue());
-        FontColors.error = colorToWeb(errorColourPicker.getValue());
+        FontColors.algebraicInput = colorToWeb(algebraicInputColorPicker.getValue());
+        FontColors.symbolicInput = colorToWeb(symbolicInputColorPicker.getValue());
+        FontColors.algebraicOutput = colorToWeb(algebraicOutputColorPicker.getValue());
+        FontColors.symbolicOutput = colorToWeb(symbolicOutputColorPicker.getValue());
+        FontColors.warning = colorToWeb(warningColorPicker.getValue());
+        FontColors.error = colorToWeb(errorColorPicker.getValue());
         FontColors.save();
         // Close dialogue:
         cancelButtonAction(actionEvent);

@@ -19,23 +19,25 @@
             <RowConstraints/>
             <RowConstraints/>
         </rowConstraints>
-        <Label text="Algebraic Input" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <ColorPicker fx:id="algebraicInputColourPicker" onAction="#algebraicInputColourAction" GridPane.columnIndex="1"
-                     GridPane.rowIndex="0"/>
-        <Label text="Symbolic Input" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <ColorPicker fx:id="symbolicInputColourPicker" onAction="#symbolicInputColourAction" GridPane.columnIndex="1"
-                     GridPane.rowIndex="1"/>
-        <Label text="Algebraic Output" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <ColorPicker fx:id="algebraicOutputColourPicker" onAction="#algebraicOutputColourAction"
-                     GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <Label text="Symbolic Output" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <ColorPicker fx:id="symbolicOutputColourPicker" onAction="#symbolicOutputColourAction" GridPane.columnIndex="1"
-                     GridPane.rowIndex="3"/>
-        <Label text="Warning" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <ColorPicker fx:id="warningColourPicker" onAction="#warningColourAction" GridPane.columnIndex="1"
+        <Label fx:id="algebraicInputLabel" style="-fx-background-color: white; -fx-label-padding: 2;"
+               text="Algebraic Input" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <ColorPicker fx:id="algebraicInputColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label fx:id="symbolicInputLabel" style="-fx-background-color: white; -fx-label-padding: 2;"
+               text="Symbolic Input" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ColorPicker fx:id="symbolicInputColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label fx:id="algebraicOutputLabel" style="-fx-background-color: white; -fx-label-padding: 2;"
+               text="Algebraic Output" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ColorPicker fx:id="algebraicOutputColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label fx:id="symbolicOutputLabel" style="-fx-background-color: white; -fx-label-padding: 2;"
+               text="Symbolic Output" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ColorPicker fx:id="symbolicOutputColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label fx:id="warningLabel" style="-fx-label-padding: 2;" text="Warning" GridPane.columnIndex="0"
+               GridPane.rowIndex="4"/>
+        <ColorPicker fx:id="warningColorPicker" onAction="#warningColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="4"/>
-        <Label text="Error" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-        <ColorPicker fx:id="errorColourPicker" onAction="#errorColourAction" GridPane.columnIndex="1"
+        <Label fx:id="errorLabel" style="-fx-label-padding: 2;" text="Error" GridPane.columnIndex="0"
+               GridPane.rowIndex="5"/>
+        <ColorPicker fx:id="errorColorPicker" onAction="#errorColourAction" GridPane.columnIndex="1"
                      GridPane.rowIndex="5"/>
     </GridPane>
     <HBox alignment="CENTER" spacing="20.0">
