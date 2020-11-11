@@ -661,13 +661,13 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.32";
+    static final String VERSION = "2.4";
 
     @FXML
     private void aboutMenuItemAction() {
         RunREDUCE.alert(Alert.AlertType.INFORMATION,
                 "Run REDUCE in a JavaFX GUI",
-                "Version " + VERSION + ", October 2020\n" +
+                "Version " + VERSION + ", November 2020\n" +
                         "\u00A9 2020 Francis Wright",
                 "About Run-REDUCE-FX");
     }

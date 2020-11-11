@@ -624,55 +624,73 @@
 
     <p>Run-REDUCE-FX remembers the options you select using
     the <em>View</em> menu and uses them the next time you start
-    Run-REDUCE-FX.  The first four options (above the separator) apply
-    to each REDUCE panel independently and Run-REDUCE-FX uses the last
-    set values initially when you create a new REDUCE panel.
-    The <em>View</em> menu provides the following items:</p>
+    Run-REDUCE-FX.  Run-REDUCE-FX uses the last set values initially
+    when you create a new REDUCE panel.  The <em>View</em> menu
+    provides the following items:</p>
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
-    Editor</em> panes.
+    Editor</em> panes.  It applies to each REDUCE panel independently.
+    </p>
+    <h3>Font Colours...</h3>
+    <p>This displays a dialogue that allows you to change the colours
+      used in the <em>Input/Output Display</em> pane.  Currently, it
+      applies to the REDUCE panel selected when you click on
+      the <em>Save</em> button (but this is not consistent with other
+      options and may change in a future release).
+    </p>
+    <p>The colours that you can select are the foreground text colours
+      for algebraic and symbolic mode input and output, and the
+      background colours for warnings (preceded by <code>***</code>)
+      and errors (preceded by <code>*****</code>).  The labels on the
+      left model the colours.  Clicking on a button on the right drops
+      down a simple colour grid from which you can pick a colour, and
+      clicking on <em>Custom Color...</em>  at the bottom of the grid
+      opens a more advanced dialogue, which includes the option to
+      change the opacity.  This is primarily relevant to the
+      background colours, which are 25% opaque by default.
+    </p>
+    <p>If you click on the <em>Cancel</em> button then the colours
+      used do not change.  If you click on the <em>Save</em> button
+      then the currently selected colours are used for the selected
+      REDUCE panel and saved as preferences.  They will be used by
+      default the next time you start Run-REDUCE-FX.  If you click on
+      the <em>Reset Defaults</em> button then the built-in default
+      colours are reinstated in the dialogue but not used or saved
+      unless you click on the <em>Save</em> button.
     </p>
     <h3>Bold Prompts</h3>
     <p>Selecting this item causes Run-REDUCE-FX to embolden the
-    display of all input prompts.
+    display of all input prompts.  It applies to each REDUCE panel independently.
     </p>
     <h3>I/O Colouring</h3>
-    <p>This sub-menu allows you to select an I/O colouring
-    option: <em>None</em>, <em>Modal</em>
-    or <em>Redfront</em>.  <em>Modal</em> colouring depends on
-    REDUCE's current input mode: algebraic-mode prompts and input are
-    red, algebraic-mode output is blue, symbolic-mode prompts and
-    input are brown, symbolic-mode output is
-    purple.  <em>Redfront</em> colouring is intended to provide a full
-    emulation of the standard REDUCE <em>redfront</em> facility and it
-    loads the <em>redfront</em> package (silently), which outputs
-    additional markup that is interpreted by Run-REDUCE-FX in the same
-    way that it is normally interpreted by the <em>redfront</em>
-    executable running in a suitable terminal (emulator).
-    With <em>Redfront</em> colouring, all prompts and interactive
-    input are red, algebraic-mode output is blue, and echoed file
-    input and symbolic-mode output are not coloured.
-    </p>
-    <p>When I/O colouring is enabled, Run-REDUCE-FX highlights
-    warnings and errors with appropriate background colours.
+    <p>Selecting this item causes Run-REDUCE-FX to colour the text in
+    the <em>Input/Output Display</em> pane.  The colouring depends on
+    REDUCE's current input mode: by default, algebraic-mode prompts
+    and input are red, algebraic-mode output is blue, symbolic-mode
+    prompts and input are green, symbolic-mode output is brown.
+    Echoed file input is not coloured.  By default, Run-REDUCE-FX
+    highlights warnings and errors with quarter-opaque orange and red
+    background colours.
     </p>
     <p>Note that turning I/O colouring on does not fully take effect
-    until the next input prompt.  Turning I/O colouring off (by
-    selecting <em>None</em>) takes effect immediately and turning it
-    back on mid-session turns any previous I/O colouring back on, but
-    any I/O produced while I/O colouring was turned off will not be
-    coloured.  (This is because the required markup is only generated
-    when I/O colouring is turned on to conserve resources.)
+    until the next input prompt.  Turning I/O colouring off takes
+    effect immediately and turning it back on mid-session turns any
+    previous I/O colouring back on, but any I/O produced while I/O
+    colouring was turned off will not be coloured.  (This is because
+    the required markup is only generated when I/O colouring is turned
+    on to conserve resources.)  Output display will be slightly faster
+    when I/O colouring if turned off.
     </p>
     <h3>Typeset Maths</h3>
     <p>Selecting this item causes Run-REDUCE-FX to display
       algebraic-mode mathematical output more-or-less as it would be
-      typeset and centred horizontally.  <strong>WARNINGS:</strong>
-      Typeset Maths is currently experimental.  It interacts badly
-      with redfront I/O colouring, so don't try to use the two
-      together: one will effectively cancel the other.  The display
-      may be incorrect in some cases, e.g. with unusual switch
+      typeset, and centred horizontally.  It applies to each REDUCE
+      panel independently.  Output display will be significantly
+      faster when Typeset Maths is turned
+      off.  <strong>WARNINGS:</strong> Typeset Maths is currently
+      experimental and line breaking is somewhat arbitrary.  The
+      display may be incorrect in some cases, e.g. with unusual switch
       settings such as <em>on list</em>.  If any TeX markup appears
       (coloured red) in the output then please let me know!  <em>Save
       Session Log...</em> outputs typeset maths using TeX markup.
@@ -967,7 +985,9 @@
     platforms, mailing lists, bug reporting, etc.
     </p>
     <h3>About Run-REDUCE-FX</h3>
-    <p>This pops up brief information about Run-REDUCE-FX.</p>
+    <p>This pops up brief information about Run-REDUCE-FX, including
+    the version number and month of the release.  The version number
+    is also shown in the application title bar.</p>
 
     <h2 id="TypesetMaths">Typeset Maths Display</h2>
 
