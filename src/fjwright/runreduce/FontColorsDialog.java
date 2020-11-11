@@ -1,5 +1,7 @@
 package fjwright.runreduce;
 
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,30 +20,38 @@ public class FontColorsDialog {
     private ColorPicker algebraicInputColorPicker, symbolicInputColorPicker,
             algebraicOutputColorPicker, symbolicOutputColorPicker, warningColorPicker, errorColorPicker;
 
+    private ObjectProperty<Color> warningColorPickerValueProperty;
+    private ObjectBinding<Background> warningLabelBackgroundBinding;
+
     @FXML
     private void initialize() {
         algebraicInputLabel.textFillProperty().bind(algebraicInputColorPicker.valueProperty());
         symbolicInputLabel.textFillProperty().bind(symbolicInputColorPicker.valueProperty());
         algebraicOutputLabel.textFillProperty().bind(algebraicOutputColorPicker.valueProperty());
         symbolicOutputLabel.textFillProperty().bind(symbolicOutputColorPicker.valueProperty());
+        warningColorPickerValueProperty = warningColorPicker.valueProperty();
+        warningLabelBackgroundBinding = new ObjectBinding<>() {
+            {
+                super.bind(warningColorPickerValueProperty);
+            }
+
+            @Override
+            protected Background computeValue() {
+                return new Background(
+                        new BackgroundFill(warningColorPickerValueProperty.get(), null, null));
+            }
+        };
+        warningLabel.backgroundProperty().bind(warningLabelBackgroundBinding);
 
         algebraicInputColorPicker.setValue(Color.web(FontColors.algebraicInput));
         symbolicInputColorPicker.setValue(Color.web(FontColors.symbolicInput));
         algebraicOutputColorPicker.setValue(Color.web(FontColors.algebraicOutput));
         symbolicOutputColorPicker.setValue(Color.web(FontColors.symbolicOutput));
+        warningColorPicker.setValue(Color.web(FontColors.warning));
+        errorColorPicker.setValue(Color.web(FontColors.error));
 
-        Color color = Color.web(FontColors.warning);
-        warningLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
-        warningColorPicker.setValue(color);
-        color = Color.web(FontColors.error);
-        errorLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
-        errorColorPicker.setValue(color);
-    }
-
-    public void warningColourAction(ActionEvent actionEvent) {
-    }
-
-    public void errorColourAction(ActionEvent actionEvent) {
+//        warningLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
+//        errorLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 
     /**

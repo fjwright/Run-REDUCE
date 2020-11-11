@@ -53,8 +53,7 @@
         </Label>
         <Label fx:id="warningLabel" style="-fx-label-padding: 2;" text="Warning" GridPane.columnIndex="0"
                GridPane.rowIndex="6"/>
-        <ColorPicker fx:id="warningColorPicker" onAction="#warningColourAction" GridPane.columnIndex="1"
-                     GridPane.rowIndex="6">
+        <ColorPicker fx:id="warningColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <tooltip>
                 <Tooltip fx:id="backgroundTooltip"
                          text="Background colours are partially transparent by default.&#10;Click on Custom Color... to change the opacity."/>
@@ -62,8 +61,7 @@
         </ColorPicker>
         <Label fx:id="errorLabel" style="-fx-label-padding: 2;" text="Error" GridPane.columnIndex="0"
                GridPane.rowIndex="7"/>
-        <ColorPicker fx:id="errorColorPicker" onAction="#errorColourAction" GridPane.columnIndex="1"
-                     GridPane.rowIndex="7">
+        <ColorPicker fx:id="errorColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="7">
             <tooltip>
                 <fx:reference source="backgroundTooltip"/>
             </tooltip>
