@@ -51,7 +51,7 @@
                 <Insets bottom="2.0" top="10.0"/>
             </padding>
         </Label>
-        <Label fx:id="warningLabel" style="-fx-label-padding: 2;" text="Warning" GridPane.columnIndex="0"
+        <Label fx:id="warningLabel" style="-fx-label-padding: 2;" text="*** Warning" GridPane.columnIndex="0"
                GridPane.rowIndex="6"/>
         <ColorPicker fx:id="warningColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <tooltip>
@@ -59,7 +59,7 @@
                          text="Background colours are partially transparent by default.&#10;Click on Custom Color... to change the opacity."/>
             </tooltip>
         </ColorPicker>
-        <Label fx:id="errorLabel" style="-fx-label-padding: 2;" text="Error" GridPane.columnIndex="0"
+        <Label fx:id="errorLabel" style="-fx-label-padding: 2;" text="***** Error" GridPane.columnIndex="0"
                GridPane.rowIndex="7"/>
         <ColorPicker fx:id="errorColorPicker" GridPane.columnIndex="1" GridPane.rowIndex="7">
             <tooltip>

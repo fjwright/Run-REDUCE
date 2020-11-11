@@ -20,28 +20,38 @@ public class FontColorsDialog {
     private ColorPicker algebraicInputColorPicker, symbolicInputColorPicker,
             algebraicOutputColorPicker, symbolicOutputColorPicker, warningColorPicker, errorColorPicker;
 
-    private ObjectProperty<Color> warningColorPickerValueProperty;
-    private ObjectBinding<Background> warningLabelBackgroundBinding;
-
     @FXML
     private void initialize() {
         algebraicInputLabel.textFillProperty().bind(algebraicInputColorPicker.valueProperty());
         symbolicInputLabel.textFillProperty().bind(symbolicInputColorPicker.valueProperty());
         algebraicOutputLabel.textFillProperty().bind(algebraicOutputColorPicker.valueProperty());
         symbolicOutputLabel.textFillProperty().bind(symbolicOutputColorPicker.valueProperty());
-        warningColorPickerValueProperty = warningColorPicker.valueProperty();
-        warningLabelBackgroundBinding = new ObjectBinding<>() {
+        warningLabel.backgroundProperty().bind(new ObjectBinding<>() {
+            final ObjectProperty<Color> colorObjectProperty = warningColorPicker.valueProperty();
+
             {
-                super.bind(warningColorPickerValueProperty);
+                super.bind(colorObjectProperty);
             }
 
             @Override
             protected Background computeValue() {
                 return new Background(
-                        new BackgroundFill(warningColorPickerValueProperty.get(), null, null));
+                        new BackgroundFill(colorObjectProperty.get(), null, null));
             }
-        };
-        warningLabel.backgroundProperty().bind(warningLabelBackgroundBinding);
+        });
+        errorLabel.backgroundProperty().bind(new ObjectBinding<>() {
+            final ObjectProperty<Color> colorObjectProperty = errorColorPicker.valueProperty();
+
+            {
+                super.bind(colorObjectProperty);
+            }
+
+            @Override
+            protected Background computeValue() {
+                return new Background(
+                        new BackgroundFill(colorObjectProperty.get(), null, null));
+            }
+        });
 
         algebraicInputColorPicker.setValue(Color.web(FontColors.algebraicInput));
         symbolicInputColorPicker.setValue(Color.web(FontColors.symbolicInput));
@@ -49,9 +59,6 @@ public class FontColorsDialog {
         symbolicOutputColorPicker.setValue(Color.web(FontColors.symbolicOutput));
         warningColorPicker.setValue(Color.web(FontColors.warning));
         errorColorPicker.setValue(Color.web(FontColors.error));
-
-//        warningLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
-//        errorLabel.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 
     /**
