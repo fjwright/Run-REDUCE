@@ -99,14 +99,14 @@
                           text="Classical Orthogonal Polynomials..."/>
             </Menu>
             <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE-FX User Guide"/>
+                <MenuItem mnemonicParsing="false" onAction="#userGuideMenuItemAction" text="Run-REDUCE User Guide"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <MenuItem mnemonicParsing="false" onAction="#webSiteMenuItemAction" text="REDUCE Web Site"/>
                 <MenuItem mnemonicParsing="false" onAction="#sourceForgeMenuItemAction"
                           text="SourceForge Project Site"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE-FX"/>
+                <MenuItem mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About Run-REDUCE"/>
             </Menu>
             <Menu fx:id="debuggingMenu" mnemonicParsing="false" text="Debugging" visible="false">
                 <MenuItem mnemonicParsing="false" onAction="#saveRawDisplayMenuItemAction"

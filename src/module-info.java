@@ -1,4 +1,4 @@
-module Run.REDUCE.FX {
+module Run.REDUCE {
     requires java.desktop;
     requires java.prefs;
     requires javafx.controls;
