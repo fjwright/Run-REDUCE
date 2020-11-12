@@ -471,7 +471,7 @@ public class RunREDUCEFrame {
                     "REDUCE Process");
         } catch (InterruptedException e) {
             RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
-                    "REDUCE may not have been killed! You are advised to restart Run-REDUCE-FX.");
+                    "REDUCE may not have been killed! You are advised to restart Run-REDUCE.");
         }
     }
 
@@ -629,11 +629,11 @@ public class RunREDUCEFrame {
     private void userGuideMenuItemAction() {
         try {
             URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
-            // file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/production/Run-REDUCE-FX/fjwright/runreduce/UserGuide.html
-            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE-FX/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE-FX.jar!/fjwright/runreduce/UserGuide.html
+            // file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/production/Run-REDUCE/fjwright/runreduce/UserGuide.html
+            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE.jar!/fjwright/runreduce/UserGuide.html
             // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
             if (url == null) {
-                RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE-FX User Guide",
+                RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE User Guide",
                         "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
             } else if (url.getProtocol().equals("file")) // Useful during development only!
                 RunREDUCE.hostServices.showDocument(url.toString());
@@ -669,7 +669,7 @@ public class RunREDUCEFrame {
                 "Run REDUCE in a JavaFX GUI",
                 "Version " + VERSION + ", November 2020\n" +
                         "\u00A9 2020 Francis Wright",
-                "About Run-REDUCE-FX");
+                "About Run-REDUCE");
     }
 
     /* ************** *

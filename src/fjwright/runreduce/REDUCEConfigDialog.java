@@ -338,7 +338,7 @@ public class REDUCEConfigDialog {
         workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
                 workingDirTextField.setText(getProperty("user.home")));
-        menuItem = new MenuItem("Run-REDUCE-FX Directory");
+        menuItem = new MenuItem("Run-REDUCE Directory");
         workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
                 workingDirTextField.setText(getProperty("user.dir")));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="author" content="Francis Wright" />
-    <title>Run-REDUCE-FX User Guide</title>
+    <title>Run-REDUCE User Guide</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
           integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous" />
     <!-- The loading of KaTeX is deferred to speed up page rendering -->
@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-    <h1>Run-REDUCE-FX User Guide</h1>
+    <h1>Run-REDUCE User Guide</h1>
     <h3>&copy; 2020 Francis Wright</h3>
 
     <h2>Contents</h2>
@@ -61,7 +61,7 @@
 
     <h2 id="GeneralInformation">General Information</h2>
 
-    <p>Run-REDUCE-FX remembers user preferences and uses them the next
+    <p>Run-REDUCE remembers user preferences and uses them the next
     time it starts. It uses the standard Java
     package <em>java.util.prefs</em>, which stores data persistently
     in an implementation-dependent backing store. On Microsoft Windows
@@ -71,7 +71,7 @@
     and on Linux they are stored in XML files under the directory
     "<code>~/.java/.userPrefs/fjwright/runreduce/</code>".
     </p>
-    <p>By default, Run-REDUCE-FX looks in the standard places for a
+    <p>By default, Run-REDUCE looks in the standard places for a
     REDUCE installation. On Microsoft Windows it looks for the folder
     "<code>\Program Files\Reduce</code>" on all accessible drives. On
     Linux it assumes that executable files are under
@@ -177,7 +177,7 @@
     <p>Sending input to REDUCE strips any trailing white space,
     normally auto-terminates it by adding a semicolon if there was no
     final terminator, and then adds a final newline. However, if
-    Run-REDUCE-FX detects a question mark in the input prompt then it
+    Run-REDUCE detects a question mark in the input prompt then it
     suppresses auto-termination (so if you really want a terminator
     you must enter it explicitly). As an additional precaution,
     holding the <em>Shift</em> key while clicking on the <em>Send
@@ -186,7 +186,7 @@
     </p>
     <p>You can edit previous input recalled into the input editor as
     necessary and then send it to REDUCE. Input can be multi-line, in
-    which case Run-REDUCE-FX processes all the lines
+    which case Run-REDUCE processes all the lines
     together. The <em>Send Input</em> action is disabled unless
     REDUCE is running, and the <em>Earlier Input</em>
     and <em>Later Input</em> actions are disabled unless there is
@@ -285,7 +285,7 @@
 
     <h2 id="Editing">Editing</h2>
 
-    <p>Run-REDUCE-FX supports the following keyboard shortcuts on
+    <p>Run-REDUCE supports the following keyboard shortcuts on
       Windows and Linux:
     </p>
     <table>
@@ -347,7 +347,7 @@
     </p>
     <p>The <em>File</em> menu provides the following items:</p>
     <h3>Echo File Input</h3>
-    <p>Selecting this causes Run-REDUCE-FX to echo file input to
+    <p>Selecting this causes Run-REDUCE to echo file input to
     the <em>Input/Output Display</em> pane. It is selectd by
     default.</p>
     <h3>Input from Files...</h3>
@@ -426,7 +426,7 @@
     the specified file exists then the session log is appended to its
     previous content.</p>
     <h3>Exit</h3>
-    <p>This terminates both REDUCE and the Run-REDUCE-FX GUI, as does
+    <p>This terminates both REDUCE and the Run-REDUCE GUI, as does
     the close widget that is normally at the top right-hand corner of
     the main window frame.
     </p>
@@ -442,9 +442,9 @@
     </p>
     <h3>Auto-run REDUCE...</h3>
     <p>This sub-menu allows you to select a REDUCE command that
-    Run-REDUCE-FX will run automatically when it starts, or
-    none. Run-REDUCE-FX remembers this selection and uses it the next
-    time it starts. If REDUCE is not running then Run-REDUCE-FX also
+    Run-REDUCE will run automatically when it starts, or
+    none. Run-REDUCE remembers this selection and uses it the next
+    time it starts. If REDUCE is not running then Run-REDUCE also
     runs the selected REDUCE command immediately.
     </p>
     <h3>Load Packages...</h3>
@@ -452,16 +452,16 @@
     to select one or more to load (using the
     REDUCE <code>LOAD_PACKAGE</code> command).  The list excludes
     packages that are pre-loaded and is sorted alphabetically.
-    Run-REDUCE-FX determines the list of packages each time it starts
+    Run-REDUCE determines the list of packages each time it starts
     up by reading the <code>package.map</code> file in the REDUCE
     installation.  This menu item is disabled unless REDUCE is
     running.
     </p>
     <h3>Stop REDUCE</h3>
     <p>This terminates REDUCE but <strong>not</strong> the
-    Run-REDUCE-FX GUI. <strong>It is the recommended way to stop
-    REDUCE because then Run-REDUCE-FX reliably knows that REDUCE is no
-    longer running.</strong> (Run-REDUCE-FX tries to detect input of
+    Run-REDUCE GUI. <strong>It is the recommended way to stop
+    REDUCE because then Run-REDUCE reliably knows that REDUCE is no
+    longer running.</strong> (Run-REDUCE tries to detect input of
     the <code>BYE</code> and <code>QUIT</code> commands via the input
     editor, but this may be less reliable.) This menu item is disabled
     unless REDUCE is running.
@@ -482,7 +482,7 @@
     <p>This displays a dialogue that allows you to configure the
     REDUCE directories and commands.  The defaults should work for
     standard installations on Microsoft Windows and Linux.
-    Run-REDUCE-FX currently assumes that if it is not running on
+    Run-REDUCE currently assumes that if it is not running on
     Windows then the Linux default configuration is appropriate, so
     that is what you will see by default on (say) Apple MacOS.  There
     is a button to reset the whole REDUCE configuration to the
@@ -490,9 +490,9 @@
     </p>
     <p>Changes made using this dialogue are saved when you click on
     the <em>Save</em> button, in which case the new configuration is
-    used within Run-REDUCE-FX and saved as preferences.  Clicking on
+    used within Run-REDUCE and saved as preferences.  Clicking on
     the <em>Cancel</em> button causes all changes made since the
-    dialogue opened to be forgotten.  However, Run-REDUCE-FX checks
+    dialogue opened to be forgotten.  However, Run-REDUCE checks
     that all fields that are directories or files exist and are
     readable before it saves them.  This includes any command
     arguments that begin with <code>$REDUCE</code> (see below).
@@ -538,17 +538,17 @@
       limit, but I hope 5 arguments is enough!)  The components of the
       command that would be separated by white space in a shell
       command must be entered into separate fields on this form.
-      (Blank arguments are ignored.)  Note that Run-REDUCE-FX does not
+      (Blank arguments are ignored.)  Note that Run-REDUCE does not
       currently use a shell to run REDUCE and the command specified is
       used directly to create a separate process to run REDUCE.  So do
       not include any shell escapes or other shell syntax!  (Think of
-      Run-REDUCE-FX as replacing the shell script normally used to run
+      Run-REDUCE as replacing the shell script normally used to run
       REDUCE.)
     </p>
     <p>You can use absolute pathnames if you want, but often (as with
       the PSL REDUCE executable and image file names) command
       components share a common root segment.  This root segment can
-      be specified as <code>$REDUCE</code>, which Run-REDUCE-FX will
+      be specified as <code>$REDUCE</code>, which Run-REDUCE will
       replace with the value of the <em>Command Root Directory</em>
       field if it is set, or with the value of the <em>REDUCE Root
       Directory</em> field otherwise.  (I have borrowed environment
@@ -600,10 +600,10 @@
       want.  The button beside this field labelled "..." does not pop
       up a directory chooser directly, but instead pops up a context
       menu with items labelled <em>Your Home
-      Directory</em>, <em>Run-REDUCE-FX Directory</em> and <em>Choose
+      Directory</em>, <em>Run-REDUCE Directory</em> and <em>Choose
       Any Directory</em>, which respectively set the <em>REDUCE
       Working Directory</em> field to your home directory, the
-      directory containing <em>Run-REDUCE-FX.jar</em>, or any
+      directory containing <em>Run-REDUCE.jar</em>, or any
       directory you choose using the directory chooser that pops up.
     </p>
     <p>The directories described above relate to the portable REDUCE
@@ -617,14 +617,14 @@
     attempt to kill REDUCE may have failed then an error dialogue pops
     up.  In this (unlikely) situation, it may be advisable to use
     operating system facilities to check that REDUCE has been killed
-    and if necessary kill it, and then restart Run-REDUCE-FX.
+    and if necessary kill it, and then restart Run-REDUCE.
     </p>
 
     <h2 id="ViewMenu">The View Menu</h2>
 
-    <p>Run-REDUCE-FX remembers the options you select using
+    <p>Run-REDUCE remembers the options you select using
     the <em>View</em> menu and uses them the next time you start
-    Run-REDUCE-FX.  Run-REDUCE-FX uses the last set values initially
+    Run-REDUCE.  Run-REDUCE uses the last set values initially
     when you create a new REDUCE panel.  The <em>View</em> menu
     provides the following items:</p>
     <h3>Font Size...</h3>
@@ -654,22 +654,22 @@
       used do not change.  If you click on the <em>Save</em> button
       then the currently selected colours are used for the selected
       REDUCE panel and saved as preferences.  They will be used by
-      default the next time you start Run-REDUCE-FX.  If you click on
+      default the next time you start Run-REDUCE.  If you click on
       the <em>Reset Defaults</em> button then the built-in default
       colours are reinstated in the dialogue but not used or saved
       unless you click on the <em>Save</em> button.
     </p>
     <h3>Bold Prompts</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to embolden the
+    <p>Selecting this item causes Run-REDUCE to embolden the
     display of all input prompts.  It applies to each REDUCE panel independently.
     </p>
     <h3>I/O Colouring</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to colour the text in
+    <p>Selecting this item causes Run-REDUCE to colour the text in
     the <em>Input/Output Display</em> pane.  The colouring depends on
     REDUCE's current input mode: by default, algebraic-mode prompts
     and input are red, algebraic-mode output is blue, symbolic-mode
     prompts and input are green, symbolic-mode output is brown.
-    Echoed file input is not coloured.  By default, Run-REDUCE-FX
+    Echoed file input is not coloured.  By default, Run-REDUCE
     highlights warnings and errors with quarter-opaque orange and red
     background colours.
     </p>
@@ -683,7 +683,7 @@
     when I/O colouring if turned off.
     </p>
     <h3>Typeset Maths</h3>
-    <p>Selecting this item causes Run-REDUCE-FX to display
+    <p>Selecting this item causes Run-REDUCE to display
       algebraic-mode mathematical output more-or-less as it would be
       typeset, and centred horizontally.  It applies to each REDUCE
       panel independently.  Output display will be significantly
@@ -696,11 +696,11 @@
       Session Log...</em> outputs typeset maths using TeX markup.
     </p>
     <h3>Single Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE-FX to display the selected
+    <p>Selecting this causes Run-REDUCE to display the selected
     REDUCE panel only. This is the default.
     </p>
     <h3>Split Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE-FX to display two REDUCE
+    <p>Selecting this causes Run-REDUCE to display two REDUCE
     panels side-by-side. The left-hand panel displays the previously
     selected REDUCE panel (if any) and is initially active. Clicking
     on a REDUCE panel makes it active for input via its input editor
@@ -709,7 +709,7 @@
     initially, but you can change that by dragging the divider.
     </p>
     <h3>Tabbed Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE-FX to display a tabbed pane
+    <p>Selecting this causes Run-REDUCE to display a tabbed pane
     with the previously selected REDUCE panel (if any) displayed under
     the first tab.  Clicking on the <code>&times;</code> icon at the
     right of the selected tab label removes that tab and the REDUCE
@@ -962,10 +962,10 @@
 
     <p>All the documents accessed via the <em>Help</em> menu are local
       files.  The <em>Help</em> menu provides the following items:</p>
-    <h3>Run-REDUCE-FX User Guide</h3>
-    <p>This opens the Run-REDUCE-FX User Guide in your default web
+    <h3>Run-REDUCE User Guide</h3>
+    <p>This opens the Run-REDUCE User Guide in your default web
     browser.  It is extracted from the Java JAR file at most once per
-    run of Run-REDUCE-FX to your default temporary directory.
+    run of Run-REDUCE to your default temporary directory.
     </p>
     <h3>REDUCE Manual etc.</h3>
     <p>These menu items open the manuals and other guides that are
@@ -984,8 +984,8 @@
     related projects, pre-built distributions of REDUCE for various
     platforms, mailing lists, bug reporting, etc.
     </p>
-    <h3>About Run-REDUCE-FX</h3>
-    <p>This pops up brief information about Run-REDUCE-FX, including
+    <h3>About Run-REDUCE</h3>
+    <p>This pops up brief information about Run-REDUCE, including
     the version number and month of the release.  The version number
     is also shown in the application title bar.</p>
 
@@ -1078,7 +1078,7 @@
     <p>It appears that on Linux, JavaFX is not aware of the default
     "Print to File" printer and only displays the print dialogue if
     there is at least one physical printer installed.  If you cancel
-    the print dialogue then Run-REDUCE-FX is left unresponsive for a
+    the print dialogue then Run-REDUCE is left unresponsive for a
     long time.  A workaround seems to be to select the "Print To File"
     option for a real printer, click Print and then cancel the
     resulting file selector, which cancels the whole print job
