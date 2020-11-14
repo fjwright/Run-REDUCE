@@ -51,67 +51,29 @@ There are many ways to run JavaFX applications.  Here are some
 specific recommendations that I have tested.
 
 
-## Install OpenJDK JRE ...
+## Install OpenJDK JRE
 
-### From the Web
+Visit [AdoptOpenJDK](https://adoptopenjdk.net/), scroll towards the
+bottom of the home page and click on *Installation*, click on
+*Installers*, and follow the instructions for your platform.
 
-This applies to all platforms, although Linux users may prefer to use
-a package manager as I describe below.
+On Microsoft Windows, select *OpenJDK nn (Latest)* with the highest
+number *nn* (or you can use Java 11 if you prefer).  The default JVM,
+HotSpot, should be fine.  Select your Operating System and
+Architecture or just scroll down to find your platform.  On the right,
+choose a JRE distribution (a JDK distribution will also work, but is
+much bigger and irrelevant unless you do Java development), download
+and run the appropriate *.msi* file.  The default installation
+settings should be fine although you can remove the *Associate .jar*
+option unless you want it for running other Java applications (but
+keep the *Add to PATH* option).
 
-Visit [AdoptOpenJDK](https://adoptopenjdk.net/), click on the *Other
-platforms* button (immediately below the *Latest release* button) and
-select *OpenJDK nn (Latest)* with the highest number *nn* (or you can
-currently use Java 11 if you prefer).  The default JVM, HotSpot,
-should be fine.  Select your Operating System and Architecture or just
-scroll down to find your platform.  On the right, choose a JRE
-distribution (a JDK distribution will also work, but is much bigger
-and irrelevant unless you do Java development), download and install
-it.  (On Windows, I recommend the *.msi* file.)  The default
-installation settings are fine although you can remove the *Associate
-.jar* option unless you want it for running other Java applications
-(but keep the *Add to PATH* option).
-
-### Using a Package Manager on Ubuntu
-
-The following details probably apply to all versions of Debian Linux,
-on which Ubuntu is based.
-
-Open the *Synaptic Package Manager* via *Show Applications*.  (If it
-is not there, open *Help*, click on *Install applications* under
-*Install & remove software*, click on *Synaptic* and then click on the
-*install* link.)  Search for `openjdk`, find the version of
-*openjdk-nn-jre* with the highest number *nn* (or you can currently
-use *openjdk-11-jre* if you prefer), mark it for installation and
-accept its dependencies.
-
-### Using a Package Manager on Fedora
-
-The following details probably apply to all versions of Red Hat Linux,
-on which Fedora is based.
-
-Fedora 32 has Java 8 installed by default but you can install and use
-the latest release of Java by executing the following commands in a
-terminal (assuming *x86_64* architecture):
-
-``` shell
-sudo dnf install java-latest-openjdk.x86_64
-sudo alternatives --config java
-```
-
-and select the new version.
-
-Alternatively, you might prefer to use *dnfdragora*, which is a
-graphical version of *dnf*.  (You may first need to install it, using
-either the *Software* app available in *Activities* or the *dnf*
-command).
+On Linux, install `adoptopenjdk-<latest>-hotspot-jre`, where
+`<latest>` represents the highest number available, currently 15.  If
+you prefer, you can use Java 11 and the non-JRE version (see above).
 
 
-## Install OpenJFX ...
-
-This is my recommendation for all platforms because appropriate
-versions of OpenJFX for some recent versions of Linux via package
-managers are either broken (e.g. for Ubuntu 20.04) or unavailable
-(e.g. for Fedora 32)!
+## Install OpenJFX
 
 Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
 *Download* button.  Scroll down to *Latest Release* (or you can
