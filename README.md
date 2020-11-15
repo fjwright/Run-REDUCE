@@ -36,7 +36,12 @@ This project is set up for development using [IntelliJ
 IDEA](https://www.jetbrains.com/idea/) with Run-REDUCE as the
 top-level directory.
 
-Run-REDUCE currently uses a bundled copy of
-[KaTeX](https://katex.org/) to render LaTeX output by code based on
-the REDUCE *tmprint* package when the *Typeset Maths* option is
-selected.
+
+### Acknowledgements
+
+Run-REDUCE currently uses:
+
+* a bundled copy of [KaTeX](https://katex.org/) to render LaTeX output
+  by code based on the REDUCE *tmprint* package when the *Typeset
+  Maths* option is selected;
+* [Icons by Icons8](https://icons8.com).

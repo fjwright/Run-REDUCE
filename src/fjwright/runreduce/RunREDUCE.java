@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
@@ -65,6 +66,9 @@ public class RunREDUCE extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(375);
+        primaryStage.getIcons().addAll(
+                new Image(getClass().getResourceAsStream("resources/images/icons8-r-24.png")),
+                new Image(getClass().getResourceAsStream("resources/images/icons8-r-48.png")));
 
         // REDUCE I/O requires a monospaced font:
         // Only "system" fonts (in C:\Windows\Fonts) are found, not
