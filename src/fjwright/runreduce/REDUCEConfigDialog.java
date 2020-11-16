@@ -252,6 +252,7 @@ public class REDUCEConfigDialog {
      * This is a local save; nothing is saved back to Run-REDUCE.
      */
     private void saveREDUCECommand(String commandName) throws FileNotFoundException {
+        // Find the command cmd in REDUCECommandList with the current name commandName:
         REDUCECommand cmd = null;
         for (REDUCECommand c : reduceCommandList)
             if (c.name.equals(commandName)) {
@@ -259,9 +260,10 @@ public class REDUCEConfigDialog {
                 break;
             }
         if (cmd == null) return; // Report an error?
+        // Update the elements of cmd:
         cmd.name = commandNameTextField.getText().trim(); // in case edited but not confirmed!
-        String commandRootDir =
-                cmd.rootDir.isEmpty() ? reduceRootDirTextField.getText().trim() : cmd.rootDir;
+        String commandRootDir = cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+        if (commandRootDir.isEmpty()) commandRootDir = reduceRootDirTextField.getText().trim();
         // Must replace the whole command array because its length may have changed:
         List<String> commandList = new ArrayList<>();
         for (int i = 0; i < commandTextFieldArray.length; i++) {
