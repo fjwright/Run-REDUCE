@@ -293,6 +293,8 @@ public class REDUCEConfigDialog {
         listViewObservableList.set(selectedIndex, text);
     }
 
+// Code for the [...] butttons: directory and file choosers =======================================
+
     /**
      * Code run by the directory chooser (DC) buttons.
      */
@@ -300,7 +302,7 @@ public class REDUCEConfigDialog {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(title);
         directoryChooser.setInitialDirectory(new File(defaultDir));
-        File dir = directoryChooser.showDialog(RunREDUCE.primaryStage);
+        File dir = directoryChooser.showDialog(null);
         if (dir != null) textField.setText(dir.toString());
     }
 
@@ -312,8 +314,8 @@ public class REDUCEConfigDialog {
     }
 
     @FXML
-    private void packagesRootDirDCButtonAction() {
-        dcButtonAction("Packages Root Directory",
+    private void packagesDirDCButtonAction() {
+        dcButtonAction("REDUCE Packages Directory",
                 RunREDUCE.reduceConfigurationDefault.packagesDir,
                 packagesDirTextField);
     }
@@ -370,11 +372,11 @@ public class REDUCEConfigDialog {
     private void fcButtonAction(String title, TextField textField) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        String commandRootDir = commandRootDirTextField.getText();
-        String defaultDir = !commandRootDir.isEmpty() ? commandRootDir :
-                RunREDUCE.reduceConfigurationDefault.reduceRootDir;
+        String defaultDir = commandRootDirTextField.getText().trim();
+        if (defaultDir.isEmpty())
+            defaultDir = RunREDUCE.reduceConfigurationDefault.reduceRootDir;
         fileChooser.setInitialDirectory(new File(defaultDir));
-        File file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
+        File file = fileChooser.showOpenDialog(null);
         if (file != null) textField.setText(file.toString());
     }
 

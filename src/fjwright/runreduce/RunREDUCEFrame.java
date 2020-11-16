@@ -217,7 +217,7 @@ public class RunREDUCEFrame {
 
     private void inputFile(boolean saveDir) {
         fileChooser.getExtensionFilters().setAll(INPUT_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
-        List<File> fileList = fileChooser.showOpenMultipleDialog(RunREDUCE.primaryStage);
+        List<File> fileList = fileChooser.showOpenMultipleDialog(null);
         if (fileList != null) {
             StringBuilder text = new StringBuilder("in \"");
             text.append(fileList.get(0).toString()); // first file
@@ -236,7 +236,7 @@ public class RunREDUCEFrame {
     private void outputNewFileMenuItemAction() {
         fileChooser.setTitle("Output to File...");
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
-        File file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
+        File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
@@ -253,7 +253,6 @@ public class RunREDUCEFrame {
             // Select output file to shut:
             ChoiceDialog<File> choiceDialog = new ChoiceDialog<>(RunREDUCE.reducePanel.outputFileList.get(0),
                     RunREDUCE.reducePanel.outputFileList);
-            choiceDialog.initOwner(RunREDUCE.primaryStage);
             Optional<File> result = choiceDialog.showAndWait();
             if (result.isPresent()) {
                 File file = result.get();
@@ -333,10 +332,10 @@ public class RunREDUCEFrame {
         File file;
         if (append && !raw) {
             fileChooser.setTitle("Append Session Log...");
-            file = fileChooser.showOpenDialog(RunREDUCE.primaryStage);
+            file = fileChooser.showOpenDialog(null);
         } else {
             fileChooser.setTitle(raw ? "Save Raw Session Log as HTML..." : "Save Session Log...");
-            file = fileChooser.showSaveDialog(RunREDUCE.primaryStage);
+            file = fileChooser.showSaveDialog(null);
         }
         if (file != null) {
             try (Writer out = new BufferedWriter(new FileWriter(file, append))) {
@@ -661,7 +660,7 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.43";
+    static final String VERSION = "2.44";
 
     @FXML
     private void aboutMenuItemAction() {
@@ -702,7 +701,6 @@ public class RunREDUCEFrame {
         } else {
             stage.initModality(modality[0]);
         }
-        stage.initOwner(RunREDUCE.primaryStage);
         stage.setTitle(dialogTitle);
         stage.setScene(new Scene(root));
         stage.showAndWait();

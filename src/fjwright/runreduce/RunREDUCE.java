@@ -35,7 +35,6 @@ import java.util.Arrays;
  */
 public class RunREDUCE extends Application {
     static RunREDUCEFrame runREDUCEFrame;
-    static Stage primaryStage;
     static String reduceFontFamilyName;
     static SplitPane splitPane;
     static TabPane tabPane;
@@ -57,7 +56,6 @@ public class RunREDUCE extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        RunREDUCE.primaryStage = primaryStage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RunREDUCEFrame.fxml"));
         Parent root = fxmlLoader.load();
         runREDUCEFrame = fxmlLoader.getController();
@@ -197,7 +195,6 @@ public class RunREDUCE extends Application {
     public static void alert(Alert.AlertType alertType, String headerText, String contentText, String... title) {
         Alert alert = new Alert(alertType);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.initOwner(primaryStage);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         if (title.length > 0) alert.setTitle(title[0]);

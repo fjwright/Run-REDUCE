@@ -59,7 +59,7 @@
                 <Tooltip text="A directory containing the standard REDUCE packages: alg, algint, arith, etc."/>
             </tooltip>
         </TextField>
-        <Button mnemonicParsing="false" onAction="#packagesRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
+        <Button mnemonicParsing="false" onAction="#packagesDirDCButtonAction" text="..." GridPane.columnIndex="2"
                 GridPane.rowIndex="2"/>
         <Label text="REDUCE Manual Directory" GridPane.rowIndex="3"/>
         <TextField fx:id="manualDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="3">
