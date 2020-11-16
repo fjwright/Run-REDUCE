@@ -630,14 +630,13 @@
     <h3>Font Size...</h3>
     <p>This displays a dialogue that allows you to change the font
     size used in the <em>Input/Output Display</em> and <em>Input
-    Editor</em> panes.  It applies to each REDUCE panel independently.
+    Editor</em> panes.  Font size applies to each REDUCE panel
+    independently.
     </p>
     <h3>Font Colours...</h3>
     <p>This displays a dialogue that allows you to change the colours
-      used in the <em>Input/Output Display</em> pane.  Currently, it
-      applies to the REDUCE panel selected when you click on
-      the <em>Save</em> button (but this is not consistent with other
-      options and may change in a future release).
+      used in the <em>Input/Output Display</em> pane.  Font colours
+      apply to all REDUCE panels together.
     </p>
     <p>The colours that you can select are the foreground text colours
       for algebraic and symbolic mode input and output, and the
@@ -660,18 +659,20 @@
       unless you click on the <em>Save</em> button.
     </p>
     <h3>Bold Prompts</h3>
-    <p>Selecting this item causes Run-REDUCE to embolden the
-    display of all input prompts.  It applies to each REDUCE panel independently.
+    <p>Selecting this item causes Run-REDUCE to embolden the display
+    of all input prompts.  Bold prompts apply to each REDUCE panel
+    independently.
     </p>
     <h3>I/O Colouring</h3>
     <p>Selecting this item causes Run-REDUCE to colour the text in
-    the <em>Input/Output Display</em> pane.  The colouring depends on
-    REDUCE's current input mode: by default, algebraic-mode prompts
-    and input are red, algebraic-mode output is blue, symbolic-mode
-    prompts and input are green, symbolic-mode output is brown.
-    Echoed file input is not coloured.  By default, Run-REDUCE
-    highlights warnings and errors with quarter-opaque orange and red
-    background colours.
+    the <em>Input/Output Display</em> pane.  I/O colouring applies to
+    each REDUCE panel independently (although the colour choices apply
+    to all REDUCE panels together).  The colouring depends on REDUCE's
+    current input mode: by default, algebraic-mode prompts and input
+    are red, algebraic-mode output is blue, symbolic-mode prompts and
+    input are green, symbolic-mode output is brown.  Echoed file input
+    is not coloured.  By default, Run-REDUCE highlights warnings and
+    errors with quarter-opaque orange and red background colours.
     </p>
     <p>Note that turning I/O colouring on does not fully take effect
     until the next input prompt.  Turning I/O colouring off takes
@@ -685,15 +686,15 @@
     <h3>Typeset Maths</h3>
     <p>Selecting this item causes Run-REDUCE to display algebraic-mode
       mathematical output more-or-less as it would be typeset, and
-      centred horizontally.  It applies to each REDUCE panel
-      independently.  Output display will be significantly faster when
-      Typeset Maths is turned off.  <strong>WARNINGS:</strong> Typeset
-      Maths is currently experimental and line breaking is somewhat
-      arbitrary.  The display may be incorrect in some cases,
-      e.g. with unusual switch settings such as <em>on list</em>.  If
-      any LaTeX markup appears (coloured red) in the output then
-      please let me know!  <em>Save Session Log...</em> outputs
-      typeset maths using LaTeX markup.
+      centred horizontally.  Typeset maths applies to each REDUCE
+      panel independently.  Output display will be significantly
+      faster when Typeset Maths is turned
+      off.  <strong>WARNINGS:</strong> Typeset Maths is currently
+      experimental and line breaking is somewhat arbitrary.  The
+      display may be incorrect in some cases, e.g. with unusual switch
+      settings such as <em>on list</em>.  If any LaTeX markup appears
+      (coloured red) in the output then please let me know!  <em>Save
+      Session Log...</em> outputs typeset maths using LaTeX markup.
     </p>
     <h3>Single Pane Display</h3>
     <p>Selecting this causes Run-REDUCE to display the selected

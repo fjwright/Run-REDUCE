@@ -28,7 +28,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This is the main class that sets up and runs the application.
@@ -40,6 +42,7 @@ public class RunREDUCE extends Application {
     static TabPane tabPane;
     static int tabLabelNumber = 1;
     public static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
+    static List<REDUCEPanel> reducePanelList = new ArrayList<>();
 
     // Set the main window to 2/3 the linear dimension of the screen initially:
     static final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -84,6 +87,7 @@ public class RunREDUCE extends Application {
         if (debugPlatform) System.err.println("reduceFont: " + reduceFont.toString());
 
         reducePanel = new REDUCEPanel();
+        reducePanelList.add(reducePanel);
         switch (RRPreferences.displayPane) {
             case SINGLE:
                 runREDUCEFrame.frame.setCenter(reducePanel);
@@ -101,6 +105,7 @@ public class RunREDUCE extends Application {
     static void useSplitPane(boolean enable, boolean startup) {
         if (enable) {
             REDUCEPanel reducePanel2 = new REDUCEPanel();
+            reducePanelList.add(reducePanel2);
             splitPane = new SplitPane(reducePanel, reducePanel2);
             splitPane.setDividerPositions(0.5);
             runREDUCEFrame.frame.setCenter(splitPane);
@@ -116,6 +121,7 @@ public class RunREDUCE extends Application {
                 reducePanel.inputTextArea.requestFocus();
             }
         } else { // Revert to single pane.
+            reducePanelList.removeIf(x -> x != reducePanel);
             splitPane = null; // release resources
             reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
             // Retain the reducePanel from the selected tab:
@@ -152,6 +158,7 @@ public class RunREDUCE extends Application {
                 Platform.runLater(() -> reducePanel.inputTextArea.requestFocus());
             }
         } else { // Revert to single pane.
+            reducePanelList.removeIf(x -> x != reducePanel);
             tabPane = null; // release resources
             // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
@@ -160,6 +167,7 @@ public class RunREDUCE extends Application {
 
     static void addTab() {
         Tab tab = new Tab("Tab " + (++tabLabelNumber), reducePanel = new REDUCEPanel());
+        reducePanelList.add(reducePanel);
         tab.setOnSelectionChanged(RunREDUCE::tabOnSelectionChanged);
         tab.setOnClosed(RunREDUCE::tabOnClosed);
         tabPane.getTabs().add(tab);
@@ -184,7 +192,7 @@ public class RunREDUCE extends Application {
             RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SINGLE);
             runREDUCEFrame.singlePaneRadioButton.setSelected(true);
             runREDUCEFrame.addTabMenuItem.setDisable(true);
-        }
+        } else reducePanelList.remove(((Tab) event.getSource()).getContent());
     }
 
     /**

@@ -121,7 +121,7 @@ class FontColors {
      * Save colours as preferences.
      */
     static void save() {
-        RunREDUCE.reducePanel.updateFontColours();
+        for (var reducePanel : RunREDUCE.reducePanelList) reducePanel.updateFontColours();
         Preferences prefs = RRPreferences.prefs.node(FONT_COLORS);
         prefs.put(ALGEBRAIC_INPUT, algebraicInput);
         prefs.put(SYMBOLIC_INPUT, symbolicInput);
