@@ -18,13 +18,13 @@ installed, both version 11 or later (preferably the latest release);
 see below for details.
 
 You also need to download the file
-[Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE-FX.jar)
+[Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar)
 (by clicking on the link) and save it somewhere convenient, such as
 your home directory or the directory in which you store your REDUCE
 projects.  You can then run Run-REDUCE by executing the shell command
 
 ``` shell
-java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE-FX.jar
+java --module-path JavaFXlibrary --add-modules javafx.controls,javafx.fxml,javafx.web -jar Run-REDUCE.jar
 ```
 
 in the directory containing the file, where *JavaFXlibrary* represents
@@ -32,16 +32,16 @@ the full pathname of your JavaFX library.
 
 Because this is a little tedious, I provide two batch files that make
 it easier to run Run-REDUCE.  The file
-[Run-REDUCE-FX.bat](https://github.com/fjwright/Run-REDUCE/releases/download/v1.6/Run-REDUCE-FX.bat)
+[Run-REDUCE.bat](https://github.com/fjwright/Run-REDUCE/releases/download/v2.5/Run-REDUCE.bat)
 is for use on Microsoft Windows and the file
-[Run-REDUCE-FX](https://github.com/fjwright/Run-REDUCE/releases/download/v1.6/Run-REDUCE-FX)
+[Run-REDUCE](https://github.com/fjwright/Run-REDUCE/releases/download/v2.5/Run-REDUCE)
 (no extension) is for use on Linux.  If you want to use one of these
 batch files, download it (by clicking on the link) to the same
-directory to which you downloaded *Run-REDUCE-FX.jar*.  Then you can
-run Run-REDUCE by executing the simpler shell command
+directory to which you downloaded *Run-REDUCE.jar*.  Then you can run
+Run-REDUCE by executing the simpler shell command
 
 ``` shell
-Run-REDUCE-FX
+Run-REDUCE
 ```
 
 provided you set up the `PATH_TO_FX` environment variable, as I
@@ -102,13 +102,13 @@ pathname.  **Enclose the folder name in double quotes.**
 
 An easy way to run Run-REDUCE using a shell command is first to open
 *File Explorer* and navigate to the folder to which you downloaded
-*Run-REDUCE-FX.jar*.  In the address bar, type `cmd` and then press
+*Run-REDUCE.jar*.  In the address bar, type `cmd` and then press
 the *Enter* key.  This will open a Command Prompt window in the
-current folder; type `Run-REDUCE-FX` and press the *Enter* key.  Or
-you can just double-click on the *Run-REDUCE-FX* Windows Batch File
-(which is actually called *Run-REDUCE-FX.bat* but the extension is
+current folder; type `Run-REDUCE` and press the *Enter* key.  Or
+you can just double-click on the *Run-REDUCE* Windows Batch File
+(which is actually called *Run-REDUCE.bat* but the extension is
 suppressed by default). This will first open a Command Prompt window
-and then run *Run-REDUCE-FX.jar*.  (I can't find a way to suppress the
+and then run *Run-REDUCE.jar*.  (I can't find a way to suppress the
 Command Prompt window.)
 
 ### Linux
@@ -123,7 +123,7 @@ export PATH_TO_FX=path-to-openjfx/lib
 
 where *path-to-openjfx* represents the full pathname of the JavaFX
 directory that you have just installed.  Log out and then log back in
-or, until you have done so, prefix the *Run-REDUCE-FX* command by
+or, until you have done so, prefix the *Run-REDUCE* command by
 
 ``` shell
 PATH_TO_FX=path-to-openjfx/lib
@@ -133,18 +133,18 @@ followed by a space.
 
 An easy way to run Run-REDUCE using a shell command is first to open
 *Files* and navigate to the directory to which you downloaded
-*Run-REDUCE-FX.jar*.  Right-click in this directory and select *Open
+*Run-REDUCE.jar*.  Right-click in this directory and select *Open
 in Terminal*.  You can now run Run-REDUCE as described above by
 executing the shell command
 
 ``` shell
-. Run-REDUCE-FX
+. Run-REDUCE
 ```
 
 (Note that the above command has the form dot space filename, where
 dot is a short name for the *source* command.  If you set the file
-permissions to make Run-REDUCE-FX executable, you can run it as
-`./Run-REDUCE-FX`, but this doesn't gain much!)
+permissions to make Run-REDUCE executable, you can run it as
+`./Run-REDUCE`, but this doesn't gain much!)
 
 
 ## Known Issues
@@ -164,7 +164,7 @@ order to avoid the other problems, I have included the option
 -Djdk.gtk.version=2
 ```
 
-in the *Run-REDUCE-FX* batch file.  This may not be necessary on all
+in the *Run-REDUCE* batch file.  This may not be necessary on all
 platforms and will, I hope, cease to be necessary at all at some
 future date, so you might like to experiment with removing it.
 

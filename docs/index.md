@@ -1,12 +1,14 @@
-### Key links: [Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE-FX.jar) | [Install and Run](InstallAndRun.md) | [User Guide](UserGuide.html)
+### Key links: [Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar) | [Install and Run](InstallAndRun.md) | [User Guide](UserGuide.html)
 
 Run-REDUCE is a Graphical User Interface for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
 System that should provide a consistent user experience across all
 implementations of REDUCE and all platforms.  It is implemented in
 JavaFX and the executable application takes the form of the JAR file
-[Run-REDUCE-FX.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE-FX.jar).
-Click on the link here or above to download the latest release.
+[Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar).
+Click on the link here or above to download the latest release.  (The
+image below relates to an earlier release and is now a little out of
+date!)
 
 ![Run-REDUCE screen shot](Run-REDUCE.png "Run-REDUCE screen shot")
 
