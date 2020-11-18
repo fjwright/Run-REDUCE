@@ -293,6 +293,48 @@ public class REDUCEConfigDialog {
         listViewObservableList.set(selectedIndex, text);
     }
 
+    /**
+     * Move the current command up the list, or to the bottom if it was at the top.
+     */
+    @FXML
+    private void moveCommandUpButtonAction() {
+        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        REDUCECommand cmd = reduceCommandList.remove(selectedIndex);
+        listViewObservableList.remove(selectedIndex);
+        if (selectedIndex == 0) {
+            reduceCommandList.add(cmd);
+            listViewObservableList.add(cmd.name);
+            listView.getSelectionModel().select(reduceCommandList.size() - 1);
+        } else {
+            reduceCommandList.add(--selectedIndex, cmd);
+            listViewObservableList.add(selectedIndex, cmd.name);
+            listView.getSelectionModel().select(selectedIndex);
+        }
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+    }
+
+    /**
+     * Move the current command down the list, or to the top if it was at the bottom.
+     */
+    @FXML
+    private void moveCommandDownButtonAction() {
+        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        REDUCECommand cmd = reduceCommandList.remove(selectedIndex);
+        listViewObservableList.remove(selectedIndex);
+        if (selectedIndex == reduceCommandList.size()) {
+            reduceCommandList.add(0,cmd);
+            listViewObservableList.add(0,cmd.name);
+            listView.getSelectionModel().select(0);
+        } else {
+            reduceCommandList.add(++selectedIndex, cmd);
+            listViewObservableList.add(selectedIndex, cmd.name);
+            listView.getSelectionModel().select(selectedIndex);
+        }
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+    }
+
 // Code for the [...] butttons: directory and file choosers =======================================
 
     /**

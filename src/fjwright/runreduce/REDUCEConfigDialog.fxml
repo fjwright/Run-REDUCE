@@ -103,7 +103,7 @@
             <Insets bottom="10.0" top="10.0"/>
         </padding>
         <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER"/>
-        <ListView fx:id="listView" editable="false" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
+        <ListView fx:id="listView" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
                   GridPane.rowIndex="1"/>
         <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command"
                 GridPane.halignment="CENTER" GridPane.rowIndex="2">
@@ -150,13 +150,25 @@
         <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:"
                GridPane.columnSpan="2147483647"/>
         <Label text="Command Label" GridPane.rowIndex="1"/>
-        <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
-                   GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <tooltip>
-                <Tooltip
-                        text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
-            </tooltip>
-        </TextField>
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
+                       HBox.hgrow="ALWAYS">
+                <tooltip>
+                    <Tooltip
+                            text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
+                </tooltip>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#moveCommandUpButtonAction" text="▲">
+                <tooltip>
+                    <Tooltip text="Move this command up the list."/>
+                </tooltip>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#moveCommandDownButtonAction" text="▼">
+                <tooltip>
+                    <Tooltip text="Move this command down the list."/>
+                </tooltip>
+            </Button>
+        </HBox>
         <Label text="Command Root Directory" GridPane.rowIndex="2"/>
         <TextField fx:id="commandRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
