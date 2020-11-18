@@ -290,7 +290,9 @@ public class REDUCEConfigDialog {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         String text = commandNameTextField.getText().trim();
         reduceCommandList.get(selectedIndex).name = text;
+        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
         listViewObservableList.set(selectedIndex, text);
+        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
     }
 
     /**
