@@ -139,18 +139,18 @@ public class REDUCEConfigDialog {
     }
 
     /**
-     * Duplicate all configuration data for the selected REDUCE command.
+     * Duplicate all configuration data for the selected REDUCE command
+     * and add it as a new command at the bottom of the list.
      */
     @FXML
     private void duplicateCommandButtonAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        REDUCECommand oldCmd = reduceCommandList.get(selectedIndex++);
-        // selectedIndex is now incremented to the index of the duplicate entry.
+        REDUCECommand oldCmd = reduceCommandList.get(selectedIndex);
         REDUCECommand newCmd = new REDUCECommand(
                 oldCmd.name + " New", oldCmd.rootDir, oldCmd.command);
-        reduceCommandList.add(selectedIndex, newCmd);
-        listViewObservableList.add(selectedIndex, newCmd.name);
-        listViewSelectIndexRemoveAddListener(selectedIndex);
+        reduceCommandList.add(newCmd);
+        listViewObservableList.add(newCmd.name);
+        listViewSelectIndexRemoveAddListener(reduceCommandList.size() - 1);
         showREDUCECommand(newCmd);
     }
 
@@ -324,8 +324,8 @@ public class REDUCEConfigDialog {
         REDUCECommand cmd = reduceCommandList.remove(selectedIndex);
         listViewObservableList.remove(selectedIndex);
         if (selectedIndex == reduceCommandList.size()) {
-            reduceCommandList.add(0,cmd);
-            listViewObservableList.add(0,cmd.name);
+            reduceCommandList.add(0, cmd);
+            listViewObservableList.add(0, cmd.name);
             listView.getSelectionModel().select(0);
         } else {
             reduceCommandList.add(++selectedIndex, cmd);
