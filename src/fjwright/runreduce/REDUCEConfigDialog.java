@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class REDUCEConfigDialog {
     private static TextField[] commandTextFieldArray;
     private static REDUCECommandList reduceCommandList; // local copy
     private static ObservableList<String> listViewObservableList;
+    private static final String USER_HOME_DIR = getProperty("user.home");
 
     @FXML
     private void initialize() {
@@ -214,16 +216,23 @@ public class REDUCEConfigDialog {
     }
 
     /**
-     * Check that dir is a readable directory and if not throw an exception.
+     * Check that dir is empty or a readable directory and if not throw an exception.
      */
     private String directoryTextFieldReadableCheck(TextField dirTextField) throws FileNotFoundException {
         String dir = dirTextField.getText().trim();
-        if (dir.isEmpty() || new File(dir).canRead()) return dir;
-        else {
-            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
-                    "The directory\n" + dir + "\ndoes not exist or is not accessible.");
-            throw new FileNotFoundException();
+        if (dir.isEmpty()) return dir;
+        // Convert leading ~ to user's home directory:
+        Path path = Path.of(dir);
+        if (path.startsWith("~")) {
+            if (path.getNameCount() > 1)
+                path = Path.of(USER_HOME_DIR).resolve(path.subpath(1, path.getNameCount()));
+            else
+                path = Path.of(USER_HOME_DIR);
         }
+        if (path.toFile().canRead()) return path.toString();
+        RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
+                "The directory\n" + dir + "\ndoes not exist or is not accessible.");
+        throw new FileNotFoundException();
     }
 
     /**
@@ -385,7 +394,7 @@ public class REDUCEConfigDialog {
         MenuItem menuItem = new MenuItem("Your Home Directory");
         workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
-                workingDirTextField.setText(getProperty("user.home")));
+                workingDirTextField.setText(USER_HOME_DIR));
         menuItem = new MenuItem("Run-REDUCE Directory");
         workingDirContextMenu.getItems().add(menuItem);
         menuItem.setOnAction(e ->
