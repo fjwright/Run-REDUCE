@@ -270,7 +270,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     static final String WORKING_DIR = "workingDir";
     static final String REDUCE_VERSIONS = "reduceVersions"; // FixMe delete this obsolete temporary compatibility code
     static final String REDUCE_COMMANDS = "reduceCommands";
-    static final String REDUCE_COMMAND_INDEX = "reduceCommandIndex";
+    static final String COMMAND_INDEX = "commandIndex";
+    static final String COMMAND_ROOT_DIR = "commandRootDir";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
     static final String ARG = "arg";
@@ -301,7 +302,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                         }
                     if (cmdDefault == null) cmdDefault = new REDUCECommand(); // all fields ""
                     prefs = prefs.node(commandName);
-                    String commandRootDir = prefs.get(REDUCE_ROOT_DIR, cmdDefault.rootDir);
+                    String commandRootDir = prefs.get(COMMAND_ROOT_DIR, cmdDefault.rootDir);
                     int commandLength = prefs.getInt(COMMAND_LENGTH, cmdDefault.command.length);
                     String[] command;
                     if (commandLength == 0) {
@@ -314,7 +315,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                                     i < cmdDefault.command.length ? cmdDefault.command[i] : "");
                         }
                     }
-                    int commandIndex = prefs.getInt(REDUCE_COMMAND_INDEX, -1);
+                    int commandIndex = prefs.getInt(COMMAND_INDEX, -1);
                     if (commandIndex == -1 || commandIndex >= reduceCommandList.size()) // append
                         reduceCommandList.add(new REDUCECommand(commandName, commandRootDir, command));
                     else
@@ -381,8 +382,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         int commandIndex = 0;
         for (REDUCECommand cmd : reduceCommandList) {
             prefs = prefs.node(cmd.name);
-            prefs.putInt(REDUCE_COMMAND_INDEX, commandIndex++);
-            prefs.put(REDUCE_ROOT_DIR, cmd.rootDir);
+            prefs.putInt(COMMAND_INDEX, commandIndex++);
+            prefs.put(COMMAND_ROOT_DIR, cmd.rootDir);
             int commandLength = cmd.command.length;
             prefs.putInt(COMMAND_LENGTH, commandLength);
             prefs.put(COMMAND, commandLength > 0 ? cmd.command[0] : "");
