@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/11.0.1"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.REDUCEConfigDialog">
@@ -17,13 +26,45 @@
         <ColumnConstraints/>
     </columnConstraints>
 
-    <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults"
-            GridPane.halignment="CENTER">
-        <tooltip>
-            <Tooltip
-                    text="Reset all directory and command information to its default values.&#10;This will also delete information about any non-default commands."/>
-        </tooltip>
-    </Button>
+    <VBox alignment="CENTER" spacing="10.0" GridPane.rowSpan="2">
+        <Region VBox.vgrow="SOMETIMES"/>
+        <Button mnemonicParsing="false" onAction="#resetAllDefaultsButtonAction" text="Reset All Defaults">
+            <tooltip>
+                <Tooltip
+                        text="Reset all directory and command information to its default values.&#10;This will also delete any non-default commands."/>
+            </tooltip>
+        </Button>
+        <Region VBox.vgrow="SOMETIMES"/>
+        <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:"/>
+        <ListView fx:id="listView" maxHeight="160.0" maxWidth="210.0"/>
+        <HBox alignment="CENTER" fillHeight="false" spacing="10.0">
+            <Button mnemonicParsing="false" onAction="#moveCommandUpButtonAction" text="▲">
+                <tooltip>
+                    <Tooltip text="Move the selected REDUCE command up the list."/>
+                </tooltip>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#moveCommandDownButtonAction" text="▼">
+                <tooltip>
+                    <Tooltip text="Move the selected REDUCE command down the list."/>
+                </tooltip>
+            </Button>
+        </HBox>
+        <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command">
+            <tooltip>
+                <Tooltip text="Delete the configuration for the selected REDUCE command."/>
+            </tooltip>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#duplicateCommandButtonAction" text="Duplicate Selected Command">
+            <tooltip>
+                <Tooltip text="Duplicate at the bottom of the list the configuration for the selected REDUCE command."/>
+            </tooltip>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#addCommandButtonAction" text="Add New Command">
+            <tooltip>
+                <Tooltip text="Add at the bottom of the list an empty configuration for a new REDUCE command."/>
+            </tooltip>
+        </Button>
+    </VBox>
 
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
@@ -88,43 +129,6 @@
                 GridPane.rowIndex="5"/>
     </GridPane>
 
-    <GridPane alignment="CENTER" vgap="10.0" GridPane.rowIndex="1">
-        <columnConstraints>
-            <ColumnConstraints/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-            <RowConstraints/>
-        </rowConstraints>
-        <padding>
-            <Insets bottom="10.0" top="10.0"/>
-        </padding>
-        <Label style="-fx-font-weight: bold;" text="Select REDUCE Command:" GridPane.halignment="CENTER"/>
-        <ListView fx:id="listView" maxHeight="160.0" maxWidth="210.0" GridPane.halignment="CENTER"
-                  GridPane.rowIndex="1"/>
-        <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command"
-                GridPane.halignment="CENTER" GridPane.rowIndex="2">
-            <tooltip>
-                <Tooltip text="Delete the configuration for the selected REDUCE command."/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#duplicateCommandButtonAction" text="Duplicate Selected Command"
-                GridPane.halignment="CENTER" GridPane.rowIndex="3">
-            <tooltip>
-                <Tooltip text="Duplicate below it in the list the configuration for the selected REDUCE command."/>
-            </tooltip>
-        </Button>
-        <Button mnemonicParsing="false" onAction="#addCommandButtonAction" text="Add New Command"
-                GridPane.halignment="CENTER" GridPane.rowIndex="4">
-            <tooltip>
-                <Tooltip text="Add at the bottom of the list an empty configuration for a new REDUCE command."/>
-            </tooltip>
-        </Button>
-    </GridPane>
-
     <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0"
               GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
@@ -150,25 +154,13 @@
         <Label style="-fx-font-weight: bold;" text="Specific information for each REDUCE command:"
                GridPane.columnSpan="2147483647"/>
         <Label text="Command Label" GridPane.rowIndex="1"/>
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
-                       HBox.hgrow="ALWAYS">
-                <tooltip>
-                    <Tooltip
-                            text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
-                </tooltip>
-            </TextField>
-            <Button mnemonicParsing="false" onAction="#moveCommandUpButtonAction" text="▲">
-                <tooltip>
-                    <Tooltip text="Move this command up the list."/>
-                </tooltip>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#moveCommandDownButtonAction" text="▼">
-                <tooltip>
-                    <Tooltip text="Move this command down the list."/>
-                </tooltip>
-            </Button>
-        </HBox>
+        <TextField fx:id="commandNameTextField" onAction="#commandNameTextFieldAction" promptText="Required"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <tooltip>
+                <Tooltip
+                        text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
+            </tooltip>
+        </TextField>
         <Label text="Command Root Directory" GridPane.rowIndex="2"/>
         <TextField fx:id="commandRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <tooltip>
