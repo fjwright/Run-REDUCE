@@ -268,7 +268,9 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     static final String MANUAL_DIR = "manualDir";
     static final String PRIMERS_DIR = "primersDir";
     static final String WORKING_DIR = "workingDir";
-    static final String REDUCE_VERSIONS = "reduceVersions";
+    static final String REDUCE_VERSIONS = "reduceVersions"; // FixMe delete this obsolete temporary compatibility code
+    static final String REDUCE_COMMANDS = "reduceCommands";
+    static final String REDUCE_COMMAND_INDEX = "reduceCommandIndex";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
     static final String ARG = "arg";
@@ -287,7 +289,40 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         reduceCommandList = new REDUCECommandList();
 
         try {
-            if (prefs.nodeExists(REDUCE_VERSIONS)) {
+            if (prefs.nodeExists(REDUCE_COMMANDS)) {
+                prefs = prefs.node(REDUCE_COMMANDS);
+                for (String commandName : prefs.childrenNames()) {
+                    // Get defaults:
+                    REDUCECommand cmdDefault = null;
+                    for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
+                        if (commandName.equals(cmd.name)) {
+                            cmdDefault = cmd;
+                            break;
+                        }
+                    if (cmdDefault == null) cmdDefault = new REDUCECommand(); // all fields ""
+                    prefs = prefs.node(commandName);
+                    String commandRootDir = prefs.get(REDUCE_ROOT_DIR, cmdDefault.rootDir);
+                    int commandLength = prefs.getInt(COMMAND_LENGTH, cmdDefault.command.length);
+                    String[] command;
+                    if (commandLength == 0) {
+                        command = new String[]{""};
+                    } else {
+                        command = new String[commandLength];
+                        command[0] = prefs.get(COMMAND, cmdDefault.command[0]);
+                        for (int i = 1; i < commandLength; i++) {
+                            command[i] = prefs.get(ARG + i,
+                                    i < cmdDefault.command.length ? cmdDefault.command[i] : "");
+                        }
+                    }
+                    int commandIndex = prefs.getInt(REDUCE_COMMAND_INDEX, -1);
+                    if (commandIndex == -1 || commandIndex >= reduceCommandList.size()) // append
+                        reduceCommandList.add(new REDUCECommand(commandName, commandRootDir, command));
+                    else
+                        reduceCommandList.add(commandIndex,
+                                new REDUCECommand(commandName, commandRootDir, command));
+                    prefs = prefs.parent();
+                }
+            } else if (prefs.nodeExists(REDUCE_VERSIONS)) { // FixMe delete this obsolete temporary compatibility code
                 prefs = prefs.node(REDUCE_VERSIONS);
                 for (String version : prefs.childrenNames()) {
                     // Get defaults:
@@ -323,7 +358,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     }
 
     /**
-     * This method saves the *RootDir and REDUCECommandList fields as preferences.
+     * This method saves the generic directory and REDUCECommandList fields as preferences.
      */
     void save() {
         Preferences prefs = RRPreferences.prefs;
@@ -334,14 +369,19 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         prefs.put(WORKING_DIR, workingDir);
         RunREDUCEFrame.fileChooser.setInitialDirectory(new File(workingDir));
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
-        try {
+        try { // FixMe delete this obsolete temporary compatibility code
             prefs.node(REDUCE_VERSIONS).removeNode();
-        } catch (BackingStoreException e) {
-            e.printStackTrace();
+        } catch (BackingStoreException ignored) {
         }
-        prefs = prefs.node(REDUCE_VERSIONS);
+        try {
+            prefs.node(REDUCE_COMMANDS).removeNode();
+        } catch (BackingStoreException ignored) {
+        }
+        prefs = prefs.node(REDUCE_COMMANDS);
+        int commandIndex = 0;
         for (REDUCECommand cmd : reduceCommandList) {
             prefs = prefs.node(cmd.name);
+            prefs.putInt(REDUCE_COMMAND_INDEX, commandIndex++);
             prefs.put(REDUCE_ROOT_DIR, cmd.rootDir);
             int commandLength = cmd.command.length;
             prefs.putInt(COMMAND_LENGTH, commandLength);
