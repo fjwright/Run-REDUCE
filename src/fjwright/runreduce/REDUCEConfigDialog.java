@@ -222,32 +222,42 @@ public class REDUCEConfigDialog {
         String dir = dirTextField.getText().trim();
         if (dir.isEmpty()) return dir;
         // Convert leading ~ to user's home directory:
-        Path path = Path.of(dir);
+        Path path = Path.of(dir), newpath = path;
         if (path.startsWith("~")) {
+            newpath = Path.of(USER_HOME_DIR);
             if (path.getNameCount() > 1)
-                path = Path.of(USER_HOME_DIR).resolve(path.subpath(1, path.getNameCount()));
-            else
-                path = Path.of(USER_HOME_DIR);
+                newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
         }
-        if (path.toFile().canRead()) return path.toString();
+        if (newpath.toFile().canRead()) return newpath.toString();
         RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
                 "The directory\n" + dir + "\ndoes not exist or is not accessible.");
         throw new FileNotFoundException();
     }
 
     /**
-     * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or alwaysCheck == true.
+     * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or ~ or alwaysCheck == true.
      * If not throw an exception.
      */
     private String fileOrDirTextFieldReadableCheck(TextField fileOrDirTextField, String commandRootDir,
                                                    boolean alwaysCheck) throws FileNotFoundException {
-        String localFileOrDir, fileOrDir = fileOrDirTextField.getText().trim();
-        // Replace $REDUCE/ or $REDUCE\ in local copy of fileOrDir:
-        if (fileOrDir.startsWith("$REDUCE")) {
-            localFileOrDir = Paths.get(commandRootDir).resolve(fileOrDir.substring(8)).toString();
+        String fileOrDir = fileOrDirTextField.getText().trim();
+        Path path = Path.of(fileOrDir), newpath = path;
+        // Replace leading $REDUCE in *local* path copy of fileOrDir:
+        if (path.startsWith("$REDUCE")) {
+            newpath = Paths.get(commandRootDir);
+            if (path.getNameCount() > 1)
+                newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
             alwaysCheck = true;
-        } else localFileOrDir = fileOrDir;
-        if (alwaysCheck && !new File(localFileOrDir).canRead()) {
+        } else
+            // Convert leading ~ to user's home directory:
+            if (path.startsWith("~")) {
+                newpath = Path.of(USER_HOME_DIR);
+                if (path.getNameCount() > 1)
+                    newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
+                alwaysCheck = true;
+                fileOrDir = newpath.toString();
+            }
+        if (alwaysCheck && !newpath.toFile().canRead()) {
             RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
                     fileOrDir + "\ndoes not exist or is not accessible.");
             throw new FileNotFoundException();

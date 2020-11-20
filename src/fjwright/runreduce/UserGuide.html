@@ -492,40 +492,52 @@
     the <em>Save</em> button, in which case the new configuration is
     used within Run-REDUCE and saved as preferences.  Clicking on
     the <em>Cancel</em> button causes all changes made since the
-    dialogue opened to be forgotten.  However, Run-REDUCE checks
-    that all fields that are directories or files exist and are
-    readable before it saves them.  This includes any command
-    arguments that begin with <code>$REDUCE</code> (see below).
+    dialogue opened to be forgotten.  However, Run-REDUCE checks that
+    all fields that are directories or files exist and are readable
+    before it saves them.  This includes any command arguments that
+    begin with <code>$REDUCE</code> or <code>~</code> followed
+    immediately by <code>/</code> or <code>\</code> (see below).
     </p>
     <p>Note that all field values are stripped of leading and trailing
-    space before they are used or saved, and empty fields are not
-    saved at all.  Where appropriate, text fields have a button beside
-    them labelled "...".  This button displays a directory or file
-    chooser that can be used to set the field (which can then be
-    edited further).  The initial directory used by the directory or
-    file chooser is the platform default.
+      space before they are used or saved, and empty fields are not
+      saved at all.  Where appropriate, text fields have a button
+      beside them labelled "...".  This button displays a directory or
+      file chooser that can be used to set the field (which can then
+      be edited further).  The initial directory used by the directory
+      or file chooser is the platform default.
     </p>
-    <p>Clicking on the <em>Delete Selected Command</em> button deletes
-    the configuration for the selected REDUCE command.  If you delete
-    all available commands then a new (empty) command is automatically
-    created.
+    <p>On the left of the dialogue is a list of REDUCE command labels
+      and clicking on a command label selects it for editing in the
+      box at the bottom right.  Clicking on the ▲ (up) or ▼ (down)
+      button immediately below this list moves the selected command up
+      or down the list cyclically, meaning that when a command moves
+      above the top of the list is reappears at the bottom, and vice
+      versa.  Clicking on the <em>Save</em> button saves the order of
+      the commands together with the other information in the
+      dialogue, and re-starting Run-REDUCE restores it.
+    </p>
+    <p>Clicking on the <em>Delete Selected Command</em> button
+      completely deletes the selected REDUCE command.  If you delete
+      all available commands then a new (empty) command is
+      automatically created.
     </p>
     <p>Clicking on the <em>Duplicate Selected Command</em> button
-    duplicates the configuration for the selected REDUCE command
-    immediately below it in the list.  The label of the duplicate
-    command is the label of the duplicated command with <em>New</em>
-    appended, which you can edit as you wish.  (But keep command
-    labels fairly short!).  Changes to the <em>Command Label</em>
-    field are reflected in the list of REDUCE commands only when you
-    press Enter (or click on the <em>Save</em> button).  This provides
-    a convenient way, for example, to add one or more REDUCE commands
-    with non-standard options such as memory size.
+      duplicates the configuration for the selected REDUCE command at
+      the bottom of the list.  The label of the duplicate command is
+      the label of the duplicated command with <em>New</em> appended,
+      which you can edit as you wish.  (But keep command labels fairly
+      short!).  Changes to the <em>Command Label</em> field are
+      reflected in the list of REDUCE commands only when you press
+      Enter (or click on the <em>Save</em> button).  This provides a
+      convenient way, for example, to add one or more REDUCE commands
+      with non-standard options such as memory size.
     </p>
     <p>Clicking on the <em>Add New Command</em> button adds a new
-    REDUCE command, which is initially labelled <em>New Command</em>,
-    with all other fields empty.  You could, for example, add one or
-    more commands running REDUCE on Common Lisp.  (At some future date
-    I may include CL REDUCE in the default configuration.)
+      REDUCE command at the bottom of the list, which is initially
+      labelled <em>New Command</em>, with all other fields empty.  You
+      could, for example, add one or more commands running REDUCE on
+      Common Lisp.  (At some future date I may include CL REDUCE in
+      the default configuration.)
     </p>
     <p>After you edit the label used for a REDUCE command you should
       press the <em>Return</em> key to confirm the edit, which will
@@ -543,7 +555,10 @@
       used directly to create a separate process to run REDUCE.  So do
       not include any shell escapes or other shell syntax!  (Think of
       Run-REDUCE as replacing the shell script normally used to run
-      REDUCE.)
+      REDUCE.)  However, if any field (other than Command Label)
+      begins with <code>~</code> followed immediately
+      by <code>/</code> or <code>\</code> then it is replaced by your
+      home directory (on all platforms).
     </p>
     <p>You can use absolute pathnames if you want, but often (as with
       the PSL REDUCE executable and image file names) command

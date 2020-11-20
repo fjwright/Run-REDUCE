@@ -40,12 +40,12 @@
         <HBox alignment="CENTER" fillHeight="false" spacing="10.0">
             <Button mnemonicParsing="false" onAction="#moveCommandUpButtonAction" text="▲">
                 <tooltip>
-                    <Tooltip text="Move the selected REDUCE command up the list."/>
+                    <Tooltip text="Move the selected REDUCE command up the list cyclically."/>
                 </tooltip>
             </Button>
             <Button mnemonicParsing="false" onAction="#moveCommandDownButtonAction" text="▼">
                 <tooltip>
-                    <Tooltip text="Move the selected REDUCE command down the list."/>
+                    <Tooltip text="Move the selected REDUCE command down the list cyclically."/>
                 </tooltip>
             </Button>
         </HBox>
