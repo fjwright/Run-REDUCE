@@ -31,10 +31,16 @@
           margin-right: auto;
           margin-left: auto;
       }
-      td,th {
+      td, th {
           padding-right: 10px;
           padding-left: 10px;
           text-align: left;
+      }
+      table.small {
+          font-size: small
+      }
+      table.nowrap td, table.nowrap th {
+          white-space: pre
       }
     </style>
 </head>
@@ -57,6 +63,7 @@
       <li><a href="#HelpMenu">The Help Menu</a></li>
       <li><a href="#TypesetMaths">Typeset Maths Display</a></li>
       <li><a href="#Printing">Printing on Linux</a></li>
+      <li><a href="#ConfigExamples">Configuring Run-REDUCE for Subversion Builds</a></li>
     </ul>
 
     <h2 id="GeneralInformation">General Information</h2>
@@ -623,7 +630,9 @@
     </p>
     <p>The directories described above relate to the portable REDUCE
     source code and are independent of particular REDUCE
-    implementations, so they are fixed for all REDUCE commands.
+    implementations, so they are fixed for all REDUCE commands.  See
+    also <a href="#ConfigExamples">Configuring Run-REDUCE for
+    Subversion Builds</a>.
     </p>
     <h3>Kill REDUCE</h3>
     <p>This cab be used to kill REDUCE in an emergency, such as if it
@@ -1094,13 +1103,59 @@
     <p>It appears that on Linux, JavaFX is not aware of the default
     "Print to File" printer and only displays the print dialogue if
     there is at least one physical printer installed.  If you cancel
-    the print dialogue then Run-REDUCE is left unresponsive for a
-    long time.  A workaround seems to be to select the "Print To File"
+    the print dialogue then Run-REDUCE is left unresponsive for a long
+    time.  A workaround seems to be to select the "Print To File"
     option for a real printer, click Print and then cancel the
     resulting file selector, which cancels the whole print job
     immediately.  (Nearly all of the code involved is in the standard
     JavaFX library and so out of my control, although in the longer
     term I might be able to improve the response by running printing
     in a separate thread.)
+    </p>
+
+    <h2 id="ConfigExamples">Configuring Run-REDUCE for Subversion Builds</h2>
+
+    <p>Here are some examples of REDUCE command configurations that
+      might be appropriate if you build REDUCE yourself and want to
+      run it from your Subversion repository.  They assume that you
+      downloaded the repository to your home directory using
+      the <code>svn</code> command provided by SourceForge.
+    </p>
+    <h3>Microsoft Windows</h3>
+    <h4>CSL REDUCE</h4>
+    <table class="small nowrap">
+      <tr><th>Command Label</th><td><code>CSL REDUCE Subversion</code></td></tr>
+      <tr><th>Command Root Directory</th><td><code>~\reduce-algebra-code\cslbuild\x86_64-pc-windows</code></td></tr>
+      <tr><th>Command Pathname</th><td><code>$REDUCE\csl\reduce.com</code></td></tr>
+      <tr><th>Command Argument 1</th><td><code>--nogui</code></td></tr>
+    </table>
+    <h4>PSL REDUCE</h4>
+    <table class="small nowrap">
+      <tr><th>Command Label</th><td><code>PSL REDUCE Subversion</code></td></tr>
+      <tr><th>Command Root Directory</th><td><code>~\reduce-algebra-code\pslbuild\x86_64-pc-windows</code></td></tr>
+      <tr><th>Command Pathname</th><td><code>$REDUCE\psl\bpsl.exe</code></td></tr>
+      <tr><th>Command Argument 1</th><td><code>-td</code></td></tr>
+      <tr><th>Command Argument 2</th><td><code>1000</code></td></tr>
+      <tr><th>Command Argument 3</th><td><code>-f</code></td></tr>
+      <tr><th>Command Argument 4</th><td><code>$REDUCE\red\reduce.img</code></td></tr>
+    </table>
+    <h3>Linux</h3>
+    <h4>CSL REDUCE</h4>
+    <table class="small nowrap">
+      <tr><th>Command Label</th><td><code>CSL REDUCE Subversion</code></td></tr>
+      <tr><th>Command Root Directory</th><td><code>~/reduce-algebra-code/cslbuild/x86_64-unknown-ubuntu20.04</code></td></tr>
+      <tr><th>Command Pathname</th><td><code>$REDUCE/csl/reduce</code></td></tr>
+      <tr><th>Command Argument 1</th><td><code>--nogui</code></td></tr>
+    </table>
+    <h4>PSL REDUCE</h4>
+    <table class="small nowrap">
+      <tr><th>Command Label</th><td><code>PSL REDUCE Subversion</code></td></tr>
+      <tr><th>Command Root Directory</th><td><code>~/reduce-algebra-code/pslbuild/x86_64-unknown-ubuntu20.04</code></td></tr>
+      <tr><th>Command Pathname</th><td><code>$REDUCE/psl/bpsl</code></td></tr>
+      <tr><th>Command Argument 1</th><td><code>-td</code></td></tr>
+      <tr><th>Command Argument 2</th><td><code>1000</code></td></tr>
+      <tr><th>Command Argument 3</th><td><code>-f</code></td></tr>
+      <tr><th>Command Argument 4</th><td><code>$REDUCE/red/reduce.img</code></td></tr>
+    </table>
 </body>
 </html>
