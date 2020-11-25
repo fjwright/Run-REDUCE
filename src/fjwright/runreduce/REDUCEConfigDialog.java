@@ -10,6 +10,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.System.getProperty;
@@ -228,10 +230,13 @@ public class REDUCEConfigDialog {
             if (path.getNameCount() > 1)
                 newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
         }
-        if (newpath.toFile().canRead()) return newpath.toString();
-        RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory",
-                "The directory\n" + dir + "\ndoes not exist or is not accessible.");
-        throw new FileNotFoundException();
+        if (!newpath.toFile().canRead())
+            confirm("Invalid Directory",
+                    "The directory\n" +
+                            dir +
+                            "\ndoes not exist or is not accessible." +
+                            "\nRun-REDUCE may not operate correctly! Continue?");
+        return newpath.toString();
     }
 
     /**
@@ -257,12 +262,26 @@ public class REDUCEConfigDialog {
                 alwaysCheck = true;
                 fileOrDir = newpath.toString();
             }
-        if (alwaysCheck && !newpath.toFile().canRead()) {
-            RunREDUCE.alert(Alert.AlertType.ERROR, "Invalid Directory or File",
-                    fileOrDir + "\ndoes not exist or is not accessible.");
-            throw new FileNotFoundException();
-        }
+        if (alwaysCheck && !newpath.toFile().canRead())
+            confirm("Invalid Directory or File",
+                    fileOrDir +
+                            "\ndoes not exist or is not accessible." +
+                            "\nREDUCE may not run! Continue?");
         return fileOrDir;
+    }
+
+    /**
+     * Display a standard modal JavaFX pop-up CONFIRMATION dialogue and wait for a response.
+     * OK just returns; Cancel throws a FileNotFoundException exception.
+     */
+    public static void confirm(String headerText, String contentText) throws FileNotFoundException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.CANCEL)
+            throw new FileNotFoundException();
     }
 
     /**
@@ -356,7 +375,7 @@ public class REDUCEConfigDialog {
         listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
     }
 
-// Code for the [...] butttons: directory and file choosers =======================================
+// Code for the [...] buttons: directory and file choosers =======================================
 
     /**
      * Code run by the directory chooser (DC) buttons.
