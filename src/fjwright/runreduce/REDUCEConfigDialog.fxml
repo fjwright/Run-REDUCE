@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/11.0.1"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.REDUCEConfigDialog">
@@ -49,6 +40,11 @@
                 </tooltip>
             </Button>
         </HBox>
+        <Button mnemonicParsing="false" onAction="#resetCommandButtonAction" text="Reset Selected Command">
+            <tooltip>
+                <Tooltip text="Reset the default configuration for the selected REDUCE command."/>
+            </tooltip>
+        </Button>
         <Button mnemonicParsing="false" onAction="#deleteCommandButtonAction" text="Delete Selected Command">
             <tooltip>
                 <Tooltip text="Delete the configuration for the selected REDUCE command."/>

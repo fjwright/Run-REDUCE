@@ -126,6 +126,25 @@ public class REDUCEConfigDialog {
     }
 
     /**
+     * Reset the default configuration data for the selected REDUCE command.
+     * Ignore if there is no default command with the selected command name.
+     */
+    @FXML
+    private void resetCommandButtonAction() {
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        REDUCECommand oldCmd = reduceCommandList.get(selectedIndex);
+        String cmdName = listView.getSelectionModel().getSelectedItem();
+        // The default order may have been changed, so match by command name:
+        for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
+            if (cmd.name.equals(cmdName)) {
+                oldCmd.rootDir = cmd.rootDir;
+                oldCmd.command = cmd.command;
+                showREDUCECommand(oldCmd);
+                break;
+            }
+    }
+
+    /**
      * Delete all configuration data for the selected REDUCE command.
      */
     @FXML
@@ -232,10 +251,9 @@ public class REDUCEConfigDialog {
         }
         if (!newpath.toFile().canRead())
             confirm("Invalid Directory",
-                    "The directory\n" +
                             dir +
                             "\ndoes not exist or is not accessible." +
-                            "\nRun-REDUCE may not operate correctly! Continue?");
+                            "\nRun-REDUCE may not operate correctly! Continue anyway?");
         return newpath.toString();
     }
 
@@ -266,19 +284,18 @@ public class REDUCEConfigDialog {
             confirm("Invalid Directory or File",
                     fileOrDir +
                             "\ndoes not exist or is not accessible." +
-                            "\nREDUCE may not run! Continue?");
+                            "\nREDUCE may not run! Continue anyway?");
         return fileOrDir;
     }
 
     /**
-     * Display a standard modal JavaFX pop-up CONFIRMATION dialogue and wait for a response.
+     * Display a standard modal JavaFX pop-up WARNING alert and wait for a response.
      * OK just returns; Cancel throws a FileNotFoundException exception.
      */
     public static void confirm(String headerText, String contentText) throws FileNotFoundException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING, contentText, ButtonType.OK, ButtonType.CANCEL);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.CANCEL)
             throw new FileNotFoundException();
