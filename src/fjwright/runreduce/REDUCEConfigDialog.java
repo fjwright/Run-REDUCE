@@ -39,6 +39,8 @@ public class REDUCEConfigDialog {
     @FXML
     private TextField commandNameTextField, commandRootDirTextField, commandPathNameTextField;
     @FXML
+    private CheckBox useShellCheckBox, checkCommandCheckBox;
+    @FXML
     private TextField arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField;
     @FXML
     private GridPane commandGridPane;
@@ -251,7 +253,7 @@ public class REDUCEConfigDialog {
         }
         if (!newpath.toFile().canRead())
             confirm("Invalid Directory",
-                            dir +
+                    dir +
                             "\ndoes not exist or is not accessible." +
                             "\nRun-REDUCE may not operate correctly! Continue anyway?");
         return newpath.toString();
@@ -262,11 +264,11 @@ public class REDUCEConfigDialog {
      * If not throw an exception.
      */
     private String fileOrDirTextFieldReadableCheck(TextField fileOrDirTextField, String commandRootDir,
-                                                   boolean alwaysCheck) throws FileNotFoundException {
+                                                   boolean alwaysCheck, boolean check) throws FileNotFoundException {
         String fileOrDir = fileOrDirTextField.getText().trim();
         Path path = Path.of(fileOrDir), newpath = path;
         // Replace leading $REDUCE in *local* path copy of fileOrDir:
-        if (path.startsWith("$REDUCE")) {
+        if (check && path.startsWith("$REDUCE")) {
             newpath = Paths.get(commandRootDir);
             if (path.getNameCount() > 1)
                 newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
@@ -280,7 +282,7 @@ public class REDUCEConfigDialog {
                 alwaysCheck = true;
                 fileOrDir = newpath.toString();
             }
-        if (alwaysCheck && !newpath.toFile().canRead())
+        if (check && alwaysCheck && !newpath.toFile().canRead())
             confirm("Invalid Directory or File",
                     fileOrDir +
                             "\ndoes not exist or is not accessible." +
@@ -323,7 +325,8 @@ public class REDUCEConfigDialog {
         List<String> commandList = new ArrayList<>();
         for (int i = 0; i < commandTextFieldArray.length; i++) {
             String element = fileOrDirTextFieldReadableCheck(
-                    commandTextFieldArray[i], commandRootDir, i == 0);
+                    commandTextFieldArray[i], commandRootDir, i == 0,
+                    i != 0 || checkCommandCheckBox.isSelected());
             if (!element.isEmpty()) commandList.add(element);
         }
         cmd.command = commandList.toArray(new String[0]);
@@ -490,7 +493,7 @@ public class REDUCEConfigDialog {
     private void createCommandArgFCButtons() {
         for (int i = 1; i < commandTextFieldArray.length; i++) {
             Button button = new Button("...");
-            commandGridPane.add(button, 2, 4 + i);
+            commandGridPane.add(button, 2, 5 + i);
             String title = "Command Argument " + i;
             TextField textField = commandTextFieldArray[i];
             button.setOnAction(event -> fcButtonAction(title, textField));

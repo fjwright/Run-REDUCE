@@ -64,8 +64,8 @@
 
     <GridPane hgap="10.0" style="-fx-border-color: lightgrey;" vgap="5.0" GridPane.columnIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity"/>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity"/>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="SOMETIMES"/>
             <ColumnConstraints prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
@@ -128,11 +128,12 @@
     <GridPane fx:id="commandGridPane" hgap="10.0" style="-fx-border-color: lightgray;" vgap="5.0"
               GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints minWidth="-Infinity"/>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
-            <ColumnConstraints prefWidth="24.0"/>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="SOMETIMES"/>
+            <ColumnConstraints maxWidth="-Infinity" prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
             <RowConstraints/>
@@ -157,37 +158,49 @@
                         text="An arbitrary label used to identify this REDUCE command.&#10;After you edit this label, press the Return key to confirm."/>
             </tooltip>
         </TextField>
-        <Label text="Command Root Directory" GridPane.rowIndex="2"/>
-        <TextField fx:id="commandRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label text="Command Type" GridPane.rowIndex="2"/>
+        <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <CheckBox fx:id="useShellCheckBox" mnemonicParsing="false" text="Use Default Command Shell">
+                <padding>
+                    <Insets bottom="4.0" top="4.0"/>
+                </padding>
+            </CheckBox>
+            <Region HBox.hgrow="SOMETIMES"/>
+            <CheckBox fx:id="checkCommandCheckBox" mnemonicParsing="false" selected="true"
+                      text="Check Command Pathname"/>
+            <Region HBox.hgrow="SOMETIMES"/>
+        </HBox>
+        <Label text="Command Root Directory" GridPane.rowIndex="3"/>
+        <TextField fx:id="commandRootDirTextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip
                         text="As an optional convenience, specify a root directory path to be&#10;referenced as $REDUCE in the command path name and arguments below."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#commandRootDirDCButtonAction" text="..." GridPane.columnIndex="2"
-                GridPane.rowIndex="2"/>
+                GridPane.rowIndex="3"/>
         <Text text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'."
-              wrappingWidth="600.0" GridPane.columnSpan="3" GridPane.rowIndex="3"/>
-        <Label text="Command Pathname" GridPane.rowIndex="4"/>
+              wrappingWidth="600.0" GridPane.columnSpan="3" GridPane.rowIndex="4"/>
+        <Label text="Command Pathname" GridPane.rowIndex="5"/>
         <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1"
-                   GridPane.rowIndex="4">
+                   GridPane.rowIndex="5">
             <tooltip>
                 <Tooltip
                         text="The filename part of the *binary* command (not shell script)&#10;to run REDUCE, which can optionally begin with $REDUCE."/>
             </tooltip>
         </TextField>
         <Button mnemonicParsing="false" onAction="#commandPathNameFCButtonAction" text="..." GridPane.columnIndex="2"
-                GridPane.rowIndex="4"/>
-        <Label text="Command Argument 1" GridPane.rowIndex="5"/>
-        <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-        <Label text="Command Argument 2" GridPane.rowIndex="6"/>
-        <TextField fx:id="arg2TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-        <Label text="Command Argument 3" GridPane.rowIndex="7"/>
-        <TextField fx:id="arg3TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-        <Label text="Command Argument 4" GridPane.rowIndex="8"/>
-        <TextField fx:id="arg4TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-        <Label text="Command Argument 5" GridPane.rowIndex="9"/>
-        <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                GridPane.rowIndex="5"/>
+        <Label text="Command Argument 1" GridPane.rowIndex="6"/>
+        <TextField fx:id="arg1TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        <Label text="Command Argument 2" GridPane.rowIndex="7"/>
+        <TextField fx:id="arg2TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="Command Argument 3" GridPane.rowIndex="8"/>
+        <TextField fx:id="arg3TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        <Label text="Command Argument 4" GridPane.rowIndex="9"/>
+        <TextField fx:id="arg4TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+        <Label text="Command Argument 5" GridPane.rowIndex="10"/>
+        <TextField fx:id="arg5TextField" promptText="Optional" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
     </GridPane>
 
     <HBox alignment="CENTER_RIGHT" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
