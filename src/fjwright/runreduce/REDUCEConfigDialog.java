@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -267,11 +268,18 @@ public class REDUCEConfigDialog {
      * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or ~ or alwaysCheck == true.
      * If not throw an exception.
      */
-    private String fileOrDirTextFieldReadableCheck(TextField fileOrDirTextField, String commandRootDir,
-                                                   boolean alwaysCheck, boolean check) throws FileNotFoundException {
-        String fileOrDir = fileOrDirTextField.getText().trim();
-        Path path = Path.of(fileOrDir), newpath = path;
-        // Replace leading $REDUCE in *local* path copy of fileOrDir:
+    private String commandTextFieldReadableCheck(TextField commandTextField, String commandRootDir,
+                                                 boolean alwaysCheck, boolean check) throws FileNotFoundException {
+        String commandOrArg = commandTextField.getText().trim();
+        Path path;
+        // commandOrArg may or may not be a filepath, so...
+        try {
+            path = Path.of(commandOrArg);
+        } catch (InvalidPathException e) {
+            return commandOrArg;
+        }
+        Path newpath = path;
+        // Replace leading $REDUCE in *local* path copy of commandOrArg:
         if (check && path.startsWith("$REDUCE")) {
             newpath = Paths.get(commandRootDir);
             if (path.getNameCount() > 1)
@@ -284,14 +292,14 @@ public class REDUCEConfigDialog {
                 if (path.getNameCount() > 1)
                     newpath = newpath.resolve(path.subpath(1, path.getNameCount()));
                 alwaysCheck = true;
-                fileOrDir = newpath.toString();
+                commandOrArg = newpath.toString();
             }
         if (check && alwaysCheck && !newpath.toFile().canRead())
             confirm("Invalid Directory or File",
-                    fileOrDir +
+                    commandOrArg +
                             "\ndoes not exist or is not accessible." +
                             "\nREDUCE may not run! Continue anyway?");
-        return fileOrDir;
+        return commandOrArg;
     }
 
     /**
@@ -330,7 +338,7 @@ public class REDUCEConfigDialog {
         // Must replace the whole command array because its length may have changed:
         List<String> commandList = new ArrayList<>();
         for (int i = 0; i < commandTextFieldArray.length; i++) {
-            String element = fileOrDirTextFieldReadableCheck(
+            String element = commandTextFieldReadableCheck(
                     commandTextFieldArray[i], commandRootDir, i == 0,
                     i != 0 || checkCommandCheckBox.isSelected());
             if (!element.isEmpty()) commandList.add(element);

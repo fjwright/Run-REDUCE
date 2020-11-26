@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.System.getProperty;
+import static java.lang.System.getenv;
 
 class RRPreferences {
     static final Preferences prefs = Preferences.userRoot().node("/fjwright/runreduce");  // cf. package name
@@ -169,6 +170,15 @@ class REDUCECommand {
                 element = reduceRootPath.resolve(element.substring(8)).toString();
             command[i] = element;
         }
+        if (useShell) {
+            StringBuilder reduceCommand = new StringBuilder();
+            // Double-quote the command name/pathname element ONLY:
+            reduceCommand.append("\"").append(command[0]).append("\"");
+            for (int i = 1; i < command.length; i++) {
+                reduceCommand.append(" ").append(command[i]);
+            }
+            return new String[]{getenv("ComSpec"), "/c", reduceCommand.toString()};
+        }
         if (!Files.isExecutable(Paths.get(command[0]))) {
             RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Configuration",
                     "The command path name\n" + command[0] + "\ndoes not exist or is not executable.");
@@ -306,7 +316,11 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         try {
             if (prefs.nodeExists(REDUCE_COMMANDS)) {
                 prefs = prefs.node(REDUCE_COMMANDS);
-                for (String commandName : prefs.childrenNames()) {
+                String[] childrenNames = prefs.childrenNames();
+                // Build a list with the right number of null REDUCECommand elements
+                // so that they can be set in the right order below:
+                reduceCommandList.addAll(Collections.nCopies(childrenNames.length, null));
+                for (String commandName : childrenNames) {
                     // Get defaults:
                     REDUCECommand cmdDefault = null;
                     for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
@@ -332,10 +346,10 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                         }
                     }
                     int commandIndex = prefs.getInt(COMMAND_INDEX, -1);
-                    if (commandIndex == -1 || commandIndex >= reduceCommandList.size()) // append
+                    if (commandIndex == -1) // append, but this should not happen!
                         reduceCommandList.add(new REDUCECommand(commandName, useShell, checkCommand, commandRootDir, command));
                     else
-                        reduceCommandList.add(commandIndex,
+                        reduceCommandList.set(commandIndex,
                                 new REDUCECommand(commandName, useShell, checkCommand, commandRootDir, command));
                     prefs = prefs.parent();
                 }
