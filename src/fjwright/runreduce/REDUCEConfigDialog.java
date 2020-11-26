@@ -139,6 +139,8 @@ public class REDUCEConfigDialog {
         // The default order may have been changed, so match by command name:
         for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
             if (cmd.name.equals(cmdName)) {
+                oldCmd.useShell = cmd.useShell;
+                oldCmd.checkCommand = cmd.checkCommand;
                 oldCmd.rootDir = cmd.rootDir;
                 oldCmd.command = cmd.command;
                 showREDUCECommand(oldCmd);
@@ -172,7 +174,7 @@ public class REDUCEConfigDialog {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         REDUCECommand oldCmd = reduceCommandList.get(selectedIndex);
         REDUCECommand newCmd = new REDUCECommand(
-                oldCmd.name + " New", oldCmd.rootDir, oldCmd.command);
+                oldCmd.name + " New", oldCmd.useShell, oldCmd.checkCommand, oldCmd.rootDir, oldCmd.command);
         reduceCommandList.add(newCmd);
         listViewObservableList.add(newCmd.name);
         listViewSelectIndexRemoveAddListener(reduceCommandList.size() - 1);
@@ -196,6 +198,8 @@ public class REDUCEConfigDialog {
      */
     private void showREDUCECommand(REDUCECommand cmd) {
         commandNameTextField.setText(cmd.name);
+        useShellCheckBox.setSelected(cmd.useShell);
+        checkCommandCheckBox.setSelected(cmd.checkCommand);
         commandRootDirTextField.setText(cmd.rootDir);
         int i;
         for (i = 0; i < cmd.command.length; i++)
@@ -319,6 +323,8 @@ public class REDUCEConfigDialog {
         if (cmd == null) return; // Report an error?
         // Update the elements of cmd:
         cmd.name = commandNameTextField.getText().trim(); // in case edited but not confirmed!
+        cmd.useShell = useShellCheckBox.isSelected();
+        cmd.checkCommand = checkCommandCheckBox.isSelected();
         String commandRootDir = cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
         if (commandRootDir.isEmpty()) commandRootDir = reduceRootDirTextField.getText().trim();
         // Must replace the whole command array because its length may have changed:

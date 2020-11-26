@@ -137,6 +137,8 @@ class FontColors {
  */
 class REDUCECommand {
     String name = ""; // e.g. "CSL REDUCE" or "PSL REDUCE"
+    boolean useShell = false;
+    boolean checkCommand = true;
     String rootDir = ""; // command-specific reduceRootDir.
     String[] command = {"", "", "", "", "", ""}; // executable pathname followed by 5 arguments
 
@@ -147,8 +149,10 @@ class REDUCECommand {
         this.name = name;
     }
 
-    REDUCECommand(String name, String rootDir, String... command) {
+    REDUCECommand(String name, boolean useShell, boolean checkCommand, String rootDir, String... command) {
         this.name = name;
+        this.useShell = useShell;
+        this.checkCommand = checkCommand;
         this.rootDir = rootDir;
         this.command = command;
     }
@@ -181,7 +185,7 @@ class REDUCECommandList extends ArrayList<REDUCECommand> {
     REDUCECommandList copy() {
         REDUCECommandList reduceCommandList = new REDUCECommandList();
         for (REDUCECommand cmd : this) // Build a deep copy of cmd
-            reduceCommandList.add(new REDUCECommand(cmd.name, cmd.rootDir, cmd.command));
+            reduceCommandList.add(new REDUCECommand(cmd.name, cmd.useShell, cmd.checkCommand, cmd.rootDir, cmd.command));
         return reduceCommandList;
     }
 }
@@ -219,10 +223,14 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
             // before attempting to run REDUCE.
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
+                    false,
+                    true,
                     "",
                     "$REDUCE\\lib\\csl\\reduce.exe",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
+                    false,
+                    true,
                     "",
                     "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
                     "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
@@ -232,10 +240,14 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             packagesDir = "/usr/share/reduce/packages";
             primersDir = manualDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
+                    false,
+                    true,
                     "",
                     "$REDUCE/cslbuild/csl/reduce",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
+                    false,
+                    true,
                     "",
                     "$REDUCE/pslbuild/psl/bpsl",
                     "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
@@ -271,6 +283,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     static final String REDUCE_VERSIONS = "reduceVersions"; // FixMe delete this obsolete temporary compatibility code
     static final String REDUCE_COMMANDS = "reduceCommands";
     static final String COMMAND_INDEX = "commandIndex";
+    static final String USE_SHELL = "useShell";
+    static final String CHECK_COMMAND = "checkCommand";
     static final String COMMAND_ROOT_DIR = "commandRootDir";
     static final String COMMAND_LENGTH = "commandLength";
     static final String COMMAND = "command";
@@ -302,6 +316,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                         }
                     if (cmdDefault == null) cmdDefault = new REDUCECommand(); // all fields ""
                     prefs = prefs.node(commandName);
+                    boolean useShell = prefs.getBoolean(USE_SHELL, cmdDefault.useShell);
+                    boolean checkCommand = prefs.getBoolean(CHECK_COMMAND, cmdDefault.checkCommand);
                     String commandRootDir = prefs.get(COMMAND_ROOT_DIR, cmdDefault.rootDir);
                     int commandLength = prefs.getInt(COMMAND_LENGTH, cmdDefault.command.length);
                     String[] command;
@@ -317,10 +333,10 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                     }
                     int commandIndex = prefs.getInt(COMMAND_INDEX, -1);
                     if (commandIndex == -1 || commandIndex >= reduceCommandList.size()) // append
-                        reduceCommandList.add(new REDUCECommand(commandName, commandRootDir, command));
+                        reduceCommandList.add(new REDUCECommand(commandName, useShell, checkCommand, commandRootDir, command));
                     else
                         reduceCommandList.add(commandIndex,
-                                new REDUCECommand(commandName, commandRootDir, command));
+                                new REDUCECommand(commandName, useShell, checkCommand, commandRootDir, command));
                     prefs = prefs.parent();
                 }
             } else if (prefs.nodeExists(REDUCE_VERSIONS)) { // FixMe delete this obsolete temporary compatibility code
@@ -348,7 +364,7 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                                     i < cmdDefault.command.length ? cmdDefault.command[i] : "");
                         }
                     }
-                    reduceCommandList.add(new REDUCECommand(version, versionRootDir, command));
+                    reduceCommandList.add(new REDUCECommand(version, false, true, versionRootDir, command));
                     prefs = prefs.parent();
                 }
             } else
@@ -383,6 +399,8 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         for (REDUCECommand cmd : reduceCommandList) {
             prefs = prefs.node(cmd.name);
             prefs.putInt(COMMAND_INDEX, commandIndex++);
+            prefs.putBoolean(USE_SHELL, cmd.useShell);
+            prefs.putBoolean(CHECK_COMMAND, cmd.checkCommand);
             prefs.put(COMMAND_ROOT_DIR, cmd.rootDir);
             int commandLength = cmd.command.length;
             prefs.putInt(COMMAND_LENGTH, commandLength);
