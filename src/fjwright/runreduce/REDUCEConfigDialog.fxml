@@ -181,7 +181,10 @@
                 GridPane.rowIndex="3"/>
         <Text text="\$REDUCE used as a path prefix below is replaced by 'Command Root Directory' if it is set above, otherwise by 'REDUCE Root Directory'."
               wrappingWidth="600.0" GridPane.columnSpan="3" GridPane.rowIndex="4"/>
-        <Label text="Command Pathname" GridPane.rowIndex="5"/>
+        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
+            <Label text="Command"/>
+            <Label fx:id="commandPathnameLabel" text=" Pathname"/>
+        </HBox>
         <TextField fx:id="commandPathNameTextField" promptText="Required" GridPane.columnIndex="1"
                    GridPane.rowIndex="5">
             <tooltip>

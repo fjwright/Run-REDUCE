@@ -42,6 +42,8 @@ public class REDUCEConfigDialog {
     @FXML
     private CheckBox useShellCheckBox, checkCommandCheckBox;
     @FXML
+    private Label commandPathnameLabel;
+    @FXML
     private TextField arg1TextField, arg2TextField, arg3TextField, arg4TextField, arg5TextField;
     @FXML
     private GridPane commandGridPane;
@@ -63,6 +65,8 @@ public class REDUCEConfigDialog {
         listView.setItems(listViewObservableList = FXCollections.observableArrayList());
         setupDialog(RunREDUCE.reduceConfiguration);
         createCommandArgFCButtons();
+        commandPathnameLabel.visibleProperty().bind(useShellCheckBox.selectedProperty().not()
+                .or(checkCommandCheckBox.selectedProperty()));
     }
 
     /**
