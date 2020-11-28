@@ -481,12 +481,15 @@ public class REDUCEConfigDialog {
 
     @FXML
     private void commandRootDirDCButtonAction() {
-        String defaultDir = commandRootDirTextField.getText().trim();
-        if (defaultDir.isEmpty())
-            defaultDir = reduceRootDirTextField.getText().trim();
-        dcButtonAction("Command Root Directory",
-                defaultDir.isEmpty() ? RunREDUCE.reduceConfigurationDefault.reduceRootDir : defaultDir,
-                commandRootDirTextField);
+        try {
+            String defaultDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+            if (defaultDir.isEmpty())
+                defaultDir = directoryTextFieldReadableCheck(reduceRootDirTextField);
+            if (defaultDir.isEmpty())
+                defaultDir = RunREDUCE.reduceConfigurationDefault.reduceRootDir;
+            dcButtonAction("Command Root Directory", defaultDir, commandRootDirTextField);
+        } catch (FileNotFoundException ignored) {
+        }
     }
 
     /**

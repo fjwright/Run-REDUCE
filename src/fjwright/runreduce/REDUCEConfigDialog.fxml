@@ -129,7 +129,7 @@
               GridPane.columnIndex="1" GridPane.rowIndex="1">
         <columnConstraints>
             <ColumnConstraints/>
-            <ColumnConstraints hgrow="SOMETIMES"/>
+            <ColumnConstraints prefWidth="450.0"/>
             <ColumnConstraints maxWidth="-Infinity" prefWidth="24.0"/>
         </columnConstraints>
         <rowConstraints>

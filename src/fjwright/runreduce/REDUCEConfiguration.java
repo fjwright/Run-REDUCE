@@ -251,21 +251,21 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
                     "$REDUCE\\bin\\redpsl.bat")); // "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
                     // "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
         } else {
-            // Linux, etc.
-            reduceRootDir = "/usr/bin";
+            // Linux, etc.: use shell and search path
+            reduceRootDir = "/usr/bin"; // "/usr/lib/reduce";
             packagesDir = "/usr/share/reduce/packages";
             primersDir = manualDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
                     true, // false,
-                    true,
+                    false,
                     "",
-                    "$REDUCE/redcsl", // "$REDUCE/cslbuild/csl/reduce",
+                    "redcsl", // "$REDUCE/cslbuild/csl/reduce",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
                     true, // false,
-                    true,
+                    false,
                     "",
-                    "$REDUCE/redpsl")); // "$REDUCE/pslbuild/psl/bpsl",
+                    "redpsl")); // "$REDUCE/pslbuild/psl/bpsl",
                     // "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
         }
         workingDir = getProperty("user.home");
