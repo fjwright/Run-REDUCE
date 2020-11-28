@@ -171,13 +171,19 @@ class REDUCECommand {
             command[i] = element;
         }
         if (useShell) {
-            StringBuilder reduceCommand = new StringBuilder();
-            // Double-quote the command name/pathname element ONLY:
-            reduceCommand.append("\"").append(command[0]).append("\"");
-            for (int i = 1; i < command.length; i++) {
-                reduceCommand.append(" ").append(command[i]);
+            if (REDUCEConfigurationType.windowsOS) {
+                // Microsoft Windows
+                StringBuilder reduceCommand = new StringBuilder();
+                // Double-quote the command name/pathname element ONLY:
+                reduceCommand.append("\"").append(command[0]).append("\"");
+                for (int i = 1; i < command.length; i++) {
+                    reduceCommand.append(" ").append(command[i]);
+                }
+                return new String[]{getenv("ComSpec"), "/c", reduceCommand.toString()};
+            } else {
+                // Linux, etc.
+                return new String[]{getenv("SHELL"), "-c", String.join(" ", command)};
             }
-            return new String[]{getenv("ComSpec"), "/c", reduceCommand.toString()};
         }
         if (!Files.isExecutable(Paths.get(command[0]))) {
             RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Configuration",
@@ -233,34 +239,34 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
             // $REDUCE below will be replaced by versionRootDir if set or reduceRootDir otherwise
             // before attempting to run REDUCE.
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
-                    false,
+                    true, // false,
                     true,
                     "",
-                    "$REDUCE\\lib\\csl\\reduce.exe",
+                    "$REDUCE\\bin\\redcsl.bat", // "$REDUCE\\lib\\csl\\reduce.exe",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
-                    false,
+                    true, // false,
                     true,
                     "",
-                    "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
-                    "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
+                    "$REDUCE\\bin\\redpsl.bat")); // "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
+                    // "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
         } else {
-            // This is appropriate for Ubuntu:
-            reduceRootDir = "/usr/lib/reduce";
+            // Linux, etc.
+            reduceRootDir = "/usr/bin";
             packagesDir = "/usr/share/reduce/packages";
             primersDir = manualDir = "/usr/share/doc/reduce";
             reduceCommandList.add(new REDUCECommand(CSL_REDUCE,
-                    false,
+                    true, // false,
                     true,
                     "",
-                    "$REDUCE/cslbuild/csl/reduce",
+                    "$REDUCE/redcsl", // "$REDUCE/cslbuild/csl/reduce",
                     "--nogui"));
             reduceCommandList.add(new REDUCECommand(PSL_REDUCE,
-                    false,
+                    true, // false,
                     true,
                     "",
-                    "$REDUCE/pslbuild/psl/bpsl",
-                    "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
+                    "$REDUCE/redpsl")); // "$REDUCE/pslbuild/psl/bpsl",
+                    // "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
         }
         workingDir = getProperty("user.home");
     }
