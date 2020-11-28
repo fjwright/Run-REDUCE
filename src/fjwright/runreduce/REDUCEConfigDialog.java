@@ -477,8 +477,11 @@ public class REDUCEConfigDialog {
 
     @FXML
     private void commandRootDirDCButtonAction() {
+        String defaultDir = commandRootDirTextField.getText().trim();
+        if (defaultDir.isEmpty())
+            defaultDir = reduceRootDirTextField.getText().trim();
         dcButtonAction("Command Root Directory",
-                RunREDUCE.reduceConfigurationDefault.reduceRootDir,
+                defaultDir.isEmpty() ? RunREDUCE.reduceConfigurationDefault.reduceRootDir : defaultDir,
                 commandRootDirTextField);
     }
 
@@ -486,14 +489,25 @@ public class REDUCEConfigDialog {
      * Code run by the file chooser (FC) buttons.
      */
     private void fcButtonAction(String title, TextField textField) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(title);
-        String defaultDir = commandRootDirTextField.getText().trim();
-        if (defaultDir.isEmpty())
-            defaultDir = RunREDUCE.reduceConfigurationDefault.reduceRootDir;
-        fileChooser.setInitialDirectory(new File(defaultDir));
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) textField.setText(file.toString());
+        try {
+            String defaultDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+            if (defaultDir.isEmpty())
+                defaultDir = directoryTextFieldReadableCheck(reduceRootDirTextField);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle(title);
+            fileChooser.setInitialDirectory(new File(
+                    defaultDir.isEmpty() ? RunREDUCE.reduceConfigurationDefault.reduceRootDir : defaultDir));
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null) // Use the *visible* default directory:
+                if (defaultDir.isEmpty())
+                    textField.setText(file.toString());
+                else { // Replace defaultDir root segment by $REDUCE if possible:
+                    Path $REDUCE = Path.of(defaultDir), path = file.toPath();
+                    path = Path.of("$REDUCE").resolve($REDUCE.relativize(path));
+                    textField.setText(path.toString());
+                }
+        } catch (FileNotFoundException ignored) {
+        }
     }
 
     @FXML
