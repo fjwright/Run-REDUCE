@@ -660,16 +660,15 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.6";
+    static final String VERSION = "2.61";
 
     @FXML
     private void aboutMenuItemAction() {
         RunREDUCE.alert(Alert.AlertType.INFORMATION,
                 "Run REDUCE in a JavaFX GUI\n" +
-                        "Version " + VERSION + ", November 2020\n" +
+                        "Version " + VERSION + ", December 2020\n" +
                         "\u00A9 2020 Francis Wright",
-                        "Typeset maths by KaTeX.org\n" +
-                                "Icon by Icons8.com",
+                        "Typeset maths by KaTeX.org",
                 "About Run-REDUCE");
     }
 

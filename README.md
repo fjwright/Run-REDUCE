@@ -2,14 +2,14 @@
 
 ## A JavaFX GUI to run CLI versions of the REDUCE Computer Algebra System
 
-### Francis Wright, November 2020
+### Francis Wright, December 2020
 
 Run-REDUCE was originally implemented using Swing as the obsolete
 project now called
 [Run-REDUCE-0](https://fjwright.github.io/Run-REDUCE-0/).  The current
-JavaFX version was originally called Run-REDUCE-FX but I am in the
-process of dropping the "-FX" suffix.  It requires Java 11 or later
-plus JavaFX 11 or later.
+JavaFX version was originally called Run-REDUCE-FX but I have dropped
+the "-FX" suffix.  It requires Java 11 or later plus JavaFX 11 or
+later, although I recommend using Java 15 plus JavaFX 15.
 
 For further general background information please see the [Run-REDUCE
 web page](https://fjwright.github.io/Run-REDUCE/).  For information
@@ -39,9 +39,6 @@ top-level directory.
 
 ### Acknowledgements
 
-Run-REDUCE currently uses:
-
-* a bundled copy of [KaTeX](https://katex.org) to render LaTeX output
-  by code based on the REDUCE *tmprint* package when the *Typeset
-  Maths* option is selected;
-* an icon by [Icons8](https://icons8.com).
+Run-REDUCE uses a bundled copy of [KaTeX](https://katex.org) to render
+LaTeX output by code based on the REDUCE *tmprint* package when the
+*Typeset Maths* option is selected.

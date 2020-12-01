@@ -68,7 +68,7 @@ public class RunREDUCE extends Application {
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(375);
         primaryStage.getIcons().addAll(
-                new Image(getClass().getResourceAsStream("resources/images/icons8-r-64.png")));
+                new Image(getClass().getResourceAsStream("resources/images/RR-icon-128.png")));
 
         // REDUCE I/O requires a monospaced font:
         // Only "system" fonts (in C:\Windows\Fonts) are found, not
