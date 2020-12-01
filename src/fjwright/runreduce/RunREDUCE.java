@@ -51,6 +51,8 @@ public class RunREDUCE extends Application {
             primaryScreenBounds.getMinX(), primaryScreenBounds.getMinY(),
             primaryScreenBounds.getWidth() * initialSceneFactor,
             primaryScreenBounds.getHeight() * initialSceneFactor);
+    static Image RRicon128Image =
+            new Image(RunREDUCE.class.getResourceAsStream("resources/images/RR-icon-128.png"));
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
     public static REDUCEConfiguration reduceConfiguration;
@@ -67,15 +69,14 @@ public class RunREDUCE extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(375);
-        primaryStage.getIcons().addAll(
-                new Image(getClass().getResourceAsStream("resources/images/RR-icon-128.png")));
+        primaryStage.getIcons().addAll(RRicon128Image);
 
-        // REDUCE I/O requires a monospaced font:
-        // Only "system" fonts (in C:\Windows\Fonts) are found, not
-        // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
-        // ("DejaVu Sans Mono" is my only "user" font.)
-        // ToDo Consider bundling a font as a resource.
-        reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
+                // REDUCE I/O requires a monospaced font:
+                // Only "system" fonts (in C:\Windows\Fonts) are found, not
+                // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
+                // ("DejaVu Sans Mono" is my only "user" font.)
+                // ToDo Consider bundling a font as a resource.
+                reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         Font reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         if (!reduceFont.getFamily().equals(reduceFontFamilyName))
             alert(Alert.AlertType.WARNING, "REDUCE I/O Font",

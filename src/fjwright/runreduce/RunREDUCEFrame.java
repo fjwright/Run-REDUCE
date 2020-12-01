@@ -9,7 +9,9 @@ import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -664,12 +666,26 @@ public class RunREDUCEFrame {
 
     @FXML
     private void aboutMenuItemAction() {
-        RunREDUCE.alert(Alert.AlertType.INFORMATION,
-                "Run REDUCE in a JavaFX GUI\n" +
-                        "Version " + VERSION + ", December 2020\n" +
-                        "\u00A9 2020 Francis Wright",
-                        "Typeset maths by KaTeX.org",
-                "About Run-REDUCE");
+//        RunREDUCE.alert(Alert.AlertType.INFORMATION,
+//                "Run REDUCE in a JavaFX GUI\n" +
+//                        "Version " + VERSION + ", December 2020\n" +
+//                        "\u00A9 2020 Francis Wright",
+//                        "Typeset maths by KaTeX.org",
+//                );
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setHeaderText("Run REDUCE in a JavaFX GUI\n" +
+                "Version " + VERSION + ", December 2020\n" +
+                "\u00A9 2020 Francis Wright");
+        alert.setContentText("Typeset maths by KaTeX.org");
+        alert.setTitle("About Run-REDUCE");
+        ImageView img = new ImageView(RunREDUCE.RRicon128Image);
+        img.setFitWidth(64);
+        img.setPreserveRatio(true);
+        img.setSmooth(true);
+        img.setCache(true);
+        alert.setGraphic(img);
+        alert.showAndWait();
     }
 
     /* ************** *
