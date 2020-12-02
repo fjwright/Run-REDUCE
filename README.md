@@ -4,12 +4,14 @@
 
 ### Francis Wright, December 2020
 
-Run-REDUCE was originally implemented using Swing as the obsolete
+I originally implemented Run-REDUCE using Swing as the obsolete
 project now called
-[Run-REDUCE-0](https://fjwright.github.io/Run-REDUCE-0/).  The current
-JavaFX version was originally called Run-REDUCE-FX but I have dropped
-the "-FX" suffix.  It requires Java 11 or later plus JavaFX 11 or
-later, although I recommend using Java 15 plus JavaFX 15.
+[Run-REDUCE-0](https://fjwright.github.io/Run-REDUCE-0/).  I
+originally called the current JavaFX version Run-REDUCE-FX but I have
+now dropped the "-FX" suffix.  It requires Java 11 or later plus
+JavaFX 11 or later, although I recommend using Java 15 plus JavaFX 15
+since I currently build Run-REDUCE using Java 15, set to language
+level 11, plus JavaFX 15.
 
 For further general background information please see the [Run-REDUCE
 web page](https://fjwright.github.io/Run-REDUCE/).  For information
