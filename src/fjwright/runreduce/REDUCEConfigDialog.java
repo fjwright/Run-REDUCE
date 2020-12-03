@@ -80,11 +80,11 @@ public class REDUCEConfigDialog {
         primersDirTextField.setText(reduceConfiguration.primersDir);
         workingDirTextField.setText(reduceConfiguration.workingDir);
         reduceCommandList = reduceConfiguration.reduceCommandList.copy();
-        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         listViewObservableList.setAll(
                 reduceCommandList.stream().map(cmd -> cmd.name).collect(Collectors.toList()));
         listView.getSelectionModel().selectFirst();
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
         showREDUCECommand(reduceCommandList.get(0));
     }
 
@@ -93,24 +93,20 @@ public class REDUCEConfigDialog {
      * will be lost, and display the new REDUCE command from reduceCommandList.
      * Abort the switch in case of errors in the old command.
      */
-    private final ChangeListener<String> listViewListener = new ChangeListener<>() {
+    private final ChangeListener<Number> listViewListener = new ChangeListener<>() {
         @Override
-        public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
+        public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
             if (old_val != null) {
                 try {
-                    saveREDUCECommand(old_val);
+                    saveREDUCECommand((int) old_val);
                 } catch (FileNotFoundException | DuplicateCommandLabelException e) {
                     ov.removeListener(this);
-                    listView.getSelectionModel().select(old_val); // Don't want this to do any checking or saving.
+                    listView.getSelectionModel().select((int) old_val); // Don't want this to do any checking or saving.
                     ov.addListener(this);
                     return;
                 }
             }
-            for (REDUCECommand cmd : reduceCommandList)
-                if (cmd.name.equals(new_val)) {
-                    showREDUCECommand(cmd);
-                    break;
-                }
+            showREDUCECommand(reduceCommandList.get((int) new_val));
         }
     };
 
@@ -119,9 +115,9 @@ public class REDUCEConfigDialog {
      * to avoid any checking or saving, then add listViewListener.
      */
     private void listViewSelectIndexRemoveAddListener(int index) {
-        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         listView.getSelectionModel().select(index);
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
     }
 
     /**
@@ -213,10 +209,12 @@ public class REDUCEConfigDialog {
             commandTextFieldArray[i].setText("");
     }
 
+    /**
+    * Write form data back to REDUCEConfiguration
+    * after validating directory and file fields.
+    */
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
-        // Write form data back to REDUCEConfiguration
-        // after validating directory and file fields:
         String s;
         try {
             // Optional:
@@ -235,7 +233,7 @@ public class REDUCEConfigDialog {
             s = directoryTextFieldReadableCheck(workingDirTextField);
             RunREDUCE.reduceConfiguration.workingDir =
                     s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.workingDir : s;
-            saveREDUCECommand(listView.getSelectionModel().getSelectedItem());
+            saveREDUCECommand(listView.getSelectionModel().getSelectedIndex());
             RunREDUCE.reduceConfiguration.reduceCommandList = reduceCommandList;
             RunREDUCE.reduceConfiguration.save();
             // Close dialogue:
@@ -308,7 +306,7 @@ public class REDUCEConfigDialog {
 
     /**
      * Display a standard modal JavaFX pop-up WARNING alert and wait for a response.
-     * OK just returns; Cancel throws a FileNotFoundException exception.
+     * OK just returns; Cancel throws a FileNotFoundException.
      */
     public static void confirm(String headerText, String contentText) throws FileNotFoundException {
         Alert alert = new Alert(Alert.AlertType.WARNING, contentText, ButtonType.OK, ButtonType.CANCEL);
@@ -322,7 +320,7 @@ public class REDUCEConfigDialog {
     private static class DuplicateCommandLabelException extends Exception {
     }
 
-    /*
+    /**
      * Get the value of the command label field and check it is unique.
      */
     private String getCommandNameCheckUnique(int selectedIndex)
@@ -344,18 +342,10 @@ public class REDUCEConfigDialog {
      * to the specified REDUCE command in reduceCommandList.
      * This is a local save; nothing is saved back to Run-REDUCE.
      */
-    private void saveREDUCECommand(String commandName) throws FileNotFoundException, DuplicateCommandLabelException {
-        // Find the command cmd in REDUCECommandList with the current name commandName:
-        REDUCECommand cmd = null;
-        for (REDUCECommand c : reduceCommandList)
-            if (c.name.equals(commandName)) {
-                cmd = c;
-                break;
-            }
-        if (cmd == null) return; // Report an error?
+    private void saveREDUCECommand(int commandIndex) throws FileNotFoundException, DuplicateCommandLabelException {
+        REDUCECommand cmd = reduceCommandList.get(commandIndex);
         // Update the elements of cmd:
-        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        cmd.name = getCommandNameCheckUnique(selectedIndex); // in case edited but not confirmed!
+        cmd.name = getCommandNameCheckUnique(commandIndex); // in case edited but not confirmed!
         commandNameTextFieldAction(); // FixMe Remove code duplication? DOESN'T WORK!!!
         cmd.useShell = useShellCheckBox.isSelected();
         cmd.checkCommand = checkCommandCheckBox.isSelected();
@@ -393,9 +383,9 @@ public class REDUCEConfigDialog {
             return;
         }
         reduceCommandList.get(selectedIndex).name = newName;
-        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         listViewObservableList.set(selectedIndex, newName);
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
     }
 
     /**
@@ -403,7 +393,7 @@ public class REDUCEConfigDialog {
      */
     @FXML
     private void moveCommandUpButtonAction() {
-        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         REDUCECommand cmd = reduceCommandList.remove(selectedIndex);
         listViewObservableList.remove(selectedIndex);
@@ -416,7 +406,7 @@ public class REDUCEConfigDialog {
             listViewObservableList.add(selectedIndex, cmd.name);
             listView.getSelectionModel().select(selectedIndex);
         }
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
     }
 
     /**
@@ -424,7 +414,7 @@ public class REDUCEConfigDialog {
      */
     @FXML
     private void moveCommandDownButtonAction() {
-        listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         REDUCECommand cmd = reduceCommandList.remove(selectedIndex);
         listViewObservableList.remove(selectedIndex);
@@ -437,7 +427,7 @@ public class REDUCEConfigDialog {
             listViewObservableList.add(selectedIndex, cmd.name);
             listView.getSelectionModel().select(selectedIndex);
         }
-        listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
     }
 
 // Code for the [...] buttons: directory and file choosers =======================================
