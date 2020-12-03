@@ -99,7 +99,7 @@ public class REDUCEConfigDialog {
             if (old_val != null) {
                 try {
                     saveREDUCECommand(old_val);
-                } catch (FileNotFoundException e) {
+                } catch (FileNotFoundException | DuplicateCommandLabelException e) {
                     ov.removeListener(this);
                     listView.getSelectionModel().select(old_val); // Don't want this to do any checking or saving.
                     ov.addListener(this);
@@ -243,7 +243,7 @@ public class REDUCEConfigDialog {
             // Rebuild the Run REDUCE submenus:
             RunREDUCE.runREDUCEFrame.runREDUCESubmenuBuild();
             RunREDUCE.runREDUCEFrame.autoRunREDUCESubmenuBuild();
-        } catch (FileNotFoundException ignored) {
+        } catch (FileNotFoundException | DuplicateCommandLabelException ignored) {
         }
     }
 
@@ -319,12 +319,32 @@ public class REDUCEConfigDialog {
             throw new FileNotFoundException();
     }
 
+    private static class DuplicateCommandLabelException extends Exception {
+    }
+
+    /*
+     * Get the value of the command label field and check it is unique.
+     */
+    private String getCommandNameCheckUnique(int selectedIndex)
+            throws DuplicateCommandLabelException {
+        String newName = commandNameTextField.getText().trim();
+        for (int i = 0; i < reduceCommandList.size(); i++)
+            if (i != selectedIndex &&
+                    reduceCommandList.get(i).name.equals(newName)) {
+                RunREDUCE.alert(Alert.AlertType.ERROR,
+                        "Duplicate Command Label",
+                        "Please choose a unique command label.");
+                throw new DuplicateCommandLabelException();
+            }
+        return newName;
+    }
+
     /**
      * Save the command-specific text fields in the dialogue
      * to the specified REDUCE command in reduceCommandList.
      * This is a local save; nothing is saved back to Run-REDUCE.
      */
-    private void saveREDUCECommand(String commandName) throws FileNotFoundException {
+    private void saveREDUCECommand(String commandName) throws FileNotFoundException, DuplicateCommandLabelException {
         // Find the command cmd in REDUCECommandList with the current name commandName:
         REDUCECommand cmd = null;
         for (REDUCECommand c : reduceCommandList)
@@ -334,7 +354,9 @@ public class REDUCEConfigDialog {
             }
         if (cmd == null) return; // Report an error?
         // Update the elements of cmd:
-        cmd.name = commandNameTextField.getText().trim(); // in case edited but not confirmed!
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        cmd.name = getCommandNameCheckUnique(selectedIndex); // in case edited but not confirmed!
+        commandNameTextFieldAction(); // FixMe Remove code duplication? DOESN'T WORK!!!
         cmd.useShell = useShellCheckBox.isSelected();
         cmd.checkCommand = checkCommandCheckBox.isSelected();
         String commandRootDir = cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
@@ -359,15 +381,20 @@ public class REDUCEConfigDialog {
     }
 
     /**
-     * Update reduceCommandList and the ListView when the command name TextField is edited.
+     * Update reduceCommandList and the ListView when the Command Label TextField is edited.
      */
     @FXML
     private void commandNameTextFieldAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        String text = commandNameTextField.getText().trim();
-        reduceCommandList.get(selectedIndex).name = text;
+        String newName;
+        try {
+            newName = getCommandNameCheckUnique(selectedIndex);
+        } catch (DuplicateCommandLabelException e) {
+            return;
+        }
+        reduceCommandList.get(selectedIndex).name = newName;
         listView.getSelectionModel().selectedItemProperty().removeListener(listViewListener);
-        listViewObservableList.set(selectedIndex, text);
+        listViewObservableList.set(selectedIndex, newName);
         listView.getSelectionModel().selectedItemProperty().addListener(listViewListener);
     }
 
