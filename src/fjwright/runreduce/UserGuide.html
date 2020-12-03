@@ -54,9 +54,9 @@
       <li><a href="#MainWindow">The Main Window</a></li>
       <li><a href="#PopupKeyboard">The Pop-up Keyboard</a></li>
       <li><a href="#Editing">Editing</a></li>
+      <li><a href="#Configuration">REDUCE Configuration</a></li>
       <li><a href="#FileMenu">The File Menu</a></li>
       <li><a href="#REDUCEMenu">The REDUCE Menu</a></li>
-      <li><a href="#Configure">Configure REDUCE...</a></li>
       <li><a href="#ViewMenu">The View Menu</a></li>
       <li><a href="#TemplatesMenu">The Templates Menu</a></li>
       <li><a href="#FunctionsMenu">The Functions Menu</a></li>
@@ -329,6 +329,199 @@
       pointer is over the input area.
     </p>
 
+    <h2 id="Configuration">REDUCE Configuration</h2>
+
+    <p>An item on the <em>REDUCE menu</em> displays a dialogue that
+      allows you to configure the REDUCE directories and commands.
+      The defaults should work for standard installations of snapshot
+      releases on Microsoft Windows and Linux.  Run-REDUCE currently
+      assumes that if it is not running on Windows then the Linux
+      default configuration is appropriate, so that is what you will
+      see by default on (say) Apple MacOS.  There is a button in the
+      top left-hand corner to reset the whole REDUCE configuration to
+      the platform defaults.
+    </p>
+    <p>When you click on the <em>Save</em> button, any changes made
+      using this dialogue are saved as preferences and the new
+      configuration is used within Run-REDUCE.  If you click on
+      the <em>Cancel</em> button then all changes made since this
+      dialogue opened are forgotten.  Run-REDUCE warns you if any
+      fields that are directories or files do not exist or are
+      unreadable and asks if you want to continue anyway.  This
+      includes command arguments that begin with <code>$REDUCE</code>
+      or <code>~</code> followed immediately by <code>/</code>
+      or <code>\</code> (see below).
+    </p>
+    <p>Note that all field values are stripped of leading and trailing
+      space before they are used or saved, and empty command argument
+      fields are not saved at all.  Most fields have a button beside
+      them labelled "...".  Clicking on it displays a directory or
+      file chooser that can be used to set the field (which can then
+      be edited further).
+    </p>
+    <p>The dialogue is divided into three main sections, each of which
+      is described separately below.
+    </p>
+    
+    <h3>Generic Information</h3>
+    <p>The box in the top right-hand corner covers directories that
+      relate to the portable REDUCE code and are independent of
+      particular REDUCE implementations or commands.  The REDUCE Root
+      Directory field provides the initial directory for the directory
+      or file choosers for most of the other fields, which is useful
+      on Windows or with local builds;
+      see <a href="#ConfigExamples">Configuring Run-REDUCE for
+      Subversion Builds</a>.
+    <p>The <em>Load Packages...</em> facility in the <em>File</em>
+      menu requires a standard REDUCE packages directory, which should
+      be specified as the value of the <em>REDUCE Packages
+      Directory</em> field.  This directory should contain directories
+      named <em>alg</em>, <em>algint</em>, <em>arith</em>, etc.  It is
+      only used by <em>Load Packages...</em>.  If the directory
+      specified does not exist or is mis-configured then <em>Load
+      Packages...</em> will pop up a warning and closing it will
+      automatically pop up the <em>Configure REDUCE...</em> dialogue
+      to allow you to correct the problem.
+    </p>
+    <p>The <em>Help</em> menu items that display REDUCE documentation
+      require the directories containing the distributed documentation
+      files to be specified as the values of the <em>REDUCE Manual
+      Directory</em> and <em>REDUCE Primers Directory</em> fields.
+      These fields are named after the directories in the REDUCE
+      Subversion repository and the same directory division is used
+      for the standard Windows snapshot installation folders, although
+      on a standard Linux snapshot installation the two directories
+      are the same.  The <em>REDUCE Manual Directory</em> should
+      contain the files <em>manual.html</em> and <em>manual.pdf</em>
+      and the <em>REDUCE Primers Directory</em> should contain the
+      files <em>insidereduce.pdf</em>, <em>primer.pdf</em>
+      and <em>sl.pdf</em>, where on Linux the filename extension
+      is <em>.pdf.gz</em> instead of just <em>.pdf</em>.
+    </p>
+    <p>The <em>REDUCE Working Directory</em> field allows you to
+      configure the initial working directory used by REDUCE and the
+      initial directory used by all the file choosers available from
+      the <em>File</em> menu.  (However, note that this is only the
+      initial directory because you can change the directory when you
+      use a file chooser and the file choosers remember and share the
+      last directory used.  This does not change REDUCE's working
+      directory!)  By default, the <em>REDUCE Working Directory</em>
+      is your home directory, but you can change it to anything you
+      want.  The button beside this field labelled "..." does not pop
+      up a directory chooser directly, but instead pops up a context
+      menu with items labelled <em>Your Home
+      Directory</em>, <em>Run-REDUCE Directory</em> and <em>Choose Any
+      Directory</em>, which respectively set the <em>REDUCE Working
+      Directory</em> field to your home directory, the directory
+      containing <em>Run-REDUCE.jar</em>, or any directory you choose
+      using the directory chooser that pops up.  The initial directory
+      for this chooser is your home directory.
+    </p>
+
+    <h3>The REDUCE Command List</h3>
+    <p>In the bottom left-hand corner of the dialogue is a list of
+      REDUCE command labels and clicking on a command label selects it
+      for editing in the box in the bottom right-hand corner.
+      Clicking on the ▲ (up) or ▼ (down) button immediately below this
+      list moves the selected command up or down the list cyclically,
+      meaning that when a command moves above the top of the list is
+      reappears at the bottom, and vice versa.  Clicking on
+      the <em>Save</em> button saves the order of the commands
+      together with the other information in the dialogue, and
+      re-starting Run-REDUCE restores it.
+    </p>
+    <p>Clicking on the <em>Reset Selected Command</em> button resets
+      the selected command to its default configuration if this
+      exists, otherwise nothing happens.  The appropriate default
+      configuration is found by matching the command label.
+    </p>
+    <p>Clicking on the <em>Delete Selected Command</em> button
+      completely deletes the selected REDUCE command.  If you delete
+      all available commands then a new (empty) command is
+      automatically created.
+    </p>
+    <p>Clicking on the <em>Duplicate Selected Command</em> button
+      duplicates the configuration for the selected REDUCE command
+      with a new label at the bottom of the list.  The new label is
+      the label of the duplicated command with <em>New</em> appended,
+      which you can edit in the Command Label field as you wish.  (But
+      keep command labels fairly short!).  This provides a convenient
+      way, for example, to add one or more REDUCE commands with
+      non-standard options such as memory size.
+    </p>
+    <p>Clicking on the <em>Add New Command</em> button adds a new
+      REDUCE command at the bottom of the list, which is initially
+      labelled <em>New Command</em>, with all other fields empty.  You
+      could, for example, add one or more commands running REDUCE on
+      Common Lisp.  (At some future date I may include CL REDUCE in
+      the default configuration.)
+    </p>
+    
+    <h3>Specific Information</h3>
+    <p>The box in the bottom right-hand corner relates to the REDUCE
+      command currently selected in the list on the left.  You can
+      change the label by editing the <em>Command Label</em> field.
+      You should then press the <em>Return</em> key to confirm the
+      edit, which will update the label in the list of REDUCE
+      commands.  Whether you confirm an edit or not, the new label
+      will be saved if you click on the <em>Save</em> button.  Command
+      labels must be unique and an error alert will pop up that
+      prevents you from saving a non-unique label.
+    </p>
+    <p>If the <em>Use Default Command Shell</em> check box is selected
+      then the REDUCE command is run via the default system shell,
+      which is found as the value of the appropriate environment
+      variable: <code>ComSpec</code> on Windows; <code>SHELL</code> on
+      other platforms.  In this case the command can be any name that
+      the shell can execute; it need not be a complete pathname.
+      Otherwise, the command entry must be the pathname of an
+      executable <strong>binary</strong> program.  If <em>Use Default
+      Command Shell</em> is selected then the <em>Check Command
+      Pathname</em> check box will be visible.  You can use it to
+      select whether Run-REDUCE should check that the command is a
+      pathname that exists and is readable, and the field label
+      changes as appropriate.  The default configuration uses the
+      shell and on Linux also uses the search path and does not check
+      the command pathname,
+    </p>
+    <p>A complete REDUCE command must be split into the command name
+      as described above and a sequence of up to 5 command
+      arguments. (It would be easy to increase this limit, but I hope
+      5 arguments is enough!)  The components of the command that
+      would be separated by white space in a normal shell command must
+      be entered into separate fields in this dialogue.  (Blank
+      arguments are ignored.)  Run-REDUCE handles the quoting required
+      on Windows, so you should not normally include any quotes
+      explicitly.  If any field (other than Command Label) begins
+      with <code>~</code> followed immediately by <code>/</code>
+      or <code>\</code> then it is replaced by your home directory (on
+      all platforms).
+    </p>
+    <p>You can use absolute pathnames if you want, but often (as with
+      the PSL REDUCE executable and image file names) command
+      components share a common root segment.  This root segment can
+      be specified as <code>$REDUCE</code>, which Run-REDUCE will
+      replace with the value of the <em>Command Root Directory</em>
+      field if it is set, or with the value of the <em>REDUCE Root
+      Directory</em> field otherwise.  (I have borrowed environment
+      variable syntax, but <code>$REDUCE</code> here is not related to
+      any environment variable.)  The <em>Command Root Directory</em>
+      chooser and file choosers use as initial directory the
+      current <em>Command Root Directory</em> field value if defined,
+      otherwise the <em>REDUCE Root Directory</em> field value if
+      defined, otherwise the platform default REDUCE root directory.
+      The file choosers replace the root segment of the returned path
+      by $REDUCE if possible.
+    </p>
+    <p>The two default REDUCE commands, which assume standard
+      installations of CSL and PSL REDUCE, share the same root
+      directory, which is why the default configuration
+      uses <em>REDUCE Root Directory</em> and leaves <em>Command Root
+      Directory</em> empty.  But a Subversion build or a version of
+      REDUCE running on Common Lisp would probably use a different
+      root directory.
+    </p>    
+
     <h2 id="FileMenu">The File Menu</h2>
 
     <p>Some items in this menu pop up a dialogue that allows you to
@@ -485,194 +678,10 @@
       by <em>Clear I/O Display</em> followed by running the last-run
       REDUCE command.
     </p>
-    <h3 id="Configure">Configure REDUCE...</h3>
+    <h3>Configure REDUCE...</h3>
     <p>This displays a dialogue that allows you to configure the
-      REDUCE directories and commands.  The defaults should work for
-      standard installations of snapshot releases on Microsoft Windows
-      and Linux.  Run-REDUCE currently assumes that if it is not
-      running on Windows then the Linux default configuration is
-      appropriate, so that is what you will see by default on (say)
-      Apple MacOS.  There is a button in the top left-hand corner to
-      reset the whole REDUCE configuration to the platform defaults.
-    </p>
-    <p>When you click on the <em>Save</em> button, any changes made
-      using this dialogue are saved as preferences and the new
-      configuration is used within Run-REDUCE.  If you click on
-      the <em>Cancel</em> button then all changes made since this
-      dialogue opened are forgotten.  Run-REDUCE warns you if any
-      fields that are directories or files do not exist or are
-      unreadable and asks if you want to continue anyway.  This
-      includes command arguments that begin with <code>$REDUCE</code>
-      or <code>~</code> followed immediately by <code>/</code>
-      or <code>\</code> (see below).
-    </p>
-    <p>Note that all field values are stripped of leading and trailing
-      space before they are used or saved, and empty command argument
-      fields are not saved at all.  Most fields have a button beside
-      them labelled "...".  Clicking on it displays a directory or
-      file chooser that can be used to set the field (which can then
-      be edited further).  The initial directory used by the directory
-      or file chooser is the platform default unless stated to the
-      contrary below.
-    </p>
-    <p>The dialogue is divided into three main sections, each of which
-      is described separately below.
-    </p>
-    
-    <h4>Generic Information</h4>
-    <p>The box in the top right-hand corner covers directories that
-      relate to the portable REDUCE code and are independent of
-      particular REDUCE implementations or commands.  The first field
-      provides a default root directory for all other fields, which is
-      useful on Windows or with local builds;
-      see <a href="#ConfigExamples">Configuring Run-REDUCE for
-      Subversion Builds</a>.
-    <p>The <em>Load Packages...</em> facility in the <em>File</em>
-      menu requires a standard REDUCE packages directory, which should
-      be specified as the value of the <em>REDUCE Packages
-      Directory</em> field.  This directory should contain directories
-      named <em>alg</em>, <em>algint</em>, <em>arith</em>, etc.  It is
-      only used by <em>Load Packages...</em>.  If the directory
-      specified does not exist or is mis-configured then <em>Load
-      Packages...</em> will pop up a warning and closing it will
-      automatically pop up the <em>Configure REDUCE...</em> dialogue
-      to allow you to correct the problem.
-    </p>
-    <p>The <em>Help</em> menu items that display REDUCE documentation
-      require the directories containing the distributed documentation
-      files to be specified as the values of the <em>REDUCE Manual
-      Directory</em> and <em>REDUCE Primers Directory</em> fields.
-      These fields are named after the directories in the REDUCE
-      Subversion repository and the same directory division is used by
-      the standard Windows snapshot installation folders, although on
-      a standard Linux snapshot installation the two directories are
-      the same.  The <em>REDUCE Manual Directory</em> should contain
-      the files <em>manual.html</em> and <em>manual.pdf</em> and
-      the <em>REDUCE Primers Directory</em> should contain the
-      files <em>insidereduce.pdf</em>, <em>primer.pdf</em>
-      and <em>sl.pdf</em>, where on Linux the filename extension
-      is <em>.pdf.gz</em> instead of just <em>.pdf</em>.
-    </p>
-    <p>The <em>REDUCE Working Directory</em> field allows you to
-      configure the initial working directory used by REDUCE and the
-      initial directory used by all the file choosers available from
-      the <em>File</em> menu.  (However, note that this is only the
-      initial directory because you can change the directory when you
-      use a file chooser and the file choosers remember and share the
-      last directory used.  This does not change REDUCE's working
-      directory!)  By default, the <em>REDUCE Working Directory</em>
-      is your home directory, but you can change it to anything you
-      want.  The button beside this field labelled "..." does not pop
-      up a directory chooser directly, but instead pops up a context
-      menu with items labelled <em>Your Home
-      Directory</em>, <em>Run-REDUCE Directory</em> and <em>Choose Any
-      Directory</em>, which respectively set the <em>REDUCE Working
-      Directory</em> field to your home directory, the directory
-      containing <em>Run-REDUCE.jar</em>, or any directory you choose
-      using the directory chooser that pops up.
-    </p>
-
-    <h4>The REDUCE Command List</h4>
-    <p>In the bottom left-hand corner of the dialogue is a list of
-      REDUCE command labels and clicking on a command label selects it
-      for editing in the box in the bottom right-hand corner.
-      Clicking on the ▲ (up) or ▼ (down) button immediately below this
-      list moves the selected command up or down the list cyclically,
-      meaning that when a command moves above the top of the list is
-      reappears at the bottom, and vice versa.  Clicking on
-      the <em>Save</em> button saves the order of the commands
-      together with the other information in the dialogue, and
-      re-starting Run-REDUCE restores it.
-    </p>
-    <p>Clicking on the <em>Reset Selected Command</em> button resets
-      the selected command to its default configuration if this
-      exists, otherwise nothing happens.  The appropriate default
-      configuration is found by matching the command label.
-    </p>
-    <p>Clicking on the <em>Delete Selected Command</em> button
-      completely deletes the selected REDUCE command.  If you delete
-      all available commands then a new (empty) command is
-      automatically created.
-    </p>
-    <p>Clicking on the <em>Duplicate Selected Command</em> button
-      duplicates the configuration for the selected REDUCE command
-      with a new label at the bottom of the list.  The new label is
-      the label of the duplicated command with <em>New</em> appended,
-      which you can edit in the Command Label field as you wish.  (But
-      keep command labels fairly short!).  This provides a convenient
-      way, for example, to add one or more REDUCE commands with
-      non-standard options such as memory size.
-    </p>
-    <p>Clicking on the <em>Add New Command</em> button adds a new
-      REDUCE command at the bottom of the list, which is initially
-      labelled <em>New Command</em>, with all other fields empty.  You
-      could, for example, add one or more commands running REDUCE on
-      Common Lisp.  (At some future date I may include CL REDUCE in
-      the default configuration.)
-    </p>
-    
-    <h4>Specific Information</h4>
-    <p>The box in the bottom right-hand corner relates to the REDUCE
-      command currently selected in the list on the left.  You can
-      change the label by editing the <em>Command Label</em> field.
-      You should then press the <em>Return</em> key to confirm the
-      edit, which will update the label in the list of REDUCE
-      commands.  Whether you confirm an edit or not, the new label
-      will be saved if you click on the <em>Save</em> button.
-    </p>
-    <p>If the check box <em>Use Default Command Shell</em> is selected
-      then the REDUCE command is run via the default system shell,
-      which is found as the value of the appropriate environment
-      variable: <code>ComSpec</code> on Windows; <code>SHELL</code> on
-      other platforms.  In this case the command can be any name that
-      the shell can execute; it need not be a complete pathname.
-      Otherwise, the command entry must be the pathname of an
-      executable <strong>binary</strong> program.  If you use a shell
-      then you can use the check box <em>Check Command Pathname</em>
-      to select whether Run-REDUCE should check that the command is a
-      pathname that exists and is readable, and the field label
-      changes as appropriate.  The default configuration uses the
-      shell and on Linux also uses the search path and does not check
-      the command pathname,
-    </p>
-    <p>A complete REDUCE command must be split into the command name
-      as described above and a sequence of up to 5 command
-      arguments. (It would be easy to increase this limit, but I hope
-      5 arguments is enough!)  The components of the command that
-      would be separated by white space in a normal shell command must
-      be entered into separate fields in this dialogue.  (Blank
-      arguments are ignored.)  Run-REDUCE handles the quoting required
-      on Windows, so you should not normally include any quotes
-      explicitly.  If any field (other than Command Label) begins
-      with <code>~</code> followed immediately by <code>/</code>
-      or <code>\</code> then it is replaced by your home directory (on
-      all platforms).
-    </p>
-    <p>You can use absolute pathnames if you want, but often (as with
-      the PSL REDUCE executable and image file names) command
-      components share a common root segment.  This root segment can
-      be specified as <code>$REDUCE</code>, which Run-REDUCE will
-      replace with the value of the <em>Command Root Directory</em>
-      field if it is set, or with the value of the <em>REDUCE Root
-      Directory</em> field otherwise.  (I have borrowed environment
-      variable syntax, but <code>$REDUCE</code> here is not related to
-      any environment variable.)  The <em>Command Root Directory</em>
-      chooser and file choosers use as initial directory the
-      current <em>Command Root Directory</em> field value if defined,
-      otherwise the <em>REDUCE Root Directory</em> field value if
-      defined, otherwise the platform default REDUCE root directory.
-      The file choosers replace the root segment of the returned path
-      by $REDUCE if possible.
-    </p>
-    <p>The two default REDUCE commands, which assume standard
-      installations of CSL and PSL REDUCE, share the same root
-      directory, which is why the default configuration
-      uses <em>REDUCE Root Directory</em> and leaves <em>Command Root
-      Directory</em> empty.  But a Subversion build or a version of
-      REDUCE running on Common Lisp would probably use a different
-      root directory.
-    </p>
-    
+      REDUCE directories and commands;
+      see <a href="#Configuration">REDUCE Configuration</a>.</p>
     <h3>Kill REDUCE</h3>
     <p>This cab be used to kill REDUCE in an emergency, such as if it
       hangs or you put it into an infinite loop.  Once REDUCE has been
