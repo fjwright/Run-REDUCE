@@ -448,24 +448,29 @@ public class REDUCEConfigDialog {
                 reduceRootDirTextField);
     }
 
+    private String getDefaultRootDir() {
+        String rootDir = reduceRootDirTextField.getText().trim();
+        return rootDir.isEmpty() ? RunREDUCE.reduceConfigurationDefault.reduceRootDir : rootDir;
+    }
+
     @FXML
     private void packagesDirDCButtonAction() {
         dcButtonAction("REDUCE Packages Directory",
-                RunREDUCE.reduceConfigurationDefault.packagesDir,
+                getDefaultRootDir(),
                 packagesDirTextField);
     }
 
     @FXML
     private void manualDirDCButtonAction() {
         dcButtonAction("REDUCE Manual Directory",
-                RunREDUCE.reduceConfigurationDefault.manualDir,
+                getDefaultRootDir(),
                 manualDirTextField);
     }
 
     @FXML
     private void primersDirDCButtonAction() {
         dcButtonAction("REDUCE Primers Directory",
-                RunREDUCE.reduceConfigurationDefault.primersDir,
+                getDefaultRootDir(),
                 primersDirTextField);
     }
 
