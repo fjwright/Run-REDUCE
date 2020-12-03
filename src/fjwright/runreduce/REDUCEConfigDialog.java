@@ -65,6 +65,7 @@ public class REDUCEConfigDialog {
         listView.setItems(listViewObservableList = FXCollections.observableArrayList());
         setupDialog(RunREDUCE.reduceConfiguration);
         createCommandArgFCButtons();
+        checkCommandCheckBox.visibleProperty().bind(useShellCheckBox.selectedProperty());
         commandPathnameLabel.visibleProperty().bind(useShellCheckBox.selectedProperty().not()
                 .or(checkCommandCheckBox.selectedProperty()));
     }
