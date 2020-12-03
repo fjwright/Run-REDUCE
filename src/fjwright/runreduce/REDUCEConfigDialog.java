@@ -156,7 +156,9 @@ public class REDUCEConfigDialog {
     private void deleteCommandButtonAction() {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         reduceCommandList.remove(selectedIndex);
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
         listViewObservableList.remove(selectedIndex);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
         int size = reduceCommandList.size(); // new size!
         if (size > 0) {
             if (selectedIndex == size) selectedIndex--;
@@ -210,27 +212,27 @@ public class REDUCEConfigDialog {
     }
 
     /**
-    * Write form data back to REDUCEConfiguration
-    * after validating directory and file fields.
-    */
+     * Write form data back to REDUCEConfiguration
+     * after validating directory and file fields.
+     */
     @FXML
     private void saveButtonAction(ActionEvent actionEvent) {
         String s;
         try {
             // Optional:
             RunREDUCE.reduceConfiguration.reduceRootDir =
-                    directoryTextFieldReadableCheck(reduceRootDirTextField);
+                    directoryTextFieldCheckReadable(reduceRootDirTextField);
             // All required:
-            s = directoryTextFieldReadableCheck(packagesDirTextField);
+            s = directoryTextFieldCheckReadable(packagesDirTextField);
             RunREDUCE.reduceConfiguration.packagesDir =
                     s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.packagesDir : s;
-            s = directoryTextFieldReadableCheck(manualDirTextField);
+            s = directoryTextFieldCheckReadable(manualDirTextField);
             RunREDUCE.reduceConfiguration.manualDir =
                     s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.manualDir : s;
-            s = directoryTextFieldReadableCheck(primersDirTextField);
+            s = directoryTextFieldCheckReadable(primersDirTextField);
             RunREDUCE.reduceConfiguration.primersDir =
                     s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.primersDir : s;
-            s = directoryTextFieldReadableCheck(workingDirTextField);
+            s = directoryTextFieldCheckReadable(workingDirTextField);
             RunREDUCE.reduceConfiguration.workingDir =
                     s.isEmpty() ? RunREDUCE.reduceConfigurationDefault.workingDir : s;
             saveREDUCECommand(listView.getSelectionModel().getSelectedIndex());
@@ -248,7 +250,7 @@ public class REDUCEConfigDialog {
     /**
      * Check that dir is empty or a readable directory and if not throw an exception.
      */
-    private String directoryTextFieldReadableCheck(TextField dirTextField) throws FileNotFoundException {
+    private String directoryTextFieldCheckReadable(TextField dirTextField) throws FileNotFoundException {
         String dir = dirTextField.getText().trim();
         if (dir.isEmpty()) return dir;
         // Convert leading ~ to user's home directory:
@@ -270,7 +272,7 @@ public class REDUCEConfigDialog {
      * Check that fileOrDir is a readable file or directory if it begins with $REDUCE or ~ or alwaysCheck == true.
      * If not throw an exception.
      */
-    private String commandTextFieldReadableCheck(TextField commandTextField, String commandRootDir,
+    private String commandTextFieldCheckReadable(TextField commandTextField, String commandRootDir,
                                                  boolean alwaysCheck, boolean check) throws FileNotFoundException {
         String commandOrArg = commandTextField.getText().trim();
         Path path;
@@ -321,20 +323,23 @@ public class REDUCEConfigDialog {
     }
 
     /**
-     * Get the value of the command label field and check it is unique.
+     * Update the command name from the value of the command label field and check it is unique.
      */
-    private String getCommandNameCheckUnique(int selectedIndex)
-            throws DuplicateCommandLabelException {
+    private void updateCommandNameCheckUnique(int selectedIndex) throws DuplicateCommandLabelException {
         String newName = commandNameTextField.getText().trim();
+        reduceCommandList.get(selectedIndex).name = newName;
+        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
+        listViewObservableList.set(selectedIndex, newName);
+        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
         for (int i = 0; i < reduceCommandList.size(); i++)
             if (i != selectedIndex &&
                     reduceCommandList.get(i).name.equals(newName)) {
                 RunREDUCE.alert(Alert.AlertType.ERROR,
                         "Duplicate Command Label",
-                        "Please choose a unique command label.");
+                        "\"" + newName + "\" is already used.\n" +
+                                "Please choose a unique command label.");
                 throw new DuplicateCommandLabelException();
             }
-        return newName;
     }
 
     /**
@@ -345,16 +350,15 @@ public class REDUCEConfigDialog {
     private void saveREDUCECommand(int commandIndex) throws FileNotFoundException, DuplicateCommandLabelException {
         REDUCECommand cmd = reduceCommandList.get(commandIndex);
         // Update the elements of cmd:
-        cmd.name = getCommandNameCheckUnique(commandIndex); // in case edited but not confirmed!
-        commandNameTextFieldAction(); // FixMe Remove code duplication? DOESN'T WORK!!!
+        updateCommandNameCheckUnique(commandIndex); // in case edited but not confirmed!
         cmd.useShell = useShellCheckBox.isSelected();
         cmd.checkCommand = checkCommandCheckBox.isSelected();
-        String commandRootDir = cmd.rootDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+        String commandRootDir = cmd.rootDir = directoryTextFieldCheckReadable(commandRootDirTextField);
         if (commandRootDir.isEmpty()) commandRootDir = reduceRootDirTextField.getText().trim();
         // Must replace the whole command array because its length may have changed:
         List<String> commandList = new ArrayList<>();
         for (int i = 0; i < commandTextFieldArray.length; i++) {
-            String element = commandTextFieldReadableCheck(
+            String element = commandTextFieldCheckReadable(
                     commandTextFieldArray[i], commandRootDir, i == 0,
                     i != 0 || checkCommandCheckBox.isSelected());
             if (!element.isEmpty()) commandList.add(element);
@@ -375,17 +379,10 @@ public class REDUCEConfigDialog {
      */
     @FXML
     private void commandNameTextFieldAction() {
-        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
-        String newName;
         try {
-            newName = getCommandNameCheckUnique(selectedIndex);
-        } catch (DuplicateCommandLabelException e) {
-            return;
+            updateCommandNameCheckUnique(listView.getSelectionModel().getSelectedIndex());
+        } catch (DuplicateCommandLabelException ignored) {
         }
-        reduceCommandList.get(selectedIndex).name = newName;
-        listView.getSelectionModel().selectedIndexProperty().removeListener(listViewListener);
-        listViewObservableList.set(selectedIndex, newName);
-        listView.getSelectionModel().selectedIndexProperty().addListener(listViewListener);
     }
 
     /**
@@ -499,9 +496,9 @@ public class REDUCEConfigDialog {
     @FXML
     private void commandRootDirDCButtonAction() {
         try {
-            String defaultDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+            String defaultDir = directoryTextFieldCheckReadable(commandRootDirTextField);
             if (defaultDir.isEmpty())
-                defaultDir = directoryTextFieldReadableCheck(reduceRootDirTextField);
+                defaultDir = directoryTextFieldCheckReadable(reduceRootDirTextField);
             if (defaultDir.isEmpty())
                 defaultDir = RunREDUCE.reduceConfigurationDefault.reduceRootDir;
             dcButtonAction("Command Root Directory", defaultDir, commandRootDirTextField);
@@ -514,9 +511,9 @@ public class REDUCEConfigDialog {
      */
     private void fcButtonAction(String title, TextField textField) {
         try {
-            String defaultDir = directoryTextFieldReadableCheck(commandRootDirTextField);
+            String defaultDir = directoryTextFieldCheckReadable(commandRootDirTextField);
             if (defaultDir.isEmpty())
-                defaultDir = directoryTextFieldReadableCheck(reduceRootDirTextField);
+                defaultDir = directoryTextFieldCheckReadable(reduceRootDirTextField);
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle(title);
             fileChooser.setInitialDirectory(new File(
