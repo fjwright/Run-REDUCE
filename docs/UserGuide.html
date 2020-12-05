@@ -1149,16 +1149,26 @@
     <h2 id="Printing">Printing on Linux</h2>
     
     <p>It appears that on Linux, JavaFX is not aware of the default
-    "Print to File" printer and only displays the print dialogue if
-    there is at least one physical printer installed.  If you cancel
-    the print dialogue then Run-REDUCE is left unresponsive for a long
-    time.  A workaround seems to be to select the "Print To File"
-    option for a real printer, click Print and then cancel the
-    resulting file selector, which cancels the whole print job
-    immediately.  (Nearly all of the code involved is in the standard
-    JavaFX library and so out of my control, although in the longer
-    term I might be able to improve the response by running printing
-    in a separate thread.)
+      <em>Print to File</em> printer and only displays the print
+       dialogue if there is at least one printer explicitly installed.
+       However, it should be sufficient to install the CUPS PDF
+       printer, to which Run-REDUCE can print.  (But beware that
+       Run-REDUCE may not recognise the new printer immediately!)  If
+       you have problems printing to a real printer then a workaround
+       might be first to print to PDF and then to print the PDF to a
+       real printer.
+    </p>
+    <p>If you cancel the print dialogue then Run-REDUCE may be left
+      unresponsive for a long time, but switching focus away from and
+      then back to Run-REDUCE may make it responsive again.
+      Alternatively, you may be able to avoid this problem by
+      selecting the <em>Print To File</em> option instead of
+      cancelling the print dialogue, clicking on <em>Print</em> and
+      then cancelling the resulting file selector, which should cancel
+      the whole print job immediately.  (Nearly all of the code
+      involved is in the standard JavaFX library and so out of my
+      control, although in the longer term I might be able to improve
+      the responsiveness by running printing in a separate thread.)
     </p>
 
     <h2 id="ConfigExamples">Configuring Run-REDUCE for Subversion Builds</h2>
