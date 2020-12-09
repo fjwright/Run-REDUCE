@@ -52,7 +52,7 @@ public class RunREDUCE extends Application {
             primaryScreenBounds.getWidth() * initialSceneFactor,
             primaryScreenBounds.getHeight() * initialSceneFactor);
     static Image RRicon128Image =
-            new Image(RunREDUCE.class.getResourceAsStream("resources/images/RR-icon-128.png"));
+            new Image(RunREDUCE.class.getResourceAsStream("images/RR-icon-128.png"));
 
     static REDUCEConfigurationDefault reduceConfigurationDefault;
     public static REDUCEConfiguration reduceConfiguration;
