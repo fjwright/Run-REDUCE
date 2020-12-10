@@ -22,6 +22,8 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
@@ -110,8 +112,9 @@ public class RunREDUCE extends Application {
             splitPane = new SplitPane(reducePanel, reducePanel2);
             splitPane.setDividerPositions(0.5);
             runREDUCEFrame.frame.setCenter(splitPane);
-            reducePanel.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
-            reducePanel2.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
+            reducePanel.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::splitPaneMouseClicked);
+            reducePanel2.addEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::splitPaneMouseClicked);
+            splitPane.addEventFilter(KeyEvent.KEY_PRESSED, RunREDUCE::splitPaneKeyPressed);
             if (startup)
                 reducePanel.setSelected(true);
             else {
@@ -124,14 +127,14 @@ public class RunREDUCE extends Application {
         } else { // Revert to single pane.
             reducePanelList.removeIf(x -> x != reducePanel);
             splitPane = null; // release resources
-            reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::useSplitPaneMouseClicked);
+            reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::splitPaneMouseClicked);
             // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
             reducePanel.activeLabel.setVisible(false);
         }
     }
 
-    private static void useSplitPaneMouseClicked(MouseEvent event) {
+    private static void splitPaneMouseClicked(MouseEvent event) {
         Node node = (Node) event.getSource();
         if (node == reducePanel) return;
         reducePanel.setSelected(false); // other panel
@@ -139,6 +142,23 @@ public class RunREDUCE extends Application {
         reducePanel.setSelected(true);
         reducePanel.updateMenus();
         reducePanel.inputTextArea.requestFocus();
+    }
+
+    private static void splitPaneKeyPressed(KeyEvent event) {
+        if (event.isControlDown() &&
+                (event.getCode() == KeyCode.TAB ||
+                        event.getCode() == KeyCode.PAGE_UP ||
+                        event.getCode() == KeyCode.PAGE_DOWN)) {
+            reducePanel.setSelected(false); // current panel
+            for (var rp : reducePanelList)
+                if (rp != reducePanel) {
+                    reducePanel = rp;
+                    break;
+                }
+            reducePanel.setSelected(true); // new panel
+            reducePanel.updateMenus();
+            reducePanel.inputTextArea.requestFocus();
+        }
     }
 
     static void useTabPane(boolean enable) {
