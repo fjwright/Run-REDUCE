@@ -1,0 +1,9 @@
+#! /bin/bash
+
+# This batch file and Run-REDUCE.jar must be in the same directory.
+# The Java bin directory must be in PATH and the environment
+# variable PATH_TO_FX must be set to the JavaFX lib directory.
+# Then Run-REDUCE.jar can be run from anywhere by running this batch file.
+# Any command-line arguments are passed on to Run-REDUCE.jar.
+
+java -Djdk.gtk.version=2 --module-path "${PATH_TO_FX//\"/}" --add-modules javafx.fxml,javafx.web -jar "$(dirname $0)/Run-REDUCE.jar" $*
