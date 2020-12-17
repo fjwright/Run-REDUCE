@@ -1,4 +1,5 @@
 #! /bin/bash
+# Run Run-REDUCE asynchronously on Linux, etc.
 
 # This batch file and Run-REDUCE.jar must be in the same directory.
 # The Java bin directory must be in PATH and the environment
@@ -6,4 +7,5 @@
 # Then Run-REDUCE.jar can be run from anywhere by running this batch file.
 # Any command-line arguments are passed on to Run-REDUCE.jar.
 
-java -Djdk.gtk.version=2 --module-path "${PATH_TO_FX//\"/}" --add-modules javafx.fxml,javafx.web -jar "$(dirname $0)/Run-REDUCE.jar" $*
+java -Djdk.gtk.version=2 --module-path "${PATH_TO_FX//\"/}" --add-modules javafx.fxml,javafx.web \
+-jar "$(dirname $0)/Run-REDUCE.jar" "$@" &
