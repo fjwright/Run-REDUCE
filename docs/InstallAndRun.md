@@ -1,6 +1,6 @@
 # Run-REDUCE Install and Run Guide
 
-### Francis Wright, November 2020
+## Francis Wright, December 2020
 
 Run-REDUCE is an open-source JavaFX GUI to run the REDUCE Computer
 Algebra System.  REDUCE must be obtained from
@@ -32,23 +32,25 @@ the full pathname of your JavaFX library.
 
 Because this is a little tedious, I provide two batch files that make
 it easier to run Run-REDUCE.  The file
-[Run-REDUCE.bat](https://github.com/fjwright/Run-REDUCE/releases/download/v2.5/Run-REDUCE.bat)
-is for use on Microsoft Windows and the file
-[Run-REDUCE](https://github.com/fjwright/Run-REDUCE/releases/download/v2.5/Run-REDUCE)
-(no extension) is for use on Linux.  If you want to use one of these
-batch files, download it (by clicking on the link) to the same
-directory to which you downloaded *Run-REDUCE.jar*.  Then you can run
-Run-REDUCE by executing the simpler shell command
+[Run-REDUCE.bat](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE.bat)
+is for use on [Microsoft Windows](#Microsoft-Windows) and the file
+[Run-REDUCE](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE)
+(no extension) is for use on [Unix-like platforms](#Linux).  If you
+want to use one of these batch files, download it (by right-clicking
+on the link and selecting *Save Link As...*) to the same directory to
+which you downloaded *Run-REDUCE.jar*.  Then you can run Run-REDUCE by
+executing the simpler shell command
 
 ``` shell
 Run-REDUCE
 ```
 
-provided you set up the `PATH_TO_FX` environment variable, as I
-explain below.
+provided you set up the `PATH_TO_FX` environment variable; please see
+the additional details for [Microsoft Windows](#Microsoft-Windows) and
+[Linux](#Linux) below.
 
-There are many ways to run JavaFX applications.  Here are some
-specific recommendations that I have tested.
+There are many ways to run JavaFX applications, but here are my
+recommendations.
 
 
 ## Install OpenJDK JRE
@@ -102,14 +104,11 @@ pathname.  **Enclose the folder name in double quotes.**
 
 An easy way to run Run-REDUCE using a shell command is first to open
 *File Explorer* and navigate to the folder to which you downloaded
-*Run-REDUCE.jar*.  In the address bar, type `cmd` and then press
-the *Enter* key.  This will open a Command Prompt window in the
-current folder; type `Run-REDUCE` and press the *Enter* key.  Or
-you can just double-click on the *Run-REDUCE* Windows Batch File
-(which is actually called *Run-REDUCE.bat* but the extension is
-suppressed by default). This will first open a Command Prompt window
-and then run *Run-REDUCE.jar*.  (I can't find a way to suppress the
-Command Prompt window.)
+*Run-REDUCE.jar*.  In the address bar, type `cmd` and then press the
+*Enter* key.  This will open a Command Prompt window in the current
+folder; type `Run-REDUCE` and press the *Enter* key.  Or you can just
+double-click on the *Run-REDUCE* Windows Batch File (which is actually
+called *Run-REDUCE.bat* but the extension is suppressed by default).
 
 ### Linux
 
