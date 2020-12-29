@@ -158,6 +158,7 @@ public class RunREDUCE extends Application {
                 (event.getCode() == KeyCode.TAB ||
                         event.getCode() == KeyCode.PAGE_UP ||
                         event.getCode() == KeyCode.PAGE_DOWN)) {
+            event.consume(); // NECESSARY for Control+Tab!
             reducePanel.setSelected(false); // current panel
             REDUCEPanel tmp = reducePanel; // swap panels
             reducePanel = reducePanel2;
