@@ -53,11 +53,11 @@
                 <MenuItem mnemonicParsing="false" onAction="#fontSizeMenuItemAction" text="Font Size..."/>
                 <MenuItem mnemonicParsing="false" onAction="#fontColorsMenuItemAction" text="Font Colours..."/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
-                <CheckMenuItem fx:id="boldPromptsCheckBox" mnemonicParsing="false" onAction="#boldPromptsCheckBoxAction"
-                               text="Bold Prompts"/>
-                <CheckMenuItem fx:id="colouredIOCheckBox" mnemonicParsing="false" onAction="#colouredIOCheckBoxAction"
-                               text="I/O Colouring"/>
-                <CheckMenuItem fx:id="typesetMathsCheckBox" mnemonicParsing="false"
+                <CheckMenuItem fx:id="boldPromptsCheckMenuItem" mnemonicParsing="false"
+                               onAction="#boldPromptsCheckBoxAction" text="Bold Prompts"/>
+                <CheckMenuItem fx:id="colouredIOCheckMenuItem" mnemonicParsing="false"
+                               onAction="#colouredIOCheckBoxAction" text="I/O Colouring"/>
+                <CheckMenuItem fx:id="typesetMathsCheckMenuItem" mnemonicParsing="false"
                                onAction="#typesetMathsCheckBoxAction" text="Typeset Maths"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <RadioMenuItem fx:id="singlePaneRadioButton" mnemonicParsing="false"
@@ -72,6 +72,9 @@
                 <RadioMenuItem fx:id="tabbedPaneRadioButton" mnemonicParsing="false"
                                onAction="#tabbedPaneRadioButtonAction" text="Tabbed Pane Display"
                                toggleGroup="$displayPaneButtonGroup"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <CheckMenuItem fx:id="syncScrollCheckMenuItem" disable="true" mnemonicParsing="false"
+                               onAction="#syncScrollCheckMenuItemAction" text="Synchronize Scrolling"/>
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction"
                           text="Add Another Tab"/>
             </Menu>

@@ -29,6 +29,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +47,7 @@ public class RunREDUCE extends Application {
     static int tabLabelNumber = 1;
     public static REDUCEPanel reducePanel; // the REDUCEPanel with current focus
     static List<REDUCEPanel> reducePanelList = new ArrayList<>();
+    private static REDUCEPanel reducePanel2; // the split pane REDUCEPanel without current focus
 
     // Set the main window to 2/3 the linear dimension of the screen initially:
     static final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -73,12 +76,12 @@ public class RunREDUCE extends Application {
         primaryStage.setMinHeight(375);
         primaryStage.getIcons().addAll(RRicon128Image);
 
-                // REDUCE I/O requires a monospaced font:
-                // Only "system" fonts (in C:\Windows\Fonts) are found, not
-                // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
-                // ("DejaVu Sans Mono" is my only "user" font.)
-                // ToDo Consider bundling a font as a resource.
-                reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
+        // REDUCE I/O requires a monospaced font:
+        // Only "system" fonts (in C:\Windows\Fonts) are found, not
+        // "user" fonts (in C:\Users\franc\AppData\Local\Microsoft\Windows\Fonts).
+        // ("DejaVu Sans Mono" is my only "user" font.)
+        // ToDo Consider bundling a font as a resource.
+        reduceFontFamilyName = REDUCEConfiguration.windowsOS ? "Consolas" : "DejaVu Sans Mono";
         Font reduceFont = Font.font(reduceFontFamilyName, RRPreferences.fontSize);
         if (!reduceFont.getFamily().equals(reduceFontFamilyName))
             alert(Alert.AlertType.WARNING, "REDUCE I/O Font",
@@ -107,7 +110,7 @@ public class RunREDUCE extends Application {
 
     static void useSplitPane(boolean enable, boolean startup) {
         if (enable) {
-            REDUCEPanel reducePanel2 = new REDUCEPanel();
+            reducePanel2 = new REDUCEPanel();
             reducePanelList.add(reducePanel2);
             splitPane = new SplitPane(reducePanel, reducePanel2);
             splitPane.setDividerPositions(0.5);
@@ -118,26 +121,32 @@ public class RunREDUCE extends Application {
             if (startup)
                 reducePanel.setSelected(true);
             else {
-                reducePanel.setSelected(false); // old panel
+                REDUCEPanel tmp = reducePanel; // swap panels
                 reducePanel = reducePanel2; // new panel
+                reducePanel2 = tmp;
                 reducePanel.setSelected(true);
                 reducePanel.updateMenus();
                 reducePanel.inputTextArea.requestFocus();
             }
         } else { // Revert to single pane.
-            reducePanelList.removeIf(x -> x != reducePanel);
+            reducePanelList.remove(reducePanel2);
+            reducePanel2 = null; // release resources
             splitPane = null; // release resources
             reducePanel.removeEventFilter(MouseEvent.MOUSE_CLICKED, RunREDUCE::splitPaneMouseClicked);
-            // Retain the reducePanel from the selected tab:
+            ((EventTarget) reducePanel.doc).removeEventListener("scroll", scrollListener, false);
+            RunREDUCE.runREDUCEFrame.syncScrollCheckMenuItem.setSelected(false);
+            // Retain the selected reducePanel:
             runREDUCEFrame.frame.setCenter(reducePanel);
             reducePanel.activeLabel.setVisible(false);
         }
+        RunREDUCE.runREDUCEFrame.syncScrollCheckMenuItem.setDisable(!enable);
     }
 
     private static void splitPaneMouseClicked(MouseEvent event) {
         Node node = (Node) event.getSource();
         if (node == reducePanel) return;
         reducePanel.setSelected(false); // other panel
+        reducePanel2 = reducePanel;
         reducePanel = (REDUCEPanel) node; // this panel
         reducePanel.setSelected(true);
         reducePanel.updateMenus();
@@ -150,14 +159,29 @@ public class RunREDUCE extends Application {
                         event.getCode() == KeyCode.PAGE_UP ||
                         event.getCode() == KeyCode.PAGE_DOWN)) {
             reducePanel.setSelected(false); // current panel
-            for (var rp : reducePanelList)
-                if (rp != reducePanel) {
-                    reducePanel = rp;
-                    break;
-                }
+            REDUCEPanel tmp = reducePanel; // swap panels
+            reducePanel = reducePanel2;
+            reducePanel2 = tmp;
             reducePanel.setSelected(true); // new panel
             reducePanel.updateMenus();
             reducePanel.inputTextArea.requestFocus();
+        }
+    }
+
+    static final EventListener scrollListener = new EventListener() {
+        public void handleEvent(org.w3c.dom.events.Event ev) {
+            int scrollY = (int) reducePanel.window.getMember("scrollY");
+            reducePanel2.window.call("scrollTo", 0, scrollY);
+        }
+    };
+
+    static void setUseSplitPaneSyncScroll(boolean enable) {
+        if (enable) {
+            ((EventTarget) reducePanel.doc).addEventListener("scroll", scrollListener, false);
+            ((EventTarget) reducePanel2.doc).addEventListener("scroll", scrollListener, false);
+        } else {
+            ((EventTarget) reducePanel.doc).removeEventListener("scroll", scrollListener, false);
+            ((EventTarget) reducePanel2.doc).removeEventListener("scroll", scrollListener, false);
         }
     }
 

@@ -54,7 +54,7 @@ public class RunREDUCEFrame {
     private Menu autoRunREDUCESubmenu;
     // View menu:
     @FXML
-    CheckMenuItem boldPromptsCheckBox, colouredIOCheckBox, typesetMathsCheckBox;
+    CheckMenuItem boldPromptsCheckMenuItem, colouredIOCheckMenuItem, typesetMathsCheckMenuItem, syncScrollCheckMenuItem;
     @FXML
     RadioMenuItem singlePaneRadioButton;
     @FXML
@@ -116,15 +116,13 @@ public class RunREDUCEFrame {
          * View menu *
          * ********* */
 
-        boldPromptsCheckBox.setSelected(RRPreferences.boldPromptsState);
-
-        colouredIOCheckBox.setSelected(RRPreferences.colouredIOState);
-
-        typesetMathsCheckBox.setSelected(RRPreferences.typesetMathsState);
-
+        boldPromptsCheckMenuItem.setSelected(RRPreferences.boldPromptsState);
+        colouredIOCheckMenuItem.setSelected(RRPreferences.colouredIOState);
+        typesetMathsCheckMenuItem.setSelected(RRPreferences.typesetMathsState);
         singlePaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SINGLE);
         splitPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT);
         tabbedPaneRadioButton.setSelected(RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED);
+        syncScrollCheckMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.SPLIT);
         addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
 
         /* ********* *
@@ -487,12 +485,12 @@ public class RunREDUCEFrame {
 
     @FXML
     private void boldPromptsCheckBoxAction() {
-        RRPreferences.save(RRPreferences.BOLDPROMPTS, boldPromptsCheckBox.isSelected());
+        RRPreferences.save(RRPreferences.BOLDPROMPTS, boldPromptsCheckMenuItem.isSelected());
     }
 
     @FXML
     private void colouredIOCheckBoxAction() {
-        RRPreferences.save(RRPreferences.COLOUREDIO, colouredIOCheckBox.isSelected());
+        RRPreferences.save(RRPreferences.COLOUREDIO, colouredIOCheckMenuItem.isSelected());
     }
 
     @FXML
@@ -502,7 +500,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void typesetMathsCheckBoxAction() {
-        RRPreferences.save(RRPreferences.TYPESET_MATHS, typesetMathsCheckBox.isSelected());
+        RRPreferences.save(RRPreferences.TYPESET_MATHS, typesetMathsCheckMenuItem.isSelected());
     }
 
     @FXML
@@ -533,6 +531,11 @@ public class RunREDUCEFrame {
         RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
         RunREDUCE.useTabPane(true);
         addTabMenuItem.setDisable(false);
+    }
+
+    @FXML
+    private void syncScrollCheckMenuItemAction() {
+        RunREDUCE.setUseSplitPaneSyncScroll(syncScrollCheckMenuItem.isSelected());
     }
 
     @FXML
@@ -662,7 +665,7 @@ public class RunREDUCEFrame {
         RunREDUCE.hostServices.showDocument("https://sourceforge.net/projects/reduce-algebra/");
     }
 
-    static final String VERSION = "2.65";
+    static final String VERSION = "2.66";
 
     @FXML
     private void aboutMenuItemAction() {

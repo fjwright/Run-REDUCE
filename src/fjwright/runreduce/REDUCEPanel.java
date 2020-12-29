@@ -60,10 +60,11 @@ public class REDUCEPanel extends BorderPane {
     private double[] dividerPositions;
 
     final WebEngine webEngine;
-    private HTMLDocument doc;
+    HTMLDocument doc;
     private HTMLElement html, head, inputPre;
     HTMLElement body;
     private JSObject katex, katexMacros;
+    JSObject window;
 
     /*
      * The <body> content should look like repeats of this structure:
@@ -142,7 +143,7 @@ public class REDUCEPanel extends BorderPane {
                 (ov, oldState, newState) -> {
                     if (newState == State.SUCCEEDED) {
                         // Begin debugging support
-                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        window = (JSObject) webEngine.executeScript("window");
                         window.setMember("bridge", bridge);
                         webEngine.executeScript(
                                 "console.error=function(message){bridge.log('JS ERROR: '+message)};" +
@@ -1034,9 +1035,9 @@ public class REDUCEPanel extends BorderPane {
         FRAME.restartREDUCEMenuItem.setDisable(restartREDUCEMenuItemDisabled);
         FRAME.killREDUCEMenuItem.setDisable(killREDUCEMenuItemDisabled);
         // View menu items:
-        FRAME.boldPromptsCheckBox.setSelected(boldPromptsState);
-        FRAME.colouredIOCheckBox.setSelected(colouredIOState);
-        FRAME.typesetMathsCheckBox.setSelected(typesetMathsState);
+        FRAME.boldPromptsCheckMenuItem.setSelected(boldPromptsState);
+        FRAME.colouredIOCheckMenuItem.setSelected(colouredIOState);
+        FRAME.typesetMathsCheckMenuItem.setSelected(typesetMathsState);
         // Templates and Functions menus:
         FRAME.templatesMenu.setDisable(templatesMenuDisabled);
         FRAME.functionsMenu.setDisable(functionsMenuDisabled);
