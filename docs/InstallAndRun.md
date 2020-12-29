@@ -33,9 +33,9 @@ the full pathname of your JavaFX library.
 Because this is a little tedious, I provide two batch files that make
 it easier to run Run-REDUCE.  The file
 [Run-REDUCE.bat](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE.bat)
-is for use on [Microsoft Windows](#Microsoft-Windows) and the file
+is for use on [Microsoft Windows](#Windows) and the file
 [Run-REDUCE](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE)
-(no extension) is for use on [Unix-like platforms](#Linux).  If you
+(no extension) is for use on [Unix-like platforms](#Unix).  If you
 want to use one of these batch files, download it (by right-clicking
 on the link and selecting *Save Link As...*) to the same directory to
 which you downloaded *Run-REDUCE.jar*.  Then you can run Run-REDUCE by
@@ -46,8 +46,8 @@ Run-REDUCE
 ```
 
 provided you set up the `PATH_TO_FX` environment variable; please see
-the additional details for [Microsoft Windows](#Microsoft-Windows) and
-[Linux](#Linux) below.
+the additional details for [Microsoft Windows](#Windows) and
+[Unix-like platforms](#Unix) below.
 
 There are many ways to run JavaFX applications, but here are my
 recommendations.
@@ -70,7 +70,7 @@ settings should be fine although you can remove the *Associate .jar*
 option unless you want it for running other Java applications (but
 keep the *Add to PATH* option).
 
-On Linux, install `adoptopenjdk-<latest>-hotspot-jre`, where
+On other platforms, install `adoptopenjdk-<latest>-hotspot-jre`, where
 `<latest>` represents the highest number available, currently 15.  If
 you prefer, you can use Java 11 and the non-JRE version (see above).
 
@@ -89,7 +89,7 @@ below.
 
 ## Run Run-REDUCE using a Batch File on...
 
-### Microsoft Windows
+### <a id="Windows"></a>Microsoft Windows
 
 To create the `PATH_TO_FX` environment variable, open the *Start*
 menu, type `env` and click on *Edit the system environment variables*.
@@ -110,7 +110,7 @@ folder; type `Run-REDUCE` and press the *Enter* key.  Or you can just
 double-click on the *Run-REDUCE* Windows Batch File (which is actually
 called *Run-REDUCE.bat* but the extension is suppressed by default).
 
-### Linux
+### <a id="Unix"></a>Unix-like Platforms
 
 To create the environment variable, open your profile (or shell
 configuration) file (e.g. *~/.profile* in Ubuntu or *~/.bash_profile*
