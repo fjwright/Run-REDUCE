@@ -43,7 +43,7 @@ public class REDUCEPanel extends BorderPane {
     @FXML
     private Label outputLabel, inputLabel;
     @FXML
-    private ToggleButton hideEditorToggleButton;
+    ToggleButton hideEditorToggleButton;
     @FXML
     Label activeLabel;
     @FXML
@@ -61,8 +61,8 @@ public class REDUCEPanel extends BorderPane {
 
     final WebEngine webEngine;
     HTMLDocument doc;
-    private HTMLElement html, head, inputPre;
-    HTMLElement body;
+    HTMLElement html, body;
+    private HTMLElement head, inputPre;
     private JSObject katex, katexMacros;
     JSObject window;
 

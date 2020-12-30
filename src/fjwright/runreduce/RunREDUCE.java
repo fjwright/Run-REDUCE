@@ -29,6 +29,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
@@ -165,14 +166,24 @@ public class RunREDUCE extends Application {
             reducePanel2 = tmp;
             reducePanel.setSelected(true); // new panel
             reducePanel.updateMenus();
-            reducePanel.inputTextArea.requestFocus();
+            if (reducePanel.hideEditorToggleButton.isSelected())
+                reducePanel.outputWebView.requestFocus();
+            else
+                reducePanel.inputTextArea.requestFocus();
         }
     }
 
     static final EventListener scrollListener = new EventListener() {
         public void handleEvent(org.w3c.dom.events.Event ev) {
-            int scrollY = (int) reducePanel.window.getMember("scrollY");
-            reducePanel2.window.call("scrollTo", 0, scrollY);
+//            int scrollY = (int) reducePanel.window.getMember("scrollY");
+//            reducePanel2.window.call("scrollTo", 0, scrollY);
+            // Relative scrolling:
+            int windowHeight = (int) reducePanel.window.getMember("innerHeight");
+            float thisScrollYMax = (int) ((JSObject) reducePanel.html).getMember("scrollHeight") - windowHeight;
+            float thatScrollYMax = (int) ((JSObject) reducePanel2.html).getMember("scrollHeight") - windowHeight;
+            int thisScrollY = (int) reducePanel.window.getMember("scrollY");
+            int thatScrollY = (int) (thisScrollY / thisScrollYMax * thatScrollYMax);
+            reducePanel2.window.call("scrollTo", 0, thatScrollY);
         }
     };
 
