@@ -1808,16 +1808,24 @@ put('log, 'fancy!-functionsymbol, "\log");
 put('logb, 'fancy!-prifn, 'fancy!-logb);
 put('log10, 'fancy!-prifn, 'fancy!-log10);
 
-symbolic procedure fancy!-logb(u);
+inline procedure fancy!-logb(u);
    % u = (logb(x, b) -> \log_{b}(x)
-   fancy!-indexed!-fn {'log, caddr u, cadr u};
+   fancy!-indexed!-fn {"\log", caddr u, cadr u};
 
-symbolic procedure fancy!-log10(u);
+inline procedure fancy!-log10(u);
    % u = (log10 x) -> \log_{10}(x)
-   fancy!-indexed!-fn {'log, 10, cadr u};
+   fancy!-indexed!-fn {"\log", 10, cadr u};
 
-symbolic inline procedure fancy!-indexed!-fn u;
-   fancy!-bessel u;
+put('atan2, 'fancy!-functionsymbol, "\arctan_2");
+
+symbolic procedure fancy!-indexed!-fn u;
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator car u;
+      w := fancy!-print!-one!-index cadr u;
+      if testing!-width!* and w eq 'failed then return w;
+      return fancy!-print!-function!-arguments cddr u;
+   end;
 
 put('ln, 'fancy!-functionsymbol, "\ln");
 put('max, 'fancy!-functionsymbol, "\max");
@@ -1868,6 +1876,7 @@ symbolic procedure fancy!-polygamma(u);
    end;
 
 put('iGamma, 'fancy!-functionsymbol, '!P); % P(a,z)
+put('m_Gamma, 'fancy!-functionsymbol, "\gamma"); % gamma(a,z)
 
 put('iBeta, 'fancy!-prifn, 'fancy!-iBeta);
 put('iBeta, 'fancy!-functionsymbol, '!I);
@@ -1900,6 +1909,7 @@ put('Ci, 'fancy!-functionsymbol, "\mathrm{Ci}");
 put('Shi, 'fancy!-functionsymbol, "\mathrm{Shi}");
 put('Chi, 'fancy!-functionsymbol, "\mathrm{Chi}");
 put('erf, 'fancy!-functionsymbol, "\mathrm{erf}");
+% erfc(x) -> 1 - erf(x) for all x.
 put('Fresnel_S, 'fancy!-functionsymbol, "\mathrm{S}");
 put('Fresnel_C, 'fancy!-functionsymbol, "\mathrm{C}");
 
@@ -1917,23 +1927,14 @@ put('Airy_BiPrime, 'fancy!-functionsymbol, "\mathrm{Bi}'");
 put('Airy_AiPrime, 'fancy!-symbol!-length, 5);
 put('Airy_BiPrime, 'fancy!-symbol!-length, 5);
 
-put('BesselI, 'fancy!-prifn, 'fancy!-bessel);
-put('BesselJ, 'fancy!-prifn, 'fancy!-bessel);
-put('BesselY, 'fancy!-prifn, 'fancy!-bessel);
-put('BesselK, 'fancy!-prifn, 'fancy!-bessel);
+put('BesselI, 'fancy!-prifn, 'fancy!-indexed!-fn);
+put('BesselJ, 'fancy!-prifn, 'fancy!-indexed!-fn);
+put('BesselY, 'fancy!-prifn, 'fancy!-indexed!-fn);
+put('BesselK, 'fancy!-prifn, 'fancy!-indexed!-fn);
 put('BesselI, 'fancy!-functionsymbol, '!I);
 put('BesselJ, 'fancy!-functionsymbol, '!J);
 put('BesselY, 'fancy!-functionsymbol, '!Y);
 put('BesselK, 'fancy!-functionsymbol, '!K);
-
-symbolic procedure fancy!-bessel(u);
- fancy!-level
-  begin scalar w;
-   fancy!-prefix!-operator car u;
-   w:=fancy!-print!-one!-index cadr u;
-   if testing!-width!* and w eq 'failed then return w;
-   return fancy!-print!-function!-arguments cddr u;
-  end;
 
 put('Hankel1, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(1)}(z)
 put('Hankel2, 'fancy!-prifn, 'fancy!-Hankel); % H_{nu}^{(2)}(z)
@@ -1974,6 +1975,10 @@ symbolic procedure fancy!-Lommel(u);
 
 put('KummerM, 'fancy!-functionsymbol, '!M); % M(a, b, z)
 put('KummerU, 'fancy!-functionsymbol, '!U); % U(a, b, z)
+% Note the Whittaker M & W functions are simplified to expressions
+% involving the Kummer M & U functions respectively.
+
+put('Lambert_W, 'fancy!-functionsymbol, "\omega");
 
 % Classical Orthogonal Polynomials
 
@@ -2030,6 +2035,47 @@ put('LaguerreP, 'fancy!-functionsymbol, '!L);
 
 put('HermiteP, 'fancy!-prifn, 'fancy!-indexed!-fn); % H_n(x)
 put('HermiteP, 'fancy!-functionsymbol, '!H);
+
+% Other Polynomials and Numbers
+
+put('BernoulliP, 'fancy!-prifn, 'fancy!-indexed!-fn); % B_n(x)
+put('BernoulliP, 'fancy!-functionsymbol, '!B);
+put('EulerP, 'fancy!-prifn, 'fancy!-indexed!-fn); % E_n(x)
+put('EulerP, 'fancy!-functionsymbol, '!E);
+put('FibonacciP, 'fancy!-prifn, 'fancy!-indexed!-fn); % F_n(x)
+put('FibonacciP, 'fancy!-functionsymbol, '!F);
+
+put('Bernoulli, 'fancy!-prifn, 'fancy!-indexed!-symbol); % B_n
+put('Bernoulli, 'fancy!-special!-symbol, '!B);
+put('Euler, 'fancy!-prifn, 'fancy!-indexed!-symbol); % E_n
+put('Euler, 'fancy!-special!-symbol, '!E);
+put('Fibonacci, 'fancy!-prifn, 'fancy!-indexed!-symbol); % F_n
+put('Fibonacci, 'fancy!-special!-symbol, '!F);
+put('Motzkin, 'fancy!-prifn, 'fancy!-indexed!-symbol); % M_n
+put('Motzkin, 'fancy!-special!-symbol, '!M);
+
+symbolic procedure fancy!-indexed!-symbol(u);
+   % e.g. u = (Motzkin n)
+   fancy!-level
+   <<
+      fancy!-prefix!-operator car u;
+      fancy!-print!-one!-index cadr u
+   >>;
+
+put('Stirling1, 'fancy!-prifn, 'fancy!-Stirling); % s_n^m
+put('Stirling2, 'fancy!-prifn, 'fancy!-Stirling); % S_n^m
+
+symbolic procedure fancy!-Stirling(u);
+   % u = (Stirling1/2 mu nu)
+   fancy!-level
+   begin scalar w;
+      fancy!-prefix!-operator(if car u eq 'Stirling1 then "\mathrm{s}"
+                              else "\mathrm{S}");
+      w := fancy!-print!-indexlist1({cadr u}, '!_, '!*comma!*);
+      if testing!-width!* and w eq 'failed then return w;
+      w := fancy!-print!-indexlist1({caddr u}, '!^, '!*comma!*);
+      return w;     
+   end;
 
 % Other Special Functions
 
