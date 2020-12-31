@@ -110,6 +110,15 @@
       in it (if any) is preserved and carried to the new display pane
       arrangement, but any other REDUCE invocations are discarded.
     </p>
+    <p>With a split pane, you can select synchronised scrolling so
+      that scrolling the selected REDUCE panel (in any way) also
+      scrolls the other REDUCE panel to the same relative position.
+      This facility is experimental and currently forces both REDUCE
+      panels to display content at the same (relative) position; the
+      other REDUCE panel cannot be scrolled from its current position
+      but will jump to the same relative position as the selected
+      REDUCE panel.
+    </p>
     <p>With a split or tabbed pane, you can select the active REDUCE
       panel by clicking on the desired panel in a split pane or tab on
       a tabbed pane.  You can also select the next REDUCE panel
@@ -781,30 +790,36 @@
       Session Log...</em> outputs typeset maths using LaTeX markup.
     </p>
     <h3>Single Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE to display the selected
-    REDUCE panel only. This is the default.
+    <p>Selecting this causes Run-REDUCE to display the selected REDUCE
+      panel only.  This is the default.
     </p>
     <h3>Split Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE to display two REDUCE
-    panels side-by-side. The left-hand panel displays the previously
-    selected REDUCE panel (if any) and is initially active. Clicking
-    on a REDUCE panel makes it active for input via its input editor
-    pane and the menus. The inactive REDUCE panel can continue to
-    update its output display. Both panels are the same size
-    initially, but you can change that by dragging the divider.
+    <p>Selecting this causes Run-REDUCE to display two REDUCE panels
+      side-by-side.  The left-hand panel displays the previously
+      selected REDUCE panel (if any) and is initially active.
+      Clicking on a REDUCE panel makes it active for input via its
+      input editor pane and the menus.  The inactive REDUCE panel can
+      continue to update its output display.  Both panels are the same
+      size initially, but you can change that by dragging the divider.
     </p>
     <h3>Tabbed Pane Display</h3>
-    <p>Selecting this causes Run-REDUCE to display a tabbed pane
-    with the previously selected REDUCE panel (if any) displayed under
-    the first tab.  Clicking on the <code>&times;</code> icon at the
-    right of the selected tab label removes that tab and the REDUCE
-    panel it contains. When there is only one tab, removing it
-    disables tabbed display but preserves the REDUCE panel that the
-    tab contained.
+    <p>Selecting this causes Run-REDUCE to display a tabbed pane with
+      the previously selected REDUCE panel (if any) displayed under
+      the first tab.  Clicking on the <code>&times;</code> icon at the
+      right of the selected tab label removes that tab and the REDUCE
+      panel it contains.  When there is only one tab, removing it
+      disables tabbed display but preserves the REDUCE panel that the
+      tab contained.
+    </p>
+    <h3>Synchronise Scrolling</h3>
+    <p>Selecting this synchronises the scrolling of the two REDUCE
+      panels in a split pane display; see <a href="#MainWindow">The
+      Main Window</a>.  This menu item is disabled unless split pane
+      display is selected.
     </p>
     <h3>Add Another Tab</h3>
     <p>This adds a new tab to a tabbed display.  This menu item is
-    disabled unless tabbed pane display is selected.
+      disabled unless tabbed pane display is selected.
     </p>
 
     <h2 id="TemplatesMenu">The Templates Menu</h2>

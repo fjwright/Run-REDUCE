@@ -74,7 +74,7 @@
                                toggleGroup="$displayPaneButtonGroup"/>
                 <SeparatorMenuItem mnemonicParsing="false"/>
                 <CheckMenuItem fx:id="syncScrollCheckMenuItem" disable="true" mnemonicParsing="false"
-                               onAction="#syncScrollCheckMenuItemAction" text="Synchronize Scrolling"/>
+                               onAction="#syncScrollCheckMenuItemAction" text="Synchronise Scrolling"/>
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction"
                           text="Add Another Tab"/>
             </Menu>
