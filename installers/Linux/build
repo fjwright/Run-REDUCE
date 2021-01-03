@@ -1,0 +1,36 @@
+#! /bin/bash
+# Use jpackage to build a Run-REDUCE installer for Linux.
+# User's Guide: https://docs.oracle.com/en/java/javase/15/jpackage/.
+# Man Page: https://docs.oracle.com/en/java/javase/15/docs/specs/man/jpackage.html.
+# Requires JDK 14+ and (e.g.) JAVA_HOME = /usr/lib/jvm/adoptopenjdk-15-hotspot-amd64.
+# Debian Linux also requires the fakeroot package.
+# Red Hat Linux also requires the rpm-build package.
+
+# --type app-image creates only the application image for testing.
+# --verbose enables verbose output.
+
+# Use JDK 14 because JDK 15 currently leads to ghost output!
+# sudo update-java-alternatives
+
+# For --linux-rpm-license-type values see https://spdx.org/licenses/.
+
+echo -n 'java version '
+  java --version
+echo -n 'jpackage version '
+  jpackage --version
+echo -n 'jlink version '
+  jlink --version
+echo 'JAVA_HOME =' "$JAVA_HOME"
+echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
+echo
+
+jpackage --name Run-REDUCE --app-version 2.70 \
+  --module-path "$PATH_TO_FX_MODS:/media/sf_Run-REDUCE/out/production" \
+  --module Run.REDUCE/fjwright.runreduce.RunREDUCE \
+  --icon /media/sf_Run-REDUCE/resources/images/RR-icon-128.png \
+  --description "A JavaFX GUI to run the REDUCE CAS" \
+  --vendor "Francis Wright" \
+  --copyright "2021, Francis Wright, All rights reserved" \
+  --license-file /media/sf_Run-REDUCE/LICENSE \
+  --linux-rpm-license-type BSD-2-Clause \
+  "$@"
