@@ -18,9 +18,9 @@ echo jlink version
     jlink --version
 echo JAVA_HOME = %JAVA_HOME%
 echo PATH_TO_FX_MODS = %PATH_TO_FX_MODS%
-echo
+echo ---
 
-jpackage --name Run-REDUCE --app-version 2.70 ^
+jpackage --name Run-REDUCE --app-version 2.7 ^
 --module-path %PATH_TO_FX_MODS%;..\..\out\production ^
 --module Run.REDUCE/fjwright.runreduce.RunREDUCE ^
 --type msi ^
@@ -30,5 +30,4 @@ jpackage --name Run-REDUCE --app-version 2.70 ^
 --copyright "2021, Francis Wright, All rights reserved" ^
 --win-upgrade-uuid 83c944a0-27b3-43a2-99ff-455d746acabc ^
 --win-shortcut --win-dir-chooser ^
---win-menu --win-menu-group Reduce ^
-%*
+--win-menu --win-menu-group Reduce %*

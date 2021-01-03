@@ -22,7 +22,7 @@ echo -n 'jlink version '
   jlink --version
 echo 'JAVA_HOME =' "$JAVA_HOME"
 echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
-echo
+echo '---'
 
 jpackage --name Run-REDUCE --app-version 2.70 \
   --module-path "$PATH_TO_FX_MODS:/media/sf_Run-REDUCE/out/production" \
