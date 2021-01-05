@@ -239,3 +239,7 @@ which tells Java to use software display rendering.  On Fedora, you
 may find that the *Gnome Classic* desktop environment works better
 than *Gnome*.  (One way to select your desktop environment is by using
 the settings icon on the login screen.)
+
+I find that on Fedora 32 and 33 using the default desktop, namely
+GNOME (Wayland), dialogues jump when opened or closed; using either
+GNOME Classic or GNOME on Xorg (X11) avoids this problem.
