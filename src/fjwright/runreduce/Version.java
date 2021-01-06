@@ -6,15 +6,25 @@ package fjwright.runreduce;
  * Release date as month and year, and copyright string.
  */
 public class Version {
-    private final static int major = 2;
-    private final static int minor = 7;
-    private final static int revision = 0;
-    private final static String month = "January";
-    private final static int year = 2021;
+    private final static int MAJOR = 2;
+    private final static int MINOR = 7;
+    private final static int REVISION = 1;
+    private final static String MONTH = "January";
+    private final static int YEAR = 2021;
 
     // Excess format arguments are ignored.
-    static String version = String.format(revision == 0 ? "%d.%d" : "%d.%d.%d",
-            major, minor, revision);
-    static String date = String.format("%s %d", month, year);
-    static String copyright = String.format("© 2020‒%d, Francis Wright", year);
+    static final String VERSION = String.format(REVISION == 0 ? "%d.%d" : "%d.%d.%d",
+            MAJOR, MINOR, REVISION);
+    static final String DATE = String.format("%s %d", MONTH, YEAR);
+    static final String COPYRIGHT = String.format("© 2020‒%d, Francis Wright", YEAR);
+
+    static final String JAVA = String.format(
+            "Compiled using: Java 14.0.2; JavaFX 15.0.1.\n" +
+            "Run using: Java %s; JavaFX %s.",
+            System.getProperty("java.version"),
+            System.getProperty("javafx.version"));
+
+//    static {
+//        System.err.println(System.getProperties());
+//    }
 }

@@ -70,7 +70,7 @@ public class RunREDUCE extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RunREDUCEFrame.fxml"));
         Parent root = fxmlLoader.load();
         runREDUCEFrame = fxmlLoader.getController();
-        primaryStage.setTitle(String.format("Run-REDUCE (v%s)", Version.version));
+        primaryStage.setTitle(String.format("Run-REDUCE (v%s)", Version.VERSION));
         primaryStage.setScene(new Scene(root, initialFrameSize.getWidth(), initialFrameSize.getHeight()));
         primaryStage.show();
         primaryStage.setMinWidth(500);
