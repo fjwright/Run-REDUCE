@@ -20,11 +20,17 @@ echo -n 'jpackage version '
   jpackage --version
 echo -n 'jlink version '
   jlink --version
-echo 'JAVA_HOME =' "$JAVA_HOME"
-echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
+echo 'JAVA_HOME = ' "$JAVA_HOME"
+echo 'PATH_TO_FX_MODS = ' "$PATH_TO_FX_MODS"
+
+VERSION=$(java \
+  --module-path "$PATH_TO_FX_MODS:/media/sf_Run-REDUCE/out/production" \
+  --module Run.REDUCE/fjwright.runreduce.Version)
+
+echo 'Run-REDUCE version = ' $VERSION
 echo '---'
 
-jpackage --name Run-REDUCE --app-version 2.70 \
+jpackage --name Run-REDUCE --app-version $VERSION \
   --module-path "$PATH_TO_FX_MODS:/media/sf_Run-REDUCE/out/production" \
   --module Run.REDUCE/fjwright.runreduce.RunREDUCE \
   --icon /media/sf_Run-REDUCE/resources/images/RR-icon-128.png \
