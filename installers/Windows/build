@@ -16,24 +16,24 @@ echo -n 'jpackage version '
   jpackage --version
 echo -n 'jlink version '
   jlink --version
-echo 'JAVA_HOME = ' "$JAVA_HOME"
-echo 'PATH_TO_FX_MODS = ' "$PATH_TO_FX_MODS"
+echo 'JAVA_HOME =' "$JAVA_HOME"
+echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
 
 VERSION=$(java --module-path "${PATH_TO_FX//\"/};..\..\out\production" \
   --module Run.REDUCE/fjwright.runreduce.Version)
 
-echo 'Run-REDUCE version = ' $VERSION
+echo 'Run-REDUCE version =' "$VERSION"
 echo '---'
 
-jpackage --name Run-REDUCE --app-version $VERSION \
---module-path "${PATH_TO_FX//\"/};..\..\out\production" \
---module Run.REDUCE/fjwright.runreduce.RunREDUCE \
---type msi \
---icon RR-icon-128.ico \
---description "A JavaFX GUI to run the REDUCE CAS" \
---vendor "Francis Wright" \
---copyright "2021, Francis Wright, All rights reserved" \
---win-upgrade-uuid 83c944a0-27b3-43a2-99ff-455d746acabc \
---win-shortcut --win-dir-chooser \
---win-menu --win-menu-group Reduce \
+jpackage --name Run-REDUCE --app-version "$VERSION" \
+  --module-path "${PATH_TO_FX//\"/};..\..\out\production" \
+  --module Run.REDUCE/fjwright.runreduce.RunREDUCE \
+  --type msi \
+  --icon RR-icon-128.ico \
+  --description "A JavaFX GUI to run the REDUCE CAS" \
+  --vendor "Francis Wright" \
+  --copyright "2021, Francis Wright, All rights reserved" \
+  --win-upgrade-uuid 83c944a0-27b3-43a2-99ff-455d746acabc \
+  --win-shortcut --win-dir-chooser \
+  --win-menu --win-menu-group Reduce \
   "$@"

@@ -32,6 +32,7 @@ public class Version {
      * This program is used to set the version in the installer builders.
      */
     public static void main(String[] args) {
-        System.out.println(Version.VERSION);
+        // Do not output a newline here!
+        System.out.print(Version.VERSION);
     }
 }
