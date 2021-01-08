@@ -76,6 +76,7 @@ public class RunREDUCE extends Application {
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(375);
         primaryStage.getIcons().addAll(RRicon128Image);
+        primaryStage.setOnCloseRequest(windowEvent -> killAllREDUCEProcesses());
 
         // REDUCE I/O requires a monospaced font:
         // Only "system" fonts (in C:\Windows\Fonts) are found, not
@@ -266,7 +267,16 @@ public class RunREDUCE extends Application {
         alert.showAndWait();
     }
 
-    // Run-time argument processing ***************************************************************
+    /**
+     * Called automatically when Run-REDUCE is closed to avoid leaving
+     * a zombie process caused by REDUCE processes left running.
+     */
+    static void killAllREDUCEProcesses() {
+        for (var reducePanel : reducePanelList)
+            if (reducePanel.runningREDUCE) reducePanel.reduceProcess.destroyForcibly();
+    }
+
+    // Run-time argument processing ***************************************************************killAllREDUCEProcesses()
 
     static boolean debugPlatform, debugOutput, debugMenu;
     private static final String debugPlatformArg = "-debugPlatform";
