@@ -516,7 +516,7 @@ public class REDUCEPanel extends BorderPane {
 
     REDUCECommand previousREDUCECommand;
     Process reduceProcess;
-    private REDUCEOutputThread outputGobbler;
+    private REDUCEOutputThread outputThread;
 
     /**
      * Run the specified REDUCE command in this REDUCE panel.
@@ -541,8 +541,8 @@ public class REDUCEPanel extends BorderPane {
 
             // Start a thread to handle the REDUCE output stream
             // (assigned to a global variable):
-            outputGobbler = new REDUCEOutputThread(reduceProcess.getInputStream());
-            Thread th = new Thread(outputGobbler);
+            outputThread = new REDUCEOutputThread(reduceProcess.getInputStream());
+            Thread th = new Thread(outputThread);
             th.setDaemon(true); // terminate after all the stages are closed
             th.start();
         } catch (Exception exc) {
@@ -569,7 +569,7 @@ public class REDUCEPanel extends BorderPane {
      * Implement "Restart REDUCE" in the REDUCE menu.
      */
     void restart() {
-        outputGobbler.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
+        outputThread.cancel(true); // to avoid PSL REDUCE leaving "quitting" in the display pane.
         sendStringToREDUCENoEcho("bye;\n");
         // Reset enabled status of controls:
         reduceStopped();
@@ -579,6 +579,16 @@ public class REDUCEPanel extends BorderPane {
         }
         clearDisplay();
         if (previousREDUCECommand != null) run(previousREDUCECommand);
+    }
+
+    /**
+     * Called in RunREDUCE.stop() only.
+     */
+    void terminateREDUCEifRunning() {
+        if (runningREDUCE) {
+            outputThread.cancel(true);
+            reduceProcess.destroyForcibly();
+        }
     }
 
     // REDUCE output processing *******************************************************************

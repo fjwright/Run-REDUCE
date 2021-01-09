@@ -271,8 +271,8 @@ public class RunREDUCE extends Application {
      * a zombie process caused by REDUCE processes left running.
      */
     public void stop() {
-        for (var reducePanel : reducePanelList)
-            if (reducePanel.runningREDUCE) reducePanel.reduceProcess.destroyForcibly();
+        for (var reducePanel : reducePanelList) reducePanel.terminateREDUCEifRunning();
+        System.exit(0);
     }
 
     // Run-time argument processing ***************************************************************
