@@ -372,7 +372,6 @@ public class RunREDUCEFrame {
     // Exit
     @FXML
     private void exitMenuItemAction() {
-        RunREDUCE.killAllREDUCEProcesses();
         Platform.exit();
     }
 
