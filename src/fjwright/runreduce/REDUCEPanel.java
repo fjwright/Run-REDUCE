@@ -135,22 +135,16 @@ public class REDUCEPanel extends BorderPane {
         // KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly.
         // See https://github.com/KaTeX/KaTeX/issues/1775 for a discussion about rules disappearing.
         webEngine.loadContent("<!DOCTYPE html><html><head>" +
-                // https access works!
-//                "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css' integrity='sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X' crossorigin='anonymous'>" +
                 "<link rel='stylesheet' href='" + REDUCEPanel.class.getResource("katex/katex.min.css") + "'>" +
-//                "<link rel='stylesheet' href='file:/Users/franc/IdeaProjects/Run-REDUCE/katex.min.css'>" +
-
                 "<script src='" + REDUCEPanel.class.getResource("katex/katex.min.js") + "'></script>" +
                 "<style>pre{margin:0}body{margin-bottom:15px}</style>" +
                 "</head><body>" +
-
                 // Debug KaTeX:
 //                "<style>.katex-version {display: none;}.katex-version::after {content:\"0.10.2 or earlier\";}</style>\n" +
 //                "<span class=\"katex\">\n" +
 //                "  <span class=\"katex-mathml\">The KaTeX stylesheet is not loaded!</span>\n" +
 //                "  <span class=\"katex-version rule\">KaTeX stylesheet version: </span>\n" +
 //                "</span>\n" +
-
                 "</body></html>");
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
