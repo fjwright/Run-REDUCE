@@ -1,37 +1,42 @@
 #! /bin/bash
 # Use jpackage to build a Run-REDUCE installer for Linux.
-# User's Guide: https://docs.oracle.com/en/java/javase/15/jpackage/.
-# Man Page: https://docs.oracle.com/en/java/javase/15/docs/specs/man/jpackage.html.
-# Requires JDK 14+ and (e.g.) JAVA_HOME = /usr/lib/jvm/adoptopenjdk-15-hotspot-amd64.
+# User's Guide: https://docs.oracle.com/en/java/javase/16/jpackage/.
+# Man Page: https://docs.oracle.com/en/java/javase/16/docs/specs/man/jpackage.html.
+# Requires JDK 14+ and (e.g.) JAVA_HOME = /usr/bin/java (set using alternatives)
+
+# Ubuntu: sudo update-java-alternatives
+# Fedora: sudo alternatives --config java
+
+# Set (e.g.) PATH_TO_FX_MODS = ~/javafx-jmods-16
+# and (e.g.) PATH_TO_FX = ~/javafx-16/lib (to run Version)
+
 # Debian Linux also requires the fakeroot package.
 # Red Hat Linux also requires the rpm-build package.
 
 # --type app-image creates only the application image for testing.
 # --verbose enables verbose output.
 
-# Use JDK 14 because JDK 15 currently leads to ghost output!
-# sudo update-java-alternatives
-
 # For --linux-rpm-license-type values see https://spdx.org/licenses/.
 
 echo -n 'java version '
-  java --version
+java --version
 echo -n 'jpackage version '
-  jpackage --version
+jpackage --version
 echo -n 'jlink version '
-  jlink --version
-echo 'JAVA_HOME =' "$JAVA_HOME"
-echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
+jlink --version
+echo 'JAVA_HOME =' $JAVA_HOME
+echo 'PATH_TO_FX_MODS =' $PATH_TO_FX_MODS
+echo 'PATH_TO_FX =' $PATH_TO_FX '(to run Version)'
 
 VERSION=$(java \
-  --module-path "$PATH_TO_FX:/media/sf_Run-REDUCE/out/production" \
+  --module-path $PATH_TO_FX:/media/sf_Run-REDUCE/out/production \
   --module Run.REDUCE/fjwright.runreduce.Version)
 
-echo 'Run-REDUCE version =' "$VERSION"
+echo 'Run-REDUCE version =' $VERSION
 echo '---'
 
-jpackage --name Run-REDUCE --app-version "$VERSION" \
-  --module-path "$PATH_TO_FX_MODS:/media/sf_Run-REDUCE/out/production" \
+jpackage --name Run-REDUCE --app-version $VERSION \
+  --module-path "$PATH_TO_FX_MODS":/media/sf_Run-REDUCE/out/production \
   --module Run.REDUCE/fjwright.runreduce.RunREDUCE \
   --icon /media/sf_Run-REDUCE/resources/images/RR-icon-128.png \
   --description "A JavaFX GUI to run the REDUCE CAS" \
