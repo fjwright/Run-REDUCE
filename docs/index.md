@@ -1,4 +1,4 @@
-# Run-REDUCE Introduction
+# Introduction
 
 ### Key links: [Releases](https://github.com/fjwright/Run-REDUCE/releases) | [Install and Run Guide](InstallAndRun.md) | [User Guide](UserGuide.html)
 

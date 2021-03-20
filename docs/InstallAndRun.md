@@ -1,4 +1,4 @@
-# Run-REDUCE Install and Run Guide
+# Install and Run Guide
 
 Run-REDUCE is an open-source JavaFX GUI to run the REDUCE Computer
 Algebra System.  REDUCE must be obtained from
@@ -11,14 +11,14 @@ configuration](https://fjwright.github.io/Run-REDUCE/UserGuide.html#Configure)
 it **should** run on any platform that supports JavaFX, but I can only
 test on 64-bit Windows, Ubuntu and Fedora.
 
-I recommend that you use the appropriate installer but you can also
-use the platform-independent JAR, although this is considerably more
-complicated.  Please note that: the installers are quite large, around
-50 MB, whereas the JAR is well under 1 MB; I may release installers
-less frequently than JARs.
+I recommend that you use the appropriate [installer](#Installer) but
+you can also use the [platform-independent JAR](#JAR), although this
+is considerably more complicated.  Please note that: the installers
+are quite large, around 50 MB, whereas the JAR is well under 1 MB; I
+may release installers less frequently than JARs.
 
 
-## Using an Installer
+## <a id="Installer"></a>Using an Installer
 
 I provide installers for 64-bit Windows and Gnu/Linux, which include
 customised versions of Java and JavaFX (but not REDUCE).  The
@@ -69,11 +69,11 @@ can ignore.  (It is not displayed when you run Run-REDUCE from
 *Applications*.)
 
 
-## Using the JAR
+## <a id="JAR"></a>Using the JAR
 
-To run the JAR, you need to have a Java Runtime Environment (JRE) and
-JavaFX libraries installed, both version 11 or later (preferably the
-latest release); see below for details.
+To run the JAR, you need to have a [Java Runtime Environment
+(JRE)](#JRE) and [JavaFX](#JFX) libraries installed, both version 11
+or later (preferably the latest release); see below for details.
 
 You also need to download the file
 [Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar)
@@ -111,7 +111,7 @@ There are many ways to run JavaFX applications, but here are my
 recommendations.
 
 
-## Install OpenJDK JRE
+## <a id="JRE"></a>Install OpenJDK JRE
 
 Visit [AdoptOpenJDK](https://adoptopenjdk.net/), scroll towards the
 bottom of the home page and click on *Installation*, click on
@@ -133,7 +133,7 @@ On other platforms, install `adoptopenjdk-<latest>-hotspot-jre`, where
 you can use Java 11 and/or the non-JRE version (see above).
 
 
-## Install OpenJFX
+## <a id="JFX"></a>Install OpenJFX
 
 Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
 *Download* button.  Scroll down to *Latest Release* (or you can use
