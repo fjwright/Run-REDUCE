@@ -1,17 +1,22 @@
 # Run-REDUCE
 
-## A JavaFX GUI to run CLI versions of the REDUCE Computer Algebra System
+## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, December 2020
+### Francis Wright, March 2021
 
 I originally implemented Run-REDUCE using Swing as the obsolete
 project now called
-[Run-REDUCE-0](https://fjwright.github.io/Run-REDUCE-0/).  I
-originally called the current JavaFX version Run-REDUCE-FX but I have
-now dropped the "-FX" suffix.  It requires Java 11 or later plus
-JavaFX 11 or later, although I recommend using Java 15 plus JavaFX 15
-since I currently build Run-REDUCE using Java 15, set to language
-level 11, plus JavaFX 15.
+[Run-REDUCE-0](https://fjwright.github.io/Run-REDUCE-0/) and I called
+the current JavaFX version Run-REDUCE-FX, but I have since dropped the
+"-FX" suffix.  Run-REDUCE requires Java and JavaFX version 11 or
+later, although I recommend using version 16 since I currently build
+Run-REDUCE using Java 16, set to language level 11, plus JavaFX 16.
+Future versions may require Java 16 or later.
+
+However, if possible, I recommend using the self-contained installers
+available for 64-bit Windows 10 and Gnu/Linux distributions based on
+Debian (e.g. Ubuntu) or Red Hat (e.g. Fedora), which include all
+required Java and JavaFX support and hide the implementation details.
 
 For further general background information please see the [Run-REDUCE
 web page](https://fjwright.github.io/Run-REDUCE/).  For information
@@ -22,10 +27,10 @@ Guide](https://fjwright.github.io/Run-REDUCE/UserGuide.html) (which is
 also included in Run-REDUCE and easily accessible via the Help menu).
 
 See also the [release notes for all recent
-releases](https://github.com/fjwright/Run-REDUCE/releases).
+version](https://github.com/fjwright/Run-REDUCE/releases).
 
 Run-REDUCE should run on any platform that supports JavaFX 11 (or
-later), but I can only test it on Microsoft Windows and Linux.
+later), but I can only test it on Microsoft Windows and Gnu/Linux.
 (Whilst Java is portable, filesystem structures, installation
 conventions and display systems are not!)
 

@@ -6,9 +6,9 @@ package fjwright.runreduce;
  * Release date as month and year, and copyright string.
  */
 public class Version {
-    private final static int MAJOR = 2;
-    private final static int MINOR = 7;
-    private final static int REVISION = 3;
+    private final static int MAJOR = 3;
+    private final static int MINOR = 0;
+    private final static int REVISION = 0;
     private final static String MONTH = "March";
     private final static int YEAR = 2021;
 

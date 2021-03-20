@@ -1,16 +1,16 @@
-### Key links: [Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar) | [Install and Run](InstallAndRun.md) | [User Guide](UserGuide.html)
+# Run-REDUCE Introduction
 
-Run-REDUCE is a Graphical User Interface for running the
+### Key links: [Releases](https://github.com/fjwright/Run-REDUCE/releases) | [Install and Run Guide](InstallAndRun.md) | [User Guide](UserGuide.html)
+
+Run-REDUCE is a Graphical User Interface (see the [screen
+shot](#ScreenShot) below) for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
-System that should provide a consistent user experience across all
-implementations of REDUCE and all platforms.  It is implemented in
-JavaFX and the executable application takes the form of the JAR file
-[Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar).
-Click on the link here or above to download the latest release.  (The
-image below relates to an earlier release and is now a little out of
-date!)
-
-![Run-REDUCE screen shot](Run-REDUCE.png "Run-REDUCE screen shot")
+System.  It is implemented in JavaFX and should provide a consistent
+user experience across all implementations of REDUCE and all platforms
+(that support Java).  Self-contained installers are available on the
+[releases page](https://github.com/fjwright/Run-REDUCE/releases) for
+Windows and Gnu/Linux.  Alternatively, and for other platforms, a Java
+JAR file is available.
 
 REDUCE itself is an open source project available from
 [SourceForge](https://sourceforge.net/projects/reduce-algebra/), which
@@ -22,7 +22,12 @@ available in the [Install and Run Guide](InstallAndRun.md).  For
 information about how to use Run-REDUCE please see the [User
 Guide](UserGuide.html) (which is also included in Run-REDUCE and
 easily accessible via the Help menu).  Known issues are listed at end
-of the [Installation Guide](InstallationGuide.md).
+of the [Install and Run Guide](InstallAndRun.md).
+
+<a id="ScreenShot"></a>(The screen shot below relates to an earlier
+release and is now a little out of date!)
+
+![Run-REDUCE screen shot](Run-REDUCE.png "Run-REDUCE screen shot")
 
 Run-REDUCE is still under development but here are the key features
 that it currently provides:
@@ -31,25 +36,27 @@ that it currently provides:
   running CSL and PSL REDUCE as appropriate for the standard
   distributions.
 * A REDUCE input/output display pane that scrolls in both directions
-  as necessary.  Its contents can be saved to a file and/or erased.
+  as necessary.  Its contents can be printed, saved to a file and/or
+  erased.
 * Optional typeset-style display of mathematical output.
 * A multi-line input editing pane that also scrolls in both directions
   as necessary.  Previous input is remembered and can be scrolled
   through, edited and re-input.  A final terminator is normally added
   automatically if appropriate when input is sent to REDUCE.
-* Optional split or tabbed panes running independent REDUCE processes.
+* Optional split or tabbed panes running independent REDUCE sessions.
 * Menu items to handle REDUCE file input/output and load standard
   REDUCE packages, similar to the facilities provided by the CSL
   REDUCE GUI.
-* Optional bold prompts and coloured input/output text similar to
-  redfront but based on the input mode (algebraic or symbolic).
+* Optional bold prompts and coloured input/output text (similar to
+  redfront but determined by the input mode &ndash; algebraic or
+  symbolic).
 * Templates to construct structured expressions and statements.
-* A popup keyboard to access symbolic constants, Greek letters and
+* A pop-up keyboard to access symbolic constants, Greek letters and
   elementary functions.
 * Dialogues to access standard mathematical functions using
   conventional notation.
-* Easy access to the Run-REDUCE User Guide, the standard
-  documentation distributed with REDUCE as HTML or PDF files, the
-  REDUCE Web Site and the SourceForge Project Site.
+* Easy access to the Run-REDUCE User Guide, the standard documentation
+  distributed with REDUCE as HTML or PDF files, the REDUCE web site
+  and the SourceForge REDUCE project site.
 
-Francis Wright, November 2020
+Francis Wright, March 2021

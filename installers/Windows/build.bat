@@ -18,6 +18,7 @@ echo jlink version
     jlink --version
 echo JAVA_HOME = %JAVA_HOME%
 echo PATH_TO_FX_MODS = %PATH_TO_FX_MODS%
+echo PATH_TO_FX = %PATH_TO_FX% (to run Version)
 
 for /f %%v in ('java --module-path %PATH_TO_FX%^;..\..\out\production ^
 --module Run.REDUCE/fjwright.runreduce.Version') do set VERSION=%%v
