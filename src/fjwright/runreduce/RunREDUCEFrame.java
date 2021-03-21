@@ -61,6 +61,9 @@ public class RunREDUCEFrame {
     private RadioMenuItem splitPaneRadioButton, tabbedPaneRadioButton;
     @FXML
     MenuItem addTabMenuItem;
+    // Options menu:
+    @FXML
+    CheckMenuItem queryPopupsCheckMenuItem;
     // Templates and Functions menus:
     @FXML
     Menu templatesMenu, functionsMenu;
@@ -674,7 +677,7 @@ public class RunREDUCEFrame {
                         "Version %s, %s\n" +
                         "%s", Version.VERSION, Version.DATE, Version.COPYRIGHT));
         alert.setContentText("Typeset maths by KaTeX.org\n\n" +
-                        Version.JAVA);
+                Version.JAVA);
         alert.setTitle("About Run-REDUCE");
         ImageView img = new ImageView(RunREDUCE.RRicon128Image);
         img.setFitWidth(64);

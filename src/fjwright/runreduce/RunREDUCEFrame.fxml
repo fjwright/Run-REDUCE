@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="frame" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
+<BorderPane fx:id="frame" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="fjwright.runreduce.RunREDUCEFrame">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -77,6 +83,10 @@
                                onAction="#syncScrollCheckMenuItemAction" text="Synchronise Scrolling"/>
                 <MenuItem fx:id="addTabMenuItem" disable="true" mnemonicParsing="false" onAction="#addTabMenuItemAction"
                           text="Add Another Tab"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Options">
+                <CheckMenuItem fx:id="queryPopupsCheckMenuItem" mnemonicParsing="false" selected="true"
+                               text="Query Pop-ups"/>
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..."/>

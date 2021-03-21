@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -940,6 +941,20 @@ public class REDUCEPanel extends BorderPane {
                 // Before the first prompt...
                 outputHeaderText(text);
             }
+            return;
+        }
+
+        if (questionPrompt && RunREDUCE.runREDUCEFrame.queryPopupsCheckMenuItem.isSelected()) {
+            // Handle REDUCE user queries as pop-ups.
+            String queryString;
+            // Determining what the query should be is somewhat heuristic!
+            if (promptIndex == 0) queryString = text; // PSL
+            else queryString = text.substring(0, promptIndex).strip(); // CSL
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    queryString, ButtonType.YES, ButtonType.NO);
+            alert.setHeaderText("REDUCE User Query");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            sendStringToREDUCENoEcho(alert.showAndWait().get() == ButtonType.YES ? "y\n" : "n\n");
             return;
         }
 
