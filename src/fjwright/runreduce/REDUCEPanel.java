@@ -20,10 +20,7 @@ import org.w3c.dom.html.HTMLElement;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
@@ -944,7 +941,7 @@ public class REDUCEPanel extends BorderPane {
             return;
         }
 
-        if (questionPrompt && RunREDUCE.runREDUCEFrame.queryPopupsCheckMenuItem.isSelected()) {
+        if (questionPrompt && RunREDUCE.runREDUCEFrame.popupQueriesCheckMenuItem.isSelected()) {
             // Handle REDUCE user queries as pop-ups.
             String queryString;
             // Determining what the query should be is somewhat heuristic!
@@ -954,7 +951,9 @@ public class REDUCEPanel extends BorderPane {
                     queryString, ButtonType.YES, ButtonType.NO);
             alert.setHeaderText("REDUCE User Query");
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            sendStringToREDUCENoEcho(alert.showAndWait().get() == ButtonType.YES ? "y\n" : "n\n");
+            Optional<ButtonType> result = alert.showAndWait();
+            sendStringToREDUCENoEcho(result.isPresent() &&
+                    result.get() == ButtonType.YES ? "y\n" : "n\n");
             return;
         }
 

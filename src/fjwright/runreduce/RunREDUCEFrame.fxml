@@ -85,8 +85,8 @@
                           text="Add Another Tab"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
-                <CheckMenuItem fx:id="queryPopupsCheckMenuItem" mnemonicParsing="false" selected="true"
-                               text="Query Pop-ups"/>
+                <CheckMenuItem fx:id="popupQueriesCheckMenuItem" mnemonicParsing="false" selected="true"
+                               text="Pop-up Queries"/>
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">
                 <MenuItem mnemonicParsing="false" onAction="#derivativeMenuItemAction" text="Derivative..."/>
