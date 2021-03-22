@@ -941,20 +941,20 @@ public class REDUCEPanel extends BorderPane {
             return;
         }
 
+        String queryString = null;
         if (questionPrompt && RunREDUCE.runREDUCEFrame.popupQueriesCheckMenuItem.isSelected()) {
-            // Handle REDUCE user queries as pop-ups.
-            String queryString;
+            // Split off REDUCE user query from preceding text:
             // Determining what the query should be is somewhat heuristic!
-            if (promptIndex == 0) queryString = text; // PSL
-            else queryString = text.substring(0, promptIndex).strip(); // CSL
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                    queryString, ButtonType.YES, ButtonType.NO);
-            alert.setHeaderText("REDUCE User Query");
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            Optional<ButtonType> result = alert.showAndWait();
-            sendStringToREDUCENoEcho(result.isPresent() &&
-                    result.get() == ButtonType.YES ? "y\n" : "n\n");
-            return;
+            if (promptString.endsWith("? (Y or N) ")) { // PSL
+                queryString = promptString.substring(0, promptString.length() - 10); // Strip trailing " (Y or N) ".
+            } else { // CSL: query string is followed by "\n\n?".
+                text = text.substring(0, promptIndex).stripTrailing();
+                promptIndex = text.lastIndexOf('\n') + 1;
+                queryString = text.substring(promptIndex, text.length() - 9); // Strip trailing " (Y or N)".
+            }
+            if (promptIndex > 0) promptIndex--;
+            text = text.substring(0, promptIndex);
+            promptString = null;
         }
 
         if (colouredIOState) {
@@ -986,6 +986,17 @@ public class REDUCEPanel extends BorderPane {
                 outputText(text, null);
         }
         scrollWebViewToBottom();
+
+        if (queryString != null) {
+            // Handle REDUCE user query as pop-up:
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    queryString, ButtonType.YES, ButtonType.NO);
+            alert.setHeaderText("REDUCE User Query");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            Optional<ButtonType> result = alert.showAndWait();
+            sendStringToREDUCENoEcho(result.isPresent() &&
+                    result.get() == ButtonType.YES ? "y\n" : "n\n");
+        }
     }
 
     // Menu processing etc. ***********************************************************************
