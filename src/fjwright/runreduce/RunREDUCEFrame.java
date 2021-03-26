@@ -462,19 +462,7 @@ public class RunREDUCEFrame {
 
     @FXML
     private void killREDUCEMenuItemAction() {
-        RunREDUCE.reducePanel.reduceProcess.destroyForcibly();
-        // Reset enabled status of controls:
-        RunREDUCE.reducePanel.reduceStopped();
-        try {
-            RunREDUCE.reducePanel.reduceProcess.waitFor();
-            RunREDUCE.alert(Alert.AlertType.INFORMATION,
-                    "REDUCE process status",
-                    "REDUCE has been killed!",
-                    "REDUCE Process");
-        } catch (InterruptedException e) {
-            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
-                    "REDUCE may not have been killed! You are advised to restart Run-REDUCE.");
-        }
+        RunREDUCE.reducePanel.kill();
     }
 
     /* ********* *

@@ -566,8 +566,12 @@ public class REDUCEPanel extends BorderPane {
      */
     void stop() {
         sendStringToREDUCEAndEcho("bye;\n");
-        // Reset enabled status of controls:
-        reduceStopped();
+        // Reset enabled status of controls once REDUCE has stopped:
+        try {
+            reduceProcess.waitFor(1, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {
+        }
+        if (!reduceProcess.isAlive()) reduceStopped();
     }
 
     /**
@@ -584,6 +588,26 @@ public class REDUCEPanel extends BorderPane {
         }
         clearDisplay();
         if (previousREDUCECommand != null) run(previousREDUCECommand);
+    }
+
+    /**
+     * Implement "Kill REDUCE" in the REDUCE menu.
+     */
+    void kill() {
+//        reduceProcess.destroyForcibly();
+        reduceProcess.destroy();
+        // Reset enabled status of controls:
+        try {
+            reduceProcess.waitFor();
+            reduceStopped();
+            RunREDUCE.alert(Alert.AlertType.INFORMATION,
+                    "REDUCE process status",
+                    "REDUCE has been killed!",
+                    "REDUCE Process");
+        } catch (InterruptedException e) {
+            RunREDUCE.alert(Alert.AlertType.ERROR, "REDUCE Process",
+                    "REDUCE may not have been killed! You are advised to restart Run-REDUCE.");
+        }
     }
 
     /**
