@@ -397,7 +397,7 @@ public class REDUCEPanel extends BorderPane {
             laterButton.setDisable(true);
             if (quitPattern.matcher(text).matches()) {
                 // Reset enabled status of controls:
-                reduceStopped();
+                reduceStoppedMaybe();
             }
             // Return the focus to the input text area:
             inputTextArea.requestFocus();
@@ -566,12 +566,7 @@ public class REDUCEPanel extends BorderPane {
      */
     void stop() {
         sendStringToREDUCEAndEcho("bye;\n");
-        // Reset enabled status of controls once REDUCE has stopped:
-        try {
-            reduceProcess.waitFor(1, TimeUnit.SECONDS);
-        } catch (InterruptedException ignored) {
-        }
-        if (!reduceProcess.isAlive()) reduceStopped();
+        reduceStoppedMaybe();
     }
 
     /**
@@ -1050,6 +1045,17 @@ public class REDUCEPanel extends BorderPane {
         runningREDUCE = false;
         outputFileList.clear();
         startingOrStoppingREDUCE(false);
+    }
+
+    /**
+     * Reset disabled status of controls as appropriate provided REDUCE has stopped running.
+     */
+    void reduceStoppedMaybe() {
+        try {
+            reduceProcess.waitFor(1, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {
+        }
+        if (!reduceProcess.isAlive()) reduceStopped();
     }
 
     /**
