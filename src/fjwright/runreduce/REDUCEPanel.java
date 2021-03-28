@@ -684,7 +684,7 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
-    private static final Pattern WARNING_ERROR_PATTERN = Pattern.compile("^\n(\\*{3,5})");
+    private static final Pattern WARNING_ERROR_PATTERN = Pattern.compile("\n((\\*{3,5}).*\n)");
 
     /**
      * Append output text to the WebView control with the specified CSS class.
@@ -693,7 +693,10 @@ public class REDUCEPanel extends BorderPane {
         if (colouredIOState) {
             Matcher matcher = WARNING_ERROR_PATTERN.matcher(text);
             if (matcher.find()) {
-                outputPlainText(text, matcher.group(1).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
+                outputPlainText(text.substring(0, matcher.start(1)), cssClass);
+                outputPlainText(text.substring(matcher.start(1), matcher.end(1)),
+                        matcher.group(2).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
+                outputPlainText(text.substring(matcher.end(1)), cssClass);
                 return;
             }
         }
