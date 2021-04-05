@@ -684,33 +684,44 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
-    private static final Pattern WARNING_ERROR_PATTERN = Pattern.compile("\n((\\*{3,5}).*\n)");
+    private static final Pattern WARNING_ERROR_PATTERN =
+            Pattern.compile("^(\\*{3,5}).*\n", Pattern.MULTILINE);
 
     /**
      * Append output text to the WebView control with the specified CSS class.
      */
     private void outputText(String text, String cssClass) {
-        if (colouredIOState) {
-            Matcher matcher = WARNING_ERROR_PATTERN.matcher(text);
-            if (matcher.find()) {
-                outputPlainText(text.substring(0, matcher.start(1)), cssClass);
-                outputPlainText(text.substring(matcher.start(1), matcher.end(1)),
-                        matcher.group(2).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
-                outputPlainText(text.substring(matcher.end(1)), cssClass);
-                return;
-            }
-        }
         if (SYMBOLIC_OUTPUT_CSS_CLASS.equals(cssClass))
-            outputPlainText(text, cssClass);
+            outputPreformattedText(text, cssClass);
         else if (typesetMathsState) {
             if (RunREDUCE.runREDUCEFrame.showTeXMarkupCheckMenuItem.isSelected())
-                outputPlainText(text, cssClass);
+                outputPreformattedText(text, cssClass);
             outputTypesetMaths(text, cssClass);
         } else
             outputAlgebraicModeText(text, cssClass);
     }
 
-    private void outputPlainText(String text, String cssClass) {
+    /**
+     * Output preformatted text that may contain a warning or error message
+     * in one or three <pre> elements.
+     */
+    private void outputPreformattedText(String text, String cssClass) {
+        Matcher matcher;
+        if (colouredIOState &&
+                // Check for a warning or error:
+                (matcher = WARNING_ERROR_PATTERN.matcher(text)).find()) {
+            outputProcessedText(text.substring(0, matcher.start()), cssClass);
+            outputProcessedText(text.substring(matcher.start(), matcher.end()),
+                    matcher.group(1).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
+            outputProcessedText(text.substring(matcher.end()), cssClass);
+        } else
+            outputProcessedText(text, cssClass);
+    }
+
+    /**
+     * Output text with no further processing in its own <pre> element.
+     */
+    private void outputProcessedText(String text, String cssClass) {
         HTMLElement outputElement = (HTMLElement) doc.createElement("pre");
         outputElement.setTextContent(text);
         if (cssClass != null) outputElement.setClassName(cssClass);
@@ -719,6 +730,10 @@ public class REDUCEPanel extends BorderPane {
 
     private boolean inAlgOutput = false;
 
+    /**
+     * Handle a chunk of algebraic mode output and display
+     * as much as possible by calling outputPreformattedText().
+     */
     private void outputAlgebraicModeText(String text, String cssClass) {
         /*
          * rrprint delimits non-typeset algebraic output with ASCII control characters
@@ -735,23 +750,23 @@ public class REDUCEPanel extends BorderPane {
             if (inAlgOutput) { // in algebraic output; look for end of algebraic output, ^D:
                 if ((finish = text.indexOf('\u0004', start)) != -1) { // ^D found
                     // Finish current algebraic output:
-                    outputPlainText(text.substring(start, finish), cssClass);
+                    outputPreformattedText(text.substring(start, finish), cssClass);
                     inAlgOutput = false;
                     start = finish + 1; // Skip ^D:
                 } else { // ^D not found so all algebraic output:
-                    outputPlainText(text.substring(start), cssClass);
+                    outputPreformattedText(text.substring(start), cssClass);
                     return;
                 }
             } else { // Not in algebraic output so create a non-algebraic output element:
                 // Look for start of algebraic output, ^C:
                 if ((finish = text.indexOf('\u0003', start)) != -1) { // ^C found
                     // Output current non-algebraic output element:
-                    if (start < finish) outputPlainText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
+                    if (start < finish) outputPreformattedText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
                     start = finish + 1; // skip ^C
                     // Start new algebraic output:
                     inAlgOutput = true;
                 } else { // ^C not found so all non-algebraic output:
-                    outputPlainText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
+                    outputPreformattedText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
                     return;
                 }
             }
@@ -871,12 +886,12 @@ public class REDUCEPanel extends BorderPane {
                 // Look for start of maths, ^P:
                 if ((finish = text.indexOf('\u0010', start)) != -1) { // ^P found
                     // Output current non-maths element:
-                    if (start < finish) outputPlainText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
+                    if (start < finish) outputPreformattedText(text.substring(start, finish), DEFAULT_OUTPUT_CSS_CLASS);
                     start = finish + 1; // skip ^P
                     // Start new maths output:
                     inMathOutput = true;
                 } else { // ^P not found so all non-maths:
-                    outputPlainText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
+                    outputPreformattedText(text.substring(start), DEFAULT_OUTPUT_CSS_CLASS);
                     return;
                 }
             }
