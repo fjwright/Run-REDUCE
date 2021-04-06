@@ -684,9 +684,6 @@ public class REDUCEPanel extends BorderPane {
         body.appendChild(outputElement);
     }
 
-    private static final Pattern WARNING_ERROR_PATTERN =
-            Pattern.compile("^(\\*{3,5}).*\n", Pattern.MULTILINE);
-
     /**
      * Append output text to the WebView control with the specified CSS class.
      */
@@ -700,6 +697,9 @@ public class REDUCEPanel extends BorderPane {
         } else
             outputAlgebraicModeText(text, cssClass);
     }
+
+    private static final Pattern WARNING_ERROR_PATTERN =
+            Pattern.compile("^(\\*{3,5}).*", Pattern.MULTILINE);
 
     /**
      * Output preformatted text that may contain a warning or error message
@@ -927,8 +927,10 @@ public class REDUCEPanel extends BorderPane {
         // Beginning of string then newline is crucial to detecting the prompt following subsequent stealth input.
         // Leading control (newline or ) then newline is crucial to detecting the prompt following initial stealth input.
         // But a question prompt may not be preceded by a newline.
+        questionPrompt = false;
         promptIndex = text.lastIndexOf("\n");
-        if ((promptIndex <= 0 || Character.isISOControl(text.charAt(promptIndex - 1))) &&
+        if ((promptIndex <= 0 || !(hideNextOutputAndPrompt || hideNextOutputShowPrompt) ||
+                Character.isISOControl(text.charAt(promptIndex - 1))) &&
                 (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
             // Now promptIndex = actual start index of the prompt line.
             questionPrompt = promptMatcher.group(1) == null;
