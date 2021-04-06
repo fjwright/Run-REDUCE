@@ -908,7 +908,9 @@ public class REDUCEPanel extends BorderPane {
         inputPre.appendChild(span);
     }
 
-    private static final Pattern promptPattern = Pattern.compile("(?:\\d+([:*]) )|.*\\?.*");
+    private static final Pattern
+            questionAnswer = Pattern.compile("[yYnN]\n"),
+            promptPattern = Pattern.compile("(?:\\d+([:*]) )|.*\\?.*");
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -916,6 +918,8 @@ public class REDUCEPanel extends BorderPane {
      */
     private void processOutput(AtomicReference<String> textAtomicReferenceString) {
         String text = textAtomicReferenceString.get();
+        // Strip any echoed "y/Y/n/N" after responding to a user query:
+        if (questionPrompt && questionAnswer.matcher(text).lookingAt()) text = text.substring(2);
         int promptIndex; // possible start index of newline followed by a prompt line
         String promptString = null;
         Matcher promptMatcher = null;
