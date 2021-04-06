@@ -259,7 +259,8 @@ public class REDUCEPanel extends BorderPane {
         colorStyle.getFirstChild().setNodeValue(String.format(
                 ".algebraic-input{color:%s}.symbolic-input{color:%s}" +
                         ".algebraic-output{color:%s}.symbolic-output{color:%s}" +
-                        ".warning{background-color:%s}.error{background-color:%s}",
+                        ".warning{color:black;background-color:%s}" +
+                        ".error{color:black;background-color:%s}",
                 FontColors.algebraicInput, FontColors.symbolicInput,
                 FontColors.algebraicOutput, FontColors.symbolicOutput,
                 FontColors.warning, FontColors.error));
@@ -699,31 +700,26 @@ public class REDUCEPanel extends BorderPane {
     }
 
     private static final Pattern WARNING_ERROR_PATTERN =
-            Pattern.compile("^(\\*{3,5}).*", Pattern.MULTILINE);
+            Pattern.compile("^\\*{3}(\\*{2}).*", Pattern.MULTILINE);
 
     /**
      * Output preformatted text that may contain a warning or error message
-     * in one or three <pre> elements.
+     * in its own <pre> element.
      */
     private void outputPreformattedText(String text, String cssClass) {
         Matcher matcher;
+        HTMLElement outputElement = (HTMLElement) doc.createElement("pre");
         if (colouredIOState &&
                 // Check for a warning or error:
                 (matcher = WARNING_ERROR_PATTERN.matcher(text)).find()) {
-            outputProcessedText(text.substring(0, matcher.start()), cssClass);
-            outputProcessedText(text.substring(matcher.start(), matcher.end()),
-                    matcher.group(1).equals("***") ? WARNING_CSS_CLASS : ERROR_CSS_CLASS);
-            outputProcessedText(text.substring(matcher.end()), cssClass);
+            outputElement.setTextContent(text.substring(0, matcher.start()));
+            HTMLElement span = (HTMLElement) doc.createElement("span");
+            span.setTextContent(text.substring(matcher.start(), matcher.end()));
+            span.setClassName(matcher.start(1) >= 0 ? ERROR_CSS_CLASS : WARNING_CSS_CLASS);
+            outputElement.appendChild(span);
+            outputElement.appendChild(doc.createTextNode(text.substring(matcher.end())));
         } else
-            outputProcessedText(text, cssClass);
-    }
-
-    /**
-     * Output text with no further processing in its own <pre> element.
-     */
-    private void outputProcessedText(String text, String cssClass) {
-        HTMLElement outputElement = (HTMLElement) doc.createElement("pre");
-        outputElement.setTextContent(text);
+            outputElement.setTextContent(text);
         if (cssClass != null) outputElement.setClassName(cssClass);
         body.appendChild(outputElement);
     }
