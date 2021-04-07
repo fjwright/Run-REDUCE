@@ -8,8 +8,8 @@ package fjwright.runreduce;
 public class Version {
     private final static int MAJOR = 3;
     private final static int MINOR = 0;
-    private final static int REVISION = 3;
-    private final static String MONTH = "March";
+    private final static int REVISION = 4;
+    private final static String MONTH = "April";
     private final static int YEAR = 2021;
 
     // Excess format arguments are ignored.

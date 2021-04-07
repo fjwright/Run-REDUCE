@@ -31,7 +31,7 @@ public class LoadPackagesDialog {
             tb.setMaxWidth(Double.MAX_VALUE);
             tb.setOnMouseClicked(e -> {
                 if (e.getClickCount() == 2) {
-                    RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(
+                    RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(
                             "load_package " + ((ToggleButton) e.getSource()).getText() + ";\n");
                     ((Stage) ((Node) e.getSource()).getScene().getWindow()).close();
                 }
@@ -56,7 +56,7 @@ public class LoadPackagesDialog {
                 text.append(selectedPackages.get(i));
             }
             text.append(";\n");
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
+            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(text.toString());
         }
         // Close dialogue:
         cancelButtonAction(actionEvent);

@@ -229,7 +229,7 @@ public class RunREDUCEFrame {
                 text.append(file.toString());
             }
             text.append(echoCheckMenuItem.isSelected() ? "\";\n" : "\"$\n");
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(text.toString());
+            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(text.toString());
             if (saveDir) fileChooser.setInitialDirectory(fileList.get(0).getParentFile());
         }
     }
@@ -241,7 +241,7 @@ public class RunREDUCEFrame {
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
+            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
             RunREDUCE.reducePanel.outputFileList.add(file);
             RunREDUCE.reducePanel.outputFileDisableMenuItems(false);
@@ -259,7 +259,7 @@ public class RunREDUCEFrame {
             Optional<File> result = choiceDialog.showAndWait();
             if (result.isPresent()) {
                 File file = result.get();
-                RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
+                RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
                 // Make this the last file used for output:
                 RunREDUCE.reducePanel.outputFileList.remove(file);
                 RunREDUCE.reducePanel.outputFileList.add(file);
@@ -271,7 +271,7 @@ public class RunREDUCEFrame {
     // Output Here
     @FXML
     private void outputHereMenuItemAction() {
-        RunREDUCE.reducePanel.sendStringToREDUCEAndEcho("out t$\n");
+        RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out t$\n");
         RunREDUCE.reducePanel.outputHereDisableMenuItemsMaybe();
     }
 
@@ -289,7 +289,7 @@ public class RunREDUCEFrame {
     private void shutLastMenuItemAction() {
         if (!RunREDUCE.reducePanel.outputFileList.isEmpty()) { // not strictly necessary
             int last = RunREDUCE.reducePanel.outputFileList.size() - 1;
-            RunREDUCE.reducePanel.sendStringToREDUCEAndEcho(
+            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(
                     "shut \"" + RunREDUCE.reducePanel.outputFileList.remove(last).toString() + "\"$\n");
         }
         RunREDUCE.reducePanel.outputFileDisableMenuItemsMaybe();
