@@ -87,7 +87,7 @@
             <Menu mnemonicParsing="false" text="Options">
                 <CheckMenuItem fx:id="hideMenuHistoryCheckMenuItem" mnemonicParsing="false" selected="true"
                                text="Hide Menu History"/>
-                <CheckMenuItem fx:id="popupQueriesCheckMenuItem1" mnemonicParsing="false" selected="true"
+                <CheckMenuItem fx:id="popupQueriesCheckMenuItem" mnemonicParsing="false" selected="true"
                                text="Pop-up Queries"/>
             </Menu>
             <Menu fx:id="templatesMenu" disable="true" mnemonicParsing="false" text="Templates">

@@ -939,31 +939,29 @@ public class REDUCEPanel extends BorderPane {
         String text = textAtomicReferenceString.get();
         // Strip any echoed "y/Y/n/N" after responding to a user query:
         if (questionPrompt && questionAnswer.matcher(text).lookingAt()) text = text.substring(2);
-        int promptIndex; // possible start index of newline followed by a prompt line
+        int promptIndex = text.lastIndexOf("\n") + 1; // start index of a possible prompt line
+        Matcher promptMatcher;
         String promptString = null;
-        Matcher promptMatcher = null;
-        // If text ends with a prompt then promptMatcher.matches() is true.
-        // Beginning of string then newline is crucial to detecting the prompt following subsequent stealth input.
-        // Leading control (newline or ) then newline is crucial to detecting the prompt following initial stealth input.
-        // But a question prompt may not be preceded by a newline.
         questionPrompt = false;
-        promptIndex = text.lastIndexOf("\n");
-        if ((promptIndex <= 0 || !(hideNextOutputAndPrompt || hideNextOutputShowPrompt) ||
-                Character.isISOControl(text.charAt(promptIndex - 1))) &&
-                (promptMatcher = promptPattern.matcher(text.substring(++promptIndex))).matches()) {
-            // Now promptIndex = actual start index of the prompt line.
+        if ((promptMatcher = promptPattern.matcher(text.substring(promptIndex))).matches()) {
+            promptString = promptMatcher.group();
             questionPrompt = promptMatcher.group(1) == null;
-            if (promptIndex > 0 || questionPrompt) promptString = promptMatcher.group();
         }
-        // Handle stealth input:
+        // Handle stealth input after REDUCE has started due to menu actions:
         if (hideNextOutputAndPrompt) {
-            // Hide output up to and including the next prompt:
-            if (promptString != null) hideNextOutputAndPrompt = false;
+            // Set above in setColouredIO() and setTypesetMaths().
+            // Hide output up to and including the prompt after the
+            // next batch of output (which is preceded by a newline):
+            if (promptString != null && promptIndex > 0)
+                hideNextOutputAndPrompt = false;
             return;
         }
+        // Handle stealth input when REDUCE starts due to stored preferences:
         if (hideNextOutputShowPrompt) {
-            // Hide output up to but excluding the newline before the next prompt:
-            if (promptString != null) {
+            // Set below if beforeFirstPrompt.
+            // Hide output up to but excluding the newline before the prompt
+            // after the next batch of output (which is preceded by a newline):
+            if (promptString != null && promptIndex > 0) {
                 text = text.substring(promptIndex - 1);
                 promptIndex = 1;
                 hideNextOutputShowPrompt = false;
