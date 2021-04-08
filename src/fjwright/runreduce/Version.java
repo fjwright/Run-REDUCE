@@ -19,7 +19,7 @@ public class Version {
     static final String COPYRIGHT = String.format("© 2020‒%d, Francis Wright", YEAR);
 
     static final String JAVA = String.format(
-            "Compiled using Java 16 (language level 11) & JavaFX 16.\n" +
+            "Compiled using Java 16 & JavaFX 16.\n" +
                     "Run using Java %s & JavaFX %s.",
             System.getProperty("java.version"),
             System.getProperty("javafx.version"));

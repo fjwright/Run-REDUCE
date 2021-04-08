@@ -85,8 +85,8 @@
                           text="Add Another Tab"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
-                <CheckMenuItem fx:id="hideMenuHistoryCheckMenuItem" mnemonicParsing="false" selected="true"
-                               text="Hide Menu History"/>
+                <CheckMenuItem fx:id="showMenuHistoryCheckMenuItem" mnemonicParsing="false"
+                               text="Show Menu History"/>
                 <CheckMenuItem fx:id="popupQueriesCheckMenuItem" mnemonicParsing="false" selected="true"
                                text="Pop-up Queries"/>
             </Menu>

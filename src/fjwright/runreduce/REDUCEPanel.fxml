@@ -27,74 +27,83 @@ Use XML character entity references for control characters in strings, e.g. &#10
                 </center>
                 <top>
                     <HBox BorderPane.alignment="CENTER_LEFT">
-                        <Label fx:id="outputLabel" text="Input/Output Display" />
-                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="outputLabel" text="Input/Output Display"/>
+                        <Region HBox.hgrow="ALWAYS"/>
                         <Label fx:id="activeLabel" text="●" textFill="green" visible="false">
                             <tooltip>
-                                <Tooltip text="This REDUCE panel is active." />
+                                <Tooltip text="This REDUCE panel is active."/>
                             </tooltip>
                             <HBox.margin>
-                                <Insets right="10.0" />
+                                <Insets right="10.0"/>
                             </HBox.margin>
                         </Label>
-                        <ToggleButton fx:id="hideEditorToggleButton" mnemonicParsing="false" style="-fx-padding: 1 3;" text="Hide Editor" />
+                        <ToggleButton fx:id="hideEditorToggleButton" mnemonicParsing="false" style="-fx-padding: 1 3;"
+                                      text="Hide Editor"/>
                         <padding>
-                            <Insets bottom="1.0" />
+                            <Insets bottom="1.0"/>
                         </padding>
                     </HBox>
                 </top>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
             <BorderPane>
                 <top>
                     <HBox BorderPane.alignment="CENTER_LEFT">
-                        <Label fx:id="inputLabel" text="Input Editor" />
-                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="inputLabel" text="Input Editor"/>
+                        <Region HBox.hgrow="ALWAYS"/>
                         <Label text="Control+Click for the Pop-Up Keyboard">
                             <tooltip>
-                                <Tooltip text="Hold down the Control key and click your primary mouse button&#10;or click your middle (tertiary) mouse button on the text area&#10;to access special symbols etc. using the pop-up keyboard." />
+                                <Tooltip
+                                        text="Hold down the Control key and click your primary mouse button&#10;or click your middle (tertiary) mouse button on the text area&#10;to access special symbols etc. using the pop-up keyboard."/>
                             </tooltip>
                         </Label>
                         <padding>
-                            <Insets bottom="2.0" />
+                            <Insets bottom="2.0"/>
                         </padding>
                     </HBox>
                 </top>
                 <center>
                     <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-                        <TextArea fx:id="inputTextArea" disable="true" onKeyPressed="#inputTextAreaOnKeyPressed" />
+                        <TextArea fx:id="inputTextArea" disable="true" onKeyPressed="#inputTextAreaOnKeyPressed"/>
                     </ScrollPane>
                 </center>
                 <bottom>
                     <HBox BorderPane.alignment="CENTER">
                         <padding>
-                            <Insets left="10.0" right="10.0" top="10.0" />
+                            <Insets left="10.0" right="10.0" top="10.0"/>
                         </padding>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#earlierButtonAction" prefWidth="120.0" text="▲ Earlier Input">
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="earlierButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onMouseClicked="#earlierButtonClicked" prefWidth="120.0" text="▲ Earlier Input">
                             <tooltip>
-                                <Tooltip text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow." />
+                                <Tooltip
+                                        text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
                             </tooltip>
                         </Button>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0" text="Send Input">
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="sendButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onKeyTyped="#sendButtonKeyTyped" onMouseClicked="#sendButtonClicked" prefWidth="120.0"
+                                text="Send Input">
                             <tooltip>
-                                <Tooltip text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)" />
+                                <Tooltip
+                                        text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
                             </tooltip>
                         </Button>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false" onAction="#laterButtonAction" prefWidth="120.0" text="▼ Later Input">
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="laterButton" disable="true" maxWidth="-Infinity" mnemonicParsing="false"
+                                onMouseClicked="#laterButtonClicked" prefWidth="120.0" text="▼ Later Input">
                             <tooltip>
-                                <Tooltip text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow." />
+                                <Tooltip
+                                        text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
                             </tooltip>
                         </Button>
-                        <Region HBox.hgrow="ALWAYS" />
+                        <Region HBox.hgrow="ALWAYS"/>
                     </HBox>
                 </bottom>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </BorderPane>
         </SplitPane>

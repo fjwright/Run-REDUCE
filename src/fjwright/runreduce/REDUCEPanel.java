@@ -70,7 +70,10 @@ public class REDUCEPanel extends BorderPane {
      * <pre class=outputCSSClass>REDUCE output</pre> if non-typeset
      */
 
-    private final List<String> inputList = new ArrayList<>();
+    record InputHistoryItem(String input, boolean menuInput) {
+    }
+
+    private final List<InputHistoryItem> inputList = new ArrayList<>();
     private int inputListIndex = 0;
     private int maxInputListIndex = 0;
     private static final Pattern quitPattern =
@@ -385,8 +388,8 @@ public class REDUCEPanel extends BorderPane {
             sendAction(keyEvent.isShiftDown());
     }
 
-    private void addToInputList(String text) {
-        inputList.add(text);
+    private void addToInputList(String text, boolean menuInput) {
+        inputList.add(new InputHistoryItem(text, menuInput));
         inputListIndex = inputList.size();
         maxInputListIndex = inputListIndex - 1;
         earlierButton.setDisable(false);
@@ -396,7 +399,7 @@ public class REDUCEPanel extends BorderPane {
     private void sendAction(boolean isShiftDown) {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
-            addToInputList(text);
+            addToInputList(text, false);
             text = PopupKeyboard.decode(text);
             sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             if (quitPattern.matcher(text).matches()) {
@@ -410,9 +413,17 @@ public class REDUCEPanel extends BorderPane {
     }
 
     @FXML
-    private void earlierButtonAction() {
+    private void earlierButtonClicked(MouseEvent mouseEvent) {
+        earlierAction(mouseEvent.isShiftDown());
+    }
+
+    private void earlierAction(boolean isShiftDown) {
         if (inputListIndex > 0) {
-            inputTextArea.setText(inputList.get(--inputListIndex));
+            InputHistoryItem prev;
+            if (isShiftDown || RunREDUCE.runREDUCEFrame.showMenuHistoryCheckMenuItem.isSelected())
+                prev = inputList.get(--inputListIndex);
+            else do prev = inputList.get(--inputListIndex); while (prev.menuInput);
+            inputTextArea.setText(prev.input);
             if (inputListIndex <= maxInputListIndex)
                 laterButton.setDisable(false);
         }
@@ -423,9 +434,17 @@ public class REDUCEPanel extends BorderPane {
     }
 
     @FXML
-    private void laterButtonAction() {
+    private void laterButtonClicked(MouseEvent mouseEvent) {
+        laterAction(mouseEvent.isShiftDown());
+    }
+
+    private void laterAction(boolean isShiftDown) {
         if (inputListIndex < maxInputListIndex) {
-            inputTextArea.setText(inputList.get(++inputListIndex));
+            InputHistoryItem next;
+            if (isShiftDown || RunREDUCE.runREDUCEFrame.showMenuHistoryCheckMenuItem.isSelected())
+                next = inputList.get(++inputListIndex);
+            else do next = inputList.get(++inputListIndex); while (next.menuInput);
+            inputTextArea.setText(next.input);
         } else {
             inputTextArea.clear();
             inputListIndex = maxInputListIndex + 1;
@@ -448,10 +467,10 @@ public class REDUCEPanel extends BorderPane {
                     sendAction(keyEvent.isShiftDown());
                     break;
                 case UP:
-                    earlierButtonAction();
+                    earlierAction(keyEvent.isShiftDown());
                     break;
                 case DOWN:
-                    laterButtonAction();
+                    laterAction(keyEvent.isShiftDown());
             }
         }
     }
@@ -485,7 +504,7 @@ public class REDUCEPanel extends BorderPane {
      */
     void menuSendStringToREDUCEAndEcho(String text) {
         sendStringToREDUCEAndEcho(text);
-        addToInputList(text);
+        addToInputList(text, true);
     }
 
     /**

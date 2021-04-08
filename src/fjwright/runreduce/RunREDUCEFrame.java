@@ -63,7 +63,7 @@ public class RunREDUCEFrame {
     MenuItem addTabMenuItem;
     // Options menu:
     @FXML
-    CheckMenuItem hideMenuHistoryCheckMenuItem, popupQueriesCheckMenuItem;
+    CheckMenuItem showMenuHistoryCheckMenuItem, popupQueriesCheckMenuItem;
     // Templates and Functions menus:
     @FXML
     Menu templatesMenu, functionsMenu;
