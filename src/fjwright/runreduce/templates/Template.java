@@ -242,7 +242,7 @@ public abstract class Template {
         // Send to REDUCE if valid:
         try {
             // Decode pop-up keyboard input before sending to REDUCE:
-            RunREDUCE.reducePanel.sendInteractiveInputToREDUCE(processResult(true), true);
+            RunREDUCE.reducePanel.templateSendInteractiveInputToREDUCE(processResult(true));
             // Close dialogue:
 //            cancelButtonAction(actionEvent);
         } catch (EmptyFieldException ignored) {

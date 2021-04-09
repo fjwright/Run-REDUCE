@@ -79,7 +79,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                                 onMouseClicked="#earlierButtonClicked" prefWidth="120.0" text="▲ Earlier Input">
                             <tooltip>
                                 <Tooltip
-                                        text="Select earlier input via this editor.&#10;Keyboard Shortcut: Control+UpArrow."/>
+                                        text="Select earlier input via this editor. Keyboard Shortcut: Control+UpArrow.&#10;(Also hold Shift to include menu input or select Option menu item Show Menu History.)"/>
                             </tooltip>
                         </Button>
                         <Region HBox.hgrow="ALWAYS"/>
@@ -88,7 +88,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                                 text="Send Input">
                             <tooltip>
                                 <Tooltip
-                                        text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter.&#10;(Also hold Shift to prevent auto-termination.)"/>
+                                        text="Send the input above to REDUCE, adding a semicolon and/or newline if necessary.&#10;Keyboard Shortcut: Control+Enter. (Also hold Shift to prevent auto-termination.)"/>
                             </tooltip>
                         </Button>
                         <Region HBox.hgrow="ALWAYS"/>
@@ -96,7 +96,7 @@ Use XML character entity references for control characters in strings, e.g. &#10
                                 onMouseClicked="#laterButtonClicked" prefWidth="120.0" text="▼ Later Input">
                             <tooltip>
                                 <Tooltip
-                                        text="Select later input via this editor.&#10;Keyboard Shortcut: Control+DownArrow."/>
+                                        text="Select later input via this editor. Keyboard Shortcut: Control+DownArrow.&#10;(Also hold Shift to include menu input or select Option menu item Show Menu History.)"/>
                             </tooltip>
                         </Button>
                         <Region HBox.hgrow="ALWAYS"/>
