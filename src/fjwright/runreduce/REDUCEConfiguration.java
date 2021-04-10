@@ -262,7 +262,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
                     true,
                     "",
                     "$REDUCE\\bin\\redpsl.bat")); // "$REDUCE\\lib\\psl\\psl\\bpsl.exe",
-                    // "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
+            // "-td", "1000", "-f", "$REDUCE\\lib\\psl\\red\\reduce.img"));
         } else {
             // Linux, etc.: use shell and search path
             reduceRootDir = "/usr/bin"; // "/usr/lib/reduce";
@@ -279,7 +279,7 @@ class REDUCEConfigurationDefault extends REDUCEConfigurationType {
                     false,
                     "",
                     "redpsl")); // "$REDUCE/pslbuild/psl/bpsl",
-                    // "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
+            // "-td", "1000", "-f", "$REDUCE/pslbuild/red/reduce.img"));
         }
         workingDir = getProperty("user.home");
     }
@@ -413,20 +413,19 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
 }
 
 /**
- * This class provides a list of all REDUCE packages by parsing the package.map file.
- * The list excludes preloaded packages and is sorted alphabetically.
+ * This class provides a list of all REDUCE packages by parsing the 'package.map' file.
+ * The list excludes preloaded and inappropriate packages and is sorted alphabetically.
  */
 class REDUCEPackageList extends ArrayList<String> {
-    // FixMe Remove fmprint and tmprint?
 
     REDUCEPackageList() {
         Path packagesDirPath = Paths.get(RunREDUCE.reduceConfiguration.packagesDir);
         Path packageMapFile = packagesDirPath.resolve("package.map");
         if (!Files.isReadable(packageMapFile)) {
             RunREDUCE.alert(Alert.AlertType.ERROR, "Packages",
-                    "The REDUCE package map file is not available!" +
-                            "\nPlease correct 'REDUCE Packages Directory' in the 'Configure REDUCE...' dialogue," +
-                            "\nwhich will open automatically when you close this dialogue.");
+                    "The REDUCE package map file is not available!\n" +
+                            "Please correct 'REDUCE Packages Directory' in the 'Configure REDUCE...' dialogue, " +
+                            "which will open automatically when you close this dialogue.");
             RunREDUCE.runREDUCEFrame.showDialogAndWait("Configure REDUCE Directories and Commands",
                     "REDUCEConfigDialog.fxml");
             return;
@@ -434,14 +433,17 @@ class REDUCEPackageList extends ArrayList<String> {
 
         try (BufferedReader reader = Files.newBufferedReader(packageMapFile)) {
             String line;
-            Pattern pattern = Pattern.compile("\\s*\\((\\w+)");
-            // The preloaded packages are these (using non-capturing groups):
-            Pattern exclude = Pattern.compile("(?:alg)|(?:arith)|(?:mathpr)|(?:poly)|(?:rlisp)");
+            Pattern namePattern = Pattern.compile("\\s*\\((\\w+)");
+            // Exclude preloaded packages alg, arith, mathpr, poly, rlisp,
+            // fmprint and tmprint, which conflict with rrprint, and
+            // revision and support, which are only for building REDUCE:
+            Pattern excludePattern =
+                    Pattern.compile("alg|arith|mathpr|poly|rlisp|[ft]mprint|revision|support");
             while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
+                Matcher matcher = namePattern.matcher(line);
                 if (matcher.lookingAt()) {
                     String pkg = matcher.group(1);
-                    if (!exclude.matcher(pkg).matches()) this.add(pkg);
+                    if (!excludePattern.matcher(pkg).matches()) this.add(pkg);
                 }
             }
         } catch (IOException x) {

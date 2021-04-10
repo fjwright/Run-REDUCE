@@ -27,6 +27,7 @@ public class LoadPackagesDialog {
         ToggleButton tb;
         for (String pkg : RunREDUCEFrame.packageList) {
             gridPane.add(tb = new ToggleButton(pkg), col, row);
+            tb.setMnemonicParsing(false); // to display _ as a normal label character!
             tb.setAlignment(Pos.CENTER_LEFT);
             tb.setMaxWidth(Double.MAX_VALUE);
             tb.setOnMouseClicked(e -> {
