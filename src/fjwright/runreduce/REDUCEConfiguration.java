@@ -309,7 +309,6 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
     static final String MANUAL_DIR = "manualDir";
     static final String PRIMERS_DIR = "primersDir";
     static final String WORKING_DIR = "workingDir";
-    static final String REDUCE_VERSIONS = "reduceVersions"; // FixMe delete this obsolete temporary compatibility code
     static final String REDUCE_COMMANDS = "reduceCommands";
     static final String COMMAND_INDEX = "commandIndex";
     static final String USE_SHELL = "useShell";
@@ -372,34 +371,6 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
                                 new REDUCECommand(commandName, useShell, checkCommand, commandRootDir, command));
                     prefs = prefs.parent();
                 }
-            } else if (prefs.nodeExists(REDUCE_VERSIONS)) { // FixMe delete this obsolete temporary compatibility code
-                prefs = prefs.node(REDUCE_VERSIONS);
-                for (String version : prefs.childrenNames()) {
-                    // Get defaults:
-                    REDUCECommand cmdDefault = null;
-                    for (REDUCECommand cmd : RunREDUCE.reduceConfigurationDefault.reduceCommandList)
-                        if (version.equals(cmd.name)) {
-                            cmdDefault = cmd;
-                            break;
-                        }
-                    if (cmdDefault == null) cmdDefault = new REDUCECommand(); // all fields ""
-                    prefs = prefs.node(version);
-                    String versionRootDir = prefs.get(REDUCE_ROOT_DIR, cmdDefault.rootDir);
-                    int commandLength = prefs.getInt(COMMAND_LENGTH, cmdDefault.command.length);
-                    String[] command;
-                    if (commandLength == 0) {
-                        command = new String[]{""};
-                    } else {
-                        command = new String[commandLength];
-                        command[0] = prefs.get(COMMAND, cmdDefault.command[0]);
-                        for (int i = 1; i < commandLength; i++) {
-                            command[i] = prefs.get(ARG + i,
-                                    i < cmdDefault.command.length ? cmdDefault.command[i] : "");
-                        }
-                    }
-                    reduceCommandList.add(new REDUCECommand(version, false, true, versionRootDir, command));
-                    prefs = prefs.parent();
-                }
             } else
                 reduceCommandList = RunREDUCE.reduceConfigurationDefault.reduceCommandList.copy();
         } catch (BackingStoreException e) {
@@ -419,10 +390,6 @@ public class REDUCEConfiguration extends REDUCEConfigurationType {
         prefs.put(WORKING_DIR, workingDir);
         RunREDUCEFrame.fileChooser.setInitialDirectory(new File(workingDir));
         // Remove all saved REDUCE versions before saving the current REDUCE versions:
-        try { // FixMe delete this obsolete temporary compatibility code
-            prefs.node(REDUCE_VERSIONS).removeNode();
-        } catch (BackingStoreException ignored) {
-        }
         try {
             prefs.node(REDUCE_COMMANDS).removeNode();
         } catch (BackingStoreException ignored) {
