@@ -26,50 +26,63 @@ class RRPreferences {
     // and on Ubuntu Linux they are stored in the XML file
     // ~/.java/.userPrefs/fjwright/runreduce/prefs.xml.
 
-    // Preference keys:
-    static final String FONTSIZE = "fontSize";
-    static final String AUTORUNVERSION = "autoRunVersion";
-    static final String BOLDPROMPTS = "boldPrompts";
-    static final String COLOUREDIO = "colouredIO";
-    static final String DISPLAYPANE = "displayPane";
+    // Preference keys
+    // REDUCE menu:
+    static final String AUTO_RUN_VERSION = "autoRunVersion";
+    // View menu:
+    static final String FONT_SIZE = "fontSize";
+    static final String BOLD_PROMPTS = "boldPrompts";
+    static final String COLOURED_IO = "colouredIO";
     static final String TYPESET_MATHS = "typesetMaths";
+    static final String DISPLAY_PANE = "displayPane";
+    // Options menu:
+    static final String SHOW_MENU_HISTORY = "showMenuHistory";
+    static final String POPUP_QUERIES = "popupQueries";
 
     enum DisplayPane {SINGLE, SPLIT, TABBED}
 
     static final String NONE = "None";
 
-    static int fontSize = Math.max(prefs.getInt(FONTSIZE, 15), 5);
+    static String autoRunVersion = prefs.get(AUTO_RUN_VERSION, NONE);
+    static int fontSize = Math.max(prefs.getInt(FONT_SIZE, 15), 5);
     // in case a very small font size gets saved accidentally!
     // Minimum value of 5 matches minimum value set for font size SpinnerModel.
-    static String autoRunVersion = prefs.get(AUTORUNVERSION, NONE);
-    static boolean boldPromptsState = prefs.getBoolean(BOLDPROMPTS, false);
-    static boolean colouredIOState = prefs.getBoolean(COLOUREDIO, false);
-    static DisplayPane displayPane =
-            DisplayPane.valueOf(prefs.get(DISPLAYPANE, DisplayPane.SINGLE.toString()));
+    static boolean boldPromptsState = prefs.getBoolean(BOLD_PROMPTS, false);
+    static boolean colouredIOState = prefs.getBoolean(COLOURED_IO, false);
     static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, false);
+    static DisplayPane displayPane =
+            DisplayPane.valueOf(prefs.get(DISPLAY_PANE, DisplayPane.SINGLE.toString()));
+    static boolean showMenuHistory = prefs.getBoolean(SHOW_MENU_HISTORY, false);
+    static boolean popupQueries = prefs.getBoolean(POPUP_QUERIES, true);
 
     static void save(String key, Object value) {
         switch (key) {
-            case AUTORUNVERSION:
-                prefs.put(AUTORUNVERSION, autoRunVersion = (String) value);
+            case AUTO_RUN_VERSION:
+                prefs.put(AUTO_RUN_VERSION, autoRunVersion = (String) value);
                 break;
-            case FONTSIZE:
-                prefs.putInt(FONTSIZE, fontSize = (int) value);
+            case FONT_SIZE:
+                prefs.putInt(FONT_SIZE, fontSize = (int) value);
                 break;
-            case BOLDPROMPTS:
-                prefs.putBoolean(BOLDPROMPTS, boldPromptsState = (boolean) value);
+            case BOLD_PROMPTS:
+                prefs.putBoolean(BOLD_PROMPTS, boldPromptsState = (boolean) value);
                 RunREDUCE.reducePanel.setBoldPrompts(boldPromptsState);
                 break;
-            case COLOUREDIO:
-                prefs.putBoolean(COLOUREDIO, colouredIOState = (boolean) value);
+            case COLOURED_IO:
+                prefs.putBoolean(COLOURED_IO, colouredIOState = (boolean) value);
                 RunREDUCE.reducePanel.setColouredIO(colouredIOState);
                 break;
             case TYPESET_MATHS:
                 prefs.putBoolean(TYPESET_MATHS, typesetMathsState = (boolean) value);
                 RunREDUCE.reducePanel.setTypesetMaths(typesetMathsState);
                 break;
-            case DISPLAYPANE:
-                prefs.put(DISPLAYPANE, (displayPane = (DisplayPane) value).toString());
+            case DISPLAY_PANE:
+                prefs.put(DISPLAY_PANE, (displayPane = (DisplayPane) value).toString());
+                break;
+            case SHOW_MENU_HISTORY:
+                prefs.putBoolean(SHOW_MENU_HISTORY, showMenuHistory = (boolean) value);
+                break;
+            case POPUP_QUERIES:
+                prefs.putBoolean(POPUP_QUERIES, popupQueries = (boolean) value);
                 break;
             default:
                 System.err.println("Attempt to save unexpected preference key: " + key);

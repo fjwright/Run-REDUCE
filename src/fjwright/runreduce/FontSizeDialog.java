@@ -71,7 +71,7 @@ public class FontSizeDialog {
 
     @FXML
     private void okButtonAction(ActionEvent actionEvent) {
-        RRPreferences.save(RRPreferences.FONTSIZE, newFontSize);
+        RRPreferences.save(RRPreferences.FONT_SIZE, newFontSize);
         RunREDUCE.reducePanel.updateFontSize(newFontSize);
         setStyle(RunREDUCE.reducePanel.inputTextArea);
         // Close dialogue:

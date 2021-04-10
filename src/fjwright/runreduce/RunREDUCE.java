@@ -246,7 +246,7 @@ public class RunREDUCE extends Application {
             tabPane = null; // release resources
             // Retain the reducePanel from the selected tab:
             runREDUCEFrame.frame.setCenter(reducePanel);
-            RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SINGLE);
+            RRPreferences.save(RRPreferences.DISPLAY_PANE, RRPreferences.DisplayPane.SINGLE);
             runREDUCEFrame.singlePaneRadioButton.setSelected(true);
             runREDUCEFrame.addTabMenuItem.setDisable(true);
         } else reducePanelList.remove(((Tab) event.getSource()).getContent());

@@ -419,7 +419,7 @@ public class REDUCEPanel extends BorderPane {
 
     private void earlierAction(boolean isShiftDown) {
         if (inputListIndex > 0) {
-            if (isShiftDown || RunREDUCE.runREDUCEFrame.showMenuHistoryCheckMenuItem.isSelected())
+            if (isShiftDown || RRPreferences.showMenuHistory)
                 inputTextArea.setText(inputList.get(--inputListIndex).input);
             else for (int i = inputListIndex - 1; i >= 0; i--) {
                 InputHistoryItem prev = inputList.get(i);
@@ -443,7 +443,7 @@ public class REDUCEPanel extends BorderPane {
 
     private void laterAction(boolean isShiftDown) {
         if (inputListIndex < maxInputListIndex) {
-            if (isShiftDown || RunREDUCE.runREDUCEFrame.showMenuHistoryCheckMenuItem.isSelected())
+            if (isShiftDown || RRPreferences.showMenuHistory)
                 inputTextArea.setText(inputList.get(++inputListIndex).input);
             else {
                 int i;
@@ -1044,7 +1044,7 @@ public class REDUCEPanel extends BorderPane {
         }
 
         String queryString = null;
-        if (questionPrompt && RunREDUCE.runREDUCEFrame.popupQueriesCheckMenuItem.isSelected()) {
+        if (questionPrompt && RRPreferences.popupQueries) {
             // Split off REDUCE user query from preceding text:
             // Determining what the query should be is somewhat heuristic!
             if (promptString.endsWith("? (Y or N) ")) { // PSL

@@ -128,6 +128,17 @@ public class RunREDUCEFrame {
         syncScrollCheckMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.SPLIT);
         addTabMenuItem.setDisable(RRPreferences.displayPane != RRPreferences.DisplayPane.TABBED);
 
+        /* ************ *
+         * Options menu *
+         * ************ */
+
+        showMenuHistoryCheckMenuItem.setSelected(RRPreferences.showMenuHistory);
+        showMenuHistoryCheckMenuItem.selectedProperty().addListener((observableValue, old_val, new_val) ->
+                RRPreferences.save(RRPreferences.SHOW_MENU_HISTORY, new_val));
+        popupQueriesCheckMenuItem.setSelected(RRPreferences.popupQueries);
+        popupQueriesCheckMenuItem.selectedProperty().addListener((observableValue, old_val, new_val) ->
+                RRPreferences.save(RRPreferences.POPUP_QUERIES, new_val));
+
         /* ********* *
          * Help menu *
          * ********* */
@@ -402,7 +413,7 @@ public class RunREDUCEFrame {
         if (RRPreferences.autoRunVersion.equals(RRPreferences.NONE)) noAutoRunRadioMenuItem.setSelected(true);
         noAutoRunRadioMenuItem.setOnAction(e -> {
             if (((RadioMenuItem) e.getSource()).isSelected())
-                RRPreferences.save(RRPreferences.AUTORUNVERSION, RRPreferences.NONE);
+                RRPreferences.save(RRPreferences.AUTO_RUN_VERSION, RRPreferences.NONE);
         });
         for (REDUCECommand cmd : RunREDUCE.reduceConfiguration.reduceCommandList) {
             RadioMenuItem item = new RadioMenuItem(cmd.name);
@@ -413,7 +424,7 @@ public class RunREDUCEFrame {
                 RadioMenuItem radioMenuItem = (RadioMenuItem) e.getSource();
                 if (radioMenuItem.isSelected()) {
                     String version = radioMenuItem.getText();
-                    RRPreferences.save(RRPreferences.AUTORUNVERSION, version);
+                    RRPreferences.save(RRPreferences.AUTO_RUN_VERSION, version);
                     if (!RunREDUCE.reducePanel.runningREDUCE) {
                         for (REDUCECommand cmd1 : RunREDUCE.reduceConfiguration.reduceCommandList) {
                             if (version.equals(cmd1.name)) {
@@ -476,12 +487,12 @@ public class RunREDUCEFrame {
 
     @FXML
     private void boldPromptsCheckBoxAction() {
-        RRPreferences.save(RRPreferences.BOLDPROMPTS, boldPromptsCheckMenuItem.isSelected());
+        RRPreferences.save(RRPreferences.BOLD_PROMPTS, boldPromptsCheckMenuItem.isSelected());
     }
 
     @FXML
     private void colouredIOCheckBoxAction() {
-        RRPreferences.save(RRPreferences.COLOUREDIO, colouredIOCheckMenuItem.isSelected());
+        RRPreferences.save(RRPreferences.COLOURED_IO, colouredIOCheckMenuItem.isSelected());
     }
 
     @FXML
@@ -506,20 +517,20 @@ public class RunREDUCEFrame {
                 RunREDUCE.useTabPane(false);
                 addTabMenuItem.setDisable(true);
         }
-        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SINGLE);
+        RRPreferences.save(RRPreferences.DISPLAY_PANE, RRPreferences.DisplayPane.SINGLE);
     }
 
     @FXML
     private void splitPaneRadioButtonAction() {
         if (RRPreferences.displayPane == RRPreferences.DisplayPane.TABBED) RunREDUCE.useTabPane(false);
-        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.SPLIT);
+        RRPreferences.save(RRPreferences.DISPLAY_PANE, RRPreferences.DisplayPane.SPLIT);
         RunREDUCE.useSplitPane(true, false);
     }
 
     @FXML
     private void tabbedPaneRadioButtonAction() {
         if (RRPreferences.displayPane == RRPreferences.DisplayPane.SPLIT) RunREDUCE.useSplitPane(false, false);
-        RRPreferences.save(RRPreferences.DISPLAYPANE, RRPreferences.DisplayPane.TABBED);
+        RRPreferences.save(RRPreferences.DISPLAY_PANE, RRPreferences.DisplayPane.TABBED);
         RunREDUCE.useTabPane(true);
         addTabMenuItem.setDisable(false);
     }
@@ -533,6 +544,10 @@ public class RunREDUCEFrame {
     private void addTabMenuItemAction() {
         RunREDUCE.addTab();
     }
+
+    /* ************ *
+     * Options menu *
+     * ************ */
 
     /* ************** *
      * Templates menu *
