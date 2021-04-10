@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 public class LoadPackagesDialog {
     @FXML
     private GridPane gridPane;
+    @FXML
+    private Button manualButton;
 
     private static final int COLUMNS = 10; // Adjust to taste!
     ToggleButton[] toggleButtons = new ToggleButton[RunREDUCEFrame.packageList.size()];
@@ -35,7 +38,8 @@ public class LoadPackagesDialog {
                     RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(
                             "load_package " + ((ToggleButton) e.getSource()).getText() + ";\n");
                     ((Stage) ((Node) e.getSource()).getScene().getWindow()).close();
-                }
+                } else
+                    manualButton.setDisable(Arrays.stream(toggleButtons).filter(ToggleButton::isSelected).count() != 1);
             });
             toggleButtons[i++] = tb;
             if (++col == COLUMNS) {
@@ -69,5 +73,9 @@ public class LoadPackagesDialog {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void manualButtonAction(ActionEvent actionEvent) {
     }
 }

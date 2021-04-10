@@ -65,9 +65,10 @@ public abstract class Template {
         templateRoot.getChildren().add(hBox);
         hBox.setSpacing(20);
         var label = new Label("Control+Click for the Pop-Up Keyboard");
-        label.setTooltip(new Tooltip("Hold down the Control key and click your primary mouse button" +
-                "\nor click your middle (tertiary) mouse button on any text field" +
-                "\nto access special symbols etc. using the pop-up keyboard."));
+        label.setTooltip(new Tooltip("""
+                Hold down the Control key and click your primary mouse button
+                or click your middle (tertiary) mouse button on any text field
+                to access special symbols etc. using the pop-up keyboard."""));
         hBox.getChildren().add(label);
         var spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -105,7 +106,7 @@ public abstract class Template {
     }
 
     private static final Pattern INT_OR_VAR_PATTERN =
-            Pattern.compile("(?:[+-]?\\d*)|(?:!|\\p{Alpha}).*");  // non-capturing groups
+            Pattern.compile("[+-]?\\d*|(?:!|\\p{Alpha}).*");  // non-capturing groups
 
     @FXML
     private void intOrVarCheckKeyTyped(KeyEvent keyEvent) {
@@ -269,8 +270,56 @@ public abstract class Template {
                 (String) ((Node) actionEvent.getTarget()).getUserData());
     }
 
-    private static String manualIndex;
-    private static Path manualDirPath;
+    static class REDUCEManual {
+        private static String manualIndex;
+        private static Path manualDirPath;
+
+        static class REDUCEManualException extends IOException {
+            REDUCEManualException() {
+                super("REDUCE Manual Error");
+            }
+        }
+
+        /**
+         * Get the cached HTML REDUCE Manual index, creating it if necessary.
+         */
+        static String getIndex() throws IOException {
+            // Cache manualIndex:
+            Path manualDirPathNew = Path.of(RunREDUCE.reduceConfiguration.manualDir);
+            if (manualIndex == null || !manualDirPath.equals(manualDirPathNew)) {
+                manualDirPath = manualDirPathNew;
+                Path manualIndexFileName = manualDirPath.resolve("manual.html");
+                try {
+                    manualIndex = Files.readString(manualIndexFileName);
+                } catch (IOException e) {
+                    RunREDUCE.alert(Alert.AlertType.ERROR,
+                            "REDUCE Manual Error",
+                            "Cannot read HTML index file at\n"
+                                    + manualIndexFileName);
+                    throw e;
+                }
+                String searchText = "<div class=\"tableofcontents\">";
+                int start = manualIndex.indexOf(searchText);
+                if (start != -1) {
+                    start += searchText.length();
+                    int finish = manualIndex.indexOf("</div>", start);
+                    if (finish != -1) manualIndex = manualIndex.substring(start, finish);
+                } else {
+                    RunREDUCE.alert(Alert.AlertType.ERROR,
+                            "REDUCE Manual Error",
+                            "Cannot find table of contents in HTML index file at\n"
+                                    + manualIndexFileName);
+                    throw new REDUCEManualException();
+                }
+            }
+            return manualIndex;
+        }
+
+        static Path getDirPath() throws IOException {
+            if (manualDirPath == null) throw new REDUCEManualException();
+            return manualDirPath;
+        }
+    }
 
     /**
      * Register this as the OnAction method for a Hyperlink to display the
@@ -278,39 +327,22 @@ public abstract class Template {
      */
     @FXML
     protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
-        // Cache manualIndex:
-        Path manualDirPathNew = Path.of(RunREDUCE.reduceConfiguration.manualDir);
-        if (manualIndex == null || !manualDirPath.equals(manualDirPathNew)) {
-            manualDirPath = manualDirPathNew;
-            try {
-                manualIndex = Files.readString(manualDirPath.resolve("index.html"));
-            } catch (IOException e) {
-                RunREDUCE.alert(Alert.AlertType.ERROR,
-                        "REDUCE Manual Hyperlink Error",
-                        "Cannot read the index file at\n"
-                                + manualDirPath.resolve("index.html"));
-                return;
-            }
-            String searchText = "<div class=\"tableofcontents\">";
-            int start = manualIndex.indexOf(searchText);
-            if (start != -1) {
-                start += searchText.length();
-                int finish = manualIndex.indexOf("</div>", start);
-                if (finish != -1) manualIndex = manualIndex.substring(start, finish);
-            }
-        }
         // Use manualIndex as a jump table for
         String searchText = (String) ((Node) actionEvent.getTarget()).getUserData();
         // Search for (e.g.)
         // <a href="manualse33.html#x44-760007.7" id="QQ2-44-77">CONTINUED_FRACTION Operator</a>
         Pattern pattern = Pattern.compile(
                 String.format("<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s</a>", searchText));
-        Matcher matcher = pattern.matcher(manualIndex);
-        if (matcher.find())
-            RunREDUCE.hostServices.showDocument(manualDirPath.resolve(matcher.group(1)).toString());
-        else
-            RunREDUCE.alert(Alert.AlertType.ERROR,
-                    "REDUCE Manual Hyperlink Error",
-                    "Link not found for\n" + searchText);
+        try {
+            Matcher matcher = pattern.matcher(REDUCEManual.getIndex());
+            if (matcher.find())
+                RunREDUCE.hostServices.showDocument(
+                        REDUCEManual.getDirPath().resolve(matcher.group(1)).toString());
+            else
+                RunREDUCE.alert(Alert.AlertType.ERROR,
+                        "REDUCE Manual Hyperlink Error",
+                        "Link not found for\n" + searchText);
+        } catch (IOException ignored) {
+        }
     }
 }
