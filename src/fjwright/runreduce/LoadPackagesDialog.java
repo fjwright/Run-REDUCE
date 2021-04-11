@@ -4,14 +4,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class LoadPackagesDialog {
@@ -76,6 +81,27 @@ public class LoadPackagesDialog {
     }
 
     @FXML
-    private void manualButtonAction(ActionEvent actionEvent) {
+    private void manualButtonAction() {
+        // Get the first (and should be the only) selected ToggleButton:
+        Optional<ToggleButton> oTB =
+                Arrays.stream(toggleButtons).filter(ToggleButton::isSelected).findFirst();
+        if (oTB.isEmpty()) return;
+        // Use REDUCE Manual ToC as a jump table for...
+        String searchText = oTB.get().getText().toUpperCase(); // E.g. ODESOLVE
+        // Search for (e.g.) <a href="manualse139.html#x199-90800016.47" id="QQ2-199-920">
+        // ODESOLVE: Ordinary differential equations solver</a>
+        Pattern pattern = Pattern.compile(
+                String.format("<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s: .*</a>", searchText));
+        try {
+            Matcher matcher = pattern.matcher(REDUCEManual.getToC());
+            if (matcher.find())
+                RunREDUCE.hostServices.showDocument(
+                        REDUCEManual.getDirPath().resolve(matcher.group(1)).toString());
+            else
+                RunREDUCE.alert(Alert.AlertType.WARNING,
+                        "REDUCE Manual Hyperlink Failure",
+                        "Documentation not found for package " + searchText);
+        } catch (IOException ignored) {
+        }
     }
 }

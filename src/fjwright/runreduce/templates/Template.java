@@ -1,6 +1,7 @@
 package fjwright.runreduce.templates;
 
 import fjwright.runreduce.PopupKeyboard;
+import fjwright.runreduce.REDUCEManual;
 import fjwright.runreduce.RunREDUCE;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -270,71 +269,20 @@ public abstract class Template {
                 (String) ((Node) actionEvent.getTarget()).getUserData());
     }
 
-    static class REDUCEManual {
-        private static String manualIndex;
-        private static Path manualDirPath;
-
-        static class REDUCEManualException extends IOException {
-            REDUCEManualException() {
-                super("REDUCE Manual Error");
-            }
-        }
-
-        /**
-         * Get the cached HTML REDUCE Manual index, creating it if necessary.
-         */
-        static String getIndex() throws IOException {
-            // Cache manualIndex:
-            Path manualDirPathNew = Path.of(RunREDUCE.reduceConfiguration.manualDir);
-            if (manualIndex == null || !manualDirPath.equals(manualDirPathNew)) {
-                manualDirPath = manualDirPathNew;
-                Path manualIndexFileName = manualDirPath.resolve("manual.html");
-                try {
-                    manualIndex = Files.readString(manualIndexFileName);
-                } catch (IOException e) {
-                    RunREDUCE.alert(Alert.AlertType.ERROR,
-                            "REDUCE Manual Error",
-                            "Cannot read HTML index file at\n"
-                                    + manualIndexFileName);
-                    throw e;
-                }
-                String searchText = "<div class=\"tableofcontents\">";
-                int start = manualIndex.indexOf(searchText);
-                if (start != -1) {
-                    start += searchText.length();
-                    int finish = manualIndex.indexOf("</div>", start);
-                    if (finish != -1) manualIndex = manualIndex.substring(start, finish);
-                } else {
-                    RunREDUCE.alert(Alert.AlertType.ERROR,
-                            "REDUCE Manual Error",
-                            "Cannot find table of contents in HTML index file at\n"
-                                    + manualIndexFileName);
-                    throw new REDUCEManualException();
-                }
-            }
-            return manualIndex;
-        }
-
-        static Path getDirPath() throws IOException {
-            if (manualDirPath == null) throw new REDUCEManualException();
-            return manualDirPath;
-        }
-    }
-
     /**
      * Register this as the OnAction method for a Hyperlink to display the
      * local HTML REDUCE Manual section with the filename specified as User Data.
      */
     @FXML
     protected void redManHyperlinkOnAction(ActionEvent actionEvent) {
-        // Use manualIndex as a jump table for
+        // Use REDUCE Manual ToC as a jump table for...
         String searchText = (String) ((Node) actionEvent.getTarget()).getUserData();
         // Search for (e.g.)
         // <a href="manualse33.html#x44-760007.7" id="QQ2-44-77">CONTINUED_FRACTION Operator</a>
         Pattern pattern = Pattern.compile(
                 String.format("<a\\s+href=\"(manual.+?\\.html).*?\"\\s+id=\".+?\">%s</a>", searchText));
         try {
-            Matcher matcher = pattern.matcher(REDUCEManual.getIndex());
+            Matcher matcher = pattern.matcher(REDUCEManual.getToC());
             if (matcher.find())
                 RunREDUCE.hostServices.showDocument(
                         REDUCEManual.getDirPath().resolve(matcher.group(1)).toString());

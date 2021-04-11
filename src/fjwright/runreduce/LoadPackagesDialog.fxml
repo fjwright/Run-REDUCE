@@ -18,7 +18,7 @@
         <Button fx:id="manualButton" disable="true" mnemonicParsing="false" onAction="#manualButtonAction"
                 text="Display Manual Entry">
             <tooltip>
-                <Tooltip text="Display the manual entry for the *single* selected package in the default web browser."/>
+                <Tooltip text="Display the manual entry (if it exists) for the *single* selected package using the default web browser."/>
             </tooltip>
         </Button>
         <Region HBox.hgrow="ALWAYS"/>
