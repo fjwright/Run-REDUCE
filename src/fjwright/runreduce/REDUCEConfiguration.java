@@ -435,10 +435,10 @@ class REDUCEPackageList extends ArrayList<String> {
             String line;
             Pattern namePattern = Pattern.compile("\\s*\\((\\w+)");
             // Exclude preloaded packages alg, arith, mathpr, poly, rlisp,
-            // fmprint and tmprint, which conflict with rrprint, and
+            // fmprint, tmprint and redfront, which conflict with rrprint, and
             // revision and support, which are only for building REDUCE:
             Pattern excludePattern =
-                    Pattern.compile("alg|arith|mathpr|poly|rlisp|[ft]mprint|revision|support");
+                    Pattern.compile("alg|arith|mathpr|poly|rlisp|[ft]mprint|redfront|revision|support");
             while ((line = reader.readLine()) != null) {
                 Matcher matcher = namePattern.matcher(line);
                 if (matcher.lookingAt()) {

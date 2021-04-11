@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -39,7 +40,9 @@ public class LoadPackagesDialog {
             tb.setAlignment(Pos.CENTER_LEFT);
             tb.setMaxWidth(Double.MAX_VALUE);
             tb.setOnMouseClicked(e -> {
-                if (e.getClickCount() == 2) {
+                if (e.getButton() == MouseButton.SECONDARY) {
+                    ShowManualFor(((ToggleButton) e.getSource()).getText());
+                } else if (e.getClickCount() == 2) {
                     RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho(
                             "load_package " + ((ToggleButton) e.getSource()).getText() + ";\n");
                     ((Stage) ((Node) e.getSource()).getScene().getWindow()).close();
@@ -80,14 +83,27 @@ public class LoadPackagesDialog {
         stage.close();
     }
 
+    private static final String[] redlogSubPackages = new String[]{
+            "rlsupport", "rltools", "cl", "ofsf", "dvfsf", "acfsf", "dcfsf", "ibalp",
+            "pasf", "qqe", "qqe_ofsf", "mri", "mri_ofsf", "mri_pasf", "talp", "smt"};
+
+    static {
+        Arrays.sort(redlogSubPackages);
+    }
+
     @FXML
     private void manualButtonAction() {
         // Get the first (and should be the only) selected ToggleButton:
         Optional<ToggleButton> oTB =
                 Arrays.stream(toggleButtons).filter(ToggleButton::isSelected).findFirst();
         if (oTB.isEmpty()) return;
-        // Use REDUCE Manual ToC as a jump table for...
-        String searchText = oTB.get().getText().toUpperCase(); // E.g. ODESOLVE
+        ShowManualFor(oTB.get().getText());
+    }
+
+    private void ShowManualFor(String searchText) { // E.g. odesolve
+        // Use REDUCE Manual ToC as a jump table for searchText.
+        if (Arrays.binarySearch(redlogSubPackages, searchText) >= 0) searchText = "redlog";
+        searchText = searchText.toUpperCase();
         // Search for (e.g.) <a href="manualse139.html#x199-90800016.47" id="QQ2-199-920">
         // ODESOLVE: Ordinary differential equations solver</a>
         Pattern pattern = Pattern.compile(
