@@ -679,8 +679,7 @@ public class RunREDUCEFrame {
                 "Run REDUCE in a JavaFX GUI\n" +
                         "Version %s, %s\n" +
                         "%s", Version.VERSION, Version.DATE, Version.COPYRIGHT));
-        alert.setContentText("Typeset maths by KaTeX.org\n\n" +
-                Version.JAVA);
+        alert.setContentText(Version.JAVA + "\n\nTypeset maths by KaTeX.org");
         alert.setTitle("About Run-REDUCE");
         ImageView img = new ImageView(RunREDUCE.RRicon128Image);
         img.setFitWidth(64);
