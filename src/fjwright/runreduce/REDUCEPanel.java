@@ -479,6 +479,7 @@ public class REDUCEPanel extends BorderPane {
                 if (i > maxInputListIndex) {
                     inputTextArea.clear();
                     inputListIndex = maxInputListIndex + 1;
+                    kbdInputListIndex = maxKbdInputListIndex + 1;
                 }
             }
         } else {
