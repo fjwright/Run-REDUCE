@@ -7,6 +7,7 @@ import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -382,7 +383,7 @@ public class REDUCEPanel extends BorderPane {
             sendAction(keyEvent.isShiftDown());
     }
 
-    record InputHistoryItem(String input, boolean menuInput/*, int kbdInputIndex*/) {
+    record InputHistoryItem(String input, boolean menuInput) {
     }
 
     private final List<InputHistoryItem> inputList = new ArrayList<>();
@@ -498,20 +499,52 @@ public class REDUCEPanel extends BorderPane {
         inputTextArea.requestFocus();
     }
 
+    /**
+     * Called in RRPreferences.save() when the Options menu item Show Menu History changes
+     * or the Control and Shift keys are pressed or released when the Input Area has
+     * focus to reset the disabled state of the Earlier and Later Input buttons.
+     */
+    void setShowMenuHistory(boolean enabled) {
+        if (enabled) {
+            earlierButton.setDisable(inputListIndex <= 0);
+            laterButton.setDisable(inputListIndex > maxInputListIndex);
+        } else {
+            earlierButton.setDisable(kbdInputListIndex <= 0);
+            laterButton.setDisable(kbdInputListIndex > maxKbdInputListIndex);
+        }
+    }
+
+    // (Consider using alternatively javafx.scene.input.KeyCombination.)
+
     @FXML
+    /**
+     * Called when certain non-graphic keys are pressed and the Input Area has focus.
+     */
     private void inputTextAreaOnKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.isControlDown()) {
             switch (keyEvent.getCode()) {
-                case ENTER:
-                    sendAction(keyEvent.isShiftDown());
-                    break;
-                case UP:
-                    earlierAction(keyEvent.isShiftDown());
-                    break;
-                case DOWN:
-                    laterAction(keyEvent.isShiftDown());
+                case ENTER -> sendAction(keyEvent.isShiftDown());
+                case UP -> earlierAction(keyEvent.isShiftDown());
+                case DOWN -> laterAction(keyEvent.isShiftDown());
+                // Control then Shift:
+                case SHIFT -> setShowMenuHistory(true);
             }
         }
+        if (keyEvent.isShiftDown() &&
+                keyEvent.getCode() == KeyCode.CONTROL)
+            // Shift then Control:
+            setShowMenuHistory(true);
+    }
+
+    @FXML
+    /**
+     * Called when Control and Shift are no longer both pressed and the Input Area has focus.
+     */
+    private void inputTextAreaOnKeyReleased(KeyEvent keyEvent) {
+        // Control then Shift or Shift then Control:
+        if ((keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.SHIFT) ||
+                (keyEvent.isShiftDown() && keyEvent.getCode() == KeyCode.CONTROL))
+            setShowMenuHistory(false);
     }
 
     /**
@@ -905,12 +938,8 @@ public class REDUCEPanel extends BorderPane {
         matcher = LR_PATTERN.matcher(mathOutputSB);
         while (matcher.find(start)) {
             switch (matcher.group(1)) {
-                case "left":
-                    leftMinusRightCount++;
-                    break;
-                case "right":
-                    leftMinusRightCount--;
-                    break;
+                case "left" -> leftMinusRightCount++;
+                case "right" -> leftMinusRightCount--;
             }
             start = matcher.end();
         }
@@ -1003,7 +1032,7 @@ public class REDUCEPanel extends BorderPane {
 
     private static final Pattern
             questionAnswer = Pattern.compile("[yYnN]\n"),
-            promptPattern = Pattern.compile("(?:\\d+([:*]) )|.*\\?.*");
+            promptPattern = Pattern.compile("\\d+([:*]) |.*\\?.*");
 
     /**
      * This method is run in the JavaFX Application Thread to process
@@ -1093,15 +1122,14 @@ public class REDUCEPanel extends BorderPane {
                 outputText(text.substring(0, promptIndex), outputCSSClass);
                 // Only colour output *after* initial REDUCE header.
                 if (!questionPrompt) switch (promptMatcher.group(1)) {
-                    case "*":
+                    case "*" -> {
                         inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                         outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
-                        break;
-                    case ":":
-                    default:
+                    }
+                    default -> {
                         inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                         outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
-                        break;
+                    }
                 }
                 outputPromptText(promptString, inputCSSClass);
             } else
