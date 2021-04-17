@@ -372,17 +372,6 @@ public class REDUCEPanel extends BorderPane {
 
     // User input processing **********************************************************************
 
-    @FXML
-    private void sendButtonClicked(MouseEvent mouseEvent) {
-        sendAction(mouseEvent.isShiftDown());
-    }
-
-    @FXML
-    private void sendButtonKeyTyped(KeyEvent keyEvent) {
-        if (keyEvent.getCharacter().equals(" "))
-            sendAction(keyEvent.isShiftDown());
-    }
-
     record InputHistoryItem(String input, boolean menuInput) {
     }
 
@@ -400,6 +389,17 @@ public class REDUCEPanel extends BorderPane {
         kbdInputListIndex = maxKbdInputListIndex + 1;
         if (!menuInput || RRPreferences.showMenuHistory) earlierButton.setDisable(false);
         laterButton.setDisable(true);
+    }
+
+    @FXML
+    private void sendButtonClicked(MouseEvent mouseEvent) {
+        sendAction(mouseEvent.isShiftDown());
+    }
+
+    @FXML
+    private void sendButtonKeyTyped(KeyEvent keyEvent) {
+        if (keyEvent.getCharacter().equals(" "))
+            sendAction(keyEvent.isShiftDown());
     }
 
     private void sendAction(boolean isShiftDown) {
@@ -439,17 +439,10 @@ public class REDUCEPanel extends BorderPane {
                     break;
                 }
             }
-            if (showMenuHistory) {
-                if (inputListIndex <= maxInputListIndex)
-                    laterButton.setDisable(false);
-            } else {
-                if (kbdInputListIndex <= maxKbdInputListIndex)
-                    laterButton.setDisable(false);
-            }
+            laterButton.setDisable(inputListIndex > maxInputListIndex);
         }
-        if (showMenuHistory) {
-            if (inputListIndex == 0) earlierButton.setDisable(true);
-        } else if (kbdInputListIndex == 0) earlierButton.setDisable(true);
+        if (showMenuHistory) earlierButton.setDisable(inputListIndex == 0);
+        else earlierButton.setDisable(kbdInputListIndex == 0);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -488,13 +481,9 @@ public class REDUCEPanel extends BorderPane {
             inputListIndex = maxInputListIndex + 1;
             kbdInputListIndex = maxKbdInputListIndex + 1;
         }
-        if (showMenuHistory) {
-            if (inputListIndex > 0) earlierButton.setDisable(false);
-            if (inputListIndex > maxInputListIndex) laterButton.setDisable(true);
-        } else {
-            if (kbdInputListIndex > 0) earlierButton.setDisable(false);
-            if (kbdInputListIndex > maxKbdInputListIndex) laterButton.setDisable(true);
-        }
+        if (showMenuHistory) earlierButton.setDisable(inputListIndex <= 0);
+        else earlierButton.setDisable(kbdInputListIndex <= 0);
+        laterButton.setDisable(inputListIndex > maxInputListIndex);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -505,13 +494,8 @@ public class REDUCEPanel extends BorderPane {
      * focus to reset the disabled state of the Earlier and Later Input buttons.
      */
     void setShowMenuHistory(boolean enabled) {
-        if (enabled) {
-            earlierButton.setDisable(inputListIndex <= 0);
-            laterButton.setDisable(inputListIndex > maxInputListIndex);
-        } else {
-            earlierButton.setDisable(kbdInputListIndex <= 0);
-            laterButton.setDisable(kbdInputListIndex > maxKbdInputListIndex);
-        }
+        if (enabled) earlierButton.setDisable(inputListIndex <= 0);
+        else earlierButton.setDisable(kbdInputListIndex <= 0);
     }
 
     // (Consider using alternatively javafx.scene.input.KeyCombination.)
