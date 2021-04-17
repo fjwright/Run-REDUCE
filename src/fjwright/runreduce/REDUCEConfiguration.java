@@ -80,7 +80,7 @@ class RRPreferences {
                 break;
             case SHOW_MENU_HISTORY:
                 prefs.putBoolean(SHOW_MENU_HISTORY, showMenuHistory = (boolean) value);
-                RunREDUCE.reducePanel.setShowMenuHistory(showMenuHistory);
+                RunREDUCE.reducePanel.setEarlierButtonAvailability(showMenuHistory);
                 break;
             case POPUP_QUERIES:
                 prefs.putBoolean(POPUP_QUERIES, popupQueries = (boolean) value);

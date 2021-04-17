@@ -372,22 +372,22 @@ public class REDUCEPanel extends BorderPane {
 
     // User input processing **********************************************************************
 
-    record InputHistoryItem(String input, boolean menuInput) {
+    record InputHistoryItem(String input, boolean kbdInput) {
     }
 
     private final List<InputHistoryItem> inputList = new ArrayList<>();
-    // All items in the input history:
     private int inputListIndex = 0, maxInputListIndex = -1;
-    // Keyboard items in the input history:
-    private int kbdInputListIndex = 0, maxKbdInputListIndex = -1;
+    private static final int INITIAL_FIRST_KBD_INPUT_LIST_INDEX = Integer.MAX_VALUE;
+    // Index of first keyboard item in the input history:
+    private int firstKbdInputListIndex = INITIAL_FIRST_KBD_INPUT_LIST_INDEX;
 
-    private void addToInputList(String text, boolean menuInput) {
-        inputList.add(new InputHistoryItem(text, menuInput));
+    private void addToInputList(String text, boolean kbdInput) {
+        inputList.add(new InputHistoryItem(text, kbdInput));
         // inputListIndex > maxInputListIndex means looking at new input.
         inputListIndex = ++maxInputListIndex + 1;
-        if (!menuInput) maxKbdInputListIndex++;
-        kbdInputListIndex = maxKbdInputListIndex + 1;
-        if (!menuInput || RRPreferences.showMenuHistory) earlierButton.setDisable(false);
+        if (firstKbdInputListIndex == INITIAL_FIRST_KBD_INPUT_LIST_INDEX && kbdInput)
+            firstKbdInputListIndex = maxInputListIndex;
+        if (kbdInput || RRPreferences.showMenuHistory) earlierButton.setDisable(false);
         laterButton.setDisable(true);
     }
 
@@ -405,7 +405,7 @@ public class REDUCEPanel extends BorderPane {
     private void sendAction(boolean isShiftDown) {
         String text = inputTextArea.getText();
         if (text.length() > 0) {
-            addToInputList(text, false);
+            addToInputList(text, true);
             text = PopupKeyboard.decode(text);
             sendInteractiveInputToREDUCE(text, !questionPrompt && !isShiftDown);
             if (quitPattern.matcher(text).matches()) {
@@ -429,20 +429,17 @@ public class REDUCEPanel extends BorderPane {
             if (showMenuHistory) {
                 InputHistoryItem prev = inputList.get(--inputListIndex);
                 inputTextArea.setText(prev.input);
-                if (!prev.menuInput) kbdInputListIndex--;
             } else for (int i = inputListIndex - 1; i >= 0; i--) {
                 InputHistoryItem prev = inputList.get(i);
-                if (!prev.menuInput) {
+                if (prev.kbdInput) {
                     inputTextArea.setText(prev.input);
                     inputListIndex = i;
-                    kbdInputListIndex--;
                     break;
                 }
             }
             laterButton.setDisable(inputListIndex > maxInputListIndex);
         }
-        if (showMenuHistory) earlierButton.setDisable(inputListIndex == 0);
-        else earlierButton.setDisable(kbdInputListIndex == 0);
+        setEarlierButtonAvailability(showMenuHistory);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
@@ -458,52 +455,48 @@ public class REDUCEPanel extends BorderPane {
             if (showMenuHistory) {
                 InputHistoryItem next = inputList.get(++inputListIndex);
                 inputTextArea.setText(next.input);
-                if (!next.menuInput) kbdInputListIndex++;
             } else {
                 int i;
                 for (i = inputListIndex + 1; i <= maxInputListIndex; i++) {
                     InputHistoryItem next = inputList.get(i);
-                    if (!next.menuInput) {
+                    if (next.kbdInput) {
                         inputTextArea.setText(next.input);
                         inputListIndex = i;
-                        kbdInputListIndex++;
                         break;
                     }
                 }
                 if (i > maxInputListIndex) {
                     inputTextArea.clear();
                     inputListIndex = maxInputListIndex + 1;
-                    kbdInputListIndex = maxKbdInputListIndex + 1;
                 }
             }
         } else {
             inputTextArea.clear();
             inputListIndex = maxInputListIndex + 1;
-            kbdInputListIndex = maxKbdInputListIndex + 1;
         }
-        if (showMenuHistory) earlierButton.setDisable(inputListIndex <= 0);
-        else earlierButton.setDisable(kbdInputListIndex <= 0);
+        setEarlierButtonAvailability(showMenuHistory);
         laterButton.setDisable(inputListIndex > maxInputListIndex);
         // Return the focus to the input text area:
         inputTextArea.requestFocus();
     }
 
     /**
-     * Called in RRPreferences.save() when the Options menu item Show Menu History changes
-     * or the Control and Shift keys are pressed or released when the Input Area has
-     * focus to reset the disabled state of the Earlier and Later Input buttons.
+     * Called in earlierAction() and laterAction(),
+     * in RRPreferences.save() when the Options menu item Show Menu History changes,
+     * and when the Control and Shift keys are both pressed or released and the Input Area
+     * has focus, to control the disabled state of the Earlier and Later Input buttons.
      */
-    void setShowMenuHistory(boolean enabled) {
-        if (enabled) earlierButton.setDisable(inputListIndex <= 0);
-        else earlierButton.setDisable(kbdInputListIndex <= 0);
+    void setEarlierButtonAvailability(boolean showMenuHistory) {
+        if (showMenuHistory) earlierButton.setDisable(inputListIndex <= 0);
+        else earlierButton.setDisable(inputListIndex <= firstKbdInputListIndex);
     }
 
     // (Consider using alternatively javafx.scene.input.KeyCombination.)
 
-    @FXML
     /**
      * Called when certain non-graphic keys are pressed and the Input Area has focus.
      */
+    @FXML
     private void inputTextAreaOnKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.isControlDown()) {
             switch (keyEvent.getCode()) {
@@ -511,24 +504,26 @@ public class REDUCEPanel extends BorderPane {
                 case UP -> earlierAction(keyEvent.isShiftDown());
                 case DOWN -> laterAction(keyEvent.isShiftDown());
                 // Control then Shift:
-                case SHIFT -> setShowMenuHistory(true);
+                case SHIFT -> setEarlierButtonAvailability(true);
             }
         }
         if (keyEvent.isShiftDown() &&
                 keyEvent.getCode() == KeyCode.CONTROL)
             // Shift then Control:
-            setShowMenuHistory(true);
+            setEarlierButtonAvailability(true);
     }
 
-    @FXML
     /**
-     * Called when Control and Shift are no longer both pressed and the Input Area has focus.
+     * Called when Control and Shift are no longer both pressed and the Input Area has focus
+     * to cancel the effect of pressing both Control and Shift (but not the Options menu setting).
      */
+    @FXML
     private void inputTextAreaOnKeyReleased(KeyEvent keyEvent) {
         // Control then Shift or Shift then Control:
-        if ((keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.SHIFT) ||
-                (keyEvent.isShiftDown() && keyEvent.getCode() == KeyCode.CONTROL))
-            setShowMenuHistory(false);
+        if (!RRPreferences.showMenuHistory &&
+                ((keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.SHIFT) ||
+                        (keyEvent.isShiftDown() && keyEvent.getCode() == KeyCode.CONTROL)))
+            setEarlierButtonAvailability(false);
     }
 
     /**
@@ -538,7 +533,7 @@ public class REDUCEPanel extends BorderPane {
      */
     public void templateSendInteractiveInputToREDUCE(String text) {
         sendInteractiveInputToREDUCE(text, true);
-        addToInputList(text, true);
+        addToInputList(text, false);
     }
 
     /**
@@ -574,7 +569,7 @@ public class REDUCEPanel extends BorderPane {
      */
     void menuSendStringToREDUCEAndEcho(String text) {
         sendStringToREDUCEAndEcho(text);
-        addToInputList(text, true);
+        addToInputList(text, false);
     }
 
     /**
@@ -1105,16 +1100,14 @@ public class REDUCEPanel extends BorderPane {
             if (promptString != null) {
                 outputText(text.substring(0, promptIndex), outputCSSClass);
                 // Only colour output *after* initial REDUCE header.
-                if (!questionPrompt) switch (promptMatcher.group(1)) {
-                    case "*" -> {
+                if (!questionPrompt)
+                    if ("*".equals(promptMatcher.group(1))) {
                         inputCSSClass = SYMBOLIC_INPUT_CSS_CLASS;
                         outputCSSClass = SYMBOLIC_OUTPUT_CSS_CLASS;
-                    }
-                    default -> {
+                    } else {
                         inputCSSClass = ALGEBRAIC_INPUT_CSS_CLASS;
                         outputCSSClass = ALGEBRAIC_OUTPUT_CSS_CLASS;
                     }
-                }
                 outputPromptText(promptString, inputCSSClass);
             } else
                 outputText(text, outputCSSClass);
