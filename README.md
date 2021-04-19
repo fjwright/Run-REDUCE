@@ -2,7 +2,10 @@
 
 ## A JavaFX GUI to run any CLI version of the REDUCE Computer Algebra System
 
-### Francis Wright, March 2021
+### Francis Wright, April 2021
+
+![GitHub](https://img.shields.io/github/license/fjwright/Run-REDUCE)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fjwright/Run-REDUCE)
 
 I originally implemented Run-REDUCE using Swing as the obsolete
 project now called
