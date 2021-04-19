@@ -6,6 +6,7 @@
 
 ![GitHub](https://img.shields.io/github/license/fjwright/Run-REDUCE)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fjwright/Run-REDUCE)
+![GitHub Release Date](https://img.shields.io/github/release-date/fjwright/Run-REDUCE)
 
 I originally implemented Run-REDUCE using Swing as the obsolete
 project now called
