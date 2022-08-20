@@ -18,7 +18,7 @@ change this provided you keep it self-consistent.  However you build,
 the following initial steps are required:
 * Install Java and JavaFX and set up the `PATH_TO_FX` environment
 variable, as explained in the [Install and Run
-Guide](https://github.com/fjwright/Run-REDUCE/docs/InstallAndRun.md).
+Guide](https://fjwright.github.io/Run-REDUCE/InstallAndRun.html).
 You need a Java Development Kit (JDK) to build a Java program (whereas
 a Java Runtime Environment (JRE) is sufficient to run it once built.)
 I recommend using Java 16 or later, and the same version of JavaFX;
@@ -30,6 +30,7 @@ or later.
 Note that this project uses [modular
 Java](https://www.oracle.com/uk/corporate/features/understanding-java-9-modules.html),
 primarily in order to minimize the size of pre-build release files.
+See also the [JavaFX website](https://openjfx.io/) for useful guidance on building projects using JavaFX.
 
 Building and Running using IntelliJ IDEA
 ----------------------------------------
@@ -62,18 +63,30 @@ This should pop up Run-REDUCE in its own window.
 Building and Running using the Command Line
 -------------------------------------------
 
+The following instructions work for me using Java 16 and JavaFX 16.
 Make the directory `Run-REDUCE` that you have just created your
 current working directory.
 
 The commands below assume that the JDK bin directory is in your search
-path.  **Beware that they use Windows cmd syntax.** For Unix shells,
+path.  **Beware that some command use Windows cmd syntax.** For Unix shells,
 replace `%PATH_TO_FX%` with `$PATH_TO_FX` and replace semicolons with
 colons.
 
-To build the project... **to be added**.
+To build the project, execute the following **Windows** command, where the `-encoding` argument is probably required only on Windows:
+```
+javac --module-path %PATH_TO_FX% --add-modules javafx.fxml,javafx.web -d out/production/Run-REDUCE -encoding UTF-8 src/*.java src/fjwright/runreduce/*.java src/fjwright/runreduce/functions/*.java src/fjwright/runreduce/templates/*.java
+```
+Then copy the other files required using the following commands, which assume a Unix shell, such as Cygwin bash on Windows:
+```
+cp -r src/META-INF out/production/Run-REDUCE
+cp src/fjwright/runreduce/*.fxml out/production/Run-REDUCE/fjwright/runreduce
+cp src/fjwright/runreduce/functions/*.fxml out/production/Run-REDUCE/fjwright/runreduce/functions
+cp src/fjwright/runreduce/templates/*.fxml out/production/Run-REDUCE/fjwright/runreduce/templates
+cp -r resources/* out/production/Run-REDUCE/fjwright/runreduce
+```
 
 To run the project using the files in the directory `out/production`,
-execute the command
+execute the following **Windows** command
 ```
 java --module-path %PATH_TO_FX%;out/production -m Run.REDUCE/fjwright.runreduce.RunREDUCE
 ```
