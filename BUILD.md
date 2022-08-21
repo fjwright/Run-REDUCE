@@ -123,3 +123,29 @@ To run the JAR, execute the following command.
 java --module-path=$PATH_TO_FX --add-modules=javafx.fxml,javafx.web \
     -jar out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar
 ```
+
+Building Installers
+-------------------
+
+This is a command-line process and requires that the project first be
+built, as described above.  (It does not use a JAR.)  An installer can
+be built only on the platform that it targets, and the build process
+uses the standard installer-builder for that platform, which must also
+be installed.  Java (since JDK 14) provides a program called
+`jpackage` that interfaces between a Java application build and an
+installer-builder.  The [JDK Enhancement
+Proposal](https://openjdk.org/jeps/392) provides useful background,
+but see also the jpackage manual entry for the version of Java you are
+using,
+e.g. https://docs.oracle.com/en/java/javase/18/docs/specs/man/jpackage.html.
+
+I provide directories under `installers` called `Linux` and `Windows`,
+which contain native batch files.  The Linux batch file should
+automatically build an `.rpm` or `.deb` installer when run on an
+appropiate version of Linux, e.g. Fedora or Ubuntu, respectively.  The
+Windows batch file should automatically build an `.msi` installer when
+run using the Windows command prompt.  See the comments in the batch
+files for further details and setup requirements.  These batch files
+should provide a model for creating installers on other platforms.
+Note that different platforms seem to require image files in different
+formats to serve as installer icons.
