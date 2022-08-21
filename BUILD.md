@@ -16,6 +16,7 @@ IDEA. The second set (to be completed) uses the command line, and the
 same directory structure as used by IntelliJ IDEA, but you could
 change this provided you keep it self-consistent.  However you build,
 the following initial steps are required:
+
 * Install Java and JavaFX and set up the `PATH_TO_FX` environment
 variable, as explained in the [Install and Run
 Guide](https://fjwright.github.io/Run-REDUCE/InstallAndRun.html).
@@ -24,12 +25,13 @@ a Java Runtime Environment (JRE) is sufficient to run it once built.)
 I recommend using Java 16 or later, and the same version of JavaFX;
 note that building source later than version 3.0 **requires** Java 16
 or later.
+
 * Download and unpack a Run-REDUCE release source file archive or
   clone this repository.
 
 Note that this project uses [modular
 Java](https://www.oracle.com/uk/corporate/features/understanding-java-9-modules.html),
-primarily in order to minimize the size of pre-build release files.
+primarily in order to minimize the size of the pre-built release files.
 See also the [JavaFX website](https://openjfx.io/) for useful guidance
 on building projects using JavaFX.
 
@@ -64,24 +66,29 @@ This should pop up Run-REDUCE in its own window.
 Building and Running using the Command Line
 -------------------------------------------
 
-The following instructions work for me using Java 16 and JavaFX 16.
+The following instructions work for me using Java 16 and JavaFX 16 on
+Microsoft Windows.  The commands below assume that the JDK bin
+directory is in your search path and are intended to be run in `bash`.
+(On Windows I use Cygwin.  However, on Windows you need either to
+remove the quotes from the value of the environment variable
+`PATH_TO_FX` and instead use `"$PATH_TO_FX"` in the commands below, or
+to use the Windows command prompt and use `%PATH_TO_FX%` instead of
+`$PATH_TO_FX` and a semicolon instead of a colon in the commands
+below.)
+
 Make the directory `Run-REDUCE` that you have just created your
 current working directory.
 
-The commands below assume that the JDK bin directory is in your search
-path.  **Beware that some command use Windows cmd syntax.** For Unix
-shells, replace `%PATH_TO_FX%` with `$PATH_TO_FX` and replace
-semicolons with colons.
-
-To build the project, execute the following **Windows** command, where
-the `-encoding` argument is probably required only on Windows:
+To build the project, execute the following command, where the
+`-encoding` argument is probably required only on Windows.
 
 ```shell
-javac --module-path=%PATH_TO_FX% --add-modules=javafx.fxml,javafx.web -d out/production/Run-REDUCE -encoding UTF-8 src/*.java src/fjwright/runreduce/*.java src/fjwright/runreduce/functions/*.java src/fjwright/runreduce/templates/*.java
+javac --module-path=$PATH_TO_FX --add-modules=javafx.fxml,javafx.web \
+    -d out/production/Run-REDUCE -encoding UTF-8 \
+    src/{,fjwright/runreduce/{,*/}}*.java
 ```
 
-Then copy the other files required using the following commands, which
-assume a Unix shell, such as Cygwin bash on Windows:
+Then copy the other files required using the following commands.
 
 ```shell
 cp -r src/META-INF out/production/Run-REDUCE
@@ -92,22 +99,27 @@ cp -r resources/* out/production/Run-REDUCE/fjwright/runreduce
 ```
 
 To run the project using the files in the directory `out/production`,
-execute the following **Windows** command:
+execute the following command.  This is a useful check before building
+a JAR or installer.  (On Windows, replace the colon with an escaped
+semicolon.)
 
 ```shell
-java --module-path=%PATH_TO_FX%;out/production -m Run.REDUCE/fjwright.runreduce.RunREDUCE
+java --module-path=$PATH_TO_FX:out/production -m Run.REDUCE/fjwright.runreduce.RunREDUCE
 ```
 
-To build the JAR, build the project as described above, then execute
-the following **Windows** commands:
+To build a JAR, build the project as described above, then execute the
+following commands.  (Note the trailing dot.)
 
 ```shell
-mkdir out\artifacts\Run_REDUCE_jar
-jar --create --file=out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar --manifest=out/production/Run-REDUCE/META-INF/MANIFEST.MF -C out/production/Run-REDUCE .
+mkdir -p out/artifacts/Run_REDUCE_jar
+jar --create --file=out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar \
+    --manifest=out/production/Run-REDUCE/META-INF/MANIFEST.MF \
+    -C out/production/Run-REDUCE .
 ```
 
-To run the JAR, execute the following **Windows** command:
+To run the JAR, execute the following command.
 
 ```shell
-java --module-path=%PATH_TO_FX% --add-modules=javafx.fxml,javafx.web -jar out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar
+java --module-path=$PATH_TO_FX --add-modules=javafx.fxml,javafx.web \
+    -jar out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar
 ```
