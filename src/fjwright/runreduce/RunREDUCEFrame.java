@@ -252,7 +252,7 @@ public class RunREDUCEFrame {
         fileChooser.getExtensionFilters().setAll(LOG_FILE_FILTER, TEXT_FILE_FILTER, ALL_FILE_FILTER);
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
+            RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file + "\"$\n");
             RunREDUCE.reducePanel.outputFileList.remove(file); // in case it was already open
             RunREDUCE.reducePanel.outputFileList.add(file);
             RunREDUCE.reducePanel.outputFileDisableMenuItems(false);
@@ -270,7 +270,7 @@ public class RunREDUCEFrame {
             Optional<File> result = choiceDialog.showAndWait();
             if (result.isPresent()) {
                 File file = result.get();
-                RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file.toString() + "\"$\n");
+                RunREDUCE.reducePanel.menuSendStringToREDUCEAndEcho("out \"" + file + "\"$\n");
                 // Make this the last file used for output:
                 RunREDUCE.reducePanel.outputFileList.remove(file);
                 RunREDUCE.reducePanel.outputFileList.add(file);
@@ -641,7 +641,9 @@ public class RunREDUCEFrame {
             URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
             // file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/production/Run-REDUCE/fjwright/runreduce/UserGuide.html
             // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE.jar!/fjwright/runreduce/UserGuide.html
-            // JavaFX WebEngine accepts a jar URI but Firefox does not, so...
+
+            // JavaFX WebEngine accepts a jar URI but Firefox does not, so extract the User Guide
+            // from the jar to filestore when first used in each run of Run-REDUCE.
             if (url == null) {
                 RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE User Guide",
                         "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
@@ -649,7 +651,8 @@ public class RunREDUCEFrame {
                 RunREDUCE.hostServices.showDocument(url.toString());
             else { // Normal case: when running a jar file the protocol is jar.
                 if (userGuideTmpFile == null || !userGuideTmpFile.exists()) {
-                    userGuideTmpFile = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
+//                    userGuideTmpFile = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
+                    userGuideTmpFile = new File(getProperty("user.home"), USERGUIDE_FILENAME);
                     try (InputStream in = url.openStream()) {
                         Files.copy(in, userGuideTmpFile.toPath(), REPLACE_EXISTING);
                     }
@@ -675,10 +678,10 @@ public class RunREDUCEFrame {
     private void aboutMenuItemAction() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.setHeaderText(String.format(
-                "Run REDUCE in a JavaFX GUI\n" +
-                        "Version %s, %s\n" +
-                        "%s", Version.VERSION, Version.DATE, Version.COPYRIGHT));
+        alert.setHeaderText(String.format("""
+                Run REDUCE in a JavaFX GUI
+                Version %s, %s
+                %s""", Version.VERSION, Version.DATE, Version.COPYRIGHT));
         alert.setContentText(Version.JAVA + "\n\nTypeset maths by KaTeX.org");
         alert.setTitle("About Run-REDUCE");
         ImageView img = new ImageView(RunREDUCE.RRicon128Image);
