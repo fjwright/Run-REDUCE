@@ -1,6 +1,12 @@
 /Run-REDUCE.iml
 /.idea/
+/installers/*
+!/installers/Linux/build
+!/installers/Windows/build.bat
+!/installers/Windows/RR-icon-128.ico
 /out/
 /releases/
+/test/*
+!/test/symbols_and_functions.tst
 /To Do.txt
 /ReleaseNotes.md

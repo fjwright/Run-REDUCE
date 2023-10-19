@@ -632,7 +632,8 @@ public class RunREDUCEFrame {
      * Help menu *
      * ********* */
 
-    private static final String USERGUIDE_FILENAME = "UserGuide.html";
+    private static final String USERGUIDE_FILENAME = "UserGuide.html",
+            USERGUIDE_TMP_FILENAME =  "Run-REDUCE_User_Guide.html";
     private static File userGuideTmpFile;
 
     @FXML
@@ -652,7 +653,7 @@ public class RunREDUCEFrame {
             else { // Normal case: when running a jar file the protocol is jar.
                 if (userGuideTmpFile == null || !userGuideTmpFile.exists()) {
 //                    userGuideTmpFile = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
-                    userGuideTmpFile = new File(getProperty("user.home"), USERGUIDE_FILENAME);
+                    userGuideTmpFile = new File(getProperty("user.home"), USERGUIDE_TMP_FILENAME);
                     try (InputStream in = url.openStream()) {
                         Files.copy(in, userGuideTmpFile.toPath(), REPLACE_EXISTING);
                     }
