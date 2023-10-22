@@ -33,7 +33,7 @@ jpackage --name Run-REDUCE --app-version %VERSION% ^
 --icon RR-icon-128.ico ^
 --description "A JavaFX GUI to run the REDUCE CAS" ^
 --vendor "Francis Wright" ^
---copyright "2021, Francis Wright, All rights reserved" ^
+--copyright "2023, Francis Wright, All rights reserved" ^
 --win-upgrade-uuid 83c944a0-27b3-43a2-99ff-455d746acabc ^
 --win-shortcut --win-dir-chooser ^
 --win-menu --win-menu-group Reduce %*

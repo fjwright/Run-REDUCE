@@ -1,16 +1,20 @@
 #! /bin/bash
 # Use jpackage to build a Run-REDUCE installer for Linux.
-# User's Guide: https://docs.oracle.com/en/java/javase/16/jpackage/.
-# Man Page: https://docs.oracle.com/en/java/javase/16/docs/specs/man/jpackage.html.
-# Requires JDK 14+ and (e.g.) JAVA_HOME = /usr/bin/java (set using alternatives)
+# User's Guide: https://docs.oracle.com/en/java/javase/17/jpackage/.
+# Man Page: https://docs.oracle.com/en/java/javase/17/docs/specs/man/jpackage.html.
+# Requires Java JDK 14+ and (e.g.) JAVA_HOME = /usr/bin/java
+# Requires JavaFX SDK *and* jmods.
+# Requires Run-REDUCE to have been built "normally" and requires r+w access to the
+# Run-REDUCE build tree (which is /media/sf_Run-REDUCE/ on my Linux VMs).
 
+# May need to select the correct Java version:
 # Ubuntu: sudo update-java-alternatives
 # Fedora: sudo alternatives --config java
 
-# Set (e.g.) PATH_TO_FX_MODS = ~/javafx-jmods-16
-# and (e.g.) PATH_TO_FX = ~/javafx-16/lib (to run Version)
+# Set (e.g.) PATH_TO_FX_MODS = ~/javafx-jmods-17
+# and (e.g.) PATH_TO_FX = ~/javafx-17/lib (to run Version)
 
-# Debian Linux also requires the fakeroot package.
+# Debian Linux also requires the fakeroot package (included in Ubuntu 22).
 # Red Hat Linux also requires the rpm-build package.
 
 # --type app-image creates only the application image for testing.
@@ -41,7 +45,7 @@ jpackage --name Run-REDUCE --app-version $VERSION \
   --icon /media/sf_Run-REDUCE/resources/images/RR-icon-128.png \
   --description "A JavaFX GUI to run the REDUCE CAS" \
   --vendor "Francis Wright" \
-  --copyright "2021, Francis Wright, All rights reserved" \
+  --copyright "2023, Francis Wright, All rights reserved" \
   --license-file /media/sf_Run-REDUCE/LICENSE \
   --linux-rpm-license-type BSD-2-Clause \
   "$@"

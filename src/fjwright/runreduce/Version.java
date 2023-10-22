@@ -7,8 +7,8 @@ package fjwright.runreduce;
  */
 public class Version {
     private final static int MAJOR = 3;
-    private final static int MINOR = 0;
-    private final static int REVISION = 7;
+    private final static int MINOR = 1;
+    private final static int REVISION = 0;
     private final static String MONTH = "October";
     private final static int YEAR = 2023;
 

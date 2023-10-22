@@ -72,8 +72,8 @@ can ignore.  (It is not displayed when you run Run-REDUCE from
 ## <a id="JAR"></a>Using the JAR
 
 To run the JAR, you need to have a [Java Runtime Environment
-(JRE)](#JRE) and [JavaFX](#JFX) libraries installed, both version 11
-or later (preferably the latest release); see below for details.
+(JRE)](#JRE) and [JavaFX](#JFX) libraries installed, both version 16
+or later; see below for details.
 
 You also need to download the file
 [Run-REDUCE.jar](https://github.com/fjwright/Run-REDUCE/releases/latest/download/Run-REDUCE.jar)
@@ -90,9 +90,9 @@ the full pathname of your JavaFX library.
 
 Because this is a little tedious, I provide two batch files that make
 it easier to run Run-REDUCE.  The file
-[Run-REDUCE.bat](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE.bat)
+[`Run-REDUCE.bat`](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE.bat)
 is for use on [Microsoft Windows](#Windows) and the file
-[Run-REDUCE](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE)
+[`Run-REDUCE`](https://raw.githubusercontent.com/fjwright/Run-REDUCE/master/Run-REDUCE)
 (no extension) is for use on [Unix-like platforms](#Unix).  If you
 want to use one of these batch files, download it (by right-clicking
 on the link and selecting *Save Link As...*) to the same directory to
@@ -108,40 +108,43 @@ the additional details for [Microsoft Windows](#Windows) and
 [Unix-like platforms](#Unix) below.
 
 There are many ways to run JavaFX applications, but here are my
-recommendations.
-
+recommendations.  Use the same version of Java and JavaFX, and for
+both use the latest Long Term Support (LTS) version available,
+although currently version 16 or later should work.  For Java, I
+recommend that you install a JRE distribution; a JDK distribution will
+also work, but is much bigger and unnecessary unless you do Java
+development.  If your platform-specific software installation
+mechanism provides a suitable version of Java then you can use it, but
+it is unlikely to also provide JavaFX (see below).  Alternatively...
 
 ## <a id="JRE"></a>Install OpenJDK JRE
 
-Visit [AdoptOpenJDK](https://adoptopenjdk.net/), scroll towards the
-bottom of the home page and click on *Installation*, click on
-*Installers*, and follow the instructions for your platform.
+Visit [Adoptium](https://adoptium.net/), scroll down a little and
+click on the _Other platforms and versions_ link.  The Java releases
+available here are called _Temurin_.  Follow the _Installation Guide_
+linked to the top of the list of downloads.
 
-On Microsoft Windows, select *OpenJDK nn (Latest)* with the highest
-number *nn* (or you can use Java 11 if you prefer).  The default JVM,
-HotSpot, should be fine.  Select your Operating System and
-Architecture or just scroll down to find your platform.  On the right,
-choose a JRE distribution (a JDK distribution will also work, but is
-much bigger and irrelevant unless you do Java development), download
-and run the appropriate *.msi* file.  The default installation
-settings should be fine although you can remove the *Associate .jar*
-option unless you want it for running other Java applications (but
-keep the *Add to PATH* option).
+Alternatively...
 
-On other platforms, install `adoptopenjdk-<latest>-hotspot-jre`, where
-`<latest>` represents the highest number available.  If you prefer,
-you can use Java 11 and/or the non-JRE version (see above).
+Select the appropriate download for your OS.
 
+On Microsoft Windows, I recommend using the appropriate *.msi* file.
+The default installation settings should be fine although you can
+remove the *Associate .jar* option unless you want it for running
+other Java applications (but keep the *Add to PATH* option).
+
+On Linux, unpack the appropriate *.tar.gz* file somewhere convenient
+and add the Java `bin` directory to your execution path.
 
 ## <a id="JFX"></a>Install OpenJFX
 
 Visit [OpenJFX](https://openjfx.io/), scroll down and click on the
-*Download* button.  Scroll down to *Latest Release* (or you can use
-JavaFX 11 if you prefer), download the appropriate *JavaFX SDK* file
-(**not** the *jmods* file) and save it.  Move it somewhere appropriate
-(anywhere should work) and unzip it.  Make a note of the full pathname
-of the *lib* sub-directory or copy it, since you need it to set up the
-`PATH_TO_FX` environment variable; see below.
+*Download* button.  Scroll down to *Downloads*, download the
+appropriate *SDK* file (**not** the *jmods* file) and save it.  Move
+it somewhere appropriate (anywhere should work) and unzip it.  Make a
+note of the full pathname of the *lib* sub-directory or copy it, since
+you need it to set up the `PATH_TO_FX` environment variable; see
+below.
 
 
 ## Run Run-REDUCE using a Batch File on...
@@ -161,16 +164,16 @@ pathname.  **Enclose the folder name in double quotes.**
 
 An easy way to run Run-REDUCE using a shell command is first to open
 *File Explorer* and navigate to the folder to which you downloaded
-*Run-REDUCE.jar*.  In the address bar, type `cmd` and then press the
+`Run-REDUCE.jar`.  In the address bar, type `cmd` and then press the
 *Enter* key.  This will open a Command Prompt window in the current
 folder; type `Run-REDUCE` and press the *Enter* key.  Or you can just
-double-click on the *Run-REDUCE* Windows Batch File (which is actually
-called *Run-REDUCE.bat* but the extension is suppressed by default).
+double-click on the `Run-REDUCE` Windows Batch File (which is actually
+called `Run-REDUCE.bat` but the extension is suppressed by default).
 
 ### <a id="Unix"></a>Unix-like Platforms
 
 To create the environment variable, open your profile (or shell
-configuration) file (e.g. *~/.profile* in Ubuntu or *~/.bash_profile*
+configuration) file (e.g. `~/.profile` in Ubuntu or `~/.bash_profile`
 in Fedora) in a text editor and add the line
 
 ``` shell
@@ -189,7 +192,7 @@ followed by a space.
 
 An easy way to run Run-REDUCE using a shell command is first to open
 *Files*, navigate to the directory to which you downloaded
-*Run-REDUCE.jar* and set the file permissions to make *Run-REDUCE*
+`Run-REDUCE.jar` and set the file permissions to make `Run-REDUCE`
 executable.  Right-click in, or open the drop-down menu for, this
 directory and select *Open in Terminal*.  You can now run Run-REDUCE
 as described above by executing the shell command
@@ -201,18 +204,18 @@ as described above by executing the shell command
 
 ## Known Issues
 
-When running *Run-REDUCE.jar* on Ubuntu 18 and 20, by default, two
-warning messages appear and on Ubuntu 18 some dialogues jump when they
-first appear.  The warning about *libcanberra-gtk-module* can be
-avoided by using *Synaptic* to install *libcanberra-gtk-module* (or
-you can just ignore the warning).  In order to avoid the other
-problems, I have included the option
+When running `Run-REDUCE.jar` on Ubuntu, by default, two warning
+messages appear and some dialogues may jump when they first appear.
+The warning about *libcanberra-gtk-module* can be avoided by using
+*Synaptic* to install *libcanberra-gtk-module* (or you can just ignore
+the warning).  In order to avoid the other problems, I have included
+the option
 
 ``` shell
 -Djdk.gtk.version=2
 ```
 
-in the *Run-REDUCE* batch file.  This may not be necessary on all
+in the `Run-REDUCE` batch file.  This may not be necessary on all
 platforms and will, I hope, cease to be necessary at all at some
 future date, so you might like to experiment with removing it.
 
@@ -220,7 +223,7 @@ I have been advised that on Kubuntu 18.04.4 it may be necessary to
 install the Gnome 2 theme Adwaita.  You may also find that the About
 and error dialogue boxes are too small by default.
 
-If *Run-REDUCE.jar* misbehaves or crashes, try including the option
+If `Run-REDUCE.jar` misbehaves or crashes, try including the option
 
 ``` shell
 -Dprism.order=sw
@@ -235,4 +238,4 @@ find that on Fedora 32 and 33 using the default desktop, namely GNOME
 (Wayland), dialogues jump when opened or closed, whereas using either
 GNOME Classic or GNOME on Xorg (X11) avoids this problem.
 
-Francis Wright, March 2021
+Francis Wright, October 2023

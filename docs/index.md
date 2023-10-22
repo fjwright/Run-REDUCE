@@ -7,22 +7,22 @@ shot](#ScreenShot) below) for running the
 [REDUCE](https://reduce-algebra.sourceforge.io/) Computer Algebra
 System.  It is implemented in JavaFX and should provide a consistent
 user experience across all implementations of REDUCE and all platforms
-(that support Java).  Self-contained installers are available on the
+(that support JavaFX).  Self-contained installers are available on the
 [releases page](https://github.com/fjwright/Run-REDUCE/releases) for
 Windows and Gnu/Linux.  Alternatively, and for other platforms, a Java
-JAR file is available.
+`JAR` file is available.
 
 REDUCE itself is an open source project available from
 [SourceForge](https://sourceforge.net/projects/reduce-algebra/), which
 you need to install separately.  Run-REDUCE is designed to run a
 standard installation of REDUCE; it does not include REDUCE.
 
-Full information about how to install and run Run-REDUCE is
-available in the [Install and Run Guide](InstallAndRun.md).  For
-information about how to use Run-REDUCE please see the [User
+Full information about how to install and run Run-REDUCE is available
+in the [Install and Run Guide](InstallAndRun.md).  For information
+about how to use Run-REDUCE please see the [User
 Guide](UserGuide.html) (which is also included in Run-REDUCE and
-easily accessible via the Help menu).  Known issues are listed at end
-of the [Install and Run Guide](InstallAndRun.md).
+easily accessible via the _Help_ menu).  Known issues are listed at
+the end of the [Install and Run Guide](InstallAndRun.md).
 
 <a id="ScreenShot"></a>(The screen shot below relates to an earlier
 release and is now a little out of date!)
@@ -48,7 +48,7 @@ that it currently provides:
   REDUCE packages, similar to the facilities provided by the CSL
   REDUCE GUI.
 * Optional bold prompts and coloured input/output text (similar to
-  redfront but determined by the input mode &ndash; algebraic or
+  `redfront` but determined by the input mode &ndash; algebraic or
   symbolic).
 * Templates to construct structured expressions and statements.
 * A pop-up keyboard to access symbolic constants, Greek letters and
@@ -59,4 +59,4 @@ that it currently provides:
   distributed with REDUCE as HTML or PDF files, the REDUCE web site
   and the SourceForge REDUCE project site.
 
-Francis Wright, March 2021
+Francis Wright, October 2023
