@@ -8,7 +8,7 @@ package fjwright.runreduce;
 public class Version {
     private final static int MAJOR = 3;
     private final static int MINOR = 1;
-    private final static int REVISION = 0;
+    private final static int REVISION = 1;
     private final static String MONTH = "October";
     private final static int YEAR = 2023;
 
@@ -19,7 +19,7 @@ public class Version {
     static final String COPYRIGHT = String.format("© 2020‒%d, Francis Wright", YEAR);
 
     static final String JAVA = String.format(
-            "Compiled using Java 16 & JavaFX 16.\n" +
+            "Compiled using Java 17.0.9 & JavaFX 17.0.9.\n" +
                     "Run using Java %s & JavaFX %s.",
             System.getProperty("java.version"),
             System.getProperty("javafx.version"));

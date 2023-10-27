@@ -1,12 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="RunREDUCE" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="ALTERNATIVE_JRE_PATH" value="16" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="fjwright.runreduce.RunREDUCE" />
     <module name="Run-REDUCE" />
     <option name="PROGRAM_PARAMETERS" value="-debugMenu" />
-    <option name="VM_PARAMETERS" value="--module-path &quot;D:\Program Files\AdoptOpenJDK\javafx-sdk-16\lib&quot;;out\production" />
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <option name="VM_PARAMETERS" value="--module-path &quot;D:\Program Files\Eclipse Adoptium\javafx-sdk-17.0.9\lib&quot;;out\production" />
     <method v="2">
       <option name="MakeProject" enabled="true" />
     </method>

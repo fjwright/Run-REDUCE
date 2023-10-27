@@ -1,11 +1,11 @@
 @echo off
 rem Use jpackage to build a Run-REDUCE installer for Windows.
-rem User's Guide: https://docs.oracle.com/en/java/javase/16/jpackage/
+rem User's Guide: https://docs.oracle.com/en/java/javase/17/jpackage/
 rem Man Page: https://docs.oracle.com/en/java/javase/16/docs/specs/man/jpackage.html
-rem Requires JDK 14+ and WiX 3.0+.
-rem Requires (e.g.) JAVA_HOME = "D:\Program Files\Java\jdk-16"
-rem and PATH_TO_FX_MODS = "D:\Program Files\AdoptOpenJDK\javafx-jmods-16"
-rem and PATH_TO_FX = "D:\Program Files\Java\javafx-16\lib" (to run Version)
+rem Requires JDK 14+ and WiX 3.
+rem Requires (e.g.) JAVA_HOME = D:\Program Files\Java\jdk-17 (no quotes)
+rem and PATH_TO_FX_MODS = D:\Program Files\AdoptOpenJDK\javafx-jmods-17 (no quotes)
+rem and PATH_TO_FX = "D:\Program Files\Java\javafx-17\lib" (quoted -- to run Version)
 
 rem --type app-image creates only the application image for testing.
 rem --verbose enables verbose output.
