@@ -6,6 +6,7 @@
 !/installers/Windows/RR-icon-128.ico
 /out/
 /releases/
+/resources/katex.zip
 /test/*
 !/test/symbols_and_functions.tst
 /To Do.txt

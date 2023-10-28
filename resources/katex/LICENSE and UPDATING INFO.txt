@@ -19,3 +19,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+UPDATING INFO -- FJW
+
+Unpack katex.zip into ..\Run-REDUCE\resources, keeping only the fonts directory,
+katex.min.css and katex.min.js.
+
+JavaFX 17 WebView cannot read .woff2 font files, so keep only the .woff
+font files in the fonts directory. (I hope that WebView in a later version
+of JavaFX will accept .woff2 font files!)
+
+I created this file; it is not in katex.zip but I copied the license above
+from https://github.com/KaTeX/KaTeX.
