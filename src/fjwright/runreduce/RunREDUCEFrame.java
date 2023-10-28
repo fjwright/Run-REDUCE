@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +20,7 @@ import javafx.stage.Stage;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.html.HTMLElement;
 
-import java.awt.Desktop; // only Desktop needed
+import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
@@ -633,26 +635,25 @@ public class RunREDUCEFrame {
      * ********* */
 
     private static final String USERGUIDE_FILENAME = "UserGuide.html",
-            USERGUIDE_TMP_FILENAME =  "Run-REDUCE_User_Guide.html";
+            USERGUIDE_TMP_FILENAME = "Run-REDUCE_User_Guide.html";
     private static File userGuideTmpFile;
 
     @FXML
     private void userGuideMenuItemAction() {
         try {
             URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
+            // During development when running using (compiled) source files directly the value of url is
             // file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/production/Run-REDUCE/fjwright/runreduce/UserGuide.html
-            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/artifacts/Run_REDUCE_FX_jar/Run-REDUCE.jar!/fjwright/runreduce/UserGuide.html
+            // Normal case when running a jar file the value of url is
+            // jar:file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar!/fjwright/runreduce/UserGuide.html
 
             // JavaFX WebEngine accepts a jar URI but Firefox does not, so extract the User Guide
             // from the jar to filestore when first used in each run of Run-REDUCE.
-            if (url == null) {
+            if (url == null)
                 RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE User Guide",
                         "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
-            } else if (url.getProtocol().equals("file")) // Useful during development only!
-                RunREDUCE.hostServices.showDocument(url.toString());
-            else { // Normal case: when running a jar file the protocol is jar.
+            else {
                 if (userGuideTmpFile == null || !userGuideTmpFile.exists()) {
-//                    userGuideTmpFile = new File(getProperty("java.io.tmpdir"), USERGUIDE_FILENAME);
                     userGuideTmpFile = new File(getProperty("user.home"), USERGUIDE_TMP_FILENAME);
                     try (InputStream in = url.openStream()) {
                         Files.copy(in, userGuideTmpFile.toPath(), REPLACE_EXISTING);
