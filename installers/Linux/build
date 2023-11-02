@@ -2,7 +2,7 @@
 # Use jpackage to build a Run-REDUCE installer for Linux.
 # User's Guide: https://docs.oracle.com/en/java/javase/17/jpackage/.
 # Man Page: https://docs.oracle.com/en/java/javase/17/docs/specs/man/jpackage.html.
-# Requires Java JDK 14+ and (e.g.) JAVA_HOME = /usr/bin/java
+# Requires Java JDK 14+
 # Requires JavaFX SDK *and* jmods.
 # Requires Run-REDUCE to have been built "normally" and requires r+w access to the
 # Run-REDUCE build tree (which is /media/sf_Run-REDUCE/ on my Linux VMs).
@@ -28,18 +28,17 @@ echo -n 'jpackage version '
 jpackage --version
 echo -n 'jlink version '
 jlink --version
-echo 'JAVA_HOME =' $JAVA_HOME
-echo 'PATH_TO_FX_MODS =' $PATH_TO_FX_MODS
-echo 'PATH_TO_FX =' $PATH_TO_FX '(to run Version)'
+echo 'PATH_TO_FX_MODS =' "$PATH_TO_FX_MODS"
+echo 'PATH_TO_FX =' "$PATH_TO_FX" '(to run Version)'
 
 VERSION=$(java \
-  --module-path $PATH_TO_FX:/media/sf_Run-REDUCE/out/production \
+  --module-path "$PATH_TO_FX:/media/sf_Run-REDUCE/out/production" \
   --module Run.REDUCE/fjwright.runreduce.Version)
 
-echo 'Run-REDUCE version =' $VERSION
+echo 'Run-REDUCE version =' "$VERSION"
 echo '---'
 
-jpackage --name Run-REDUCE --app-version $VERSION \
+jpackage --name Run-REDUCE --app-version "$VERSION" \
   --module-path "$PATH_TO_FX_MODS":/media/sf_Run-REDUCE/out/production \
   --module Run.REDUCE/fjwright.runreduce.RunREDUCE \
   --icon /media/sf_Run-REDUCE/resources/images/RR-icon-128.png \
@@ -48,4 +47,6 @@ jpackage --name Run-REDUCE --app-version $VERSION \
   --copyright "2023, Francis Wright, All rights reserved" \
   --license-file /media/sf_Run-REDUCE/LICENSE \
   --linux-rpm-license-type BSD-2-Clause \
+  --java-options -Djdk.gtk.version=2 \
+  --about-url https://fjwright.github.io/Run-REDUCE/ \
   "$@"

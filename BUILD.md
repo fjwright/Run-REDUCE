@@ -22,12 +22,17 @@ variable, as explained in the [Install and Run
 Guide](https://fjwright.github.io/Run-REDUCE/InstallAndRun.html).  You
 need a Java Development Kit (JDK) to build a Java program (whereas a
 Java Runtime Environment (JRE) is sufficient to run it once built.)  I
-recommend using Java 16 or later, and the same version of JavaFX; note
-that building source later than version 3.0 **requires** Java 16 or
-later.
+recommend using Java 17 LTS or later, and the same version of JavaFX;
+note that building source later than version 3.0 **requires** Java 16
+or later.
 
 * Download and unpack a Run-REDUCE release source file archive or
 clone this repository.
+
+* Unless you are using IntelliJ IDEA on Windows (for which this
+process is automated using pre-launch commands), ensure that the
+"resources" directory contains a current copy of the file
+"docs/UserGuide.html".
 
 Note that this project uses [modular
 Java](https://www.oracle.com/uk/corporate/features/understanding-java-9-modules.html),
@@ -35,8 +40,8 @@ primarily in order to minimize the size of the pre-built release
 files.  See also the [JavaFX website](https://openjfx.io/) for useful
 guidance on building projects using JavaFX.
 
-The following instructions work for me using Java 16 and JavaFX 16 on
-Microsoft Windows 10 and Ubuntu 20.
+The following instructions work for me using Java and JavaFX version 17 on
+Microsoft Windows and Ubuntu.
 
 Build and Run using IntelliJ IDEA
 ---------------------------------
