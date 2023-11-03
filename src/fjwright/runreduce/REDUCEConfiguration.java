@@ -47,9 +47,9 @@ class RRPreferences {
     static int fontSize = Math.max(prefs.getInt(FONT_SIZE, 15), 5);
     // in case a very small font size gets saved accidentally!
     // Minimum value of 5 matches minimum value set for font size SpinnerModel.
-    static boolean boldPromptsState = prefs.getBoolean(BOLD_PROMPTS, false);
-    static boolean colouredIOState = prefs.getBoolean(COLOURED_IO, false);
-    static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, false);
+    static boolean boldPromptsState = prefs.getBoolean(BOLD_PROMPTS, true);
+    static boolean colouredIOState = prefs.getBoolean(COLOURED_IO, true);
+    static boolean typesetMathsState = prefs.getBoolean(TYPESET_MATHS, true);
     static DisplayPane displayPane =
             DisplayPane.valueOf(prefs.get(DISPLAY_PANE, DisplayPane.SINGLE.toString()));
     static boolean showMenuHistory = prefs.getBoolean(SHOW_MENU_HISTORY, false);
