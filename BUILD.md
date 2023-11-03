@@ -1,5 +1,4 @@
-Build from Source
-=================
+# Build from Source
 
 If you just want to use Run-REDUCE then I recommend the [latest
 pre-built
@@ -29,11 +28,6 @@ or later.
 * Download and unpack a Run-REDUCE release source file archive or
 clone this repository.
 
-* Unless you are using IntelliJ IDEA on Windows (for which this
-process is automated using pre-launch commands), ensure that the
-"resources" directory contains a current copy of the file
-"docs/UserGuide.html".
-
 Note that this project uses [modular
 Java](https://www.oracle.com/uk/corporate/features/understanding-java-9-modules.html),
 primarily in order to minimize the size of the pre-built release
@@ -43,33 +37,55 @@ guidance on building projects using JavaFX.
 The following instructions work for me using Java and JavaFX version 17 on
 Microsoft Windows and Ubuntu.
 
-Build and Run using IntelliJ IDEA
----------------------------------
+## Build and Run using *IntelliJ IDEA*
 
 Open the project based on the directory `Run-REDUCE` that you have
 just created.
 
-### Configure IntelliJ IDEA
+### Configure *IntelliJ IDEA*
 
-You will need to configure IntelliJ IDEA for the JDK and JavaFX
+You will need to configure *IntelliJ IDEA* for the JDK and JavaFX
 libraries you have installed, and other details of your platform.
 
-To configure building, open the *Project Structure* dialogue.
+* Open the *Project Structure* dialogue.
 
-* Under *Project*, set the Java SDK you are using.
+  * Under *Project*, set the Java SDK you are using.
 
-* Under *Modules*, select *Sources*, mark directory `resources` as
+  * Under *Modules*, select *Sources*, mark directory `resources` as
 *Resources* with relative output path `fjwright/runreduce`, and mark
 directories `installers` and `docs` as *Excluded*.
 
-* Under *Libraries*, click + then select *Java*, your JavaFX SDK root
+  * Under *Libraries*, click + then select *Java*, your JavaFX SDK root
 directory, and then `lib`.  Agree to having this library added to
 module `Run-REDUCE`.  Optionally, rename `lib` to something more
 informative, such as `libJFX`.
 
-* Under *Artifacts*, click + then select *JAR* and then *From modules
+  * Under *Artifacts*, click + then select *JAR* and then *From modules
 with dependencies...*.  Finally, remove all the *Extracted...* items
 under *Run-REDUCE.jar*.
+
+* Open the *Settings / Tools / External Tools* dialogue and
+add the following:
+
+  *Name*: `UserGuide-to-resources`
+
+  *Description*: `Copy docs/UserGuide.html to resources/ if necessary`
+
+  **On Microsoft Windows...**
+
+  *Program*: `XCOPY`
+
+  *Arguments*: `docs\UserGuide.html resources\ /D /Y`
+
+  **On other platforms...**
+
+  *Program*: `cp`
+
+  *Arguments*: `-u docs/UserGuide.html resources/`
+
+  *Working directory*: `$ContentRoot$`
+
+  *Advanced Options*: all selected (optional)
 
 Note that I have checked in the run configurations that I use on
 Windows, which will probably be more or less inappropriate for you.
@@ -101,8 +117,7 @@ To run the JAR, select the *Run/Debug Configuration* `Run-REDUCE.jar`
 and then click on the *Run 'Run-REDUCE.jar'* button or menu item.
 This should pop up Run-REDUCE in its own window.
 
-Build and Run using the Command Line
-------------------------------------
+## Build and Run using the Command Line
 
 The commands below assume that the JDK bin directory is in your search
 path and are intended to be run in `bash`.  (On Windows I use Cygwin.
@@ -135,6 +150,7 @@ cp src/fjwright/runreduce/*.fxml out/production/Run-REDUCE/fjwright/runreduce
 cp src/fjwright/runreduce/functions/*.fxml out/production/Run-REDUCE/fjwright/runreduce/functions
 cp src/fjwright/runreduce/templates/*.fxml out/production/Run-REDUCE/fjwright/runreduce/templates
 cp -r resources/* out/production/Run-REDUCE/fjwright/runreduce
+cp -u docs/UserGuide.html out/production/Run-REDUCE/fjwright/runreduce
 ```
 
 To run the project using the files in the directory `out/production`,
@@ -165,8 +181,7 @@ java --module-path=$PATH_TO_FX --add-modules=javafx.fxml,javafx.web \
     -jar out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar
 ```
 
-Building Installers
--------------------
+## Building Installers
 
 This is a command-line process and requires that the project first be
 built, as described above.  (It does not use a JAR.)  An installer can
