@@ -643,6 +643,32 @@ public class RunREDUCEFrame {
     private static final String USERGUIDE_EXT_FILENAME = "Run-REDUCE_User_Guide.html";
     private static File userGuideExtFile;
 
+    /**
+     * Return true if userGuideExtFile file is older than the file indicated by url.
+     */
+    private boolean userGuideExtFileOutOfDate(URL url) throws URISyntaxException, IOException {
+        // Links relating to getting the current JAR:
+        // https://mkyong.com/java/java-get-the-name-or-path-of-a-running-jar-file/
+        // https://hellowahab.wordpress.com/2014/11/11/how-to-get-executing-jar-name-and-modified-date-in-java/
+        Path sourcePath;
+        if (Objects.equals(url.getProtocol(), "jar")) {
+            // Normal case running a JAR:
+            String jarPath = getClass()
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath();
+            sourcePath = new File(jarPath).toPath();
+        } else {
+            // Special case running (compiled) source files directly:
+            sourcePath = Path.of(url.toURI());
+        }
+        FileTime sourceLMT = Files.readAttributes(sourcePath, BasicFileAttributes.class).lastModifiedTime();
+        FileTime targetLMT = Files.readAttributes(userGuideExtFile.toPath(), BasicFileAttributes.class).lastModifiedTime();
+        return targetLMT.compareTo(sourceLMT) < 0;
+    }
+
     @FXML
     private void userGuideMenuItemAction() {
         try {
@@ -663,42 +689,15 @@ public class RunREDUCEFrame {
                 // userGuideExtFile object not used this session, so create it.
                 userGuideExtFile = new File(getProperty("user.home"), USERGUIDE_EXT_FILENAME);
             }
-            if (!userGuideExtFile.exists()) {
-                // userGuideExtFile file does not exist, so create it.
+            if (!userGuideExtFile.exists() || userGuideExtFileOutOfDate(url)) {
+                // userGuideExtFile file does not exist or is out of date, so create or replace it.
                 try (InputStream in = url.openStream()) {
                     Files.copy(in, userGuideExtFile.toPath(), REPLACE_EXISTING);
                 }
-            } else {
-                // userGuideExtFile file exists; check it is up-to-date.
-                // Links relating to getting the current JAR:
-                // https://mkyong.com/java/java-get-the-name-or-path-of-a-running-jar-file/
-                // https://hellowahab.wordpress.com/2014/11/11/how-to-get-executing-jar-name-and-modified-date-in-java/
-                Path sourcePath;
-                if (Objects.equals(url.getProtocol(), "jar")) {
-                    // Normal case running a JAR:
-                    String jarPath = getClass()
-                            .getProtectionDomain()
-                            .getCodeSource()
-                            .getLocation()
-                            .toURI()
-                            .getPath();
-                    sourcePath = new File(jarPath).toPath();
-                } else {
-                    // Special case running (compiled) source files directly:
-                    sourcePath = Path.of(url.toURI());
-                }
-                FileTime sourceLMT = Files.readAttributes(sourcePath, BasicFileAttributes.class).lastModifiedTime();
-                FileTime targetLMT = Files.readAttributes(userGuideExtFile.toPath(), BasicFileAttributes.class).lastModifiedTime();
-                if (targetLMT.compareTo(sourceLMT) < 0)
-                    try (InputStream in = url.openStream()) {
-                        Files.copy(in, userGuideExtFile.toPath(), REPLACE_EXISTING);
-                    }
             }
             RunREDUCE.hostServices.showDocument(userGuideExtFile.toString());
-        } catch (IOException exc) {
+        } catch (IOException | URISyntaxException exc) {
             exc.printStackTrace();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         }
     }
 
