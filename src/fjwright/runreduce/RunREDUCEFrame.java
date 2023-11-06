@@ -22,9 +22,14 @@ import org.w3c.dom.html.HTMLElement;
 
 import java.awt.*;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.lang.System.getProperty;
@@ -634,14 +639,14 @@ public class RunREDUCEFrame {
      * Help menu *
      * ********* */
 
-    private static final String USERGUIDE_FILENAME = "UserGuide.html",
-            USERGUIDE_TMP_FILENAME = "Run-REDUCE_User_Guide.html";
-    private static File userGuideTmpFile;
+    private static final String USERGUIDE_INT_FILENAME = "UserGuide.html";
+    private static final String USERGUIDE_EXT_FILENAME = "Run-REDUCE_User_Guide.html";
+    private static File userGuideExtFile;
 
     @FXML
     private void userGuideMenuItemAction() {
         try {
-            URL url = RunREDUCEFrame.class.getResource(USERGUIDE_FILENAME);
+            URL url = RunREDUCEFrame.class.getResource(USERGUIDE_INT_FILENAME);
             // During development when running using (compiled) source files directly the value of url is
             // file:/C:/Users/franc/IdeaProjects/Run-REDUCE/out/production/Run-REDUCE/fjwright/runreduce/UserGuide.html
             // Normal case when running a jar file the value of url is
@@ -649,20 +654,51 @@ public class RunREDUCEFrame {
 
             // JavaFX WebEngine accepts a jar URI but Firefox does not, so extract the User Guide
             // from the jar to filestore when first used in each run of Run-REDUCE.
-            if (url == null)
+            if (url == null) {
                 RunREDUCE.alert(Alert.AlertType.ERROR, "Run-REDUCE User Guide",
-                        "Resource file \"" + USERGUIDE_FILENAME + "\" could not be located.");
-            else {
-                if (userGuideTmpFile == null || !userGuideTmpFile.exists()) {
-                    userGuideTmpFile = new File(getProperty("user.home"), USERGUIDE_TMP_FILENAME);
-                    try (InputStream in = url.openStream()) {
-                        Files.copy(in, userGuideTmpFile.toPath(), REPLACE_EXISTING);
-                    }
-                }
-                RunREDUCE.hostServices.showDocument(userGuideTmpFile.toString());
+                        "Resource file \"" + USERGUIDE_INT_FILENAME + "\" could not be located.");
+                return;
             }
+            if (userGuideExtFile == null) {
+                // userGuideExtFile object not used this session, so create it.
+                userGuideExtFile = new File(getProperty("user.home"), USERGUIDE_EXT_FILENAME);
+            }
+            if (!userGuideExtFile.exists()) {
+                // userGuideExtFile file does not exist, so create it.
+                try (InputStream in = url.openStream()) {
+                    Files.copy(in, userGuideExtFile.toPath(), REPLACE_EXISTING);
+                }
+            } else {
+                // userGuideExtFile file exists; check it is up-to-date.
+                // Links relating to getting the current JAR:
+                // https://mkyong.com/java/java-get-the-name-or-path-of-a-running-jar-file/
+                // https://hellowahab.wordpress.com/2014/11/11/how-to-get-executing-jar-name-and-modified-date-in-java/
+                Path sourcePath;
+                if (Objects.equals(url.getProtocol(), "jar")) {
+                    // Normal case running a JAR:
+                    String jarPath = getClass()
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()
+                            .getPath();
+                    sourcePath = new File(jarPath).toPath();
+                } else {
+                    // Special case running (compiled) source files directly:
+                    sourcePath = Path.of(url.toURI());
+                }
+                FileTime sourceLMT = Files.readAttributes(sourcePath, BasicFileAttributes.class).lastModifiedTime();
+                FileTime targetLMT = Files.readAttributes(userGuideExtFile.toPath(), BasicFileAttributes.class).lastModifiedTime();
+                if (targetLMT.compareTo(sourceLMT) < 0)
+                    try (InputStream in = url.openStream()) {
+                        Files.copy(in, userGuideExtFile.toPath(), REPLACE_EXISTING);
+                    }
+            }
+            RunREDUCE.hostServices.showDocument(userGuideExtFile.toString());
         } catch (IOException exc) {
             exc.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
