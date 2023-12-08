@@ -50,19 +50,23 @@ libraries you have installed, and other details of your platform.
 * Open the *Project Structure* dialogue.
 
   * Under *Project*, set the Java SDK you are using.
+Ensure that the language level is at least 16 and no higher than the
+SDK version.
 
   * Under *Modules*, select *Sources*, mark directory `resources` as
 *Resources* with relative output path `fjwright/runreduce`, and mark
 directories `installers` and `docs` as *Excluded*.
 
-  * Under *Libraries*, click + then select *Java*, your JavaFX SDK root
+  * Under *Libraries*, click `+` then select *Java*, your JavaFX SDK root
 directory, and then `lib`.  Agree to having this library added to
 module `Run-REDUCE`.  Optionally, rename `lib` to something more
-informative, such as `libJFX`.
+informative, such as `libJFX`.  On the panel above where *Classes* now
+appears, click `+` and select `bin`, then click `+` again and select
+`src.zip`. 
 
   * Under *Artifacts*, click + then select *JAR* and then *From modules
-with dependencies...*.  Finally, remove all the *Extracted...* items
-under *Run-REDUCE.jar*.
+with dependencies...*.  (Finally, remove any *Extracted...* items that may
+appear under *Run-REDUCE.jar*.)
 
 * Open the *Settings / Tools / External Tools* dialogue and
 add the following:
@@ -83,6 +87,8 @@ add the following:
 
   *Arguments*: `-u docs/UserGuide.html resources/`
 
+  **On all platforms...**
+
   *Working directory*: `$ContentRoot$`
 
   *Advanced Options*: all selected (optional)
@@ -95,27 +101,20 @@ project home path for your platform.
 
 ### Build and Run the Project
 
-To build the project, click on the *Build Project* button or menu
-item.  This will create the directory `out/production` if necessary
-and populate it by compiling the `.java` files and copying the other
-required files in the `src` directory.
-
-To run the project using the files in the directory `out/production`,
-select the *Run/Debug Configuration* `RunREDUCE` and then click on the
-*Run 'RunREDUCE'* button or menu item.  This is a useful check before
-building a JAR or installer.  This should pop up Run-REDUCE in its own
-window.
+Select the *Run/Debug Configuration* `RunREDUCE` and then click on the
+*Run 'RunREDUCE'* button or menu item.  This will create the directory
+`out/production` if necessary and populate it by compiling the `.java`
+files and copying the other required files.
+It should pop up Run-REDUCE in its own window, and is a useful check
+before building a JAR or installer.
 
 ### Build and Run the JAR
 
-To build the JAR, open the *Build Artifacts...* item in the *Build*
-menu and then click on *Build* in the *Action* pop-up menu.  This will
+Select the *Run/Debug Configuration* `Run-REDUCE.jar` and then click on
+the *Run 'Run-REDUCE.jar'* button or menu item.  This will
 build the project if necessary, create the directory `out/artifacts`
 if necessary and populate it by building the file `Run-REDUCE.jar`.
-
-To run the JAR, select the *Run/Debug Configuration* `Run-REDUCE.jar`
-and then click on the *Run 'Run-REDUCE.jar'* button or menu item.
-This should pop up Run-REDUCE in its own window.
+It should pop up Run-REDUCE in its own window.
 
 ## Build and Run using the Command Line
 

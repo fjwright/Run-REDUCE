@@ -4,7 +4,7 @@
     <option name="MAIN_CLASS_NAME" value="fjwright.runreduce.RunREDUCE" />
     <module name="Run-REDUCE" />
     <option name="PROGRAM_PARAMETERS" value="-debugMenu" />
-    <option name="VM_PARAMETERS" value="--module-path &quot;D:\Program Files\Eclipse Adoptium\javafx-sdk-17.0.9\lib&quot;;out\production" />
+    <option name="VM_PARAMETERS" value="--module-path C:\Java\javafx-sdk-17.0.9\lib;out\production" />
     <method v="2">
       <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_UserGuide-to-resources" />
       <option name="MakeProject" enabled="true" />

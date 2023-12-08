@@ -158,7 +158,7 @@ the dialogue, then create a new user or system variable by clicking on
 the appropriate *New...* button.  (User variables only affect you,
 whereas system variables affect all users.)  Enter the variable name
 `PATH_TO_FX`.  To enter the value, either use the *Browse
-Directory...* button, or open the JavaFX lib folder in *File
+Directory...* button, or open the JavaFX `lib` folder in *File
 Explorer*, click on the address bar, and copy and paste the folder
 pathname.  **Enclose the folder name in double quotes.**
 

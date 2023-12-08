@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run-REDUCE.jar" type="JarApplication">
     <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Run_REDUCE_jar/Run-REDUCE.jar" />
-    <option name="VM_PARAMETERS" value="--module-path &quot;D:\Program Files\Eclipse Adoptium\javafx-sdk-17.0.9\lib&quot; --add-modules javafx.fxml,javafx.web" />
+    <option name="VM_PARAMETERS" value="--module-path C:\Java\javafx-sdk-17.0.9\lib --add-modules javafx.fxml,javafx.web" />
     <option name="WORKING_DIRECTORY" value="C:\Users\franc\IdeaProjects\Run-REDUCE" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
